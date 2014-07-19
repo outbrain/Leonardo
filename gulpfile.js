@@ -14,7 +14,8 @@ var processTemplate = function(){
       collapseWhitespace: true
     }))
     .pipe(ngHtml2js({
-      moduleName: "stateRouterScenario.templates"
+      moduleName: "stateRouterScenario.templates",
+      prefix: "templates/"
     }));
 }
 
