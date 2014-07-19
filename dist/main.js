@@ -1,3 +1,5 @@
+angular.module('stateRouterScenario', []);
+
 angular.module('stateRouterScenario').provider('srsManager', function(){
   var that = this;
   this.items = angular.fromJson(localStorage.getItem('activeScenarios') || '[]');

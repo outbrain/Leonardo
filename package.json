@@ -1,0 +1,35 @@
+{
+  "name": "Leonardo",
+  "version": "0.0.0",
+  "description": "Leonardo ========",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://sagivf@github.com/outbrain/Leonardo.git"
+  },
+  "keywords": [
+    "angularjs"
+  ],
+  "author": "Sagiv Frankel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/outbrain/Leonardo/issues"
+  },
+  "homepage": "https://github.com/outbrain/Leonardo",
+  "devDependencies": {
+    "gulp": "^3.8.6",
+    "gulp-concat": "^2.3.3",
+    "gulp-htmlmin": "^0.1.3",
+    "gulp-less": "^1.3.1",
+    "gulp-minify-css": "^0.3.7",
+    "gulp-minify-html": "^0.1.4",
+    "gulp-ng-html2js": "^0.1.7",
+    "gulp-ngmin": "^0.3.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-uglify": "^0.3.1",
+    "merge-stream": "^0.1.5"
+  }
+}
