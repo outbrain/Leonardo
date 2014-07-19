@@ -11,6 +11,10 @@
     "angularjs"
   ],
   "license": "MIT",
+  "dependencies": {
+    "angular": ">= 1.0.0",
+    "angular-ui-router": "0.2.8-bowratic-tedium"
+  },
   "ignore": [
     "**/.*",
     "node_modules",

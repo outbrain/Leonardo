@@ -47,7 +47,7 @@
       var modalInstance;
       var generateModal = function(){
         modalInstance = $modal.open({
-          templateUrl: 'senarioModalContent.html',
+          templateUrl: 'templates/modalContent.html',
           controller: function ($scope, $state, $modalInstance) {
 
             $scope.items = that.list.reduce(function(prev, current){
