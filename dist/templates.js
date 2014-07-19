@@ -1,3 +1,4 @@
+/* check 1*/
 (function(module) {
 try {
   module = angular.module('stateRouterScenario.templates');
