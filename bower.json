@@ -1,0 +1,21 @@
+{
+  "name": "leonardo",
+  "version": "0.0.1",
+  "homepage": "https://github.com/outbrain/Leonardo",
+  "authors": [
+    "sagivf <sagivf@gmail.com>"
+  ],
+  "description": "secnario runner",
+  "main": "main.js",
+  "keywords": [
+    "angularjs"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
