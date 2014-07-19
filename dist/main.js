@@ -48,7 +48,7 @@
       var generateModal = function(){
         modalInstance = $modal.open({
           templateUrl: 'templates/modalContent.html',
-          controller: function ($scope, $state, $modalInstance) {
+          controller: ['$scope', '$state', '$modalInstance', function ($scope, $state, $modalInstance) {
 
             $scope.items = that.list.reduce(function(prev, current){
               if (!$state.includes(current.state)) {
@@ -107,7 +107,7 @@
             $scope.cancel = function () {
               $modalInstance.dismiss('cancel');
             };
-          }
+          }]
         });
 
         modalInstance.result.then(function (res) {
@@ -131,7 +131,7 @@
           ])[0].response;
         },
         openModal: function () {
-          generateModal()
+          generateModal();
         }
       }
     }];
