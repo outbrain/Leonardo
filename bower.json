@@ -17,6 +17,8 @@
   },
   "ignore": [
     "**/.*",
+    "src",
+    "gulp.js",
     "node_modules",
     "bower_components",
     "test",
