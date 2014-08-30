@@ -5,6 +5,18 @@
     module = angular.module('stateRouterScenario', ['ui.router']);
   }
 
+  module.run(function($window, $httpBackend){
+    if ($window.localStorage.leonardoPassThrough) {
+      $httpBackend.whenGET(new RegExp('/')).passThrough();
+      $httpBackend.whenGET = function(){
+        return {
+          passThrough: function(){},
+          respond: function(){}
+        };
+      };
+    }
+  });
+
   module.provider('srsManager', function(){
     var that = this;
     this.items = angular.fromJson(localStorage.getItem('activeScenarios') || '[]');
