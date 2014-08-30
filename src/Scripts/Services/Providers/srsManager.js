@@ -42,13 +42,27 @@
       this.list = list;
     };
 
-    this.$get = ['$rootScope', '$log', '$state', '$modal', function ($rootScope, $log, $state, $modal) {
+    this.$get = ['$rootScope', '$log', '$state', '$modal', '$window', function ($rootScope, $log, $state, $modal, $window) {
 
       var modalInstance;
       var generateModal = function(){
         modalInstance = $modal.open({
           templateUrl: 'templates/modalContent.html',
           controller: ['$scope', '$state', '$modalInstance', function ($scope, $state, $modalInstance) {
+
+            $scope.passThrough = !!$window.localStorage.leonardoPassThrough;
+
+            $scope.$watch('passThrough', function(value, oldValue){
+              if (value && value !== oldValue) {
+                if (value) {
+                  delete $window.localStorage.leonardoPassThrough;
+                }
+                else {
+                  $window.localStorage.leonardoPassThrough = true;
+                }
+                $window.location.reload();
+              }
+           });
 
             $scope.items = that.list.reduce(function(prev, current){
               if (!$state.includes(current.state)) {
