@@ -62,10 +62,12 @@
           templateUrl: 'templates/modalContent.html',
           controller: ['$scope', '$state', '$modalInstance', function ($scope, $state, $modalInstance) {
 
-            $scope.passThrough = !!$window.localStorage.leonardoPassThrough;
+            $scope.vm = {
+              passThrough: !$window.localStorage.leonardoPassThrough
+            };
 
-            $scope.$watch('passThrough', function(value, oldValue){
-              if (value && value !== oldValue) {
+            $scope.$watch('vm.passThrough', function(value, oldValue){
+              if (angular.isDefined(value) && value !== oldValue) {
                 if (value) {
                   delete $window.localStorage.leonardoPassThrough;
                 }
