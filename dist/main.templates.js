@@ -154,6 +154,24 @@ module.run(['$templateCache', function($templateCache) {
         }, function () {
           $log.info('Modal dismissed at: ' + new Date());
         });
+      };
+
+      function getResponse(def){
+        if ( typeof def === 'string'){
+          def = def.split(':');
+          var request = new XMLHttpRequest();
+
+          request.open('GET', '/js/selfserve/engage/dev/local-app/mock/data' + def[1], false);
+          request.send(null);
+
+          return [def[0], request.response]  ;
+        }
+        else if(def instanceof Array ){
+          return def;
+        }
+        else {
+          def();
+        }
       }
 
       return {
@@ -166,14 +184,14 @@ module.run(['$templateCache', function($templateCache) {
             return this.isActive(domain, item.scenario);
           }, this).concat([
             {
-              response: (def instanceof Array ? def : def())
+              response: getResponse(def)
             }
           ])[0].response;
         },
         openModal: function () {
           generateModal();
         }
-      }
+      };
     }];
   });
 
