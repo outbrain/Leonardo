@@ -8,7 +8,14 @@
   module.run(function($window, $httpBackend){
     if ($window.localStorage.leonardoPassThrough) {
       $httpBackend.whenGET(new RegExp('/')).passThrough();
+      $httpBackend.whenPOST(new RegExp('/')).passThrough();
       $httpBackend.whenGET = function(){
+        return {
+          passThrough: function(){},
+          respond: function(){}
+        };
+      };
+      $httpBackend.whenPOST = function(){
         return {
           passThrough: function(){},
           respond: function(){}
