@@ -6,7 +6,7 @@
   }
 
   module.run(function($window, $httpBackend){
-    if ($window.localStorage.leonardoPassThrough) {
+    if (!$window.localStorage.leonardoMock) {
       $httpBackend.whenGET(new RegExp('/')).passThrough();
       $httpBackend.whenPOST(new RegExp('/')).passThrough();
       $httpBackend.whenGET = function(){
@@ -70,16 +70,16 @@
           controller: ['$scope', '$state', '$modalInstance', function ($scope, $state, $modalInstance) {
 
             $scope.vm = {
-              passThrough: !$window.localStorage.leonardoPassThrough
+              passThrough: !$window.localStorage.leonardoMock
             };
 
             $scope.$watch('vm.passThrough', function(value, oldValue){
               if (angular.isDefined(value) && value !== oldValue) {
                 if (value) {
-                  delete $window.localStorage.leonardoPassThrough;
+                  delete $window.localStorage.leonardoMock;
                 }
                 else {
-                  $window.localStorage.leonardoPassThrough = true;
+                  $window.localStorage.leonardoMock = true;
                 }
                 $window.location.reload();
               }
