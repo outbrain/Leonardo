@@ -75,7 +75,7 @@
 
             $scope.$watch('vm.leonardoMock', function(value, oldValue){
               if (angular.isDefined(value) && value !== oldValue) {
-                if (value) {
+                if (!value) {
                   delete $window.localStorage.leonardoMock;
                 }
                 else {
