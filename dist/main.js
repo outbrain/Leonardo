@@ -70,10 +70,10 @@
           controller: ['$scope', '$state', '$modalInstance', function ($scope, $state, $modalInstance) {
 
             $scope.vm = {
-              passThrough: !$window.localStorage.leonardoMock
+              leonardoMock: $window.localStorage.leonardoMock
             };
 
-            $scope.$watch('vm.passThrough', function(value, oldValue){
+            $scope.$watch('vm.leonardoMock', function(value, oldValue){
               if (angular.isDefined(value) && value !== oldValue) {
                 if (value) {
                   delete $window.localStorage.leonardoMock;

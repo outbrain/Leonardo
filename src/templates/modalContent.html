@@ -1,8 +1,8 @@
 <div class="modal-header">
   <h3 class="modal-title">Scenario Config</h3>
   <div class="onoffswitch">
-    <input ng-model="vm.passThrough" class="onoffswitch-checkbox" id="passThrough" type="checkbox" name="passThrough" value="true">
-    <label class="onoffswitch-label" for="passThrough">
+    <input ng-model="vm.leonardoMock" class="onoffswitch-checkbox" id="leonardoMock" type="checkbox" name="leonardoMock" value="true">
+    <label class="onoffswitch-label" for="leonardoMock">
       <span class="onoffswitch-inner"></span>
       <span class="onoffswitch-switch"></span>
     </label>
@@ -10,7 +10,7 @@
 </div>
 <div class="modal-body">
   <ul class="clearfix">
-    <li ng-repeat="item in items" ng-class="{ \'is-group\': item.length > 1 }">
+    <li ng-repeat="item in items" ng-class="{ 'is-group': item.length > 1 }">
       <div ng-if="item.length === 1">
         <label>{{item[0].text}}</label>
         <div class="onoffswitch">
