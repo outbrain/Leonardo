@@ -70,7 +70,7 @@
           controller: ['$scope', '$state', '$modalInstance', function ($scope, $state, $modalInstance) {
 
             $scope.vm = {
-              leonardoMock: $window.localStorage.leonardoMock
+              leonardoMock: $window.localStorage.leonardoMock === "true"
             };
 
             $scope.$watch('vm.leonardoMock', function(value, oldValue){
