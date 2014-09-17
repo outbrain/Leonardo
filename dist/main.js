@@ -1,55 +1,59 @@
-(function(module) {
+/* global angular */
+
+(function (module) {
+  "use strict";
+
   try {
     module = angular.module('stateRouterScenario');
   } catch (e) {
     module = angular.module('stateRouterScenario', ['ui.router']);
   }
 
-  module.run(function($window, $httpBackend){
+  module.run(function ($window, $httpBackend) {
     if (!$window.localStorage.leonardoMock) {
       $httpBackend.whenGET(new RegExp('/')).passThrough();
       $httpBackend.whenPOST(new RegExp('/')).passThrough();
-      $httpBackend.whenGET = function(){
+      $httpBackend.whenGET = function () {
         return {
-          passThrough: function(){},
-          respond: function(){}
+          passThrough: function () {},
+          respond: function () {}
         };
       };
-      $httpBackend.whenPOST = function(){
+      $httpBackend.whenPOST = function () {
         return {
-          passThrough: function(){},
-          respond: function(){}
+          passThrough: function () {},
+          respond: function () {}
         };
       };
     }
   });
 
-  module.provider('srsManager', function(){
+  module.provider('srsManager', function () {
     var that = this;
     this.items = angular.fromJson(localStorage.getItem('activeScenarios') || '[]');
-    this.items.remove = function(domain, name){
-      var items = this.filter(function(item){
+    this.items.remove = function (domain, name) {
+      var items = this.filter(function (item) {
         return !(item.domain === domain && item.name === name);
       });
       this.splice(0, this.length);
-      items.forEach(function(item) {
+      items.forEach(function (item) {
         this.push(item);
-      },this);
+      }, this);
     };
 
-    this.items.contains = function(domain, name){
-      return this.some(function(item) {
+    this.items.contains = function (domain, name) {
+      return this.some(function (item) {
         if (item.domain === domain && item.name === name) {
           return true;
         }
       });
     };
 
-    this.items.place = function(domain, name, selected){
-      if (!selected){
+    this.items.place = function (domain, name, selected) {
+      if (!selected) {
         this.remove(domain, name);
       }
-      else if (name !== 'default' && !this.contains(domain, name)){
+      else if (name !== 'default' && !this.contains(domain, name)) {
         this.push({
           domain: domain,
           name: name
@@ -57,14 +61,14 @@
       }
     };
 
-    this.init = function(list){
+    this.init = function (list) {
       this.list = list;
     };
 
     this.$get = ['$rootScope', '$log', '$state', '$modal', '$window', function ($rootScope, $log, $state, $modal, $window) {
 
       var modalInstance;
-      var generateModal = function(){
+      var generateModal = function () {
         modalInstance = $modal.open({
           templateUrl: 'templates/modalContent.html',
           controller: ['$scope', '$state', '$modalInstance', function ($scope, $state, $modalInstance) {
@@ -73,7 +77,7 @@
               leonardoMock: $window.localStorage.leonardoMock === "true"
             };
 
-            $scope.$watch('vm.leonardoMock', function(value, oldValue){
+            $scope.$watch('vm.leonardoMock', function (value, oldValue) {
               if (angular.isDefined(value) && value !== oldValue) {
                 if (!value) {
                   delete $window.localStorage.leonardoMock;
@@ -83,15 +87,15 @@
                 }
                 $window.location.reload();
               }
-           });
+            });
 
-            $scope.items = that.list.reduce(function(prev, current){
-              if (!$state.includes(current.state)) {
+            $scope.items = that.list.reduce(function (prev, current) {
+              if (current.state && !$state.includes(current.state)) {
                 return prev;
-              };
+              }
 
-              return prev.concat(current.options.map(function(option){
-                if (option.items){
+              return prev.concat(current.options.map(function (option) {
+                if (option.items) {
                   var title = option.title;
                   option = option.items;
                   option.title = title;
@@ -101,16 +105,17 @@
                 }
 
                 var selected = 'default';
-                var res = option.map(function(item){
+                var res = option.map(function (item) {
                   var sel = that.items.contains(current.domain, item.name);
-                  if (sel){
+                  if (sel) {
                     selected = item.name;
                   }
+
                   return {
                     text: item.text,
                     name: item.name,
                     selected: sel
-                  }
+                  };
                 });
                 res.domain = current.domain;
                 res.selected = selected;
@@ -120,16 +125,16 @@
             }, []);
 
             $scope.ok = function () {
-              $scope.items.forEach(function(item){
-                if (item.length === 1){
+              $scope.items.forEach(function (item) {
+                if (item.length === 1) {
                   that.items.place(item.domain, item[0].name, item[0].selected);
                 }
                 else {
-                  item.forEach(function(subItem){
+                  item.forEach(function (subItem) {
                     that.items.place(item.domain, subItem.name, false);
                   });
 
-                  if(item.selected){
+                  if (item.selected) {
                     that.items.place(item.domain, item.selected, true);
                   }
                 }
@@ -151,17 +156,17 @@
         });
       };
 
-      function getResponse(def){
-        if ( typeof def === 'string'){
+      function getResponse(def) {
+        if (typeof def === 'string') {
           def = def.split(':');
           var request = new XMLHttpRequest();
 
           request.open('GET', '/js/selfserve/engage/dev/local-app/mock/data' + def[1], false);
           request.send(null);
 
-          return [def[0], request.response]  ;
+          return [def[0], request.response];
         }
-        else if(def instanceof Array ){
+        else if (def instanceof Array) {
           return def;
         }
         else {
@@ -170,12 +175,12 @@
       }
 
       return {
-        isActive: function(domain, name){
+        isActive: function (domain, name) {
           return that.items.contains(domain, name);
         },
-        generateResponse: function(def, domain, options){
+        generateResponse: function (def, domain, options) {
           options = options || [];
-          return options.filter(function(item){
+          return options.filter(function (item) {
             return this.isActive(domain, item.scenario);
           }, this).concat([
             {
