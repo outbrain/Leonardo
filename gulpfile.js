@@ -1,54 +1,31 @@
 var gulp = require('gulp'),
-    less = require('gulp-less'),
-    rename = require('gulp-rename'),
-    concat = require('gulp-concat'),
-    uglify = require('gulp-uglify'),
-    ngHtml2js = require('gulp-ng-html2js'),
-    htmlmin = require('gulp-htmlmin'),
-    merge = require('merge-stream'),
-    minifyCSS = require('gulp-minify-css');
+  Dgeni = require('dgeni'),
+  path = require('path'),
+  gulpTraceurCmdline = require('gulp-traceur-cmdline');
 
-var processTemplate = function(){
-  return gulp.src('src/templates/**/*.html')
-    .pipe(htmlmin({
-      collapseWhitespace: true
+require("gulp-help")(gulp);
+
+gulp.task('transpile', 'Transpile the App from ES6 to ES5', function() {
+
+  var distPath = path.join( 'dist', 'module.js');
+
+  return gulp.src(path.join('src', 'module.js'))
+    .pipe(gulpTraceurCmdline({
+      'source-maps': 'inline',
+      symbols : true,
+      modules : 'register',
+      out     : distPath,
+      debug   : false
     }))
-    .pipe(ngHtml2js({
-      moduleName: "stateRouterScenario.templates",
-      prefix: "templates/"
-    }));
-}
-
-gulp.task('less', function () {
-  gulp.src('./src/style/srs.less')
-    .pipe(less())
-    .pipe(gulp.dest('./dist'))
-    .pipe(rename({suffix: '.min'}))
-    .pipe(minifyCSS())
-    .pipe(gulp.dest('./dist/'))
+    .on('error', function (err) {
+      console.log(err.message);
+    });
 });
 
-gulp.task('process-scripts', function() {
-  var scripts = gulp.src('src/scripts/**/*.js');
-  var templates = processTemplate();
 
-  scripts
-    .pipe(concat('main.js'))
-    .pipe(gulp.dest('dist/'))
-
-  templates
-    .pipe(concat('templates.js'))
-    .pipe(gulp.dest('dist/'))
-    .pipe(rename({suffix: '.min'}))
-    .pipe(uglify())
-    .pipe(gulp.dest('dist'));
-
-  merge(scripts, templates)
-    .pipe(concat('main.templates.js'))
-    .pipe(gulp.dest('dist/'))
-    .pipe(rename({suffix: '.min'}))
-    .pipe(uglify())
-    .pipe(gulp.dest('dist/'))
+gulp.task('dgeni', function() {
+  var dgeni = new Dgeni([require('./docs/dgeni')]);
+  return dgeni.generate();
 });
 
-gulp.task('default', ['less', 'process-scripts']);
+gulp.task('default', ['transpile']);
