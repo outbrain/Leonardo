@@ -1,6 +1,6 @@
 {
   "name": "leonardo",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "homepage": "https://github.com/outbrain/Leonardo",
   "authors": [
     "sagivf <sagivf@gmail.com>"
@@ -12,8 +12,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "angular": ">= 1.0.0",
-    "angular-ui-router": "0.2.8-bowratic-tedium"
+    "angular": ">= 1.0.0"
   },
   "ignore": [
     "**/.*",
