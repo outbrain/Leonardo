@@ -15,9 +15,10 @@
   "browser": true,
   "strict": false,
   "unused": true,
-  "esnext": true,
   "maxdepth": 4,
+  "esnext": true,
   "globals": {
+    "$": true,
     "confirm": false,
     "console": false,
     "require": false,

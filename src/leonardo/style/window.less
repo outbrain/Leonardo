@@ -1,0 +1,87 @@
+.leonardo-header {
+  position: absolute;
+  z-index: 1;
+  display: inline-block;
+  line-height: 100px;
+  font-size: 1.5em;
+  color: white;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-bottom: 3px solid #3b0013;
+  text-align: center;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e22f53), color-stop(100%, #E2465A));
+  background-image: -webkit-linear-gradient(top, #e22f53, #E2465A);
+  background-image: -moz-linear-gradient(top, #e22f53, #E2465A);
+  background-image: -ms-linear-gradient(top, #e22f53, #E2465A);
+  background-image: -o-linear-gradient(top, #e22f53, #E2465A);
+  background-image: linear-gradient(top, #e22f53, #E2465A);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e22f53), color-stop(100%, #E2465A));
+}
+
+.leonardo-window {
+  position: absolute;
+  top: 0;
+  height: 0;
+  right: 0;
+  left: 0;
+  overflow: hidden;
+  background-color: white;
+  border: 1px solid black;
+  z-index: 2;
+  -webkit-transition: height 1s ease 0s;
+  -moz-transition: height 1s ease 0s;
+  -o-transition: height 1s ease 0s;
+  transition: height 1s ease 0s;
+
+  .leonardo-window-body {
+    padding-top: 100px;
+    height: 100%;
+  }
+
+  .pull-top-closed & {
+    z-index: -4;
+  }
+
+  .pull-top & {
+    bottom: 0;
+    height: 100%;
+    -webkit-transition: height 1s ease 0s;
+    -moz-transition: height 1s ease 0s;
+    -o-transition: height 1s ease 0s;
+    transition: height 1s ease 0s;
+
+    .leonardo-header {
+      z-index: 1;
+    }
+  }
+
+  .tabs {
+    width: 100%;
+    display: flex;
+    height: 100px;
+
+    > div {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      flex-grow: 1;
+      margin: 10px;
+      border-radius: 4px;
+      border: 1px solid grey;
+      font-size: 24px;
+      cursor: pointer;
+
+      &.selected {
+        background-color: grey;
+        color: white;
+        cursor: auto;
+      }
+    }
+  }
+
+  .leonardo-window-options {
+    height: 100%;
+  }
+}

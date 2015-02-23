@@ -12,7 +12,8 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "angular": ">= 1.0.0"
+    "traceur-runtime": "~0.0.85",
+    "angular": "~1.3.13"
   },
   "ignore": [
     "**/.*",
@@ -22,5 +23,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "devDependencies": {
+    "angular-mocks": "~1.3.13"
+  }
 }
