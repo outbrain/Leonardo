@@ -81,6 +81,7 @@ gulp.task("build-templates", false, function () {
       moduleName: 'leonardo.templates'
     }))
     .pipe(rename('leonardo.templates.min.js'))
+    .pipe(gulp.dest('./dist'))
     .pipe(gulp.dest('./docs/public/leonardo'));
 });
 
