@@ -67,7 +67,7 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">configurationService</span><span class="hljs-params">($q)</span> </span>{
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">configurationService</span><span class="hljs-params">($q, $httpBackend)</span> </span>{
   <span class="hljs-keyword">var</span> states = [];
 
   <span class="hljs-keyword">var</span> db = openDatabase(<span class="hljs-string">"leonardo.db"</span>, <span class="hljs-string">'1.0'</span>, <span class="hljs-string">"Leonardo WebSQL Database"</span>, <span class="hljs-number">2</span> * <span class="hljs-number">1024</span> * <span class="hljs-number">1024</span>);
@@ -93,8 +93,6 @@
 
     <span class="hljs-keyword">return</span> defer.promise;
   };
-
-  select();
 
   <span class="hljs-keyword">return</span> {</pre></div></div>
             
@@ -153,12 +151,64 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
+              <p>todo doc</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    updateHttpBackEnd: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+      <span class="hljs-keyword">this</span>.getConfiguredOptions().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span></span>{
+        states.filter(state =&gt; state.active).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
+          <span class="hljs-keyword">var</span> option = state.activeOption;
+          $httpBackend.when(<span class="hljs-string">'GET'</span>, state.url).respond(option.status, option.data);
+        });
+      });
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>todo doc</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    getConfiguredOptions: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.getActiveStateOptions().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(rows)</span></span>{
+        <span class="hljs-keyword">var</span> activeStates = {};
+        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; rows.length; i++) {
+          activeStates[rows.item(i).state] = { name: rows.item(i).name, active: (rows.item(i).active === <span class="hljs-string">"true"</span>) };
+        }
+
+        <span class="hljs-keyword">var</span> states = states.map(state =&gt; angular.copy(state));
+        states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span> </span>{
+          <span class="hljs-keyword">let</span> option = activeStates[state.name];
+          state.active = !!option &amp;&amp; option.active;
+          state.activeOption = !!option ? state.options.find(_option =&gt; _option.name === option.name) : state.options[<span class="hljs-number">0</span>];
+        });
+
+        <span class="hljs-keyword">return</span> states;
+      });
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
               <p>insert or replace an option by insert or updateing a state.</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>    upsert: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">({ state, name, url, status = 200, data = {}, delay = 0})</span></span>{
-      debugger;
       <span class="hljs-keyword">var</span> defaultState = {};
 
       <span class="hljs-keyword">var</span> defaultOption = {};
@@ -192,18 +242,17 @@
         </li>
         
         
-        <li id="section-6">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>todo doc</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>    upsertMany: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(items)</span></span>{
-      debugger;
       items.forEach(item =&gt; <span class="hljs-keyword">this</span>.upsert(item));
     }
   };

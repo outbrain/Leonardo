@@ -1,4 +1,4 @@
-function configurationService($q) {
+function configurationService($q, $httpBackend) {
   var states = [];
 
   var db = openDatabase("leonardo.db", '1.0', "Leonardo WebSQL Database", 2 * 1024 * 1024);
@@ -25,8 +25,6 @@ function configurationService($q) {
     return defer.promise;
   };
 
-  select();
-
   return {
     //configured states todo doc
     states: states,
@@ -35,9 +33,35 @@ function configurationService($q) {
     active_states_option: [],
     //todo doc
     upsertOption: upsertOption,
+    //todo doc
+    updateHttpBackEnd: function(){
+      this.getConfiguredOptions().then(function(states){
+        states.filter(state => state.active).forEach(function(state){
+          var option = state.activeOption;
+          $httpBackend.when('GET', state.url).respond(option.status, option.data);
+        });
+      });
+    },
+    //todo doc
+    getConfiguredOptions: function(){
+      return this.getActiveStateOptions().then(function(rows){
+        var activeStates = {};
+        for(var i = 0; i < rows.length; i++) {
+          activeStates[rows.item(i).state] = { name: rows.item(i).name, active: (rows.item(i).active === "true") };
+        }
+
+        var states = states.map(state => angular.copy(state));
+        states.forEach(function(state) {
+          let option = activeStates[state.name];
+          state.active = !!option && option.active;
+          state.activeOption = !!option ? state.options.find(_option => _option.name === option.name) : state.options[0];
+        });
+
+        return states;
+      });
+    },
     //insert or replace an option by insert or updateing a state.
     upsert: function({ state, name, url, status = 200, data = {}, delay = 0}){
-      debugger;
       var defaultState = {};
 
       var defaultOption = {};
