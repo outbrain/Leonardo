@@ -57,9 +57,10 @@ function configurationService($q, $httpBackend) {
   function sync(){
     return fetchStates().then(function(states) {
       var defer = $q.defer();
+      var promise = defer.promise;
       defer.resolve();
       states.forEach(function (state) {
-        defer = defer.promise.then(function(){
+        promise = promise.then(function(){
           return findStateOption(state.name).then(function(option){
             if (state.active)
             {
@@ -74,7 +75,7 @@ function configurationService($q, $httpBackend) {
         });
       });
 
-      return defer;
+      return promise;
     });
   }
 
