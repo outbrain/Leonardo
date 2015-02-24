@@ -55,10 +55,9 @@ function configurationService($q, $httpBackend) {
   }
 
   function sync(){
-    fetchStates().then(function(states) {
+    return fetchStates().then(function(states) {
       states.forEach(function (state) {
         findStateOption(state.name).then(function(option){
-          debugger;
           if (state.active)
           {
             stateReq[state.name].respond(function () {
@@ -73,17 +72,19 @@ function configurationService($q, $httpBackend) {
     });
   }
 
-  fetchStates().then(function(states) {
+  var initialized = fetchStates().then(function(states) {
     states.forEach(function (state) {
       stateReq[state.name] = $httpBackend.when('GET', state.url);
     });
   });
 
-  sync();
 
   return {
     //configured states todo doc
     states: states,
+    initialied: function(){
+      return initialized.then(sync);
+    },
     //todo doc
     active_states_option: [],
     //todo doc

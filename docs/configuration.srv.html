@@ -124,10 +124,9 @@
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sync</span><span class="hljs-params">()</span></span>{
-    fetchStates().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span> </span>{
+    <span class="hljs-keyword">return</span> fetchStates().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span> </span>{
       states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(state)</span> </span>{
         findStateOption(state.name).then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(option)</span></span>{
-          debugger;
           <span class="hljs-keyword">if</span> (state.active)
           {
             stateReq[state.name].respond(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
@@ -142,13 +141,12 @@
     });
   }
 
-  fetchStates().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span> </span>{
+  <span class="hljs-keyword">var</span> initialized = fetchStates().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span> </span>{
     states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(state)</span> </span>{
       stateReq[state.name] = $httpBackend.when(<span class="hljs-string">'GET'</span>, state.url);
     });
   });
 
-  sync();
 
   <span class="hljs-keyword">return</span> {</pre></div></div>
             
@@ -165,7 +163,10 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    states: states,</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    states: states,
+    initialied: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+      <span class="hljs-keyword">return</span> initialized.then(sync);
+    },</pre></div></div>
             
         </li>
         

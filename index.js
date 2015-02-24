@@ -26,4 +26,8 @@ function run(configuration){
   // ----------------
   //* via ui - click on leonardo and hit the activate tabs
   //* via api - coming soon...
+
+  configuration.initialied().then(function(){
+      console.log('Leonardo has initialized')
+  });
 }
