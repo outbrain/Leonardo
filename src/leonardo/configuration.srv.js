@@ -74,7 +74,7 @@ function configurationService($q, $httpBackend) {
 
   var initialized = fetchStates().then(function(states) {
     states.forEach(function (state) {
-      stateReq[state.name] = $httpBackend.when('GET', state.url);
+      stateReq[state.name] = $httpBackend.when('GET', new RegExp(state.url));
     });
   });
 

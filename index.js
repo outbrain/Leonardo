@@ -28,6 +28,6 @@ function run(configuration){
   //* via api - coming soon...
 
   configuration.initialied().then(function(){
-      console.log('Leonardo has initialized')
+      console.log('Leonardo has initialized');
   });
 }
