@@ -1,15 +1,19 @@
 function configurationService($q, $httpBackend) {
   var states = [];
+  var activeStates = {};
+  var stateReq = {};
 
   var db = openDatabase("leonardo.db", '1.0', "Leonardo WebSQL Database", 2 * 1024 * 1024);
 
   db.transaction(function (tx) {
     tx.executeSql("CREATE TABLE IF NOT EXISTS active_states_option (state PRIMARY KEY, name text, active text)");
+    sync();
   });
 
   var upsertOption = function(state, name, active) {
     db.transaction(function (tx) {
       tx.executeSql("INSERT OR REPLACE into active_states_option (state, name, active) VALUES (?,?, ?)", [state, name, active]);
+      sync();
     });
   }
 
@@ -25,41 +29,60 @@ function configurationService($q, $httpBackend) {
     return defer.promise;
   };
 
+  function fetchStates(){
+    return select().then(function(rows){
+      for(var i = 0; i < rows.length; i++) {
+        activeStates[rows.item(i).state] = { name: rows.item(i).name, active: (rows.item(i).active === "true") };
+      }
+
+      var _states = states.map(state => angular.copy(state));
+
+      _states.forEach(function(state) {
+        let option = activeStates[state.name];
+        state.active = !!option && option.active;
+        state.activeOption = !!option ? state.options.find(_option => _option.name === option.name) : state.options[0];
+      });
+
+      return _states;
+    });
+  }
+
+  function findStateOption(name){
+    return fetchStates().then(function(states){
+      return states.find(state => state.name === name).activeOption;
+    });
+
+  }
+
+  function sync(){
+    fetchStates().then(function(states) {
+      states.forEach(function (state) {
+        findStateOption(state.name).then(function(option){
+          stateReq[state.name].respond(function() {
+            return [option.status, option.data];
+          });
+        });
+      });
+    });
+  }
+
+  fetchStates().then(function(states) {
+    states.forEach(function (state) {
+      stateReq[state.name] = $httpBackend.when('GET', state.url);
+    });
+  });
+
+  sync();
+
   return {
     //configured states todo doc
     states: states,
-    getActiveStateOptions: select,
     //todo doc
     active_states_option: [],
     //todo doc
     upsertOption: upsertOption,
     //todo doc
-    updateHttpBackEnd: function(){
-      this.getConfiguredOptions().then(function(states){
-        states.filter(state => state.active).forEach(function(state){
-          var option = state.activeOption;
-          $httpBackend.when('GET', state.url).respond(option.status, option.data);
-        });
-      });
-    },
-    //todo doc
-    getConfiguredOptions: function(){
-      return this.getActiveStateOptions().then(function(rows){
-        var activeStates = {};
-        for(var i = 0; i < rows.length; i++) {
-          activeStates[rows.item(i).state] = { name: rows.item(i).name, active: (rows.item(i).active === "true") };
-        }
-
-        var states = states.map(state => angular.copy(state));
-        states.forEach(function(state) {
-          let option = activeStates[state.name];
-          state.active = !!option && option.active;
-          state.activeOption = !!option ? state.options.find(_option => _option.name === option.name) : state.options[0];
-        });
-
-        return states;
-      });
-    },
+    fetchStates: fetchStates,
     //insert or replace an option by insert or updateing a state.
     upsert: function({ state, name, url, status = 200, data = {}, delay = 0}){
       var defaultState = {};

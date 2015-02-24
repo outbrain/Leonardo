@@ -2,7 +2,7 @@
 // Steps Stages
 // ----------------
 //* Add leonardo module as a dependancy to your app
-//* You done
+//* You done!
 export default angular.module('example', ['leonardo'])
             .run(run);
 
@@ -11,7 +11,7 @@ function run(configuration){
 
   // Adding states
   // ----------------
-  //* via api
+  //* via api - you can look at the results by clicking leonardo and looking in the configure tab
   //* via ui - coming soon...
   configuration.upsert({ state: 'state1', name: 'get url1 aaaa', url: 'http://url1.com', status: 200, data: ["url1 aaa"]});
   configuration.upsertMany([
@@ -24,6 +24,6 @@ function run(configuration){
 
   // Setting options
   // ----------------
-  //* via api
-  //* via ui
+  //* via ui - click on leonardo and hit the activate tabs
+  //* via api - coming soon...
 }

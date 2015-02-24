@@ -69,16 +69,20 @@
             
             <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">configurationService</span><span class="hljs-params">($q, $httpBackend)</span> </span>{
   <span class="hljs-keyword">var</span> states = [];
+  <span class="hljs-keyword">var</span> activeStates = {};
+  <span class="hljs-keyword">var</span> stateReq = {};
 
   <span class="hljs-keyword">var</span> db = openDatabase(<span class="hljs-string">"leonardo.db"</span>, <span class="hljs-string">'1.0'</span>, <span class="hljs-string">"Leonardo WebSQL Database"</span>, <span class="hljs-number">2</span> * <span class="hljs-number">1024</span> * <span class="hljs-number">1024</span>);
 
   db.transaction(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(tx)</span> </span>{
     tx.executeSql(<span class="hljs-string">"CREATE TABLE IF NOT EXISTS active_states_option (state PRIMARY KEY, name text, active text)"</span>);
+    sync();
   });
 
   <span class="hljs-keyword">var</span> upsertOption = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state, name, active)</span> </span>{
     db.transaction(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(tx)</span> </span>{
       tx.executeSql(<span class="hljs-string">"INSERT OR REPLACE into active_states_option (state, name, active) VALUES (?,?, ?)"</span>, [state, name, active]);
+      sync();
     });
   }
 
@@ -93,6 +97,51 @@
 
     <span class="hljs-keyword">return</span> defer.promise;
   };
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetchStates</span><span class="hljs-params">()</span></span>{
+    <span class="hljs-keyword">return</span> select().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(rows)</span></span>{
+      <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; rows.length; i++) {
+        activeStates[rows.item(i).state] = { name: rows.item(i).name, active: (rows.item(i).active === <span class="hljs-string">"true"</span>) };
+      }
+
+      <span class="hljs-keyword">var</span> _states = states.map(state =&gt; angular.copy(state));
+
+      _states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span> </span>{
+        <span class="hljs-keyword">let</span> option = activeStates[state.name];
+        state.active = !!option &amp;&amp; option.active;
+        state.activeOption = !!option ? state.options.find(_option =&gt; _option.name === option.name) : state.options[<span class="hljs-number">0</span>];
+      });
+
+      <span class="hljs-keyword">return</span> _states;
+    });
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">findStateOption</span><span class="hljs-params">(name)</span></span>{
+    <span class="hljs-keyword">return</span> fetchStates().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span></span>{
+      <span class="hljs-keyword">return</span> states.find(state =&gt; state.name === name).activeOption;
+    });
+
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sync</span><span class="hljs-params">()</span></span>{
+    fetchStates().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span> </span>{
+      states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(state)</span> </span>{
+        findStateOption(state.name).then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(option)</span></span>{
+          stateReq[state.name].respond(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <span class="hljs-keyword">return</span> [option.status, option.data];
+          });
+        });
+      });
+    });
+  }
+
+  fetchStates().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span> </span>{
+    states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(state)</span> </span>{
+      stateReq[state.name] = $httpBackend.when(<span class="hljs-string">'GET'</span>, state.url);
+    });
+  });
+
+  sync();
 
   <span class="hljs-keyword">return</span> {</pre></div></div>
             
@@ -109,8 +158,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    states: states,
-    getActiveStateOptions: select,</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    states: states,</pre></div></div>
             
         </li>
         
@@ -155,14 +203,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    updateHttpBackEnd: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
-      <span class="hljs-keyword">this</span>.getConfiguredOptions().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span></span>{
-        states.filter(state =&gt; state.active).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
-          <span class="hljs-keyword">var</span> option = state.activeOption;
-          $httpBackend.when(<span class="hljs-string">'GET'</span>, state.url).respond(option.status, option.data);
-        });
-      });
-    },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    fetchStates: fetchStates,</pre></div></div>
             
         </li>
         
@@ -172,37 +213,6 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
-              <p>todo doc</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    getConfiguredOptions: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
-      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.getActiveStateOptions().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(rows)</span></span>{
-        <span class="hljs-keyword">var</span> activeStates = {};
-        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; rows.length; i++) {
-          activeStates[rows.item(i).state] = { name: rows.item(i).name, active: (rows.item(i).active === <span class="hljs-string">"true"</span>) };
-        }
-
-        <span class="hljs-keyword">var</span> states = states.map(state =&gt; angular.copy(state));
-        states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span> </span>{
-          <span class="hljs-keyword">let</span> option = activeStates[state.name];
-          state.active = !!option &amp;&amp; option.active;
-          state.activeOption = !!option ? state.options.find(_option =&gt; _option.name === option.name) : state.options[<span class="hljs-number">0</span>];
-        });
-
-        <span class="hljs-keyword">return</span> states;
-      });
-    },</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-7">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>insert or replace an option by insert or updateing a state.</p>
 
@@ -242,11 +252,11 @@
         </li>
         
         
-        <li id="section-8">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>todo doc</p>
 

@@ -16,27 +16,17 @@ function windowBodyDirective($http, configuration) {
     scope: true,
     replace: true,
     controller: function($scope){
-     // $scope.selectedItem = 'activate';
+      $scope.selectedItem = 'activate';
 
-      configuration.getActiveStateOptions().then(function(rows){
-        var activeStates = {};
-        for(var i = 0; i < rows.length; i++) {
-          activeStates[rows.item(i).state] = { name: rows.item(i).name, active: (rows.item(i).active === "true") };
-        }
+      configuration.fetchStates().then(function(states){
 
-        $scope.states = configuration.states.map(state => angular.copy(state));
-        $scope.states.forEach(function(state) {
-          let option = activeStates[state.name];
-          state.active = !!option && option.active;
-          state.activeOption = !!option ? state.options.find(_option => _option.name === option.name) : state.options[0];
-        });
-
+        $scope.states = states;
         $scope.changeActive = function(state){
           console.log("activate: " + state.name + " " + state.active);
           configuration.upsertOption(state.name, state.activeOption.name, state.active);
         };
 
-        $scope.states.forEach(function(state){
+        states.forEach(function(state){
           $scope.$watch(function(){
             return state.activeOption;
           }, function(activeOption, oldValue){
