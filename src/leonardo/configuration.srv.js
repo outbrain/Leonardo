@@ -58,9 +58,16 @@ function configurationService($q, $httpBackend) {
     fetchStates().then(function(states) {
       states.forEach(function (state) {
         findStateOption(state.name).then(function(option){
-          stateReq[state.name].respond(function() {
-            return [option.status, option.data];
-          });
+          debugger;
+          if (state.active)
+          {
+            stateReq[state.name].respond(function () {
+              return [option.status, option.data];
+            });
+          }
+          else {
+            stateReq[state.name].passThrough();
+          }
         });
       });
     });

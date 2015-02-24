@@ -127,9 +127,16 @@
     fetchStates().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span> </span>{
       states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(state)</span> </span>{
         findStateOption(state.name).then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(option)</span></span>{
-          stateReq[state.name].respond(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
-            <span class="hljs-keyword">return</span> [option.status, option.data];
-          });
+          debugger;
+          <span class="hljs-keyword">if</span> (state.active)
+          {
+            stateReq[state.name].respond(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+              <span class="hljs-keyword">return</span> [option.status, option.data];
+            });
+          }
+          <span class="hljs-keyword">else</span> {
+            stateReq[state.name].passThrough();
+          }
         });
       });
     });
