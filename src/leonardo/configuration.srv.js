@@ -56,19 +56,25 @@ function configurationService($q, $httpBackend) {
 
   function sync(){
     return fetchStates().then(function(states) {
+      var defer = $q.defer;
+      defer.resolve();
       states.forEach(function (state) {
-        findStateOption(state.name).then(function(option){
-          if (state.active)
-          {
-            stateReq[state.name].respond(function () {
-              return [option.status, option.data];
-            });
-          }
-          else {
-            stateReq[state.name].passThrough();
-          }
+        defer = defer.promise.then(function(){
+          return findStateOption(state.name).then(function(option){
+            if (state.active)
+            {
+              stateReq[state.name].respond(function () {
+                return [option.status, option.data];
+              });
+            }
+            else {
+              stateReq[state.name].passThrough();
+            }
+          });
         });
       });
+
+      return defer;
     });
   }
 
