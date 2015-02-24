@@ -8,9 +8,42 @@
   <link rel="stylesheet" media="all" href="docco.css" />
   <link rel="stylesheet" media="all" href="public/leonardo/app.min.css" />
 </head>
-<body activator class="pull-top">
+<body activator>
   <div id="container">
     <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="activator.drv.html">
+                  activator.drv.js
+                </a>
+              
+                
+                <a class="source" href="configuration.srv.html">
+                  configuration.srv.js
+                </a>
+              
+                
+                <a class="source" href="module.html">
+                  module.js
+                </a>
+              
+                
+                <a class="source" href="window-body.drv.html">
+                  window-body.drv.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
     
     <ul class="sections">
         
@@ -62,11 +95,58 @@ parameters… it just does something.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">windowBodyDirective</span><span class="hljs-params">($http)</span> </span>{
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">windowBodyDirective</span><span class="hljs-params">($http, configuration)</span> </span>{
   <span class="hljs-keyword">return</span> {
     restrict: <span class="hljs-string">'E'</span>,
     templateUrl: <span class="hljs-string">'window-body.html'</span>,
     scope: <span class="hljs-literal">true</span>,
+    replace: <span class="hljs-literal">true</span>,
+    controller: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($scope)</span></span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>$scope.selectedItem = ‘activate’;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+      configuration.getActiveStateOptions().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(rows)</span></span>{
+        <span class="hljs-keyword">var</span> activeStates = {};
+        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; rows.length; i++) {
+          activeStates[rows.item(i).state] = { name: rows.item(i).name, active: (rows.item(i).active === <span class="hljs-string">"true"</span>) };
+        }
+
+        $scope.states = configuration.states.map(state =&gt; angular.copy(state));
+        $scope.states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span> </span>{
+          <span class="hljs-keyword">let</span> option = activeStates[state.name];
+          state.active = !!option &amp;&amp; option.active;
+          state.activeOption = !!option ? state.options.find(_option =&gt; _option.name === option.name) : state.options[<span class="hljs-number">0</span>];
+        });
+
+        $scope.changeActive = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
+          <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"activate: "</span> + state.name + <span class="hljs-string">" "</span> + state.active);
+          configuration.upsertOption(state.name, state.activeOption.name, state.active);
+        };
+
+        $scope.states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
+          $scope.$watch(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+            <span class="hljs-keyword">return</span> state.activeOption;
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(activeOption, oldValue)</span></span>{
+            <span class="hljs-keyword">if</span> (activeOption !== oldValue){
+              <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"select: "</span> + state.name + <span class="hljs-string">" "</span> + activeOption.name + <span class="hljs-string">" "</span> + state.active);
+              configuration.upsertOption(state.name, activeOption.name, state.active);
+            }
+          });
+        });
+      });
+    },
     link: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(scope)</span> </span>{
       scope.submit = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(value)</span></span>{
         <span class="hljs-keyword">if</span> (value) {

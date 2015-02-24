@@ -31,29 +31,27 @@
     </div>
     <div ng-switch-when="activate" class="leonardo-activate">
       <ul>
-        <li ng-repeat="state in states">
+        <li ng-repeat="state in ::states">
           <div class="onoffswitch-wrapper">
             <div class="onoffswitch">
-              <input ng-model="state.active" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}">
-              <label class="onoffswitch-label" for="{{state.name}}">
+              <input ng-model="state.active" ng-click="changeActive(state)" class="onoffswitch-checkbox" id="{{::state.name}}" type="checkbox" name="{{::state.name}}" value="{{::state.name}}">
+              <label class="onoffswitch-label" for="{{::state.name}}">
                 <span class="onoffswitch-inner"></span>
                 <span class="onoffswitch-switch"></span>
               </label>
             </div>
           </div>
-          <h4>{{state.name}} - {{state.url}}</h4>
+          <h4>{{::state.name}} - {{::state.url}}</h4>
           <div class="select-wrapper">
-            <select>
-              <option ng-repeat="option in state.options">{{option.name}}</option>
-            </select>
+            <select ng-model="state.activeOption" ng-options="option.name for option in ::state.options"></select>
           </div>
         </li>
       </ul>
     </div>
     <div ng-switch-when="test" class="leonardo-test">
-      URL: <input type="text" ng-model="url"/>
-      <input type="button" ng-click="submit(url)" value="submit"/><br/>
-      {{value | json}}
+      <label for="url"></label>URL: <input id="url" type="text" ng-model="url"/>
+      <input type="button" ng-click="submit(url)" value="submit"/>
+      <textarea>{{value | json}}</textarea>
     </div>
   </div>
 </div>

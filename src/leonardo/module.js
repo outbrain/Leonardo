@@ -15,10 +15,23 @@ function run(configuration, $httpBackend){
   configuration.upsert({ url: 'http://url2.com', name: 'get url2 a', status:200,  data: ["url2 aaa"]});
   configuration.upsert({ url: 'http://url2.com', name: 'get url2 b', status:200,  data: ["url2 bbb"]});
 
-//  configuration.states.forEach(function (state) {
-//    state.options.forEach(function(option){
-//      $httpBackend.when('GET', state.url).respond(state.status, state.data);
-//    });
-//  });
+  configuration.getActiveStateOptions().then(function(rows){
+    var activeStates = {};
+    for(var i = 0; i < rows.length; i++) {
+      activeStates[rows.item(i).state] = { name: rows.item(i).name, active: (rows.item(i).active === "true") };
+    }
+
+    var states = configuration.states.map(state => angular.copy(state));
+    states.forEach(function(state) {
+      let option = activeStates[state.name];
+      state.active = !!option && option.active;
+      state.activeOption = !!option ? state.options.find(_option => _option.name === option.name) : state.options[0];
+    });
+
+    states.filter(state => state.active).forEach(function(state){
+      var option = state.activeOption;
+      $httpBackend.when('GET', state.url).respond(option.status, option.data);
+    });
+  });
 }
 

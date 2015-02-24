@@ -8,9 +8,42 @@
   <link rel="stylesheet" media="all" href="docco.css" />
   <link rel="stylesheet" media="all" href="public/leonardo/app.min.css" />
 </head>
-<body activator class="pull-top">
+<body activator>
   <div id="container">
     <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="activator.drv.html">
+                  activator.drv.js
+                </a>
+              
+                
+                <a class="source" href="configuration.srv.html">
+                  configuration.srv.js
+                </a>
+              
+                
+                <a class="source" href="module.html">
+                  module.js
+                </a>
+              
+                
+                <a class="source" href="window-body.drv.html">
+                  window-body.drv.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
     
     <ul class="sections">
         
@@ -42,12 +75,28 @@ export <span class="hljs-keyword">default</span> angular.module(<span class="hlj
   .directive(<span class="hljs-string">'windowBody'</span>, windowBodyDirective);
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">run</span><span class="hljs-params">(configuration, $httpBackend)</span></span>{
-  configuration.add(<span class="hljs-string">'state1'</span>, <span class="hljs-string">'http://gooo.com'</span>, <span class="hljs-number">200</span>, [<span class="hljs-string">"asdasd"</span>]);
+  configuration.upsert({ state: <span class="hljs-string">'state1'</span>, name: <span class="hljs-string">'get url1 aaaa'</span>, url: <span class="hljs-string">'http://url1.com'</span>, status: <span class="hljs-number">200</span>, data: [<span class="hljs-string">"url1 aaa"</span>]});
+  configuration.upsert({ state: <span class="hljs-string">'state1'</span>, name: <span class="hljs-string">'get url1 bbbb'</span>, status:<span class="hljs-number">200</span>,  data: [<span class="hljs-string">"url1 bbb"</span>]});
+  configuration.upsert({ url: <span class="hljs-string">'http://url1.com'</span>, name: <span class="hljs-string">'get url1 cccc'</span>, status:<span class="hljs-number">200</span>,  data: [<span class="hljs-string">"url1 ccc"</span>]});
+  configuration.upsert({ url: <span class="hljs-string">'http://url2.com'</span>, name: <span class="hljs-string">'get url2 a'</span>, status:<span class="hljs-number">200</span>,  data: [<span class="hljs-string">"url2 aaa"</span>]});
+  configuration.upsert({ url: <span class="hljs-string">'http://url2.com'</span>, name: <span class="hljs-string">'get url2 b'</span>, status:<span class="hljs-number">200</span>,  data: [<span class="hljs-string">"url2 bbb"</span>]});
 
-  <span class="hljs-built_in">Object</span>.keys(configuration.states).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(key)</span> </span>{
-    <span class="hljs-keyword">let</span> states = configuration.states[key];
-    states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
-      $httpBackend.when(<span class="hljs-string">'GET'</span>, state.url).respond(state.status, state.data);
+  configuration.getActiveStateOptions().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(rows)</span></span>{
+    <span class="hljs-keyword">var</span> activeStates = {};
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; rows.length; i++) {
+      activeStates[rows.item(i).state] = { name: rows.item(i).name, active: (rows.item(i).active === <span class="hljs-string">"true"</span>) };
+    }
+
+    <span class="hljs-keyword">var</span> states = configuration.states.map(state =&gt; angular.copy(state));
+    states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span> </span>{
+      <span class="hljs-keyword">let</span> option = activeStates[state.name];
+      state.active = !!option &amp;&amp; option.active;
+      state.activeOption = !!option ? state.options.find(_option =&gt; _option.name === option.name) : state.options[<span class="hljs-number">0</span>];
+    });
+
+    states.filter(state =&gt; state.active).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
+      <span class="hljs-keyword">var</span> option = state.activeOption;
+      $httpBackend.when(<span class="hljs-string">'GET'</span>, state.url).respond(option.status, option.data);
     });
   });
 }</pre></div></div>

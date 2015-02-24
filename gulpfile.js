@@ -6,8 +6,7 @@ var gulp = require('gulp'),
   rename = require("gulp-rename"),
   minifyCSS = require('gulp-minify-css'),
   minifyHtml = require("gulp-minify-html"),
-  ngHtml2Js = require("gulp-ng-html2js"),
-  docco = require("gulp-docco");
+  ngHtml2Js = require("gulp-ng-html2js");
 
 require("gulp-help")(gulp);
 
@@ -28,16 +27,7 @@ gulp.task('transpile', 'Transpile the App from ES6 to ES5', function() {
     });
 });
 
-gulp.task('docco', function() {
-  return gulp.src("./src/leonardo/*.js")
-    .pipe(docco({
-      template: './src/docs/resources/custom/docco.jst',
-      css: 'docco.css'
-    }))
-    .pipe(gulp.dest('./docs'));
-});
-
-gulp.task('copy-doco', function() {
+gulp.task('copy', function() {
   return gulp.src([
       "./dist/module.js",
       "./bower_components/traceur-runtime/traceur-runtime.min.js",
@@ -79,8 +69,9 @@ gulp.task("build-templates", false, function () {
 gulp.task('watch', "Watch file changes and auto compile for development", function () {
 //  gulp.watch(["./src/leonardo/*.js", "./src/leonardo/templates/*.html", "./src/leonardo/style/*.less"], ['default']);
   gulp.watch(["./src/leonardo/style/*.less"], ['build-less']);
+  gulp.watch(["./src/leonardo/*.js"], ['transpile']);
 });
 
 gulp.task('default', ['transpile', 'build-less', 'build-templates'], function(cb) {
-  runSequence(['copy-doco'], cb);
+  runSequence(['copy'], cb);
 });
