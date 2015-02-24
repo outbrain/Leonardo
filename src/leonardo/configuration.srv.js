@@ -56,7 +56,7 @@ function configurationService($q, $httpBackend) {
 
   function sync(){
     return fetchStates().then(function(states) {
-      var defer = $q.defer;
+      var defer = $q.defer();
       defer.resolve();
       states.forEach(function (state) {
         defer = defer.promise.then(function(){

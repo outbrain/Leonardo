@@ -126,7 +126,7 @@
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sync</span><span class="hljs-params">()</span></span>{
     <span class="hljs-keyword">return</span> fetchStates().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span> </span>{
-      <span class="hljs-keyword">var</span> defer = $q.defer;
+      <span class="hljs-keyword">var</span> defer = $q.defer();
       defer.resolve();
       states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(state)</span> </span>{
         defer = defer.promise.then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
