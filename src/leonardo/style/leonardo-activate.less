@@ -7,21 +7,23 @@
   li {
     display: table-row;
     height: 50px;
+
+    > div {
+      display: table-cell;
+      vertical-align: middle;
+    }
+
+    > div:nth-child(2) {
+      min-width: 400px;
+    }
   }
 
   h4 {
     padding: 0 0 0 50px;
-    min-width: 400px;
-
+    display: inline;
   }
 
   select {
     width: 200px;
   }
-
-  .onoffswitch-wrapper, h4, .select-wrapper {
-    display: table-cell;
-    vertical-align: middle;
-  }
-
 }

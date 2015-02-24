@@ -32,7 +32,7 @@
     <div ng-switch-when="activate" class="leonardo-activate">
       <ul>
         <li ng-repeat="state in ::states">
-          <div class="onoffswitch-wrapper">
+          <div>
             <div class="onoffswitch">
               <input ng-model="state.active" ng-click="changeActive(state)" class="onoffswitch-checkbox" id="{{::state.name}}" type="checkbox" name="{{::state.name}}" value="{{::state.name}}">
               <label class="onoffswitch-label" for="{{::state.name}}">
@@ -41,17 +41,21 @@
               </label>
             </div>
           </div>
-          <h4>{{::state.name}} - {{::state.url}}</h4>
-          <div class="select-wrapper">
+          <div>
+            <h4>{{::state.name}}</h4>&nbsp;&nbsp; - {{::state.url}}
+          </div>
+          <div>
             <select ng-model="state.activeOption" ng-options="option.name for option in ::state.options"></select>
           </div>
         </li>
       </ul>
     </div>
     <div ng-switch-when="test" class="leonardo-test">
-      <label for="url"></label>URL: <input id="url" type="text" ng-model="url"/>
-      <input type="button" ng-click="submit(url)" value="submit"/>
-      <textarea>{{value | json}}</textarea>
+      <div>
+        <label for="url"></label>URL: <input id="url" type="text" ng-model="test.url"/>
+        <input type="button" ng-click="submit(test.url)" value="submit"/>
+      </div>
+      <textarea>{{test.value | json}}</textarea>
     </div>
   </div>
 </div>

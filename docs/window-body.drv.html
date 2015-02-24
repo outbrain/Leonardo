@@ -5,6 +5,7 @@
   <title>window-body.drv.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="icon" type="image/x-icon" href="public/leonardo.png">
   <link rel="stylesheet" media="all" href="public/docco.css" />
   <link rel="stylesheet" media="all" href="public/leonardo/app.min.css" />
 </head>
@@ -128,10 +129,17 @@ parameters… it just does something.</p>
       });
     },
     link: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(scope)</span> </span>{
-      scope.submit = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(value)</span></span>{
-        <span class="hljs-keyword">if</span> (value) {
-          $http.get(value).success(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(res)</span> </span>{
-            scope.value = res;
+      scope.test = {
+        url: <span class="hljs-string">''</span>,
+        value: <span class="hljs-literal">undefined</span>
+      };
+
+      scope.submit = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(url)</span></span>{
+        scope.test.value = <span class="hljs-literal">undefined</span>;
+        scope.url = url;
+        <span class="hljs-keyword">if</span> (url) {
+          $http.get(url).success(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(res)</span> </span>{
+            scope.test.value = res;
           });
         }
       };

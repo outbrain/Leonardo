@@ -39,10 +39,17 @@ function windowBodyDirective($http, configuration) {
       });
     },
     link: function(scope) {
-      scope.submit = function(value){
-        if (value) {
-          $http.get(value).success(function (res) {
-            scope.value = res;
+      scope.test = {
+        url: '',
+        value: undefined
+      };
+
+      scope.submit = function(url){
+        scope.test.value = undefined;
+        scope.url = url;
+        if (url) {
+          $http.get(url).success(function (res) {
+            scope.test.value = res;
           });
         }
       };
