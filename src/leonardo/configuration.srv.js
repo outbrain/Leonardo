@@ -37,6 +37,7 @@ function configurationService($q) {
     upsertOption: upsertOption,
     //insert or replace an option by insert or updateing a state.
     upsert: function({ state, name, url, status = 200, data = {}, delay = 0}){
+      debugger;
       var defaultState = {};
 
       var defaultOption = {};
@@ -67,8 +68,8 @@ function configurationService($q) {
       }
     },
     //todo doc
-    addBundle: function(name, options){
-      //todo implement
+    upsertMany: function(items){
+      items.forEach(item => this.upsert(item));
     }
   };
 }

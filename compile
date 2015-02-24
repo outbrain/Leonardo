@@ -1,0 +1,5 @@
+#!/bin/sh
+
+gulp
+docco index.js --template=build/docs/resources/example/docco.jst --output=./
+docco src/leonardo/*.js --template=build/docs/resources/custom/docco.jst

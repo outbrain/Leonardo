@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 
-<html ng-app="leonardo">
+<html ng-app="example">
 <head>
   <title>configuration.srv.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
-  <link rel="stylesheet" media="all" href="docco.css" />
+  <link rel="stylesheet" media="all" href="public/docco.css" />
   <link rel="stylesheet" media="all" href="public/leonardo/app.min.css" />
 </head>
 <body activator>
@@ -19,6 +19,9 @@
           <div id="jump_wrapper">
           <div id="jump_page_wrapper">
             <div id="jump_page">
+              <a class="source" href="../index.html" %>
+                Back to example index.html
+              </a>
               
                 
                 <a class="source" href="activator.drv.html">
@@ -155,6 +158,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>    upsert: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">({ state, name, url, status = 200, data = {}, delay = 0})</span></span>{
+      debugger;
       <span class="hljs-keyword">var</span> defaultState = {};
 
       <span class="hljs-keyword">var</span> defaultOption = {};
@@ -198,22 +202,10 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    addBundle: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, options)</span></span>{</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-7">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
-              </div>
-              <p>todo implement</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    }
+            <div class="content"><div class='highlight'><pre>    upsertMany: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(items)</span></span>{
+      debugger;
+      items.forEach(item =&gt; <span class="hljs-keyword">this</span>.upsert(item));
+    }
   };
 }
 
@@ -229,5 +221,6 @@ export <span class="hljs-keyword">default</span> configurationService;</pre></di
   <script src='public/leonardo/traceur-runtime.min.js'></script>
   <script src="public/leonardo/leonardo.templates.min.js"></script>
   <script src="public/leonardo/module.js"></script>
+  <script src="public/leonardo/index.js"></script>
 </body>
 </html>

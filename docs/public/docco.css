@@ -2,30 +2,30 @@
 
 @font-face {
     font-family: 'aller-light';
-    src: url('public/fonts/aller-light.eot');
-    src: url('public/fonts/aller-light.eot?#iefix') format('embedded-opentype'),
-         url('public/fonts/aller-light.woff') format('woff'),
-         url('public/fonts/aller-light.ttf') format('truetype');
+    src: url('fonts/aller-light.eot');
+    src: url('fonts/aller-light.eot?#iefix') format('embedded-opentype'),
+         url('fonts/aller-light.woff') format('woff'),
+         url('fonts/aller-light.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'aller-bold';
-    src: url('public/fonts/aller-bold.eot');
-    src: url('public/fonts/aller-bold.eot?#iefix') format('embedded-opentype'),
-         url('public/fonts/aller-bold.woff') format('woff'),
-         url('public/fonts/aller-bold.ttf') format('truetype');
+    src: url('fonts/aller-bold.eot');
+    src: url('fonts/aller-bold.eot?#iefix') format('embedded-opentype'),
+         url('fonts/aller-bold.woff') format('woff'),
+         url('fonts/aller-bold.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'roboto-black';
-    src: url('public/fonts/roboto-black.eot');
-    src: url('public/fonts/roboto-black.eot?#iefix') format('embedded-opentype'),
-         url('public/fonts/roboto-black.woff') format('woff'),
-         url('public/fonts/roboto-black.ttf') format('truetype');
+    src: url('fonts/roboto-black.eot');
+    src: url('fonts/roboto-black.eot?#iefix') format('embedded-opentype'),
+         url('fonts/roboto-black.woff') format('woff'),
+         url('fonts/roboto-black.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }

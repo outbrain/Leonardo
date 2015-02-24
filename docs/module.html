@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 
-<html ng-app="leonardo">
+<html ng-app="example">
 <head>
   <title>module.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
-  <link rel="stylesheet" media="all" href="docco.css" />
+  <link rel="stylesheet" media="all" href="public/docco.css" />
   <link rel="stylesheet" media="all" href="public/leonardo/app.min.css" />
 </head>
 <body activator>
@@ -19,6 +19,9 @@
           <div id="jump_wrapper">
           <div id="jump_page_wrapper">
             <div id="jump_page">
+              <a class="source" href="../index.html" %>
+                Back to example index.html
+              </a>
               
                 
                 <a class="source" href="activator.drv.html">
@@ -69,37 +72,9 @@ import configurationService from <span class="hljs-string">'./configuration.srv.
 import windowBodyDirective from <span class="hljs-string">'./window-body.drv.js'</span>;
 
 export <span class="hljs-keyword">default</span> angular.module(<span class="hljs-string">'leonardo'</span>, [<span class="hljs-string">'leonardo.templates'</span>, <span class="hljs-string">'ngMockE2E'</span>])
-  .run(run)
   .factory(<span class="hljs-string">'configuration'</span>, configurationService)
   .directive(<span class="hljs-string">'activator'</span>, activatorDirective)
-  .directive(<span class="hljs-string">'windowBody'</span>, windowBodyDirective);
-
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">run</span><span class="hljs-params">(configuration, $httpBackend)</span></span>{
-  configuration.upsert({ state: <span class="hljs-string">'state1'</span>, name: <span class="hljs-string">'get url1 aaaa'</span>, url: <span class="hljs-string">'http://url1.com'</span>, status: <span class="hljs-number">200</span>, data: [<span class="hljs-string">"url1 aaa"</span>]});
-  configuration.upsert({ state: <span class="hljs-string">'state1'</span>, name: <span class="hljs-string">'get url1 bbbb'</span>, status:<span class="hljs-number">200</span>,  data: [<span class="hljs-string">"url1 bbb"</span>]});
-  configuration.upsert({ url: <span class="hljs-string">'http://url1.com'</span>, name: <span class="hljs-string">'get url1 cccc'</span>, status:<span class="hljs-number">200</span>,  data: [<span class="hljs-string">"url1 ccc"</span>]});
-  configuration.upsert({ url: <span class="hljs-string">'http://url2.com'</span>, name: <span class="hljs-string">'get url2 a'</span>, status:<span class="hljs-number">200</span>,  data: [<span class="hljs-string">"url2 aaa"</span>]});
-  configuration.upsert({ url: <span class="hljs-string">'http://url2.com'</span>, name: <span class="hljs-string">'get url2 b'</span>, status:<span class="hljs-number">200</span>,  data: [<span class="hljs-string">"url2 bbb"</span>]});
-
-  configuration.getActiveStateOptions().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(rows)</span></span>{
-    <span class="hljs-keyword">var</span> activeStates = {};
-    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; rows.length; i++) {
-      activeStates[rows.item(i).state] = { name: rows.item(i).name, active: (rows.item(i).active === <span class="hljs-string">"true"</span>) };
-    }
-
-    <span class="hljs-keyword">var</span> states = configuration.states.map(state =&gt; angular.copy(state));
-    states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span> </span>{
-      <span class="hljs-keyword">let</span> option = activeStates[state.name];
-      state.active = !!option &amp;&amp; option.active;
-      state.activeOption = !!option ? state.options.find(_option =&gt; _option.name === option.name) : state.options[<span class="hljs-number">0</span>];
-    });
-
-    states.filter(state =&gt; state.active).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
-      <span class="hljs-keyword">var</span> option = state.activeOption;
-      $httpBackend.when(<span class="hljs-string">'GET'</span>, state.url).respond(option.status, option.data);
-    });
-  });
-}</pre></div></div>
+  .directive(<span class="hljs-string">'windowBody'</span>, windowBodyDirective);</pre></div></div>
             
         </li>
         
@@ -111,5 +86,6 @@ export <span class="hljs-keyword">default</span> angular.module(<span class="hlj
   <script src='public/leonardo/traceur-runtime.min.js'></script>
   <script src="public/leonardo/leonardo.templates.min.js"></script>
   <script src="public/leonardo/module.js"></script>
+  <script src="public/leonardo/index.js"></script>
 </body>
 </html>

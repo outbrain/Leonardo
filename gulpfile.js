@@ -27,6 +27,24 @@ gulp.task('transpile', 'Transpile the App from ES6 to ES5', function() {
     });
 });
 
+
+gulp.task('transpile-example', 'Transpile the App from ES6 to ES5', function() {
+
+  var distPath = path.join('docs', 'public', 'leonardo',  'index.js');
+
+  return gulp.src(path.join('index.js'))
+    .pipe(gulpTraceurCmdline({
+      'source-maps': 'inline',
+      symbols : true,
+      modules : 'register',
+      out     : distPath,
+      debug   : false
+    }))
+    .on('error', function (err) {
+      console.log(err.message);
+    });
+});
+
 gulp.task('copy', function() {
   return gulp.src([
       "./dist/module.js",
@@ -72,6 +90,6 @@ gulp.task('watch', "Watch file changes and auto compile for development", functi
   gulp.watch(["./src/leonardo/*.js"], ['transpile']);
 });
 
-gulp.task('default', ['transpile', 'build-less', 'build-templates'], function(cb) {
+gulp.task('default', ['transpile', 'build-less', 'build-templates', 'transpile-example'], function(cb) {
   runSequence(['copy'], cb);
 });
