@@ -72,9 +72,9 @@
   <span class="hljs-keyword">return</span> {
     restrict: <span class="hljs-string">'A'</span>,
     link: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(scope, elem)</span> </span>{
-      <span class="hljs-keyword">var</span> el = $(<span class="hljs-string">'&lt;div ng-click="activate()" class="leonardo-activator"&gt;&lt;/div&gt;'</span>);
+      <span class="hljs-keyword">var</span> el = angular.element(<span class="hljs-string">'&lt;div ng-click="activate()" class="leonardo-activator"&gt;&lt;/div&gt;'</span>);
 
-      <span class="hljs-keyword">var</span> win = $([
+      <span class="hljs-keyword">var</span> win = angular.element([
       <span class="hljs-string">'&lt;div class="leonardo-window"&gt;'</span>,
         <span class="hljs-string">'&lt;div class="leonardo-header"&gt;Leonardo Configuration&lt;/div&gt;'</span>,
           <span class="hljs-string">'&lt;window-body&gt;&lt;/window-body&gt;'</span>,
@@ -85,8 +85,8 @@
       $compile(el)(scope);
       $compile(win)(scope);
 
-      $(elem).append(el);
-      $(elem).append(win);
+      elem.append(el);
+      elem.append(win);
 
       win[<span class="hljs-number">0</span>].addEventListener( <span class="hljs-string">'webkitTransitionEnd'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
         <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">document</span>.body.classList.contains(<span class="hljs-string">'pull-top'</span>)){
@@ -113,7 +113,6 @@ export <span class="hljs-keyword">default</span> activatorDirective</pre></div><
         
     </ul>
   </div>
-  <script src='https://code.jquery.com/jquery-2.1.3.min.js'></script>
   <script src='public/leonardo/angular.min.js'></script>
   <script src="public/leonardo/angular-mocks.js"></script>
   <script src='public/leonardo/traceur-runtime.min.js'></script>
