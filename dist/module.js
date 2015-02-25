@@ -117,7 +117,7 @@ System.registerModule("../src/leonardo/configuration.srv.js", [], function() {
     });
     return {
       states: states,
-      initialied: function() {
+      initialize: function() {
         return initialized.then(sync);
       },
       active_states_option: [],

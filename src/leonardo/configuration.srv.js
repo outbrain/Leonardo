@@ -89,7 +89,7 @@ function configurationService($q, $httpBackend) {
   return {
     //configured states todo doc
     states: states,
-    initialied: function(){
+    initialize: function(){
       return initialized.then(sync);
     },
     //todo doc
