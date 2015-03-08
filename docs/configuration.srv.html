@@ -151,7 +151,7 @@
 
   <span class="hljs-keyword">var</span> initialized = fetchStates().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span> </span>{
     states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(state)</span> </span>{
-      stateReq[state.name] = $httpBackend.when(<span class="hljs-string">'GET'</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(state.url));
+      stateReq[state.name] = $httpBackend.when(state.verb || <span class="hljs-string">'GET'</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(state.url));
     });
   });
 
@@ -234,7 +234,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    upsert: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">({ state, name, url, status = 200, data = {}, delay = 0})</span></span>{
+            <div class="content"><div class='highlight'><pre>    upsert: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">({ verb, state, name, url, status = 200, data = {}, delay = 0})</span></span>{
       <span class="hljs-keyword">var</span> defaultState = {};
 
       <span class="hljs-keyword">var</span> defaultOption = {};
@@ -244,6 +244,7 @@
       angular.extend(stateItem, {
         name: state || stateItem.name || url,
         url: url || stateItem.url,
+        verb: verb || stateItem.verb,
         options: stateItem.options || []
       });
 
