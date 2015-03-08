@@ -81,7 +81,7 @@ function configurationService($q, $httpBackend) {
 
   var initialized = fetchStates().then(function(states) {
     states.forEach(function (state) {
-      stateReq[state.name] = $httpBackend.when('GET', new RegExp(state.url));
+      stateReq[state.name] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
     });
   });
 
@@ -99,7 +99,7 @@ function configurationService($q, $httpBackend) {
     //todo doc
     fetchStates: fetchStates,
     //insert or replace an option by insert or updateing a state.
-    upsert: function({ state, name, url, status = 200, data = {}, delay = 0}){
+    upsert: function({ verb, state, name, url, status = 200, data = {}, delay = 0}){
       var defaultState = {};
 
       var defaultOption = {};
@@ -109,6 +109,7 @@ function configurationService($q, $httpBackend) {
       angular.extend(stateItem, {
         name: state || stateItem.name || url,
         url: url || stateItem.url,
+        verb: verb || stateItem.verb,
         options: stateItem.options || []
       });
 
