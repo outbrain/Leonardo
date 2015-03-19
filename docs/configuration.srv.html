@@ -76,16 +76,22 @@
   <span class="hljs-keyword">var</span> db = openDatabase(<span class="hljs-string">"leonardo.db"</span>, <span class="hljs-string">'1.0'</span>, <span class="hljs-string">"Leonardo WebSQL Database"</span>, <span class="hljs-number">2</span> * <span class="hljs-number">1024</span> * <span class="hljs-number">1024</span>);
 
   db.transaction(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(tx)</span> </span>{
-    tx.executeSql(<span class="hljs-string">"CREATE TABLE IF NOT EXISTS active_states_option (state PRIMARY KEY, name text, active text)"</span>);
-    sync();
+    tx.executeSql(<span class="hljs-string">"CREATE TABLE IF NOT EXISTS active_states_option (state PRIMARY KEY, name text, active text)"</span>, [], sync);
   });
 
   <span class="hljs-keyword">var</span> upsertOption = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state, name, active)</span> </span>{
+    <span class="hljs-keyword">var</span> defer = $q.defer();
+
     db.transaction(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(tx)</span> </span>{
-      tx.executeSql(<span class="hljs-string">"INSERT OR REPLACE into active_states_option (state, name, active) VALUES (?,?, ?)"</span>, [state, name, active]);
-      sync();
+      tx.executeSql(<span class="hljs-string">"INSERT OR REPLACE into active_states_option (state, name, active) VALUES (?,?, ?)"</span>, [state, name, active], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+        sync().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+          defer.resolve();
+        });
+      });
     });
-  }
+
+    <span class="hljs-keyword">return</span> defer.promise;
+  };
 
   <span class="hljs-keyword">var</span> select = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> defer = $q.defer();

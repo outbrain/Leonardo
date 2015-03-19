@@ -6,16 +6,22 @@ function configurationService($q, $httpBackend) {
   var db = openDatabase("leonardo.db", '1.0', "Leonardo WebSQL Database", 2 * 1024 * 1024);
 
   db.transaction(function (tx) {
-    tx.executeSql("CREATE TABLE IF NOT EXISTS active_states_option (state PRIMARY KEY, name text, active text)");
-    sync();
+    tx.executeSql("CREATE TABLE IF NOT EXISTS active_states_option (state PRIMARY KEY, name text, active text)", [], sync);
   });
 
   var upsertOption = function(state, name, active) {
+    var defer = $q.defer();
+
     db.transaction(function (tx) {
-      tx.executeSql("INSERT OR REPLACE into active_states_option (state, name, active) VALUES (?,?, ?)", [state, name, active]);
-      sync();
+      tx.executeSql("INSERT OR REPLACE into active_states_option (state, name, active) VALUES (?,?, ?)", [state, name, active], function(){
+        sync().then(function(){
+          defer.resolve();
+        });
+      });
     });
-  }
+
+    return defer.promise;
+  };
 
   var select = function() {
     var defer = $q.defer();
