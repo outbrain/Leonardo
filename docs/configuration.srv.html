@@ -86,14 +86,13 @@
   };
 
   <span class="hljs-keyword">var</span> select = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">var</span> states = [];
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> state of activeStatesStore.get(<span class="hljs-string">'states'</span>)) {
-      states.push({
-        name: state.name,
-        active: state.active
-      });
-    }
-    <span class="hljs-keyword">return</span> $q.when(states);
+    <span class="hljs-keyword">var</span> states = activeStatesStore.get(<span class="hljs-string">'states'</span>);
+    <span class="hljs-keyword">return</span> $q.when(<span class="hljs-built_in">Object</span>.keys(states).map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(key)</span></span>{
+      <span class="hljs-keyword">return</span> {
+        name: states[key].name,
+        active: states[key].active
+      };
+    }));
   };
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetchStates</span><span class="hljs-params">()</span></span>{

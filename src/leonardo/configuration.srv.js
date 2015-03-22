@@ -16,14 +16,13 @@ function configurationService($q, activeStatesStore, $httpBackend) {
   };
 
   var select = function() {
-    var states = [];
-    for (let state of activeStatesStore.get('states')) {
-      states.push({
-        name: state.name,
-        active: state.active
-      });
-    }
-    return $q.when(states);
+    var states = activeStatesStore.get('states');
+    return $q.when(Object.keys(states).map(function(key){
+      return {
+        name: states[key].name,
+        active: states[key].active
+      };
+    }));
   };
 
   function fetchStates(){
