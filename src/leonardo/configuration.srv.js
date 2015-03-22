@@ -59,8 +59,8 @@ function configurationService($q, activeStatesStore, $httpBackend) {
     });
   }
 
-  var initialized = fetchStates().then(function(states) {
-    states.forEach(function (state) {
+  var initialized = fetchStates().then(function() {
+    (states || []).forEach(function (state) {
       stateReq[state.name] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
     });
   });
