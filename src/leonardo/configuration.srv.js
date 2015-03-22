@@ -5,12 +5,10 @@ function configurationService($q, activeStatesStore, $httpBackend) {
 
   var upsertOption = function(state, name, active) {
     var states = activeStatesStore.get('states');
-    if (active) {
-      states[state] = name;
-    }
-    else {
-      delete states[state];
-    }
+    states[state] = {
+      name: name,
+      active: active
+    };
 
     activeStatesStore.set('states', states);
 
@@ -18,14 +16,21 @@ function configurationService($q, activeStatesStore, $httpBackend) {
   };
 
   var select = function() {
-    return $q.when(activeStatesStore.get('states'));
+    var states = [];
+    for (let state in activeStatesStore.get('states')) {
+      states.push({
+        name: state.name,
+        active: state.active
+      });
+    }
+    return $q.when(states);
   };
 
   function fetchStates(){
     return select().then(function(states){
       var _states = states.map(state => angular.copy(state));
 
-      _states.forEach(function(state) {
+     _states.forEach(function(state) {
         let option = activeStates[state.name];
         state.active = !!option;
         state.activeOption = !!option ? state.options.find(_option => _option.name === option) : state.options[0];
