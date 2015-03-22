@@ -74,7 +74,7 @@
   <span class="hljs-keyword">var</span> stateReq = {};
 
   <span class="hljs-keyword">var</span> upsertOption = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state, name, active)</span> </span>{
-    <span class="hljs-keyword">var</span> states = activeStatesStore.get(<span class="hljs-string">'states'</span>);
+    <span class="hljs-keyword">var</span> states = activeStatesStore.get(<span class="hljs-string">'states'</span>) || {};
     states[state] = {
       name: name,
       active: active
@@ -87,7 +87,7 @@
 
   <span class="hljs-keyword">var</span> select = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> states = [];
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> state <span class="hljs-keyword">in</span> activeStatesStore.get(<span class="hljs-string">'states'</span>)) {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> state of activeStatesStore.get(<span class="hljs-string">'states'</span>)) {
       states.push({
         name: state.name,
         active: state.active
@@ -102,8 +102,8 @@
 
      _states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span> </span>{
         <span class="hljs-keyword">let</span> option = activeStates[state.name];
-        state.active = !!option;
-        state.activeOption = !!option ? state.options.find(_option =&gt; _option.name === option) : state.options[<span class="hljs-number">0</span>];
+        state.active = !!option &amp;&amp; option.active;
+        state.activeOption = !!option ? state.options.find(_option =&gt; _option.name === option.name) : state.options[<span class="hljs-number">0</span>];
       });
 
       <span class="hljs-keyword">return</span> _states;
