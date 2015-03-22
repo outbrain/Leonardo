@@ -27,7 +27,7 @@ function configurationService($q, activeStatesStore, $httpBackend) {
   };
 
   function fetchStates(){
-    return select().then(function(states){
+    return select().then(function(activeStates){
       var _states = states.map(state => angular.copy(state));
 
      _states.forEach(function(state) {
@@ -77,7 +77,6 @@ function configurationService($q, activeStatesStore, $httpBackend) {
       stateReq[state.name] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
     });
   });
-
 
   return {
     //configured states todo doc
