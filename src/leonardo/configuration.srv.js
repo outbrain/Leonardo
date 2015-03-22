@@ -4,7 +4,7 @@ function configurationService($q, activeStatesStore, $httpBackend) {
   var stateReq = {};
 
   var upsertOption = function(state, name, active) {
-    var states = activeStatesStore.get('states');
+    var states = activeStatesStore.get('states') || {};
     states[state] = {
       name: name,
       active: active
@@ -17,7 +17,7 @@ function configurationService($q, activeStatesStore, $httpBackend) {
 
   var select = function() {
     var states = [];
-    for (let state in activeStatesStore.get('states')) {
+    for (let state of activeStatesStore.get('states')) {
       states.push({
         name: state.name,
         active: state.active
@@ -32,8 +32,8 @@ function configurationService($q, activeStatesStore, $httpBackend) {
 
      _states.forEach(function(state) {
         let option = activeStates[state.name];
-        state.active = !!option;
-        state.activeOption = !!option ? state.options.find(_option => _option.name === option) : state.options[0];
+        state.active = !!option && option.active;
+        state.activeOption = !!option ? state.options.find(_option => _option.name === option.name) : state.options[0];
       });
 
       return _states;
