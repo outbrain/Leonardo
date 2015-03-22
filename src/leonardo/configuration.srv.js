@@ -3,7 +3,7 @@ function configurationService($q, activeStatesStore, $httpBackend) {
   var stateReq = {};
 
   var upsertOption = function(state, name, active) {
-    var states = activeStatesStore.get('states') || {};
+    var states = getStatesFromStore();
     states[state] = {
       name: name,
       active: active
@@ -14,8 +14,12 @@ function configurationService($q, activeStatesStore, $httpBackend) {
     return sync();
   };
 
+  function getStatesFromStore(){
+    return activeStatesStore.get('states') || {};
+  }
+
   function fetchStates(){
-    var activeStates = activeStatesStore.get('states');
+    var activeStates = getStatesFromStore();
     var _states = states.map(state => angular.copy(state));
 
    _states.forEach(function(state) {

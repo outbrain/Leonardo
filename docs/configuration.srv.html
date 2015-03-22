@@ -73,7 +73,7 @@
   <span class="hljs-keyword">var</span> stateReq = {};
 
   <span class="hljs-keyword">var</span> upsertOption = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state, name, active)</span> </span>{
-    <span class="hljs-keyword">var</span> states = activeStatesStore.get(<span class="hljs-string">'states'</span>) || {};
+    <span class="hljs-keyword">var</span> states = getStatesFromStore();
     states[state] = {
       name: name,
       active: active
@@ -84,8 +84,12 @@
     <span class="hljs-keyword">return</span> sync();
   };
 
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getStatesFromStore</span><span class="hljs-params">()</span></span>{
+    <span class="hljs-keyword">return</span> activeStatesStore.get(<span class="hljs-string">'states'</span>) || {};
+  }
+
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetchStates</span><span class="hljs-params">()</span></span>{
-    <span class="hljs-keyword">var</span> activeStates = activeStatesStore.get(<span class="hljs-string">'states'</span>);
+    <span class="hljs-keyword">var</span> activeStates = getStatesFromStore();
     <span class="hljs-keyword">var</span> _states = states.map(state =&gt; angular.copy(state));
 
    _states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span> </span>{
