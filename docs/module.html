@@ -72,8 +72,11 @@
 import configurationService from <span class="hljs-string">'./configuration.srv.js'</span>;
 import windowBodyDirective from <span class="hljs-string">'./window-body.drv.js'</span>;
 
-export <span class="hljs-keyword">default</span> angular.module(<span class="hljs-string">'leonardo'</span>, [<span class="hljs-string">'leonardo.templates'</span>, <span class="hljs-string">'ngMockE2E'</span>])
+export <span class="hljs-keyword">default</span> angular.module(<span class="hljs-string">'leonardo'</span>, [<span class="hljs-string">'leonardo.templates'</span>, <span class="hljs-string">'angular-storage'</span>, <span class="hljs-string">'ngMockE2E'</span>])
   .factory(<span class="hljs-string">'configuration'</span>, configurationService)
+  .factory(<span class="hljs-string">'activeStatesStore'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(store)</span> </span>{
+    <span class="hljs-keyword">return</span> store.getNamespacedStore(<span class="hljs-string">'active_states'</span>);
+  })
   .directive(<span class="hljs-string">'activator'</span>, activatorDirective)
   .directive(<span class="hljs-string">'windowBody'</span>, windowBodyDirective);</pre></div></div>
             

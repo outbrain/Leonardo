@@ -1,52 +1,34 @@
-function configurationService($q, $httpBackend) {
+function configurationService($q, activeStatesStore, $httpBackend) {
   var states = [];
   var activeStates = {};
   var stateReq = {};
 
-  var db = openDatabase("leonardo.db", '1.0', "Leonardo WebSQL Database", 2 * 1024 * 1024);
-
-  db.transaction(function (tx) {
-    tx.executeSql("CREATE TABLE IF NOT EXISTS active_states_option (state PRIMARY KEY, name text, active text)", [], sync);
-  });
-
   var upsertOption = function(state, name, active) {
-    var defer = $q.defer();
+    var states = activeStatesStore.get('states');
+    if (active) {
+      states[state] = name;
+    }
+    else {
+      delete states[state];
+    }
 
-    db.transaction(function (tx) {
-      tx.executeSql("INSERT OR REPLACE into active_states_option (state, name, active) VALUES (?,?, ?)", [state, name, active], function(){
-        sync().then(function(){
-          defer.resolve();
-        });
-      });
-    });
+    activeStatesStore.set('states', states);
 
-    return defer.promise;
+    return sync();
   };
 
   var select = function() {
-    var defer = $q.defer();
-
-    db.transaction(function (tx) {
-      tx.executeSql("SELECT * from active_states_option", [], function(tx, results) {
-        defer.resolve(results.rows);
-      });
-    });
-
-    return defer.promise;
+    return $q.when(activeStatesStore.get('states'));
   };
 
   function fetchStates(){
-    return select().then(function(rows){
-      for(var i = 0; i < rows.length; i++) {
-        activeStates[rows.item(i).state] = { name: rows.item(i).name, active: (rows.item(i).active === "true") };
-      }
-
+    return select().then(function(states){
       var _states = states.map(state => angular.copy(state));
 
       _states.forEach(function(state) {
         let option = activeStates[state.name];
-        state.active = !!option && option.active;
-        state.activeOption = !!option ? state.options.find(_option => _option.name === option.name) : state.options[0];
+        state.active = !!option;
+        state.activeOption = !!option ? state.options.find(_option => _option.name === option) : state.options[0];
       });
 
       return _states;
