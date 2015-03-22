@@ -70,7 +70,6 @@
             
             <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">configurationService</span><span class="hljs-params">($q, activeStatesStore, $httpBackend)</span> </span>{
   <span class="hljs-keyword">var</span> states = [];
-  <span class="hljs-keyword">var</span> activeStates = {};
   <span class="hljs-keyword">var</span> stateReq = {};
 
   <span class="hljs-keyword">var</span> upsertOption = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state, name, active)</span> </span>{
@@ -85,28 +84,17 @@
     <span class="hljs-keyword">return</span> sync();
   };
 
-  <span class="hljs-keyword">var</span> select = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">var</span> states = activeStatesStore.get(<span class="hljs-string">'states'</span>);
-    <span class="hljs-keyword">return</span> $q.when(<span class="hljs-built_in">Object</span>.keys(states).map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(key)</span></span>{
-      <span class="hljs-keyword">return</span> {
-        name: states[key].name,
-        active: states[key].active
-      };
-    }));
-  };
-
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetchStates</span><span class="hljs-params">()</span></span>{
-    <span class="hljs-keyword">return</span> select().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(activeStates)</span></span>{
-      <span class="hljs-keyword">var</span> _states = states.map(state =&gt; angular.copy(state));
+    <span class="hljs-keyword">var</span> activeStates = activeStatesStore.get(<span class="hljs-string">'states'</span>);
+    <span class="hljs-keyword">var</span> _states = states.map(state =&gt; angular.copy(state));
 
-     _states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span> </span>{
-        <span class="hljs-keyword">let</span> option = activeStates[state.name];
-        state.active = !!option &amp;&amp; option.active;
-        state.activeOption = !!option ? state.options.find(_option =&gt; _option.name === option.name) : state.options[<span class="hljs-number">0</span>];
-      });
-
-      <span class="hljs-keyword">return</span> _states;
+   _states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span> </span>{
+      <span class="hljs-keyword">let</span> option = activeStates[state.name];
+      state.active = !!option &amp;&amp; option.active;
+      state.activeOption = !!option ? state.options.find(_option =&gt; _option.name === option.name) : state.options[<span class="hljs-number">0</span>];
     });
+
+    <span class="hljs-keyword">return</span> $q.when(_states);
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">findStateOption</span><span class="hljs-params">(name)</span></span>{
