@@ -50,7 +50,8 @@ gulp.task('copy', function() {
       "./dist/module.js",
       "./bower_components/traceur-runtime/traceur-runtime.min.js",
       "./bower_components/angular/angular.min.js",
-      "./bower_components/angular-mocks/angular-mocks.js"
+      "./bower_components/angular-mocks/angular-mocks.js",
+      "./bower_components/a0-angular-storage/dist/angular-storage.min.js"
 
   ])
     .pipe(gulp.dest('./docs/public/leonardo'));
