@@ -96,6 +96,7 @@ function configurationService($q, activeStatesStore, $httpBackend) {
         options: stateItem.options || []
       });
 
+
       if (stateItem === defaultState) {
         states.push(stateItem);
       }

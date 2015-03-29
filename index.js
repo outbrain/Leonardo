@@ -16,6 +16,7 @@ function run(configuration){
   configuration.upsert({ state: 'state1', name: 'get url1 aaaa', url: 'http://url1.com', status: 200, data: ["url1 aaa"]});
   configuration.upsertMany([
     { state: 'state1', name: 'get url1 bbbb', status:200,  data: ["url1 bbb"]},
+    { state: 'state1', url: 'http://url3.com', name: 'get url3 bbbb', status:200,  data: ["url3 bbb"]},
     { url: 'http://url1.com', name: 'get url1 cccc', status:200,  data: ["url1 ccc"]},
     { url: 'http://url2.com', name: 'get url2 a', status:200,  data: ["url2 aaa"]},
     { url: 'http://url2.com', name: 'get url2 b', status:200,  data: ["url2 bbb"]}

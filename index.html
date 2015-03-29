@@ -125,6 +125,7 @@
             <div class="content"><div class='highlight'><pre>  configuration.upsert({ state: <span class="hljs-string">'state1'</span>, name: <span class="hljs-string">'get url1 aaaa'</span>, url: <span class="hljs-string">'http://url1.com'</span>, status: <span class="hljs-number">200</span>, data: [<span class="hljs-string">"url1 aaa"</span>]});
   configuration.upsertMany([
     { state: <span class="hljs-string">'state1'</span>, name: <span class="hljs-string">'get url1 bbbb'</span>, status:<span class="hljs-number">200</span>,  data: [<span class="hljs-string">"url1 bbb"</span>]},
+    { state: <span class="hljs-string">'state1'</span>, url: <span class="hljs-string">'http://url3.com'</span>, name: <span class="hljs-string">'get url3 bbbb'</span>, status:<span class="hljs-number">200</span>,  data: [<span class="hljs-string">"url3 bbb"</span>]},
     { url: <span class="hljs-string">'http://url1.com'</span>, name: <span class="hljs-string">'get url1 cccc'</span>, status:<span class="hljs-number">200</span>,  data: [<span class="hljs-string">"url1 ccc"</span>]},
     { url: <span class="hljs-string">'http://url2.com'</span>, name: <span class="hljs-string">'get url2 a'</span>, status:<span class="hljs-number">200</span>,  data: [<span class="hljs-string">"url2 aaa"</span>]},
     { url: <span class="hljs-string">'http://url2.com'</span>, name: <span class="hljs-string">'get url2 b'</span>, status:<span class="hljs-number">200</span>,  data: [<span class="hljs-string">"url2 bbb"</span>]}
@@ -171,9 +172,9 @@
   </div>
   <script src='docs/public/leonardo/angular.min.js'></script>
   <script src="docs/public/leonardo/angular-mocks.js"></script>
-  <script src="docs/public/leonardo/angular-storage.min.js"></script>
   <script src='docs/public/leonardo/traceur-runtime.min.js'></script>
   <script src="docs/public/leonardo/leonardo.templates.min.js"></script>
+  <script src="docs/public/leonardo/angular-storage.min.js"></script>
   <script src="docs/public/leonardo/module.js"></script>
   <script src="docs/public/leonardo/index.js"></script>
 </body>
