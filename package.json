@@ -4,7 +4,10 @@
   "description": "Leonardo ========",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "docs:example": "./node_modules/docco/bin/docco index.js --template=./build/docs/resources/example/docco.jst --output=./",
+    "docs:main": "./node_modules/docco/bin/docco src/leonardo/*.js --template=./build/docs/resources/custom/docco.jst",
+    "compile": "gulp && npm run docs:example && npm run docs:main"
   },
   "repository": {
     "type": "git",
@@ -23,6 +26,7 @@
     "bower": "^1.3.12",
     "canonical-path": "0.0.2",
     "del": "^0.1.3",
+    "docco": "^0.7.0",
     "gulp": "^3.5.6",
     "gulp-docco": "0.0.4",
     "gulp-help": "^1.3.4",
