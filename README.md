@@ -1,7 +1,7 @@
 Leonardo Docs 
 =============
 
-# Compile
+## Compile
 
 `cd` into the project folder
 
@@ -11,6 +11,6 @@ npm run compile
 
 run local server and navigate to `index.html`
 
-# Documentation and example
+## Documentation and example
 
 http://outbrain.github.io/Leonardo
