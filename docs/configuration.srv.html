@@ -202,7 +202,13 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    fetchStates: fetchStates,</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    fetchStates: fetchStates,
+    getState: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span></span>{
+      <span class="hljs-keyword">return</span> fetchStates().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span></span>{
+        <span class="hljs-keyword">var</span> state = states.find(state =&gt; state.name === name);
+        <span class="hljs-keyword">return</span> (state &amp;&amp; state.active &amp;&amp; findStateOption(name)) || $q.when(<span class="hljs-literal">null</span>);
+      });
+    },</pre></div></div>
             
         </li>
         

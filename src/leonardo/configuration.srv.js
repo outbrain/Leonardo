@@ -81,6 +81,12 @@ function configurationService($q, activeStatesStore, $httpBackend) {
     upsertOption: upsertOption,
     //todo doc
     fetchStates: fetchStates,
+    getState: function(name){
+      return fetchStates().then(function(states){
+        var state = states.find(state => state.name === name);
+        return (state && state.active && findStateOption(name)) || $q.when(null);
+      });
+    },
     //insert or replace an option by insert or updateing a state.
     upsert: function({ verb, state, name, url, status = 200, data = {}, delay = 0}){
       var defaultState = {};

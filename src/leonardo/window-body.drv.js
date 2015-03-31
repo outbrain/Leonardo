@@ -17,6 +17,12 @@ function windowBodyDirective($http, configuration) {
     replace: true,
     controller: function($scope){
       $scope.selectedItem = 'activate';
+      $scope.NothasUrl = function(option){
+        return !option.url;
+      };
+      $scope.hasUrl = function(option){
+        return !!option.url;
+      };
 
       configuration.fetchStates().then(function(states){
 

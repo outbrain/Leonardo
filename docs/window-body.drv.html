@@ -107,6 +107,12 @@ parameters… it just does something.</p>
     replace: <span class="hljs-literal">true</span>,
     controller: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($scope)</span></span>{
       $scope.selectedItem = <span class="hljs-string">'activate'</span>;
+      $scope.NothasUrl = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(option)</span></span>{
+        <span class="hljs-keyword">return</span> !option.url;
+      };
+      $scope.hasUrl = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(option)</span></span>{
+        <span class="hljs-keyword">return</span> !!option.url;
+      };
 
       configuration.fetchStates().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span></span>{
 

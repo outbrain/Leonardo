@@ -7,7 +7,7 @@ export default angular.module('example', ['leonardo'])
             .run(run);
 
 //well almost...
-function run(configuration){
+function run($rootScope, configuration){
 
   // Adding states
   // ----------------
@@ -15,6 +15,8 @@ function run(configuration){
   //* via ui - coming soon...
   configuration.upsert({ state: 'state1', name: 'get url1 aaaa', url: 'http://url1.com', status: 200, data: ["url1 aaa"]});
   configuration.upsertMany([
+    { state: 'state_animals_non_ajax', name: 'get kittens', data: ["persion", "siemi"]},
+    { state: 'state_animals_non_ajax', name: 'get dogs', data: ["labrador"]},
     { state: 'state1', name: 'get url1 bbbb', status:200,  data: ["url1 bbb"]},
     { state: 'state1', url: 'http://url3.com', name: 'get url3 bbbb', status:200,  data: ["url3 bbb"]},
     { url: 'http://url1.com', name: 'get url1 cccc', status:200,  data: ["url1 ccc"]},
@@ -29,6 +31,12 @@ function run(configuration){
   //* via api - coming soon...
 
   configuration.initialize().then(function(){
-      console.log('Leonardo has initialized');
+    console.log('Leonardo has initialized');
   });
+
+  $rootScope.showAnimals = function(){
+    configuration.getState("state_animals_non_ajax").then(function(option){
+      alert(option ? option.data : 'No Active' );
+    });
+  };
 }
