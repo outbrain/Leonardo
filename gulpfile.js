@@ -22,6 +22,7 @@ gulp.task('transpile', 'Transpile the App from ES6 to ES5', function() {
       out     : distPath,
       debug   : false
     }))
+    .pipe(gulp.dest('./docs/public/leonardo'))
     .on('error', function (err) {
       console.log(err.message);
     });
@@ -47,7 +48,6 @@ gulp.task('transpile-example', 'Transpile the App from ES6 to ES5', function() {
 
 gulp.task('copy', function() {
   return gulp.src([
-      "./dist/module.js",
       "./bower_components/traceur-runtime/traceur-runtime.min.js",
       "./bower_components/angular/angular.min.js",
       "./bower_components/angular-mocks/angular-mocks.js",
@@ -86,12 +86,18 @@ gulp.task("build-templates", false, function () {
     .pipe(gulp.dest('./docs/public/leonardo'));
 });
 
-gulp.task('watch', "Watch file changes and auto compile for development", function () {
-//  gulp.watch(["./src/leonardo/*.js", "./src/leonardo/templates/*.html", "./src/leonardo/style/*.less"], ['default']);
-  gulp.watch(["./src/leonardo/style/*.less"], ['build-less']);
-  gulp.watch(["./src/leonardo/*.js"], ['transpile']);
+gulp.task('build', function(cb) {
+  runSequence(
+    ['transpile', 'build-less', 'build-templates', 'transpile-example'],
+    'copy',
+    cb);
 });
 
-gulp.task('default', ['transpile', 'build-less', 'build-templates', 'transpile-example'], function(cb) {
-  runSequence(['copy'], cb);
+gulp.task('watch', "Watch file changes and auto compile for development", ['build'], function () {
+  gulp.watch(["./src/leonardo/style/*.less"], ['build-less']);
+  gulp.watch(["./src/leonardo/*.js"], ['transpile']);
+  gulp.watch(["./index.js"], ['transpile-example']);
+  gulp.watch(["./src/leonardo/templates/*.html"], ['build-templates']);
 });
+
+gulp.task('default', ['build']);

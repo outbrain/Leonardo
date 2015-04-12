@@ -7,8 +7,9 @@
     "test": "test",
     "docs:example": "./node_modules/docco/bin/docco index.js --template=./build/docs/resources/example/docco.jst --output=./",
     "docs:main": "./node_modules/docco/bin/docco src/leonardo/*.js --template=./build/docs/resources/custom/docco.jst",
-    "compile": "gulp && npm run docs:example && npm run docs:main",
-    "compile:watch": "watch 'npm run compile' ./src"
+    "compile:docs": "npm run docs:example && npm run docs:main",
+    "compile": "gulp && npm run compile:docs",
+    "compile:watch": "gulp watch"
   },
   "repository": {
     "type": "git",
@@ -37,7 +38,6 @@
     "gulp-ng-html2js": "^0.1.8",
     "gulp-rename": "^1.2.0",
     "gulp-traceur-cmdline": "1.1.4",
-    "run-sequence": "^1.0.1",
-    "watch": "^0.16.0"
+    "run-sequence": "^1.0.1"
   }
 }
