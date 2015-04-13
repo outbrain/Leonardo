@@ -73,13 +73,13 @@
   <span class="hljs-keyword">var</span> stateReq = {};
 
   <span class="hljs-keyword">var</span> upsertOption = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state, name, active)</span> </span>{
-    <span class="hljs-keyword">var</span> states = getStatesFromStore();
-    states[state] = {
+    <span class="hljs-keyword">var</span> _states = getStatesFromStore();
+    _states[state] = {
       name: name,
       active: active
     };
 
-    activeStatesStore.set(<span class="hljs-string">'states'</span>, states);
+    activeStatesStore.set(<span class="hljs-string">'states'</span>, _states);
 
     <span class="hljs-keyword">return</span> sync();
   };
@@ -92,7 +92,7 @@
     <span class="hljs-keyword">var</span> activeStates = getStatesFromStore();
     <span class="hljs-keyword">var</span> _states = states.map(state =&gt; angular.copy(state));
 
-   _states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span> </span>{
+    _states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span> </span>{
       <span class="hljs-keyword">let</span> option = activeStates[state.name];
       state.active = !!option &amp;&amp; option.active;
       state.activeOption = !!option ? state.options.find(_option =&gt; _option.name === option.name) : state.options[<span class="hljs-number">0</span>];
@@ -102,11 +102,13 @@
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">deactivateAll</span><span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">var</span> storedStates = getStatesFromStore();
-    <span class="hljs-built_in">Object</span>.keys(storedStates).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(stateKey)</span> </span>{
-      storedStates[stateKey].active = <span class="hljs-literal">false</span>;
+    <span class="hljs-keyword">var</span> _states = getStatesFromStore();
+    <span class="hljs-built_in">Object</span>.keys(_states).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(stateKey)</span> </span>{
+      _states[stateKey].active = <span class="hljs-literal">false</span>;
     });
-    activeStatesStore.set(<span class="hljs-string">'states'</span>, storedStates);
+    activeStatesStore.set(<span class="hljs-string">'states'</span>, _states);
+
+    <span class="hljs-keyword">return</span> sync();
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">findStateOption</span><span class="hljs-params">(name)</span></span>{
@@ -123,9 +125,8 @@
       defer.resolve();
       states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(state)</span> </span>{
         promise = promise.then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
-          <span class="hljs-keyword">return</span> findStateOption(state.name).then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(option)</span></span>{
-            <span class="hljs-keyword">if</span> (state.active)
-            {
+          <span class="hljs-keyword">return</span> findStateOption(state.name).then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(option)</span> </span>{
+            <span class="hljs-keyword">if</span> (state.active) {
               stateReq[state.name].respond(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
             
         </li>
@@ -259,9 +260,6 @@ $timeout(function() {
       }
 
       <span class="hljs-keyword">var</span> stateItem = states.find(_state =&gt; _state.name === state) || defaultState;
-
-
-      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">""</span>);
 
       angular.extend(stateItem, {
         name: state,

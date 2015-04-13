@@ -3,13 +3,13 @@ function configurationService($q, activeStatesStore, $httpBackend) {
   var stateReq = {};
 
   var upsertOption = function(state, name, active) {
-    var states = getStatesFromStore();
-    states[state] = {
+    var _states = getStatesFromStore();
+    _states[state] = {
       name: name,
       active: active
     };
 
-    activeStatesStore.set('states', states);
+    activeStatesStore.set('states', _states);
 
     return sync();
   };
@@ -22,7 +22,7 @@ function configurationService($q, activeStatesStore, $httpBackend) {
     var activeStates = getStatesFromStore();
     var _states = states.map(state => angular.copy(state));
 
-   _states.forEach(function(state) {
+    _states.forEach(function(state) {
       let option = activeStates[state.name];
       state.active = !!option && option.active;
       state.activeOption = !!option ? state.options.find(_option => _option.name === option.name) : state.options[0];
@@ -32,11 +32,13 @@ function configurationService($q, activeStatesStore, $httpBackend) {
   }
 
   function deactivateAll() {
-    var storedStates = getStatesFromStore();
-    Object.keys(storedStates).forEach(function(stateKey) {
-      storedStates[stateKey].active = false;
+    var _states = getStatesFromStore();
+    Object.keys(_states).forEach(function(stateKey) {
+      _states[stateKey].active = false;
     });
-    activeStatesStore.set('states', storedStates);
+    activeStatesStore.set('states', _states);
+
+    return sync();
   }
 
   function findStateOption(name){
@@ -53,9 +55,8 @@ function configurationService($q, activeStatesStore, $httpBackend) {
       defer.resolve();
       states.forEach(function (state) {
         promise = promise.then(function(){
-          return findStateOption(state.name).then(function(option){
-            if (state.active)
-            {
+          return findStateOption(state.name).then(function(option) {
+            if (state.active) {
               stateReq[state.name].respond(function () {
                 //var deferred = $q.defer();
                 //$timeout(function() {
@@ -111,9 +112,6 @@ function configurationService($q, activeStatesStore, $httpBackend) {
       }
 
       var stateItem = states.find(_state => _state.name === state) || defaultState;
-
-
-      console.log("");
 
       angular.extend(stateItem, {
         name: state,
