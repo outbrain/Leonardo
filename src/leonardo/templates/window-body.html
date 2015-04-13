@@ -51,7 +51,7 @@
             <select ng-model="state.activeOption" ng-options="option.name for option in ::state.options"></select>
           </div>
         </li>
-        <li><h3>Ajax State</h3></li>
+        <li><h3 ng-click="deactivate()">Ajax State</h3></li>
         <li ng-repeat="state in ::states | filter:hasUrl">
           <div>
             <div class="onoffswitch">

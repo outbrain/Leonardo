@@ -31,6 +31,14 @@ function configurationService($q, activeStatesStore, $httpBackend) {
     return $q.when(_states);
   }
 
+  function deactivateAll() {
+    var storedStates = getStatesFromStore();
+    Object.keys(storedStates).forEach(function(stateKey) {
+      storedStates[stateKey].active = false;
+    });
+    activeStatesStore.set('states', storedStates);
+  }
+
   function findStateOption(name){
     return fetchStates().then(function(states){
       return states.find(state => state.name === name).activeOption;
@@ -49,6 +57,10 @@ function configurationService($q, activeStatesStore, $httpBackend) {
             if (state.active)
             {
               stateReq[state.name].respond(function () {
+                //var deferred = $q.defer();
+                //$timeout(function() {
+                //  deferred.resolve([option.status, option.data]);
+                //}, option.delay);
                 return [option.status, option.data];
               });
             }
@@ -93,10 +105,18 @@ function configurationService($q, activeStatesStore, $httpBackend) {
 
       var defaultOption = {};
 
-      var stateItem = states.find(_state => (url ? _state.url === url : _state.name === state)) || defaultState;
+      if (!state) {
+        console.log("cannot upsert - state is mandatory");
+        return;
+      }
+
+      var stateItem = states.find(_state => _state.name === state) || defaultState;
+
+
+      console.log("");
 
       angular.extend(stateItem, {
-        name: state || stateItem.name || url,
+        name: state,
         url: url || stateItem.url,
         verb: verb || stateItem.verb,
         options: stateItem.options || []
@@ -123,7 +143,8 @@ function configurationService($q, activeStatesStore, $httpBackend) {
     //todo doc
     upsertMany: function(items){
       items.forEach(item => this.upsert(item));
-    }
+    },
+    deactivateAll: deactivateAll
   };
 }
 

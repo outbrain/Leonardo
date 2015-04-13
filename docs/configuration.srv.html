@@ -101,6 +101,14 @@
     <span class="hljs-keyword">return</span> $q.when(_states);
   }
 
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">deactivateAll</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> storedStates = getStatesFromStore();
+    <span class="hljs-built_in">Object</span>.keys(storedStates).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(stateKey)</span> </span>{
+      storedStates[stateKey].active = <span class="hljs-literal">false</span>;
+    });
+    activeStatesStore.set(<span class="hljs-string">'states'</span>, storedStates);
+  }
+
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">findStateOption</span><span class="hljs-params">(name)</span></span>{
     <span class="hljs-keyword">return</span> fetchStates().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span></span>{
       <span class="hljs-keyword">return</span> states.find(state =&gt; state.name === name).activeOption;
@@ -118,8 +126,25 @@
           <span class="hljs-keyword">return</span> findStateOption(state.name).then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(option)</span></span>{
             <span class="hljs-keyword">if</span> (state.active)
             {
-              stateReq[state.name].respond(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-                <span class="hljs-keyword">return</span> [option.status, option.data];
+              stateReq[state.name].respond(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>var deferred = $q.defer();
+$timeout(function() {
+ deferred.resolve([option.status, option.data]);
+}, option.delay);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="hljs-keyword">return</span> [option.status, option.data];
               });
             }
             <span class="hljs-keyword">else</span> {
@@ -144,11 +169,11 @@
         </li>
         
         
-        <li id="section-2">
+        <li id="section-3">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>configured states todo doc</p>
 
@@ -158,21 +183,6 @@
     initialize: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
       <span class="hljs-keyword">return</span> initialized.then(sync);
     },</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-3">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
-              </div>
-              <p>todo doc</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    active_states_option: [],</pre></div></div>
             
         </li>
         
@@ -187,7 +197,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    upsertOption: upsertOption,</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    active_states_option: [],</pre></div></div>
             
         </li>
         
@@ -197,6 +207,21 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>todo doc</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    upsertOption: upsertOption,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>todo doc</p>
 
@@ -213,11 +238,11 @@
         </li>
         
         
-        <li id="section-6">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>insert or replace an option by insert or updateing a state.</p>
 
@@ -228,10 +253,18 @@
 
       <span class="hljs-keyword">var</span> defaultOption = {};
 
-      <span class="hljs-keyword">var</span> stateItem = states.find(_state =&gt; (url ? _state.url === url : _state.name === state)) || defaultState;
+      <span class="hljs-keyword">if</span> (!state) {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"cannot upsert - state is mandatory"</span>);
+        <span class="hljs-keyword">return</span>;
+      }
+
+      <span class="hljs-keyword">var</span> stateItem = states.find(_state =&gt; _state.name === state) || defaultState;
+
+
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">""</span>);
 
       angular.extend(stateItem, {
-        name: state || stateItem.name || url,
+        name: state,
         url: url || stateItem.url,
         verb: verb || stateItem.verb,
         options: stateItem.options || []
@@ -259,11 +292,11 @@
         </li>
         
         
-        <li id="section-7">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>todo doc</p>
 
@@ -271,7 +304,8 @@
             
             <div class="content"><div class='highlight'><pre>    upsertMany: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(items)</span></span>{
       items.forEach(item =&gt; <span class="hljs-keyword">this</span>.upsert(item));
-    }
+    },
+    deactivateAll: deactivateAll
   };
 }
 

@@ -24,6 +24,14 @@ function windowBodyDirective($http, configuration) {
         return !!option.url;
       };
 
+      $scope.deactivate = function() {
+        $scope.states.forEach(function(state){
+            state.active = false;
+            //$scope.changeActive(state);
+        });
+        configuration.deactivateAll();
+      };
+
       configuration.fetchStates().then(function(states){
 
         $scope.states = states;
@@ -31,6 +39,9 @@ function windowBodyDirective($http, configuration) {
           console.log("activate: " + state.name + " " + state.active);
           configuration.upsertOption(state.name, state.activeOption.name, state.active);
         };
+
+        //move to on change of the select box
+        //
 
         states.forEach(function(state){
           $scope.$watch(function(){
