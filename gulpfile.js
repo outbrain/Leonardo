@@ -12,17 +12,15 @@ require("gulp-help")(gulp);
 
 gulp.task('transpile', 'Transpile the App from ES6 to ES5', function() {
 
-  var distPath = path.join('dist', 'module.js');
-
   return gulp.src(path.join('src', 'leonardo',  'module.js'))
     .pipe(gulpTraceurCmdline({
       'source-maps': 'inline',
       symbols : true,
       modules : 'register',
-      out     : distPath,
       debug   : false
     }))
     .pipe(gulp.dest('./docs/public/leonardo'))
+    .pipe(gulp.dest('./dist'))
     .on('error', function (err) {
       console.log(err.message);
     });
@@ -30,17 +28,14 @@ gulp.task('transpile', 'Transpile the App from ES6 to ES5', function() {
 
 
 gulp.task('transpile-example', 'Transpile the App from ES6 to ES5', function() {
-
-  var distPath = path.join('docs', 'public', 'leonardo',  'index.js');
-
   return gulp.src(path.join('index.js'))
     .pipe(gulpTraceurCmdline({
       'source-maps': 'inline',
       symbols : true,
       modules : 'register',
-      out     : distPath,
       debug   : false
     }))
+    .pipe(gulp.dest('./docs/public/leonardo'))
     .on('error', function (err) {
       console.log(err.message);
     });
@@ -52,9 +47,8 @@ gulp.task('copy', function() {
       "./bower_components/angular/angular.min.js",
       "./bower_components/angular-mocks/angular-mocks.js",
       "./bower_components/a0-angular-storage/dist/angular-storage.min.js"
-
   ])
-    .pipe(gulp.dest('./docs/public/leonardo'));
+  .pipe(gulp.dest('./docs/public/leonardo'));
 });
 
 gulp.task("build-less", false, function () {
