@@ -116,57 +116,18 @@ parameters… it just does something.</p>
 
       $scope.deactivate = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
         $scope.states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
-            state.active = <span class="hljs-literal">false</span>;</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-4">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
-              </div>
-              <p>$scope.changeActive(state);</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        });
+            state.active = <span class="hljs-literal">false</span>;
+        });
         configuration.deactivateAll();
       };
 
+      $scope.updateState = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`update state: <span class="hljs-subst">${state.name}</span> <span class="hljs-subst">${state.activeOption.name}</span> <span class="hljs-subst">${state.active}</span>`</span>);
+        configuration.upsertOption(state.name, state.activeOption.name, state.active);
+      };
+
       configuration.fetchStates().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span></span>{
-
         $scope.states = states;
-        $scope.changeActive = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
-          <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"activate: "</span> + state.name + <span class="hljs-string">" "</span> + state.active);
-          configuration.upsertOption(state.name, state.activeOption.name, state.active);
-        };</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-5">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
-              </div>
-              <p>move to on change of the select box</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>
-        states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
-          $scope.$watch(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
-            <span class="hljs-keyword">return</span> state.activeOption;
-          }, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(activeOption, oldValue)</span></span>{
-            <span class="hljs-keyword">if</span> (activeOption !== oldValue){
-              <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"select: "</span> + state.name + <span class="hljs-string">" "</span> + activeOption.name + <span class="hljs-string">" "</span> + state.active);
-              configuration.upsertOption(state.name, activeOption.name, state.active);
-            }
-          });
-        });
       });
     },
     link: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(scope)</span> </span>{
@@ -188,7 +149,7 @@ parameters… it just does something.</p>
   };
 }
 
-export <span class="hljs-keyword">default</span> windowBodyDirective</pre></div></div>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> windowBodyDirective</pre></div></div>
             
         </li>
         

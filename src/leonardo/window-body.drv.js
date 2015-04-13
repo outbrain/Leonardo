@@ -27,32 +27,17 @@ function windowBodyDirective($http, configuration) {
       $scope.deactivate = function() {
         $scope.states.forEach(function(state){
             state.active = false;
-            //$scope.changeActive(state);
         });
         configuration.deactivateAll();
       };
 
+      $scope.updateState = function(state){
+        console.log(`update state: ${state.name} ${state.activeOption.name} ${state.active}`);
+        configuration.upsertOption(state.name, state.activeOption.name, state.active);
+      };
+
       configuration.fetchStates().then(function(states){
-
         $scope.states = states;
-        $scope.changeActive = function(state){
-          console.log("activate: " + state.name + " " + state.active);
-          configuration.upsertOption(state.name, state.activeOption.name, state.active);
-        };
-
-        //move to on change of the select box
-        //
-
-        states.forEach(function(state){
-          $scope.$watch(function(){
-            return state.activeOption;
-          }, function(activeOption, oldValue){
-            if (activeOption !== oldValue){
-              console.log("select: " + state.name + " " + activeOption.name + " " + state.active);
-              configuration.upsertOption(state.name, activeOption.name, state.active);
-            }
-          });
-        });
       });
     },
     link: function(scope) {
