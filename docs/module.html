@@ -78,7 +78,33 @@
     <span class="hljs-keyword">return</span> store.getNamespacedStore(<span class="hljs-string">'active_states'</span>);
   })
   .directive(<span class="hljs-string">'activator'</span>, activatorDirective)
-  .directive(<span class="hljs-string">'windowBody'</span>, windowBodyDirective);</pre></div></div>
+  .directive(<span class="hljs-string">'windowBody'</span>, windowBodyDirective)
+  <span class="hljs-comment">/* wrap $httpbackend with a proxy in order to support delaying its responses
+   * we are using the approach described in Endless Indirection:
+   * https://endlessindirection.wordpress.com/2013/05/18/angularjs-delay-response-from-httpbackend/
+   */</span>
+  .config(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($provide)</span> </span>{
+    $provide.decorator(<span class="hljs-string">'$httpBackend'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($delegate)</span> </span>{
+      <span class="hljs-keyword">var</span> proxy = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(method, url, data, callback, headers)</span> </span>{
+        <span class="hljs-keyword">var</span> interceptor = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">var</span> _this = <span class="hljs-keyword">this</span>,
+              _arguments = <span class="hljs-built_in">arguments</span>;
+          setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            callback.apply(_this, _arguments);
+          }, proxy.delay || <span class="hljs-number">0</span>);
+          proxy.delay = <span class="hljs-number">0</span>;
+        };
+        <span class="hljs-keyword">return</span> $delegate.call(<span class="hljs-keyword">this</span>, method, url, data, interceptor, headers);
+      };
+      <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> key <span class="hljs-keyword">in</span> $delegate) {
+        proxy[key] = $delegate[key];
+      }
+      proxy.setDelay = (delay) =&gt; {
+        proxy.delay = delay;
+      };
+      <span class="hljs-keyword">return</span> proxy;
+    });
+  });</pre></div></div>
             
         </li>
         

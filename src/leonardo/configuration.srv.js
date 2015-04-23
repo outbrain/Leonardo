@@ -58,10 +58,7 @@ function configurationService($q, activeStatesStore, $httpBackend) {
           return findStateOption(state.name).then(function(option) {
             if (state.active) {
               stateReq[state.name].respond(function () {
-                //var deferred = $q.defer();
-                //$timeout(function() {
-                //  deferred.resolve([option.status, option.data]);
-                //}, option.delay);
+                $httpBackend.delay = option.delay;
                 return [option.status, option.data];
               });
             }
