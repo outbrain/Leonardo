@@ -13,15 +13,43 @@ function run($rootScope, configuration){
   // ----------------
   //* via api - you can look at the results by clicking leonardo and looking in the configure tab
   //* via ui - coming soon...
-  configuration.upsert({ state: 'state1', name: 'get url1 aaaa', url: 'http://url1.com', status: 200, data: ["url1 aaa"]});
-  configuration.upsertMany([
-    { state: 'state_animals_non_ajax', name: 'get kittens', data: ["persion", "siemi"]},
-    { state: 'state_animals_non_ajax', name: 'get dogs', data: ["labrador"]},
-    { state: 'state1', name: 'get url1 bbbb', status:200,  data: ["url1 bbb"]},
-    { state: 'state1', url: 'http://url3.com', name: 'get url3 bbbb', status:200,  data: ["url3 bbb"], delay: 2000},
-    { state: 'state2', url: 'http://url1.com', name: 'get url1 cccc', status:200,  data: ["url1 ccc"]},
-    { state: 'state3', url: 'http://url2.com', name: 'get url2 a', status:200,  data: ["url2 aaa"]},
-    { state: 'state4', url: 'http://url2.com', name: 'get url2 b', status:200,  data: ["url2 bbb"]}
+  configuration.addStates([
+    {
+      name: 'state_animals_non_ajax',
+      options: [
+        {name: 'get kittens', data: ["persion", "siemi"]},
+        {name: 'get dogs', data: ["labrador"]}
+      ]
+    },
+    {
+      name: 'state1',
+      url: 'http://url1.com',
+      options: [
+        {name: 'get url1 aaaa', status: 200, data: ["url1 aaa"]},
+        {name: 'get url1 bbbb', status: 200,  data: ["url1 bbb"]},
+        {name: 'get url1 cccc', status: 200,  data: ["url1 ccc"]}
+      ]
+    },
+    {
+      name: "state2",
+      url: 'http://url2.com',
+      options: [
+        {name: 'get url2 bbbb', status: 404,  data: ["url2 404 failure"], delay: 2000}
+      ]
+    },
+    {
+      name: "state3",
+      url: 'http://url3.com',
+      options: [
+        {name: 'get url3 bbbb', status: 200,  data: ["url3 bbb"]}
+      ]
+    },
+    {
+      name: "state 4",
+      options: [
+        {name: 'get url4 bbbb', data: ["url4 bbb"]}
+      ]
+    }
   ]);
 
 
@@ -30,13 +58,10 @@ function run($rootScope, configuration){
   //* via ui - click on leonardo and hit the activate tabs
   //* via api - coming soon...
 
-  configuration.initialize().then(function(){
-    console.log('Leonardo has initialized');
-  });
+  configuration.initialize();
 
   $rootScope.showAnimals = function(){
-    configuration.getState("state_animals_non_ajax").then(function(option){
-      alert(option ? option.data : 'No Active' );
-    });
+    var option = configuration.getState("state_animals_non_ajax");
+    alert(option ? option.data : 'No Active' );
   };
 }

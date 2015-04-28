@@ -98,7 +98,7 @@
       state.activeOption = !!option ? state.options.find(_option =&gt; _option.name === option.name) : state.options[<span class="hljs-number">0</span>];
     });
 
-    <span class="hljs-keyword">return</span> $q.when(_states);
+    <span class="hljs-keyword">return</span> _states;
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">deactivateAll</span><span class="hljs-params">()</span> </span>{
@@ -112,42 +112,23 @@
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">findStateOption</span><span class="hljs-params">(name)</span></span>{
-    <span class="hljs-keyword">return</span> fetchStates().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span></span>{
-      <span class="hljs-keyword">return</span> states.find(state =&gt; state.name === name).activeOption;
-    });
-
+    <span class="hljs-keyword">return</span> fetchStates().find(state =&gt; state.name === name).activeOption;
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sync</span><span class="hljs-params">()</span></span>{
-    <span class="hljs-keyword">return</span> fetchStates().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span> </span>{
-      <span class="hljs-keyword">var</span> defer = $q.defer();
-      <span class="hljs-keyword">var</span> promise = defer.promise;
-      defer.resolve();
-      states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(state)</span> </span>{
-        promise = promise.then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
-          <span class="hljs-keyword">return</span> findStateOption(state.name).then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(option)</span> </span>{
-            <span class="hljs-keyword">if</span> (state.active) {
-              stateReq[state.name].respond(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-                $httpBackend.delay = option.delay;
-                <span class="hljs-keyword">return</span> [option.status, option.data];
-              });
-            }
-            <span class="hljs-keyword">else</span> {
-              stateReq[state.name].passThrough();
-            }
-          });
+    fetchStates().forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(state)</span> </span>{
+      <span class="hljs-keyword">var</span> option = findStateOption(state.name);
+      <span class="hljs-keyword">if</span> (state.active) {
+        stateReq[state.name].respond(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+          $httpBackend.delay = option.delay;
+          <span class="hljs-keyword">return</span> [option.status, option.data];
         });
-      });
-
-      <span class="hljs-keyword">return</span> promise;
+      }
+      <span class="hljs-keyword">else</span> {
+        stateReq[state.name].passThrough();
+      }
     });
   }
-
-  <span class="hljs-keyword">var</span> initialized = fetchStates().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
-    (states || []).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(state)</span> </span>{
-      stateReq[state.name] = $httpBackend.when(state.verb || <span class="hljs-string">'GET'</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(state.url));
-    });
-  });
 
   <span class="hljs-keyword">return</span> {</pre></div></div>
             
@@ -166,7 +147,11 @@
             
             <div class="content"><div class='highlight'><pre>    states: states,
     initialize: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
-      <span class="hljs-keyword">return</span> initialized.then(sync);
+      (fetchStates() || []).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(state)</span> </span>{
+        stateReq[state.name] = $httpBackend.when(state.verb || <span class="hljs-string">'GET'</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(state.url));
+      });
+
+      sync();
     },</pre></div></div>
             
         </li>
@@ -214,9 +199,25 @@
             
             <div class="content"><div class='highlight'><pre>    fetchStates: fetchStates,
     getState: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span></span>{
-      <span class="hljs-keyword">return</span> fetchStates().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span></span>{
-        <span class="hljs-keyword">var</span> state = states.find(state =&gt; state.name === name);
-        <span class="hljs-keyword">return</span> (state &amp;&amp; state.active &amp;&amp; findStateOption(name)) || $q.when(<span class="hljs-literal">null</span>);
+      <span class="hljs-keyword">var</span> state = fetchStates().find(state =&gt; state.name === name);
+      <span class="hljs-keyword">return</span> (state &amp;&amp; state.active &amp;&amp; findStateOption(name)) || <span class="hljs-literal">null</span>;
+    },
+    addState: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(stateObj)</span> </span>{
+      stateObj.options.forEach((option) =&gt; {
+        <span class="hljs-keyword">this</span>.upsert({
+          state: stateObj.name,
+          url: stateObj.url,
+          verb: option.verb,
+          name: option.name,
+          status: option.status,
+          data: option.data,
+          delay: option.delay
+        });
+      });
+    },
+    addStates: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(statesArr)</span> </span>{
+      statesArr.forEach((stateObj) =&gt; {
+        <span class="hljs-keyword">this</span>.addState(stateObj);
       });
     },</pre></div></div>
             

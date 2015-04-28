@@ -126,9 +126,7 @@ parameters… it just does something.</p>
         configuration.upsertOption(state.name, state.activeOption.name, state.active);
       };
 
-      configuration.fetchStates().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span></span>{
-        $scope.states = states;
-      });
+      $scope.states = configuration.fetchStates();
     },
     link: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(scope)</span> </span>{
       scope.test = {

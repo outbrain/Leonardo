@@ -36,9 +36,7 @@ function windowBodyDirective($http, configuration) {
         configuration.upsertOption(state.name, state.activeOption.name, state.active);
       };
 
-      configuration.fetchStates().then(function(states){
-        $scope.states = states;
-      });
+      $scope.states = configuration.fetchStates();
     },
     link: function(scope) {
       scope.test = {

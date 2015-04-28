@@ -11,7 +11,7 @@ function configurationService($q, activeStatesStore, $httpBackend) {
 
     activeStatesStore.set('states', _states);
 
-    return sync();
+    sync();
   };
 
   function getStatesFromStore(){
@@ -28,7 +28,7 @@ function configurationService($q, activeStatesStore, $httpBackend) {
       state.activeOption = !!option ? state.options.find(_option => _option.name === option.name) : state.options[0];
     });
 
-    return $q.when(_states);
+    return _states;
   }
 
   function deactivateAll() {
@@ -38,52 +38,37 @@ function configurationService($q, activeStatesStore, $httpBackend) {
     });
     activeStatesStore.set('states', _states);
 
-    return sync();
+    sync();
   }
 
   function findStateOption(name){
-    return fetchStates().then(function(states){
-      return states.find(state => state.name === name).activeOption;
-    });
-
+    return fetchStates().find(state => state.name === name).activeOption;
   }
 
   function sync(){
-    return fetchStates().then(function(states) {
-      var defer = $q.defer();
-      var promise = defer.promise;
-      defer.resolve();
-      states.forEach(function (state) {
-        promise = promise.then(function(){
-          return findStateOption(state.name).then(function(option) {
-            if (state.active) {
-              stateReq[state.name].respond(function () {
-                $httpBackend.delay = option.delay;
-                return [option.status, option.data];
-              });
-            }
-            else {
-              stateReq[state.name].passThrough();
-            }
-          });
+    fetchStates().forEach(function (state) {
+      var option = findStateOption(state.name);
+      if (state.active) {
+        stateReq[state.name].respond(function () {
+          $httpBackend.delay = option.delay;
+          return [option.status, option.data];
         });
-      });
-
-      return promise;
+      }
+      else {
+        stateReq[state.name].passThrough();
+      }
     });
   }
-
-  var initialized = fetchStates().then(function() {
-    (states || []).forEach(function (state) {
-      stateReq[state.name] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
-    });
-  });
 
   return {
     //configured states todo doc
     states: states,
     initialize: function(){
-      return initialized.then(sync);
+      (fetchStates() || []).forEach(function (state) {
+        stateReq[state.name] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
+      });
+
+      sync();
     },
     //todo doc
     active_states_option: [],
@@ -92,9 +77,25 @@ function configurationService($q, activeStatesStore, $httpBackend) {
     //todo doc
     fetchStates: fetchStates,
     getState: function(name){
-      return fetchStates().then(function(states){
-        var state = states.find(state => state.name === name);
-        return (state && state.active && findStateOption(name)) || $q.when(null);
+      var state = fetchStates().find(state => state.name === name);
+      return (state && state.active && findStateOption(name)) || null;
+    },
+    addState: function(stateObj) {
+      stateObj.options.forEach((option) => {
+        this.upsert({
+          state: stateObj.name,
+          url: stateObj.url,
+          verb: option.verb,
+          name: option.name,
+          status: option.status,
+          data: option.data,
+          delay: option.delay
+        });
+      });
+    },
+    addStates: function(statesArr) {
+      statesArr.forEach((stateObj) => {
+        this.addState(stateObj);
       });
     },
     //insert or replace an option by insert or updateing a state.
