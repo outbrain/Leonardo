@@ -34,14 +34,14 @@ function run($rootScope, configuration){
       name: "state2",
       url: 'http://url2.com',
       options: [
-        {name: 'get url2 bbbb', status: 404,  data: ["url2 404 failure"], delay: 2000}
+        {name: 'get url2 bbbb', status: 404,  data: ["url2 404 failure"]}
       ]
     },
     {
       name: "state3",
       url: 'http://url3.com',
       options: [
-        {name: 'get url3 bbbb', status: 200,  data: ["url3 bbb"]}
+        {name: 'get url3 bbbb with delay', status: 200,  data: ["url3 bbb"], delay: 2000}
       ]
     },
     {
@@ -58,7 +58,7 @@ function run($rootScope, configuration){
   //* via ui - click on leonardo and hit the activate tabs
   //* via api - coming soon...
 
-  configuration.initialize();
+  //configuration.initialize();
 
   $rootScope.showAnimals = function(){
     var option = configuration.getState("state_animals_non_ajax");

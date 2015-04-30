@@ -70,7 +70,7 @@
             
             <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">configurationService</span><span class="hljs-params">($q, activeStatesStore, $httpBackend)</span> </span>{
   <span class="hljs-keyword">var</span> states = [];
-  <span class="hljs-keyword">var</span> stateReq = {};
+  <span class="hljs-keyword">var</span> responseHandlers = {};
 
   <span class="hljs-keyword">var</span> upsertOption = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state, name, active)</span> </span>{
     <span class="hljs-keyword">var</span> _states = getStatesFromStore();
@@ -81,7 +81,7 @@
 
     activeStatesStore.set(<span class="hljs-string">'states'</span>, _states);
 
-    <span class="hljs-keyword">return</span> sync();
+    sync();
   };
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getStatesFromStore</span><span class="hljs-params">()</span></span>{
@@ -108,7 +108,7 @@
     });
     activeStatesStore.set(<span class="hljs-string">'states'</span>, _states);
 
-    <span class="hljs-keyword">return</span> sync();
+    sync();
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">findStateOption</span><span class="hljs-params">(name)</span></span>{
@@ -117,17 +117,27 @@
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sync</span><span class="hljs-params">()</span></span>{
     fetchStates().forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(state)</span> </span>{
-      <span class="hljs-keyword">var</span> option = findStateOption(state.name);
-      <span class="hljs-keyword">if</span> (state.active) {
-        stateReq[state.name].respond(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-          $httpBackend.delay = option.delay;
-          <span class="hljs-keyword">return</span> [option.status, option.data];
-        });
-      }
-      <span class="hljs-keyword">else</span> {
-        stateReq[state.name].passThrough();
+      <span class="hljs-keyword">var</span> option, responseHandler;
+      <span class="hljs-keyword">if</span> (state.url) {
+        option = findStateOption(state.name);
+        responseHandler = getResponseHandler(state);
+        <span class="hljs-keyword">if</span> (state.active) {
+          responseHandler.respond(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+            $httpBackend.setDelay(option.delay);
+            <span class="hljs-keyword">return</span> [option.status, option.data];
+          });
+        } <span class="hljs-keyword">else</span> {
+          responseHandler.passThrough();
+        }
       }
     });
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getResponseHandler</span><span class="hljs-params">(state)</span> </span>{
+    <span class="hljs-keyword">if</span> (!responseHandlers[state.name]) {
+      responseHandlers[state.name] = $httpBackend.when(state.verb || <span class="hljs-string">'GET'</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(state.url));
+    }
+    <span class="hljs-keyword">return</span> responseHandlers[state.name];
   }
 
   <span class="hljs-keyword">return</span> {</pre></div></div>
@@ -147,11 +157,6 @@
             
             <div class="content"><div class='highlight'><pre>    states: states,
     initialize: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
-      (fetchStates() || []).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(state)</span> </span>{
-        stateReq[state.name] = $httpBackend.when(state.verb || <span class="hljs-string">'GET'</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(state.url));
-      });
-
-      sync();
     },</pre></div></div>
             
         </li>
@@ -270,6 +275,7 @@
       <span class="hljs-keyword">if</span> (option === defaultOption) {
         stateItem.options.push(option);
       }
+      sync();
     },</pre></div></div>
             
         </li>

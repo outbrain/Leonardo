@@ -122,20 +122,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-comment">/*
-  configuration.upsert({ state: 'state1', name: 'get url1 aaaa', url: 'http://url1.com', status: 200, data: ["url1 aaa"]});
-  configuration.upsertMany([
-    { state: 'state_animals_non_ajax', name: 'get kittens', data: ["persion", "siemi"]},
-    { state: 'state_animals_non_ajax', name: 'get dogs', data: ["labrador"]},
-    { state: 'state1', name: 'get url1 bbbb', status:200,  data: ["url1 bbb"]},
-    { state: 'state1', url: 'http://url3.com', name: 'get url3 bbbb', status:200,  data: ["url3 bbb"], delay: 2000},
-    { state: 'state2', url: 'http://url1.com', name: 'get url1 cccc', status:200,  data: ["url1 ccc"]},
-    { state: 'state3', url: 'http://url2.com', name: 'get url2 a', status:200,  data: ["url2 aaa"]},
-    { state: 'state4', url: 'http://url2.com', name: 'get url2 b', status:200,  data: ["url2 bbb"]}
-  ]);
-  */</span>
-
-  configuration.addStates([
+            <div class="content"><div class='highlight'><pre>  configuration.addStates([
     {
       name: <span class="hljs-string">'state_animals_non_ajax'</span>,
       options: [
@@ -156,20 +143,20 @@
       name: <span class="hljs-string">"state2"</span>,
       url: <span class="hljs-string">'http://url2.com'</span>,
       options: [
-        {name: <span class="hljs-string">'get url2 bbbb'</span>, status: <span class="hljs-number">404</span>,  data: [<span class="hljs-string">"url2 404 failure"</span>], delay: <span class="hljs-number">2000</span>},
+        {name: <span class="hljs-string">'get url2 bbbb'</span>, status: <span class="hljs-number">404</span>,  data: [<span class="hljs-string">"url2 404 failure"</span>]}
       ]
     },
     {
       name: <span class="hljs-string">"state3"</span>,
       url: <span class="hljs-string">'http://url3.com'</span>,
       options: [
-        {name: <span class="hljs-string">'get url3 bbbb'</span>, status: <span class="hljs-number">200</span>,  data: [<span class="hljs-string">"url3 bbb"</span>]},
+        {name: <span class="hljs-string">'get url3 bbbb with delay'</span>, status: <span class="hljs-number">200</span>,  data: [<span class="hljs-string">"url3 bbb"</span>], delay: <span class="hljs-number">2000</span>}
       ]
     },
     {
       name: <span class="hljs-string">"state 4"</span>,
       options: [
-        {name: <span class="hljs-string">'get url4 bbbb'</span>, data: [<span class="hljs-string">"url4 bbb"</span>]},
+        {name: <span class="hljs-string">'get url4 bbbb'</span>, data: [<span class="hljs-string">"url4 bbb"</span>]}
       ]
     }
   ]);</pre></div></div>
@@ -203,9 +190,20 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>
-  configuration.initialize();
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>configuration.initialize();</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
   $rootScope.showAnimals = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
     <span class="hljs-keyword">var</span> option = configuration.getState(<span class="hljs-string">"state_animals_non_ajax"</span>);
     alert(option ? option.data : <span class="hljs-string">'No Active'</span> );

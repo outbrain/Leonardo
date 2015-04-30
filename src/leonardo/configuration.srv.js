@@ -1,6 +1,6 @@
 function configurationService($q, activeStatesStore, $httpBackend) {
   var states = [];
-  var stateReq = {};
+  var responseHandlers = {};
 
   var upsertOption = function(state, name, active) {
     var _states = getStatesFromStore();
@@ -47,28 +47,33 @@ function configurationService($q, activeStatesStore, $httpBackend) {
 
   function sync(){
     fetchStates().forEach(function (state) {
-      var option = findStateOption(state.name);
-      if (state.active) {
-        stateReq[state.name].respond(function () {
-          $httpBackend.delay = option.delay;
-          return [option.status, option.data];
-        });
-      }
-      else {
-        stateReq[state.name].passThrough();
+      var option, responseHandler;
+      if (state.url) {
+        option = findStateOption(state.name);
+        responseHandler = getResponseHandler(state);
+        if (state.active) {
+          responseHandler.respond(function () {
+            $httpBackend.setDelay(option.delay);
+            return [option.status, option.data];
+          });
+        } else {
+          responseHandler.passThrough();
+        }
       }
     });
+  }
+
+  function getResponseHandler(state) {
+    if (!responseHandlers[state.name]) {
+      responseHandlers[state.name] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
+    }
+    return responseHandlers[state.name];
   }
 
   return {
     //configured states todo doc
     states: states,
     initialize: function(){
-      (fetchStates() || []).forEach(function (state) {
-        stateReq[state.name] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
-      });
-
-      sync();
     },
     //todo doc
     active_states_option: [],
@@ -135,6 +140,7 @@ function configurationService($q, activeStatesStore, $httpBackend) {
       if (option === defaultOption) {
         stateItem.options.push(option);
       }
+      sync();
     },
     //todo doc
     upsertMany: function(items){
