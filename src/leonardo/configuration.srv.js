@@ -54,7 +54,7 @@ function configurationService($q, activeStatesStore, $httpBackend) {
         if (state.active) {
           responseHandler.respond(function () {
             $httpBackend.setDelay(option.delay);
-            return [option.status, option.data];
+            return [option.status, angular.isFunction(option.data) ? option.data() : option.data];
           });
         } else {
           responseHandler.passThrough();
