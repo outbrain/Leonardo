@@ -124,7 +124,7 @@
         <span class="hljs-keyword">if</span> (state.active) {
           responseHandler.respond(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
             $httpBackend.setDelay(option.delay);
-            <span class="hljs-keyword">return</span> [option.status, option.data];
+            <span class="hljs-keyword">return</span> [option.status, angular.isFunction(option.data) ? option.data() : option.data];
           });
         } <span class="hljs-keyword">else</span> {
           responseHandler.passThrough();
