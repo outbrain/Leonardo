@@ -6,7 +6,8 @@ var gulp = require('gulp'),
   rename = require("gulp-rename"),
   minifyCSS = require('gulp-minify-css'),
   minifyHtml = require("gulp-minify-html"),
-  ngHtml2Js = require("gulp-ng-html2js");
+  ngHtml2Js = require("gulp-ng-html2js"),
+  concat = require('gulp-concat');
 
 require("gulp-help")(gulp);
 
@@ -92,6 +93,21 @@ gulp.task('watch', "Watch file changes and auto compile for development", ['buil
   gulp.watch(["./src/leonardo/*.js"], ['transpile']);
   gulp.watch(["./index.js"], ['transpile-example']);
   gulp.watch(["./src/leonardo/templates/*.html"], ['build-templates']);
+});
+
+gulp.task('combine-scripts', function() {
+  return gulp.src(
+      ['angular-mocks.js',
+      'angular-storage.min.js',
+      'traceur-runtime.min.js',
+      'module.js',
+      'leonardo.templates.min.js'].
+      map(function(file){
+        return './docs/public/leonardo/' + file
+      })
+  )
+  .pipe(concat('leonardo.js'))
+  .pipe(gulp.dest('./dist/'));
 });
 
 gulp.task('default', ['build']);
