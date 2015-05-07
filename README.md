@@ -1,4 +1,4 @@
-Leonardo Docs 
+![Leonardo logo](extension/images/leonardo.png)  Leonardo Docs 
 =============
 
 Mocking made simple and consistant.
@@ -48,7 +48,7 @@ AngularJS v1.2+
 A plunker demonstration http://plnkr.co/edit/w8oaELXwQldv6AeZjnhD?p=preview
 
 ## Screen 
-Image here
+![example image](extension/images/example.png)
 
 ## Documentation
 http://outbrain.github.io/Leonardo
