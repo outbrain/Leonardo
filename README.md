@@ -1,12 +1,12 @@
 ![Leonardo logo](extension/images/leonardo.png)  Leonardo Docs 
 =============
 
-Mocking made simple and consistant.
-Developed by outbrain.
+Mocking made simple and consistent.
+Developed by Outbrain.
 
 ## Requirements 
 
-#### Load Dependany scripts
+#### Load Dependency scripts
 
 AngularJS v1.2+
 
