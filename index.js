@@ -58,7 +58,6 @@ function run($rootScope, configuration){
   //* via ui - click on leonardo and hit the activate tabs
   //* via api - coming soon...
 
-  //configuration.initialize();
 
   $rootScope.showAnimals = function(){
     var option = configuration.getState("state_animals_non_ajax");

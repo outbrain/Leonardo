@@ -73,8 +73,6 @@ function configurationService($q, activeStatesStore, $httpBackend) {
   return {
     //configured states todo doc
     states: states,
-    initialize: function(){
-    },
     //todo doc
     active_states_option: [],
     //todo doc
