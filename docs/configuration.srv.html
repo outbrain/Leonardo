@@ -40,6 +40,11 @@
                 </a>
               
                 
+                <a class="source" href="storage.srv.html">
+                  storage.srv.js
+                </a>
+              
+                
                 <a class="source" href="window-body.drv.html">
                   window-body.drv.js
                 </a>
@@ -68,28 +73,24 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">configurationService</span><span class="hljs-params">($q, activeStatesStore, $httpBackend)</span> </span>{
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">configurationService</span><span class="hljs-params">(storage, $httpBackend)</span> </span>{
   <span class="hljs-keyword">var</span> states = [];
   <span class="hljs-keyword">var</span> responseHandlers = {};
 
   <span class="hljs-keyword">var</span> upsertOption = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state, name, active)</span> </span>{
-    <span class="hljs-keyword">var</span> _states = getStatesFromStore();
+    <span class="hljs-keyword">var</span> _states = storage.getStates();
     _states[state] = {
       name: name,
       active: active
     };
 
-    activeStatesStore.set(<span class="hljs-string">'states'</span>, _states);
+    storage.setStates(_states);
 
     sync();
   };
 
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getStatesFromStore</span><span class="hljs-params">()</span></span>{
-    <span class="hljs-keyword">return</span> activeStatesStore.get(<span class="hljs-string">'states'</span>) || {};
-  }
-
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetchStates</span><span class="hljs-params">()</span></span>{
-    <span class="hljs-keyword">var</span> activeStates = getStatesFromStore();
+    <span class="hljs-keyword">var</span> activeStates = storage.getStates();
     <span class="hljs-keyword">var</span> _states = states.map(state =&gt; angular.copy(state));
 
     _states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span> </span>{
@@ -102,11 +103,11 @@
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">deactivateAll</span><span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">var</span> _states = getStatesFromStore();
+    <span class="hljs-keyword">var</span> _states = storage.getStates();
     <span class="hljs-built_in">Object</span>.keys(_states).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(stateKey)</span> </span>{
       _states[stateKey].active = <span class="hljs-literal">false</span>;
     });
-    activeStatesStore.set(<span class="hljs-string">'states'</span>, _states);
+    storage.setStates(_states);
 
     sync();
   }
@@ -304,10 +305,7 @@
   </div>
   <script src='public/leonardo/angular.min.js'></script>
   <script src="public/leonardo/angular-mocks.js"></script>
-  <script src='public/leonardo/traceur-runtime.min.js'></script>
-  <script src="public/leonardo/leonardo.templates.min.js"></script>
-  <script src="docs/public/leonardo/angular-storage.min.js"></script>
-  <script src="public/leonardo/module.js"></script>
+  <script src="public/leonardo/leonardo.js"></script>
   <script src="public/leonardo/index.js"></script>
 </body>
 </html>

@@ -40,6 +40,11 @@
                 </a>
               
                 
+                <a class="source" href="storage.srv.html">
+                  storage.srv.js
+                </a>
+              
+                
                 <a class="source" href="window-body.drv.html">
                   window-body.drv.js
                 </a>
@@ -70,13 +75,12 @@
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> activatorDirective <span class="hljs-keyword">from</span> <span class="hljs-string">'./activator.drv.js'</span>;
 <span class="hljs-keyword">import</span> configurationService <span class="hljs-keyword">from</span> <span class="hljs-string">'./configuration.srv.js'</span>;
+<span class="hljs-keyword">import</span> storageService <span class="hljs-keyword">from</span> <span class="hljs-string">'./storage.srv.js'</span>;
 <span class="hljs-keyword">import</span> windowBodyDirective <span class="hljs-keyword">from</span> <span class="hljs-string">'./window-body.drv.js'</span>;
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> angular.module(<span class="hljs-string">'leonardo'</span>, [<span class="hljs-string">'leonardo.templates'</span>, <span class="hljs-string">'angular-storage'</span>, <span class="hljs-string">'ngMockE2E'</span>])
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> angular.module(<span class="hljs-string">'leonardo'</span>, [<span class="hljs-string">'leonardo.templates'</span>, <span class="hljs-string">'ngMockE2E'</span>])
+  .factory(<span class="hljs-string">'storage'</span>, storageService)
   .factory(<span class="hljs-string">'configuration'</span>, configurationService)
-  .factory(<span class="hljs-string">'activeStatesStore'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(store)</span> </span>{
-    <span class="hljs-keyword">return</span> store.getNamespacedStore(<span class="hljs-string">'active_states'</span>);
-  })
   .directive(<span class="hljs-string">'activator'</span>, activatorDirective)
   .directive(<span class="hljs-string">'windowBody'</span>, windowBodyDirective)
   <span class="hljs-comment">/* wrap $httpbackend with a proxy in order to support delaying its responses
@@ -112,10 +116,7 @@
   </div>
   <script src='public/leonardo/angular.min.js'></script>
   <script src="public/leonardo/angular-mocks.js"></script>
-  <script src='public/leonardo/traceur-runtime.min.js'></script>
-  <script src="public/leonardo/leonardo.templates.min.js"></script>
-  <script src="docs/public/leonardo/angular-storage.min.js"></script>
-  <script src="public/leonardo/module.js"></script>
+  <script src="public/leonardo/leonardo.js"></script>
   <script src="public/leonardo/index.js"></script>
 </body>
 </html>

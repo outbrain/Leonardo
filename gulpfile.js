@@ -21,7 +21,6 @@ gulp.task('transpile', 'Transpile the App from ES6 to ES5', function() {
       debug   : false
     }))
     .pipe(gulp.dest('./docs/public/leonardo'))
-    .pipe(gulp.dest('./dist'))
     .on('error', function (err) {
       console.log(err.message);
     });
@@ -46,8 +45,7 @@ gulp.task('copy', function() {
   return gulp.src([
       "./bower_components/traceur-runtime/traceur-runtime.min.js",
       "./bower_components/angular/angular.min.js",
-      "./bower_components/angular-mocks/angular-mocks.js",
-      "./bower_components/a0-angular-storage/dist/angular-storage.min.js"
+      "./bower_components/angular-mocks/angular-mocks.js"
   ])
   .pipe(gulp.dest('./docs/public/leonardo'));
 });
@@ -77,7 +75,6 @@ gulp.task("build-templates", false, function () {
       moduleName: 'leonardo.templates'
     }))
     .pipe(rename('leonardo.templates.min.js'))
-    .pipe(gulp.dest('./dist'))
     .pipe(gulp.dest('./docs/public/leonardo'));
 });
 
@@ -85,6 +82,7 @@ gulp.task('build', function(cb) {
   runSequence(
     ['transpile', 'build-less', 'build-templates', 'transpile-example'],
     'copy',
+    'combine-scripts',
     cb);
 });
 
@@ -97,8 +95,7 @@ gulp.task('watch', "Watch file changes and auto compile for development", ['buil
 
 gulp.task('combine-scripts', function() {
   return gulp.src(
-      ['angular-mocks.js',
-      'angular-storage.min.js',
+      [
       'traceur-runtime.min.js',
       'module.js',
       'leonardo.templates.min.js'].
@@ -107,7 +104,8 @@ gulp.task('combine-scripts', function() {
       })
   )
   .pipe(concat('leonardo.js'))
-  .pipe(gulp.dest('./dist/'));
+  .pipe(gulp.dest('./dist'))
+  .pipe(gulp.dest('./docs/public/leonardo'));
 });
 
 gulp.task('default', ['build']);
