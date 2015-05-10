@@ -56,7 +56,7 @@ gulp.task("build-less", false, function () {
       .on('error', function (err) {
         console.log(err.message);
       })
-      .pipe(rename('app.min.css'))
+      .pipe(rename('leonardo.min.css'))
       .pipe(minifyCSS({
         keepSpecialComments: 0
       }))
