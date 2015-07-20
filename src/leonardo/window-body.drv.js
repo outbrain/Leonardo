@@ -9,7 +9,7 @@
 //
 // The `DoSomething` method does something! It doesn't take any
 // parameters... it just does something.
-function windowBodyDirective($http, configuration) {
+angular.module('leonardo').directive('activator', function windowBodyDirective($http, configuration) {
   return {
     restrict: 'E',
     templateUrl: 'window-body.html',
@@ -55,6 +55,4 @@ function windowBodyDirective($http, configuration) {
       };
     }
   };
-}
-
-export default windowBodyDirective
+});

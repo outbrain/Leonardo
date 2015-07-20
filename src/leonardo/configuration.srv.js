@@ -1,4 +1,4 @@
-function configurationService($q, activeStatesStore, $httpBackend) {
+angular.module('leonardo').directive('activator', function configurationService($q, activeStatesStore, $httpBackend) {
   var states = [];
   var responseHandlers = {};
 
@@ -146,6 +146,4 @@ function configurationService($q, activeStatesStore, $httpBackend) {
     },
     deactivateAll: deactivateAll
   };
-}
-
-export default configurationService;
+});

@@ -1,7 +1,6 @@
 var gulp = require('gulp'),
   path = require('path'),
   runSequence = require('run-sequence'),
-  gulpTraceurCmdline = require('gulp-traceur-cmdline'),
   less = require('gulp-less'),
   rename = require("gulp-rename"),
   minifyCSS = require('gulp-minify-css'),
@@ -10,40 +9,8 @@ var gulp = require('gulp'),
 
 require("gulp-help")(gulp);
 
-gulp.task('transpile', 'Transpile the App from ES6 to ES5', function() {
-
-  return gulp.src(path.join('src', 'leonardo',  'module.js'))
-    .pipe(gulpTraceurCmdline({
-      'source-maps': 'inline',
-      symbols : true,
-      modules : 'register',
-      debug   : false
-    }))
-    .pipe(gulp.dest('./docs/public/leonardo'))
-    .pipe(gulp.dest('./dist'))
-    .on('error', function (err) {
-      console.log(err.message);
-    });
-});
-
-
-gulp.task('transpile-example', 'Transpile the App from ES6 to ES5', function() {
-  return gulp.src(path.join('index.js'))
-    .pipe(gulpTraceurCmdline({
-      'source-maps': 'inline',
-      symbols : true,
-      modules : 'register',
-      debug   : false
-    }))
-    .pipe(gulp.dest('./docs/public/leonardo'))
-    .on('error', function (err) {
-      console.log(err.message);
-    });
-});
-
 gulp.task('copy', function() {
   return gulp.src([
-      "./bower_components/traceur-runtime/traceur-runtime.min.js",
       "./bower_components/angular/angular.min.js",
       "./bower_components/angular-mocks/angular-mocks.js",
       "./bower_components/a0-angular-storage/dist/angular-storage.min.js"
