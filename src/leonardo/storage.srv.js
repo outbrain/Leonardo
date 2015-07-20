@@ -1,5 +1,5 @@
 angular.module('leonardo').factory('leoStorage', function storageService() {
-  var STATES_STORE_KEY = 'states';
+  var STATES_STORE_KEY = 'leonardo-states';
   function getItem(key) {
     var item = localStorage.getItem(key);
     if (!item) {
