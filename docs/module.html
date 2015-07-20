@@ -75,13 +75,6 @@
             
             <div class="content"><div class='highlight'><pre>
 angular.module(<span class="hljs-string">'leonardo'</span>, [<span class="hljs-string">'leonardo.templates'</span>, <span class="hljs-string">'ngMockE2E'</span>])
-  .factory(<span class="hljs-string">'configuration'</span>, configurationService)
-  .factory(<span class="hljs-string">'activeStatesStore'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(store)</span> </span>{
-    <span class="hljs-keyword">return</span> store.getNamespacedStore(<span class="hljs-string">'active_states'</span>);
-  })
-  .factory(<span class="hljs-string">'storage'</span>, storageService)
-  .directive(<span class="hljs-string">'activator'</span>, activatorDirective)
-  .directive(<span class="hljs-string">'windowBody'</span>, windowBodyDirective)
   <span class="hljs-comment">/* wrap $httpbackend with a proxy in order to support delaying its responses
    * we are using the approach described in Endless Indirection:
    * https://endlessindirection.wordpress.com/2013/05/18/angularjs-delay-response-from-httpbackend/

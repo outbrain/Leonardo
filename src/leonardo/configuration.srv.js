@@ -17,16 +17,16 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
   function fetchStates(){
     var activeStates = storage.getStates();
     var _states = states.map(function(state) {
-      return angular.copy(state)
+      return angular.copy(state);
     });
 
     _states.forEach(function(state) {
       var option = activeStates[state.name];
       state.active = !!option && option.active;
       state.activeOption = !!option ?
-        state.options.find(function (_option) {
-          return _option.name === option.name
-        }) : state.options[0];
+        state.options.filter(function (_option) {
+          return _option.name === option.name;
+        })[0] : state.options[0];
     });
 
     return _states;
@@ -43,7 +43,7 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
   }
 
   function findStateOption(name){
-    return fetchStates().find(function(state){ return state.name === name;}).activeOption;
+    return fetchStates().filter(function(state){ return state.name === name;})[0].activeOption;
   }
 
   function sync(){
@@ -81,7 +81,7 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
     //todo doc
     fetchStates: fetchStates,
     getState: function(name){
-      var state = fetchStates().find(function(state) { return state.name === name});
+      var state = fetchStates().filter(function(state) { return state.name === name})[0];
       return (state && state.active && findStateOption(name)) || null;
     },
     addState: function(stateObj) {
@@ -95,15 +95,22 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
           data: option.data,
           delay: option.delay
         });
-      });
+      }.bind(this));
     },
     addStates: function(statesArr) {
       statesArr.forEach(function(stateObj) {
         this.addState(stateObj);
-      });
+      }.bind(this));
     },
     //insert or replace an option by insert or updateing a state.
-    upsert: function({ verb, state, name, url, status = 200, data = {}, delay = 0}){
+    upsert: function(stateObj) {
+      var verb = stateObj.verb,
+          state = stateObj.state,
+          name = stateObj.name,
+          url = stateObj.url,
+          status = stateObj.status || 200,
+          data = stateObj.data || {},
+          delay = stateObj.delay || 0;
       var defaultState = {};
 
       var defaultOption = {};
@@ -113,7 +120,8 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
         return;
       }
 
-      var stateItem = states.find(function(_state) { return _state.name === state;}) || defaultState;
+      var stateItem = defaultState;
+      states.filter(function(_state) { return _state.name === state;})[0] || defaultState;
 
       angular.extend(stateItem, {
         name: state,
@@ -127,7 +135,7 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
         states.push(stateItem);
       }
 
-      var option = stateItem.options.find(function(_option) {return _option.name === name}) || defaultOption;
+      var option = stateItem.options.filter(function(_option) {return _option.name === name})[0] || defaultOption;
 
       angular.extend(option, {
         name: name,

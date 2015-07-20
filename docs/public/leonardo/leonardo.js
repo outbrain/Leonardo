@@ -1,12 +1,5 @@
 
 angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
-  .factory('configuration', configurationService)
-  .factory('activeStatesStore', function(store) {
-    return store.getNamespacedStore('active_states');
-  })
-  .factory('storage', storageService)
-  .directive('activator', activatorDirective)
-  .directive('windowBody', windowBodyDirective)
   /* wrap $httpbackend with a proxy in order to support delaying its responses
    * we are using the approach described in Endless Indirection:
    * https://endlessindirection.wordpress.com/2013/05/18/angularjs-delay-response-from-httpbackend/
@@ -53,12 +46,17 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
 
   function fetchStates(){
     var activeStates = storage.getStates();
-    var _states = states.map(state => angular.copy(state));
+    var _states = states.map(function(state) {
+      return angular.copy(state);
+    });
 
     _states.forEach(function(state) {
-      let option = activeStates[state.name];
+      var option = activeStates[state.name];
       state.active = !!option && option.active;
-      state.activeOption = !!option ? state.options.find(_option => _option.name === option.name) : state.options[0];
+      state.activeOption = !!option ?
+        state.options.filter(function (_option) {
+          return _option.name === option.name;
+        })[0] : state.options[0];
     });
 
     return _states;
@@ -75,7 +73,7 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
   }
 
   function findStateOption(name){
-    return fetchStates().find(state => state.name === name).activeOption;
+    return fetchStates().filter(function(state){ return state.name === name;})[0].activeOption;
   }
 
   function sync(){
@@ -113,11 +111,11 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
     //todo doc
     fetchStates: fetchStates,
     getState: function(name){
-      var state = fetchStates().find(state => state.name === name);
+      var state = fetchStates().filter(function(state) { return state.name === name})[0];
       return (state && state.active && findStateOption(name)) || null;
     },
     addState: function(stateObj) {
-      stateObj.options.forEach((option) => {
+      stateObj.options.forEach(function (option) {
         this.upsert({
           state: stateObj.name,
           url: stateObj.url,
@@ -127,15 +125,22 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
           data: option.data,
           delay: option.delay
         });
-      });
+      }.bind(this));
     },
     addStates: function(statesArr) {
-      statesArr.forEach((stateObj) => {
+      statesArr.forEach(function(stateObj) {
         this.addState(stateObj);
-      });
+      }.bind(this));
     },
     //insert or replace an option by insert or updateing a state.
-    upsert: function({ verb, state, name, url, status = 200, data = {}, delay = 0}){
+    upsert: function(stateObj) {
+      var verb = stateObj.verb,
+          state = stateObj.state,
+          name = stateObj.name,
+          url = stateObj.url,
+          status = stateObj.status || 200,
+          data = stateObj.data || {},
+          delay = stateObj.delay || 0;
       var defaultState = {};
 
       var defaultOption = {};
@@ -145,7 +150,8 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
         return;
       }
 
-      var stateItem = states.find(_state => _state.name === state) || defaultState;
+      var stateItem = defaultState;
+      states.filter(function(_state) { return _state.name === state;})[0] || defaultState;
 
       angular.extend(stateItem, {
         name: state,
@@ -159,7 +165,7 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
         states.push(stateItem);
       }
 
-      var option = stateItem.options.find(_option => _option.name === name) || defaultOption;
+      var option = stateItem.options.filter(function(_option) {return _option.name === name})[0] || defaultOption;
 
       angular.extend(option, {
         name: name,
@@ -175,7 +181,9 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
     },
     //todo doc
     upsertMany: function(items){
-      items.forEach(item => this.upsert(item));
+      items.forEach(function(item) {
+        this.upsert(item);
+      }.bind(this));
     },
     deactivateAll: deactivateAll
   };
@@ -249,3 +257,15 @@ angular.module('leonardo').directive('activator', function activatorDirective($c
     }
   };
 });
+
+(function(module) {
+try {
+  module = angular.module('leonardo.templates');
+} catch (e) {
+  module = angular.module('leonardo.templates', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('window-body.html',
+    '<div class="leonardo-window-body"><div class="tabs"><div ng-click="selectedItem = \'configure\'" ng-class="{ \'selected\': selectedItem == \'configure\' }">Configure</div><div ng-click="selectedItem = \'activate\'" ng-class="{ \'selected\': selectedItem == \'activate\' }">Activate</div><div ng-click="selectedItem = \'test\'" ng-class="{ \'selected\': selectedItem == \'test\' }">Test</div></div><div ng-switch="selectedItem" class="leonardo-window-options"><div ng-switch-when="configure" class="leonardo-configure"><table><thead><tr><th>State</th><th>URL</th><th>Options</th></tr></thead><tbody><tr ng-repeat="state in states"><td>{{state.name}}</td><td>{{state.url}}</td><td><ul><li ng-repeat="option in state.options">Name: {{option.name}}<br>Status: {{option.status}}<br>Data: {{option.data}}<br></li></ul></td></tr></tbody></table></div><div ng-switch-when="activate" class="leonardo-activate"><ul><li><h3>Non Ajax State</h3></li><li ng-repeat="state in ::states | filter:NothasUrl"><div><div class="onoffswitch"><input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{::state.name}}" type="checkbox" name="{{::state.name}}" value="{{::state.name}}"> <label class="onoffswitch-label" for="{{::state.name}}"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div><h4>{{::state.name}}</h4></div><div><select ng-model="state.activeOption" ng-options="option.name for option in ::state.options" ng-change="updateState(state)"></select></div></li><li><h3>Ajax State</h3></li><li ng-repeat="state in ::states | filter:hasUrl"><div><div class="onoffswitch"><input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{::state.name}}" type="checkbox" name="{{::state.name}}" value="{{::state.name}}"> <label class="onoffswitch-label" for="{{::state.name}}"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div><h4>{{::state.name}}</h4>&nbsp;&nbsp; - {{::state.url}}</div><div><select ng-model="state.activeOption" ng-options="option.name for option in ::state.options" ng-change="updateState(state)"></select></div></li></ul></div><div ng-switch-when="test" class="leonardo-test"><div><label for="url"></label>URL: <input id="url" type="text" ng-model="test.url"> <input type="button" ng-click="submit(test.url)" value="submit"></div><textarea>{{test.value | json}}</textarea></div></div></div>');
+}]);
+})();
