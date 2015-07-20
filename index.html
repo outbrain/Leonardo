@@ -33,7 +33,9 @@
   <a href="https://github.com/outbrain/Leonardo">Github</a>
   <a href="docs/module.html">Documentation</a>
   <a href="http://plnkr.co/edit/w8oaELXwQldv6AeZjnhD?p=preview">Plunker</a>
+  <br/>
   <a href="index.js">Example javascript source</a>
+  <a href="leonardo-mocking.js">Example mocking source</a>
 
   <div class="clearfix">
     <div class="error" ng-show="error">Failed To Load</div>
@@ -43,7 +45,7 @@
       </a>
       <div class="media-item-meta">
         <h4>{{ item.title }}</h4>
-        <p>by <a ng-href="#/flickers/{{ item.author_id }}">{{ item.author }}</a></p>
+        <p>by {{ item.author }}</p>
         <p>Taken {{ item.date_taken }}</p>
       </div>
     </div>
