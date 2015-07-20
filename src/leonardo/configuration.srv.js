@@ -23,7 +23,10 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
     _states.forEach(function(state) {
       var option = activeStates[state.name];
       state.active = !!option && option.active;
-      state.activeOption = !!option ? state.options.find(_option => _option.name === option.name) : state.options[0];
+      state.activeOption = !!option ?
+        state.options.find(function (_option) {
+          return _option.name === option.name
+        }) : state.options[0];
     });
 
     return _states;
@@ -40,7 +43,7 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
   }
 
   function findStateOption(name){
-    return fetchStates().find(state => state.name === name).activeOption;
+    return fetchStates().find(function(state){ return state.name === name;}).activeOption;
   }
 
   function sync(){
@@ -78,11 +81,11 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
     //todo doc
     fetchStates: fetchStates,
     getState: function(name){
-      var state = fetchStates().find(state => state.name === name);
+      var state = fetchStates().find(function(state) { return state.name === name});
       return (state && state.active && findStateOption(name)) || null;
     },
     addState: function(stateObj) {
-      stateObj.options.forEach((option) => {
+      stateObj.options.forEach(function (option) {
         this.upsert({
           state: stateObj.name,
           url: stateObj.url,
@@ -95,7 +98,7 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
       });
     },
     addStates: function(statesArr) {
-      statesArr.forEach((stateObj) => {
+      statesArr.forEach(function(stateObj) {
         this.addState(stateObj);
       });
     },
@@ -110,7 +113,7 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
         return;
       }
 
-      var stateItem = states.find(_state => _state.name === state) || defaultState;
+      var stateItem = states.find(function(_state) { return _state.name === state;}) || defaultState;
 
       angular.extend(stateItem, {
         name: state,
@@ -124,7 +127,7 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
         states.push(stateItem);
       }
 
-      var option = stateItem.options.find(_option => _option.name === name) || defaultOption;
+      var option = stateItem.options.find(function(_option) {return _option.name === name}) || defaultOption;
 
       angular.extend(option, {
         name: name,
