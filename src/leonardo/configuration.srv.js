@@ -154,6 +154,23 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
         this.upsert(item);
       }.bind(this));
     },
-    deactivateAll: deactivateAll
+    deactivateAll: deactivateAll,
+    addSenario: function(){
+      //TODO
+    },
+    addSenarios: function(){
+      //TODO
+    },
+    getScenarios: function(){
+      return ["3g", "xx"];
+    },
+    getScenario: function(name){
+      return [
+        {
+          name: 'state_animals_non_ajax',
+          option: 'get dogs'
+        }
+      ];
+    }
   };
 });
