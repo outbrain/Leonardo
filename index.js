@@ -1,113 +1,51 @@
+"use strict";
 
-// Steps Stages
-// ----------------
-//* Add leonardo module as a dependancy to your app
-//* You done!
-angular.module('example', ['leonardo'])
-            .run(run);
-
-//well almost...
-function run($rootScope, leoConfiguration){
-
-  // Adding states
-  // ----------------
-  //* via api - you can look at the results by clicking leonardo and looking in the configure tab
-  //* via ui - coming soon...
-
-  
-  leoConfiguration.addScenario({
-    name: '3g',
-    states: [
-      {
-        name: 'state_animals_non_ajax',
-        option: 'get dogs'
-      },
-      {
-        name: 'state1',
-        option: 'get url1 bbbb'
-      }
-    ]
+var Flicker = angular.module('flicker', ["leonardo"])
+  .config(function ($locationProvider) {
+    $locationProvider.html5Mode(false);
+  })
+  .run(function($rootScope, flickerGetter){
+    flickerGetter.getData().then(function(data){
+      $rootScope.images = data;
+    });
   });
 
-  leoConfiguration.addScenario({
-    name: 'A test',
-    states: [
-      {
-        name: 'state_animals_non_ajax',
-        option: 'get kittens'
-      },
-      {
-        name: 'state2',
-        option: 'get url2 bbbb'
-      }
-    ]
-  });
+Flicker.factory('flickerGetter', function ($q, $http) {
+  return {
+    getData: function () {
+      var defer = $q.defer();
 
-  leoConfiguration.addScenario({
-    name: 'B test',
-    states: [
-      {
-        name: 'state_animals_non_ajax',
-        option: 'get kittens'
-      },
-      {
-        name: 'state1',
-        option: 'get url1 cccc'
-      }
-    ]
-  });
+      $http.jsonp('http://api.flickr.com/services/feeds/photos_public.gne', {
+        params: {
+          format: 'json',
+          jsoncallback: 'JSON_CALLBACK'
+        }
+      }).success(function (data) {
+        data = data.items.map(function (item) {
+          var author,
+            thumbnail = item.media.m;
 
-  leoConfiguration.addStates([
-    {
-      name: 'state_animals_non_ajax',
-      options: [
-        {name: 'get kittens', data: ["persion", "siemi"]},
-        {name: 'get dogs', data: ["labrador"]}
-      ]
-    },
-    {
-      name: 'state1',
-      url: 'http://url1.com',
-      options: [
-        {name: 'get url1 aaaa', status: 200, data: ["url1 aaa"]},
-        {name: 'get url1 bbbb', status: 200,  data: ["url1 bbb"]},
-        {name: 'get url1 cccc', status: 200,  data: ["url1 ccc"]}
-      ]
-    },
-    {
-      name: "state2",
-      url: 'http://url2.com',
-      options: [
-        {name: 'get url2 bbbb', status: 404,  data: ["url2 404 failure"]}
-      ]
-    },
-    {
-      name: "state3",
-      url: 'http://url3.com',
-      options: [
-        {name: 'get url3 bbbb with delay', status: 200,  data: ["url3 bbb"], delay: 2000}
-      ]
-    },
-    {
-      name: "state 4 - PUT",
-      url: 'http://url4.com',
-      verb: 'PUT',
-      options: [
-        {name: 'with delay', data: ["response"], delay: 2000},
-        {name: 'without delay', data: ["response"]}
-      ]
+          angular.forEach(['m.jpg', 'm.gif', 'm.png'], function (item) {
+            thumbnail = thumbnail.replace(item, 't.' + item.split('.')[1]);
+          });
+
+          author = item.author.split(' ')[1];
+          return {
+            author_id: item.author_id,
+            media: item.media,
+            page: item.link,
+            title: item.title.length > 60 ? item.title.substr(0, 50) + '...' : item.title,
+            author: author,
+            date_taken: moment(item.date_taken).format("MMM Do YYYY"),
+            thumbnail: thumbnail
+          };
+        });
+        defer.resolve(data);
+      }).error(function () {
+        defer.resolve();
+      });
+
+      return defer.promise;
     }
-  ]);
-
-
-  // Setting options
-  // ----------------
-  //* via ui - click on leonardo and hit the activate tabs
-  //* via api - coming soon...
-
-
-  $rootScope.showAnimals = function(){
-    var option = leoConfiguration.getState("state_animals_non_ajax");
-    alert(option ? option.data : 'No Active' );
   };
-}
+});

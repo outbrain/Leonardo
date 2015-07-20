@@ -99,5 +99,5 @@ gulp.task('watch', "Watch file changes and auto compile for development", ['buil
   gulp.watch(["./src/leonardo/**/*"], ['build']);
 });
 
-
+gulp.task('serve', "Serve the documentation files", ['build']);
 gulp.task('default', ['build']);

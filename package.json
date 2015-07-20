@@ -7,7 +7,7 @@
     "test": "test",
     "docs:example": "./node_modules/docco/bin/docco index.js --template=./build/docs/resources/example/docco.jst --output=./",
     "docs:main": "./node_modules/docco/bin/docco src/leonardo/*.js --template=./build/docs/resources/custom/docco.jst",
-    "compile:docs": "npm run docs:example && npm run docs:main",
+    "compile:docs": "npm run docs:main",
     "compile": "gulp && npm run compile:docs",
     "compile:watch": "gulp watch"
   },
