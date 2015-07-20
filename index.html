@@ -9,7 +9,7 @@
   <link rel="stylesheet" media="all" href="docs/public/docco.css" />
   <link rel="stylesheet" media="all" href="docs/public/leonardo/leonardo.min.css" />
 </head>
-<body leo-activator class="pull-top">
+<body leo-activator>
   <div id="container">
     <div id="background"></div>
     <ul id="jump_to">
@@ -91,7 +91,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">run</span><span class="hljs-params">($rootScope, configuration)</span></span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">run</span><span class="hljs-params">($rootScope, leoConfiguration)</span></span>{</pre></div></div>
             
         </li>
         
@@ -124,7 +124,7 @@
             
             <div class="content"><div class='highlight'><pre>
   
-  configuration.addScenario({
+  leoConfiguration.addScenario({
     name: <span class="hljs-string">'3g'</span>,
     states: [
       {
@@ -138,7 +138,7 @@
     ]
   });
 
-  configuration.addScenario({
+  leoConfiguration.addScenario({
     name: <span class="hljs-string">'A test'</span>,
     states: [
       {
@@ -152,7 +152,7 @@
     ]
   });
 
-  configuration.addScenario({
+  leoConfiguration.addScenario({
     name: <span class="hljs-string">'B test'</span>,
     states: [
       {
@@ -166,7 +166,7 @@
     ]
   });
 
-  configuration.addStates([
+  leoConfiguration.addStates([
     {
       name: <span class="hljs-string">'state_animals_non_ajax'</span>,
       options: [
@@ -240,7 +240,7 @@
             <div class="content"><div class='highlight'><pre>
 
   $rootScope.showAnimals = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
-    <span class="hljs-keyword">var</span> option = configuration.getState(<span class="hljs-string">"state_animals_non_ajax"</span>);
+    <span class="hljs-keyword">var</span> option = leoConfiguration.getState(<span class="hljs-string">"state_animals_non_ajax"</span>);
     alert(option ? option.data : <span class="hljs-string">'No Active'</span> );
   };
 }</pre></div></div>

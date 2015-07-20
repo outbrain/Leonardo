@@ -73,25 +73,25 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>).factory(<span class="hljs-string">'configuration'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(storage, $httpBackend)</span> </span>{
+            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>).factory(<span class="hljs-string">'leoConfiguration'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(leoStorage, $httpBackend)</span> </span>{
   <span class="hljs-keyword">var</span> states = [],
     _scenarios = {},
     responseHandlers = {};
 
   <span class="hljs-keyword">var</span> upsertOption = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state, name, active)</span> </span>{
-    <span class="hljs-keyword">var</span> _states = storage.getStates();
+    <span class="hljs-keyword">var</span> _states = leoStorage.getStates();
     _states[state] = {
       name: name,
       active: active
     };
 
-    storage.setStates(_states);
+    leoStorage.setStates(_states);
 
     sync();
   };
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetchStates</span><span class="hljs-params">()</span></span>{
-    <span class="hljs-keyword">var</span> activeStates = storage.getStates();
+    <span class="hljs-keyword">var</span> activeStates = leoStorage.getStates();
     <span class="hljs-keyword">var</span> _states = states.map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span> </span>{
       <span class="hljs-keyword">return</span> angular.copy(state);
     });
@@ -109,11 +109,11 @@
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">deactivateAll</span><span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">var</span> _states = storage.getStates();
+    <span class="hljs-keyword">var</span> _states = leoStorage.getStates();
     <span class="hljs-built_in">Object</span>.keys(_states).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(stateKey)</span> </span>{
       _states[stateKey].active = <span class="hljs-literal">false</span>;
     });
-    storage.setStates(_states);
+    leoStorage.setStates(_states);
 
     sync();
   }

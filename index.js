@@ -29,7 +29,7 @@ function run($rootScope, leoConfiguration){
     ]
   });
 
-  configuration.addScenario({
+  leoConfiguration.addScenario({
     name: 'A test',
     states: [
       {
@@ -43,7 +43,7 @@ function run($rootScope, leoConfiguration){
     ]
   });
 
-  configuration.addScenario({
+  leoConfiguration.addScenario({
     name: 'B test',
     states: [
       {
@@ -57,7 +57,7 @@ function run($rootScope, leoConfiguration){
     ]
   });
 
-  configuration.addStates([
+  leoConfiguration.addStates([
     {
       name: 'state_animals_non_ajax',
       options: [

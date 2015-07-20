@@ -28,25 +28,25 @@ angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
   });
 
 
-angular.module('leonardo').factory('configuration', function(storage, $httpBackend) {
+angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $httpBackend) {
   var states = [],
     _scenarios = {},
     responseHandlers = {};
 
   var upsertOption = function(state, name, active) {
-    var _states = storage.getStates();
+    var _states = leoStorage.getStates();
     _states[state] = {
       name: name,
       active: active
     };
 
-    storage.setStates(_states);
+    leoStorage.setStates(_states);
 
     sync();
   };
 
   function fetchStates(){
-    var activeStates = storage.getStates();
+    var activeStates = leoStorage.getStates();
     var _states = states.map(function(state) {
       return angular.copy(state);
     });
@@ -64,11 +64,11 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
   }
 
   function deactivateAll() {
-    var _states = storage.getStates();
+    var _states = leoStorage.getStates();
     Object.keys(_states).forEach(function(stateKey) {
       _states[stateKey].active = false;
     });
-    storage.setStates(_states);
+    leoStorage.setStates(_states);
 
     sync();
   }
@@ -216,7 +216,7 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
   };
 });
 
-angular.module('leonardo').factory('storage', function storageService() {
+angular.module('leonardo').factory('leoStorage', function storageService() {
   var STATES_STORE_KEY = 'states';
   function getItem(key) {
     var item = localStorage.getItem(key);
@@ -246,7 +246,7 @@ angular.module('leonardo').factory('storage', function storageService() {
   };
 });
 
-angular.module('leonardo').directive('activator', function activatorDirective($compile) {
+angular.module('leonardo').directive('leoActivator', function activatorDirective($compile) {
   return {
     restrict: 'A',
     link: function(scope, elem) {
@@ -296,7 +296,7 @@ angular.module('leonardo').directive('activator', function activatorDirective($c
 //
 // The `DoSomething` method does something! It doesn't take any
 // parameters... it just does something.
-angular.module('leonardo').directive('windowBody', function windowBodyDirective($http, configuration) {
+angular.module('leonardo').directive('windowBody', function windowBodyDirective($http, leoConfiguration) {
   return {
     restrict: 'E',
     templateUrl: 'window-body.html',
@@ -315,22 +315,22 @@ angular.module('leonardo').directive('windowBody', function windowBodyDirective(
         $scope.states.forEach(function(state){
             state.active = false;
         });
-        configuration.deactivateAll();
+        leoConfiguration.deactivateAll();
       };
 
       $scope.updateState = function(state){
         console.log(`update state: ${state.name} ${state.activeOption.name} ${state.active}`);
-        configuration.upsertOption(state.name, state.activeOption.name, state.active);
+        leoConfiguration.upsertOption(state.name, state.activeOption.name, state.active);
       };
 
-      $scope.states = configuration.fetchStates();
+      $scope.states = leoConfiguration.fetchStates();
 
-      $scope.scenarios = configuration.getScenarios();
+      $scope.scenarios = leoConfiguration.getScenarios();
 
       $scope.activateScenario = function(scenario){
         $scope.activeScenario = scenario;
-        configuration.setActiveScenario(scenario);
-        $scope.states = configuration.fetchStates();
+        leoConfiguration.setActiveScenario(scenario);
+        $scope.states = leoConfiguration.fetchStates();
       };
     },
     link: function(scope) {
