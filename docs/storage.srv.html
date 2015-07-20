@@ -74,7 +74,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>).factory(<span class="hljs-string">'leoStorage'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">storageService</span><span class="hljs-params">()</span> </span>{
-  <span class="hljs-keyword">var</span> STATES_STORE_KEY = <span class="hljs-string">'states'</span>;
+  <span class="hljs-keyword">var</span> STATES_STORE_KEY = <span class="hljs-string">'leonardo-states'</span>;
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getItem</span><span class="hljs-params">(key)</span> </span>{
     <span class="hljs-keyword">var</span> item = localStorage.getItem(key);
     <span class="hljs-keyword">if</span> (!item) {
@@ -110,6 +110,5 @@
   <script src='public/leonardo/angular.min.js'></script>
   <script src="public/leonardo/angular-mocks.js"></script>
   <script src="public/leonardo/leonardo.js"></script>
-  <script src="public/leonardo/index.js"></script>
 </body>
 </html>

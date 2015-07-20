@@ -9,7 +9,7 @@ angular.module('leonardo').directive('leoActivator', function activatorDirective
         '<div class="leonardo-header">',
           '<div class="menu"></div>',
         '</div>',
-        '<window-body></window-body>',
+        '<leo-window-body></leo-window-body>',
         '</div>',
       '</div>'
       ].join(''));

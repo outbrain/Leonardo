@@ -60,18 +60,6 @@ gulp.task('build:js', function(){
       .pipe(gulp.dest('./tmp'));
 });
 
-
-gulp.task('copy:docs', function() {
-  return gulp.src([
-      "./bower_components/angular/angular.min.js",
-      "./bower_components/angular-mocks/angular-mocks.js",
-      "./tmp/leonardo.js",
-      "./tmp/leonardo.min.css",
-      "./index.js"
-  ])
-  .pipe(gulp.dest('./docs/public/leonardo'));
-});
-
 gulp.task('copy:dist', function() {
   return gulp.src([
     "./tmp/leonardo.js",
@@ -80,16 +68,12 @@ gulp.task('copy:dist', function() {
   .pipe(gulp.dest('./dist'));
 });
 
-
-
-
 gulp.task('build', function(cb) {
   runSequence(
     'build:less',
     'build:templates',
     'build:js',
     'clean:dist',
-    'copy:docs',
     'copy:dist',
     'clean:tmp',
     cb);
@@ -99,5 +83,5 @@ gulp.task('watch', "Watch file changes and auto compile for development", ['buil
   gulp.watch(["./src/leonardo/**/*"], ['build']);
 });
 
-
+gulp.task('serve', "Serve the documentation files", ['build']);
 gulp.task('default', ['build']);

@@ -97,7 +97,12 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
 
   function getResponseHandler(state) {
     if (!responseHandlers[state.name]) {
-      responseHandlers[state.name] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
+      if (state.verb === 'jsonp'){
+        responseHandlers[state.name] = $httpBackend.whenJSONP(new RegExp(state.url));
+      }
+      else {
+        responseHandlers[state.name] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
+      }
     }
     return responseHandlers[state.name];
   }
@@ -217,7 +222,7 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
 });
 
 angular.module('leonardo').factory('leoStorage', function storageService() {
-  var STATES_STORE_KEY = 'states';
+  var STATES_STORE_KEY = 'leonardo-states';
   function getItem(key) {
     var item = localStorage.getItem(key);
     if (!item) {
@@ -255,7 +260,7 @@ angular.module('leonardo').directive('leoActivator', function activatorDirective
       var win = angular.element([
       '<div class="leonardo-window">',
         '<div class="leonardo-header">Leonardo Configuration</div>',
-          '<window-body></window-body>',
+          '<leo-window-body></leo-window-body>',
         '</div>',
       '</div>'
       ].join(''));
@@ -296,7 +301,7 @@ angular.module('leonardo').directive('leoActivator', function activatorDirective
 //
 // The `DoSomething` method does something! It doesn't take any
 // parameters... it just does something.
-angular.module('leonardo').directive('windowBody', function windowBodyDirective($http, leoConfiguration) {
+angular.module('leonardo').directive('leoWindowBody', function windowBodyDirective($http, leoConfiguration) {
   return {
     restrict: 'E',
     templateUrl: 'window-body.html',
