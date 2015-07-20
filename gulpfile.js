@@ -17,7 +17,7 @@ gulp.task('transpile', 'Transpile the App from ES6 to ES5', function() {
     .pipe(gulpTraceurCmdline({
       'source-maps': 'inline',
       symbols : true,
-      modules : 'register',
+      modules : 'inline',
       debug   : false
     }))
     .pipe(gulp.dest('./docs/public/leonardo'))
@@ -32,7 +32,7 @@ gulp.task('transpile-example', 'Transpile the App from ES6 to ES5', function() {
     .pipe(gulpTraceurCmdline({
       'source-maps': 'inline',
       symbols : true,
-      modules : 'register',
+      modules : 'inline',
       debug   : false
     }))
     .pipe(gulp.dest('./docs/public/leonardo'))

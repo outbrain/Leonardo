@@ -32,6 +32,14 @@
       </table>
     </div>
     <div ng-switch-when="activate" class="leonardo-activate">
+      <div class="leonardo-menu">
+        <ul>
+          <li>Secenarios:</li>
+          <li>Senario a</li>
+          <li class="selected">Senario a</li>
+          <li>Senario b</li>
+        </ul>
+      </div>
       <ul>
         <li><h3>Non Ajax State</h3></li>
         <li ng-repeat="state in ::states | filter:NothasUrl">
