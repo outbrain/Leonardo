@@ -1,25 +1,21 @@
-angular.module('leonardo').directive('activator', function configurationService($q, activeStatesStore, $httpBackend) {
+angular.module('leonardo').factory('configuration', function(storage, $httpBackend) {
   var states = [];
   var responseHandlers = {};
 
   var upsertOption = function(state, name, active) {
-    var _states = getStatesFromStore();
+    var _states = storage.getStates();
     _states[state] = {
       name: name,
       active: active
     };
 
-    activeStatesStore.set('states', _states);
+    storage.setStates(_states);
 
     sync();
   };
 
-  function getStatesFromStore(){
-    return activeStatesStore.get('states') || {};
-  }
-
   function fetchStates(){
-    var activeStates = getStatesFromStore();
+    var activeStates = storage.getStates();
     var _states = states.map(state => angular.copy(state));
 
     _states.forEach(function(state) {
@@ -32,11 +28,11 @@ angular.module('leonardo').directive('activator', function configurationService(
   }
 
   function deactivateAll() {
-    var _states = getStatesFromStore();
+    var _states = storage.getStates();
     Object.keys(_states).forEach(function(stateKey) {
       _states[stateKey].active = false;
     });
-    activeStatesStore.set('states', _states);
+    storage.setStates(_states);
 
     sync();
   }

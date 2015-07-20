@@ -1,9 +1,11 @@
 
-angular.module('leonardo', ['leonardo.templates', 'angular-storage', 'ngMockE2E'])
+angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
   .factory('configuration', configurationService)
   .factory('activeStatesStore', function(store) {
     return store.getNamespacedStore('active_states');
   })
+  .factory('storage', storageService)
+  .directive('activator', activatorDirective)
   .directive('windowBody', windowBodyDirective)
   /* wrap $httpbackend with a proxy in order to support delaying its responses
    * we are using the approach described in Endless Indirection:
