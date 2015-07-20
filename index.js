@@ -23,6 +23,20 @@ function run($rootScope, configuration){
         option: 'get dogs'
       },
       {
+        name: 'state1',
+        option: 'get url1 bbbb'
+      }
+    ]
+  });
+
+  configuration.addScenario({
+    name: 'A test',
+    states: [
+      {
+        name: 'state_animals_non_ajax',
+        option: 'get kittens'
+      },
+      {
         name: 'state2',
         option: 'get url2 bbbb'
       }
@@ -30,7 +44,7 @@ function run($rootScope, configuration){
   });
 
   configuration.addScenario({
-    name: 'xx',
+    name: 'B test',
     states: [
       {
         name: 'state_animals_non_ajax',
@@ -38,11 +52,10 @@ function run($rootScope, configuration){
       },
       {
         name: 'state1',
-        option: 'get url2 bbbb'
+        option: 'get url1 cccc'
       }
     ]
   });
-
 
   configuration.addStates([
     {

@@ -29,8 +29,9 @@ angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
 
 
 angular.module('leonardo').factory('configuration', function(storage, $httpBackend) {
-  var states = [];
-  var responseHandlers = {};
+  var states = [],
+    _scenarios = {},
+    responseHandlers = {};
 
   var upsertOption = function(state, name, active) {
     var _states = storage.getStates();
@@ -185,27 +186,30 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
       }.bind(this));
     },
     deactivateAll: deactivateAll,
-    addScenario: function(){
-      //TODO
+    addScenario: function(scenario){
+      if (scenario && typeof scenario.name === 'string') {
+        _scenarios[scenario.name] = scenario;
+      } else {
+        throw 'addScnerio method expects a scenario object with name property';
+      }
     },
-    addScenarios: function(){
-      //TODO
+    addScenarios: function(scenarios){
+      angular.forEach(scenarios, this.addScenario);
     },
     getScenarios: function(){
-      return ["3g", "xx"];
+      return Object.keys(_scenarios);
     },
     getScenario: function(name){
-      return [
-        {
-          name: 'state_animals_non_ajax',
-          option: 'get dogs'
-        }
-      ];
+      console.log(name); 
+      if (!_scenarios[name]) {
+        return
+      }
+      console.log('return scenario', _scenarios[name].states); 
+      return _scenarios[name].states;
     },
     setActiveScenario: function(name){
       this.deactivateAll();
       this.getScenario(name).forEach(function(state){
-        debugger;
         upsertOption(state.name, state.option, true);
       });
     }

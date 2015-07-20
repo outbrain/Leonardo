@@ -1,11 +1,10 @@
 angular.module('leonardo').factory('configuration', function(storage, $httpBackend) {
-  var states = [];
-  var responseHandlers = {};
+  var states = [],
+    _scenarios = {},
+    responseHandlers = {};
 
   var upsertOption = function(state, name, active) {
-    var _states = storage.getStates(),
-      _scenarios = {};
-
+    var _states = storage.getStates();
     _states[state] = {
       name: name,
       active: active
@@ -157,23 +156,25 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
       }.bind(this));
     },
     deactivateAll: deactivateAll,
-    addSenario: function(scenario, name){
-      if (senario && typeof scenario.name === 'string') {
+    addScenario: function(scenario){
+      if (scenario && typeof scenario.name === 'string') {
         _scenarios[scenario.name] = scenario;
       } else {
         throw 'addScnerio method expects a scenario object with name property';
       }
     },
-    addSenarios: function(scenarios){
+    addScenarios: function(scenarios){
       angular.forEach(scenarios, this.addScenario);
     },
     getScenarios: function(){
       return Object.keys(_scenarios);
     },
     getScenario: function(name){
+      console.log(name); 
       if (!_scenarios[name]) {
         return
       }
+      console.log('return scenario', _scenarios[name].states); 
       return _scenarios[name].states;
     },
     setActiveScenario: function(name){

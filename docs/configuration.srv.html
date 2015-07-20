@@ -74,8 +74,9 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>).factory(<span class="hljs-string">'configuration'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(storage, $httpBackend)</span> </span>{
-  <span class="hljs-keyword">var</span> states = [];
-  <span class="hljs-keyword">var</span> responseHandlers = {};
+  <span class="hljs-keyword">var</span> states = [],
+    _scenarios = {},
+    responseHandlers = {};
 
   <span class="hljs-keyword">var</span> upsertOption = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state, name, active)</span> </span>{
     <span class="hljs-keyword">var</span> _states = storage.getStates();
@@ -308,53 +309,30 @@
       }.bind(<span class="hljs-keyword">this</span>));
     },
     deactivateAll: deactivateAll,
-    addScenario: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-8">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
-              </div>
-              <p>TODO</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    },
-    addScenarios: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-9">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
-              </div>
-              <p>TODO</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    },
+    addScenario: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(scenario)</span></span>{
+      <span class="hljs-keyword">if</span> (scenario &amp;&amp; <span class="hljs-keyword">typeof</span> scenario.name === <span class="hljs-string">'string'</span>) {
+        _scenarios[scenario.name] = scenario;
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">throw</span> <span class="hljs-string">'addScnerio method expects a scenario object with name property'</span>;
+      }
+    },
+    addScenarios: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(scenarios)</span></span>{
+      angular.forEach(scenarios, <span class="hljs-keyword">this</span>.addScenario);
+    },
     getScenarios: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
-      <span class="hljs-keyword">return</span> [<span class="hljs-string">"3g"</span>, <span class="hljs-string">"xx"</span>];
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.keys(_scenarios);
     },
     getScenario: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span></span>{
-      <span class="hljs-keyword">return</span> [
-        {
-          name: <span class="hljs-string">'state_animals_non_ajax'</span>,
-          option: <span class="hljs-string">'get dogs'</span>
-        }
-      ];
+      <span class="hljs-built_in">console</span>.log(name); 
+      <span class="hljs-keyword">if</span> (!_scenarios[name]) {
+        <span class="hljs-keyword">return</span>
+      }
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'return scenario'</span>, _scenarios[name].states); 
+      <span class="hljs-keyword">return</span> _scenarios[name].states;
     },
     setActiveScenario: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span></span>{
       <span class="hljs-keyword">this</span>.deactivateAll();
       <span class="hljs-keyword">this</span>.getScenario(name).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
-        debugger;
         upsertOption(state.name, state.option, <span class="hljs-literal">true</span>);
       });
     }
