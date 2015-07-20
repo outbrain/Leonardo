@@ -89,7 +89,7 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
         this.upsert({
           state: stateObj.name,
           url: stateObj.url,
-          verb: option.verb,
+          verb: stateObj.verb,
           name: option.name,
           status: option.status,
           data: option.data,
@@ -104,7 +104,7 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
     },
     //insert or replace an option by insert or updateing a state.
     upsert: function(stateObj) {
-      var verb = stateObj.verb,
+      var verb = stateObj.verb || 'GET',
           state = stateObj.state,
           name = stateObj.name,
           url = stateObj.url,
@@ -125,7 +125,7 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
       angular.extend(stateItem, {
         name: state,
         url: url || stateItem.url,
-        verb: verb || stateItem.verb,
+        verb: verb,
         options: stateItem.options || []
       });
 

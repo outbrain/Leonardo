@@ -216,7 +216,7 @@
         <span class="hljs-keyword">this</span>.upsert({
           state: stateObj.name,
           url: stateObj.url,
-          verb: option.verb,
+          verb: stateObj.verb,
           name: option.name,
           status: option.status,
           data: option.data,
@@ -244,7 +244,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>    upsert: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(stateObj)</span> </span>{
-      <span class="hljs-keyword">var</span> verb = stateObj.verb,
+      <span class="hljs-keyword">var</span> verb = stateObj.verb || <span class="hljs-string">'GET'</span>,
           state = stateObj.state,
           name = stateObj.name,
           url = stateObj.url,
@@ -265,7 +265,7 @@
       angular.extend(stateItem, {
         name: state,
         url: url || stateItem.url,
-        verb: verb || stateItem.verb,
+        verb: verb,
         options: stateItem.options || []
       });
 
