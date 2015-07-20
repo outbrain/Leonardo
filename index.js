@@ -13,6 +13,37 @@ function run($rootScope, configuration){
   // ----------------
   //* via api - you can look at the results by clicking leonardo and looking in the configure tab
   //* via ui - coming soon...
+
+  
+  configuration.addScenario({
+    name: '3g',
+    states: [
+      {
+        name: 'state_animals_non_ajax',
+        option: 'get dogs'
+      },
+      {
+        name: 'state2',
+        option: 'get url2 bbbb'
+      }
+    ]
+  });
+
+  configuration.addScenario({
+    name: 'xx',
+    states: [
+      {
+        name: 'state_animals_non_ajax',
+        option: 'get kittens'
+      },
+      {
+        name: 'state1',
+        option: 'get url2 bbbb'
+      }
+    ]
+  });
+
+
   configuration.addStates([
     {
       name: 'state_animals_non_ajax',

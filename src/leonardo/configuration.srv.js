@@ -3,7 +3,9 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
   var responseHandlers = {};
 
   var upsertOption = function(state, name, active) {
-    var _states = storage.getStates();
+    var _states = storage.getStates(),
+      _scenarios = {};
+
     _states[state] = {
       name: name,
       active: active
@@ -155,22 +157,24 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
       }.bind(this));
     },
     deactivateAll: deactivateAll,
-    addSenario: function(){
-      //TODO
+    addSenario: function(scenario, name){
+      if (senario && typeof scenario.name === 'string') {
+        _scenarios[scenario.name] = scenario;
+      } else {
+        throw 'addScnerio method expects a scenario object with name property';
+      }
     },
-    addSenarios: function(){
-      //TODO
+    addSenarios: function(scenarios){
+      angular.forEach(scenarios, this.addScenario);
     },
     getScenarios: function(){
-      return ["3g", "xx"];
+      return Object.keys(_scenarios);
     },
     getScenario: function(name){
-      return [
-        {
-          name: 'state_animals_non_ajax',
-          option: 'get dogs'
-        }
-      ];
+      if (!_scenarios[name]) {
+        return
+      }
+      return _scenarios[name].states;
     }
   };
 });
