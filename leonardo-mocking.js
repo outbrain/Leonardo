@@ -53,4 +53,19 @@ angular.module('leonardo').run(function(leoConfiguration){
       ]
     }
   ]);
+
+  leoConfiguration.addScenario({
+      name: 'flicker-images',
+      states: [
+        'get ninja turtles'
+      ]
+  });
+
+  leoConfiguration.addScenario({
+      name: 'reneissance artists',
+      states: [
+        'get ninja turtles'
+      ]
+  });
+
 });
