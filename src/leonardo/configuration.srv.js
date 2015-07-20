@@ -175,6 +175,12 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
         return
       }
       return _scenarios[name].states;
+    },
+    setActiveScenario: function(name){
+      this.deactivateAll();
+      this.getScenario(name).forEach(function(state){
+        upsertOption(state.name, state.option, true);
+      });
     }
   };
 });
