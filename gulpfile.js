@@ -53,7 +53,7 @@ gulp.task('build-js', function(){
         './src/leonardo/configuration.srv.js',
         './src/leonardo/storage.srv.js',
         './src/leonardo/activator.drv.js',
-        './src/leonardo/windows-body.drv.js',
+        './src/leonardo/window-body.drv.js',
         './docs/public/leonardo/leonardo.templates.min.js'
       ])
       .pipe(concat('leonardo.js'))

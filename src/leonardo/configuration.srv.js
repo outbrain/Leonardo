@@ -120,8 +120,7 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
         return;
       }
 
-      var stateItem = defaultState;
-      states.filter(function(_state) { return _state.name === state;})[0] || defaultState;
+      var stateItem = states.filter(function(_state) { return _state.name === state;})[0] || defaultState;
 
       angular.extend(stateItem, {
         name: state,

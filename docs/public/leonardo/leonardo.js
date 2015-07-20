@@ -150,8 +150,7 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
         return;
       }
 
-      var stateItem = defaultState;
-      states.filter(function(_state) { return _state.name === state;})[0] || defaultState;
+      var stateItem = states.filter(function(_state) { return _state.name === state;})[0] || defaultState;
 
       angular.extend(stateItem, {
         name: state,
@@ -258,6 +257,65 @@ angular.module('leonardo').directive('activator', function activatorDirective($c
   };
 });
 
+// This Is A Header
+// ----------------
+
+
+// This is a normal comment, that will become part of the
+// annotations after running through the Docco tool. Use this
+// space to describe the function or other code just below
+// this comment. For example:
+//
+// The `DoSomething` method does something! It doesn't take any
+// parameters... it just does something.
+angular.module('leonardo').directive('windowBody', function windowBodyDirective($http, configuration) {
+  return {
+    restrict: 'E',
+    templateUrl: 'window-body.html',
+    scope: true,
+    replace: true,
+    controller: function($scope){
+      $scope.selectedItem = 'activate';
+      $scope.NothasUrl = function(option){
+        return !option.url;
+      };
+      $scope.hasUrl = function(option){
+        return !!option.url;
+      };
+
+      $scope.deactivate = function() {
+        $scope.states.forEach(function(state){
+            state.active = false;
+        });
+        configuration.deactivateAll();
+      };
+
+      $scope.updateState = function(state){
+        console.log(`update state: ${state.name} ${state.activeOption.name} ${state.active}`);
+        configuration.upsertOption(state.name, state.activeOption.name, state.active);
+      };
+
+      $scope.states = configuration.fetchStates();
+    },
+    link: function(scope) {
+      scope.test = {
+        url: '',
+        value: undefined
+      };
+
+      scope.submit = function(url){
+        scope.test.value = undefined;
+        scope.url = url;
+        if (url) {
+          $http.get(url).success(function (res) {
+            scope.test.value = res;
+          });
+        }
+      };
+    }
+  };
+});
+
 (function(module) {
 try {
   module = angular.module('leonardo.templates');
@@ -266,6 +324,6 @@ try {
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('window-body.html',
-    '<div class="leonardo-window-body"><div class="tabs"><div ng-click="selectedItem = \'configure\'" ng-class="{ \'selected\': selectedItem == \'configure\' }">Configure</div><div ng-click="selectedItem = \'activate\'" ng-class="{ \'selected\': selectedItem == \'activate\' }">Activate</div><div ng-click="selectedItem = \'test\'" ng-class="{ \'selected\': selectedItem == \'test\' }">Test</div></div><div ng-switch="selectedItem" class="leonardo-window-options"><div ng-switch-when="configure" class="leonardo-configure"><table><thead><tr><th>State</th><th>URL</th><th>Options</th></tr></thead><tbody><tr ng-repeat="state in states"><td>{{state.name}}</td><td>{{state.url}}</td><td><ul><li ng-repeat="option in state.options">Name: {{option.name}}<br>Status: {{option.status}}<br>Data: {{option.data}}<br></li></ul></td></tr></tbody></table></div><div ng-switch-when="activate" class="leonardo-activate"><ul><li><h3>Non Ajax State</h3></li><li ng-repeat="state in ::states | filter:NothasUrl"><div><div class="onoffswitch"><input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{::state.name}}" type="checkbox" name="{{::state.name}}" value="{{::state.name}}"> <label class="onoffswitch-label" for="{{::state.name}}"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div><h4>{{::state.name}}</h4></div><div><select ng-model="state.activeOption" ng-options="option.name for option in ::state.options" ng-change="updateState(state)"></select></div></li><li><h3>Ajax State</h3></li><li ng-repeat="state in ::states | filter:hasUrl"><div><div class="onoffswitch"><input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{::state.name}}" type="checkbox" name="{{::state.name}}" value="{{::state.name}}"> <label class="onoffswitch-label" for="{{::state.name}}"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div><h4>{{::state.name}}</h4>&nbsp;&nbsp; - {{::state.url}}</div><div><select ng-model="state.activeOption" ng-options="option.name for option in ::state.options" ng-change="updateState(state)"></select></div></li></ul></div><div ng-switch-when="test" class="leonardo-test"><div><label for="url"></label>URL: <input id="url" type="text" ng-model="test.url"> <input type="button" ng-click="submit(test.url)" value="submit"></div><textarea>{{test.value | json}}</textarea></div></div></div>');
+    '<div class="leonardo-window-body"><div class="tabs"><div ng-click="selectedItem = \'configure\'" ng-class="{ \'selected\': selectedItem == \'configure\' }">Configure</div><div ng-click="selectedItem = \'activate\'" ng-class="{ \'selected\': selectedItem == \'activate\' }">Activate</div><div ng-click="selectedItem = \'test\'" ng-class="{ \'selected\': selectedItem == \'test\' }">Test</div></div><div ng-switch="selectedItem" class="leonardo-window-options"><div ng-switch-when="configure" class="leonardo-configure"><table><thead><tr><th>State</th><th>URL</th><th>Options</th></tr></thead><tbody><tr ng-repeat="state in states"><td>{{state.name}}</td><td>{{state.url}}</td><td><ul><li ng-repeat="option in state.options">Name: {{option.name}}<br>Status: {{option.status}}<br>Data: {{option.data}}<br></li></ul></td></tr></tbody></table></div><div ng-switch-when="activate" class="leonardo-activate"><ul><li><h3>Non Ajax State</h3></li><li ng-repeat="state in states | filter:NothasUrl"><div><div class="onoffswitch"><input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}"> <label class="onoffswitch-label" for="{{state.name}}"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div><h4>{{state.name}}</h4></div><div><select ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="updateState(state)"></select></div></li><li><h3>Ajax State</h3></li><li ng-repeat="state in states | filter:hasUrl"><div><div class="onoffswitch"><input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}"> <label class="onoffswitch-label" for="{{state.name}}"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div><h4>{{state.name}}</h4>&nbsp;&nbsp; - {{state.url}}</div><div><select ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="updateState(state)"></select></div></li></ul></div><div ng-switch-when="test" class="leonardo-test"><div><label for="url"></label>URL: <input id="url" type="text" ng-model="test.url"> <input type="button" ng-click="submit(test.url)" value="submit"></div><textarea>{{test.value | json}}</textarea></div></div></div>');
 }]);
 })();
