@@ -1,7 +1,62 @@
-Leonardo Docs 
+![Leonardo logo](extension/images/leonardo.png)  Leonardo Docs 
 =============
 
-## Compile
+Mocking made simple and consistent.
+Developed by Outbrain.
+
+## Requirements 
+
+#### Load Dependency scripts
+
+AngularJS v1.2+
+
+#### Load Leonardo scripts
+
+```html
+<!DOCTYPE HTML>
+<html>
+<body ng-app="app">
+  //.....
+  <script src="src/js/leonardos.js"></script>
+</body>
+</html>
+```
+#### Add Angular module dependancy
+
+```html
+<!DOCTYPE HTML>
+<html>
+<body ng-app="app">
+  //.....
+   <script>
+    var myApp = angular.module("app", ["leonardo"]);
+   </script>
+</body>
+</html>
+```
+#### Add Attribute For UI Activation Via Icon
+
+```html
+<!DOCTYPE HTML>
+<html>
+<body ng-app="app" activator>
+  //.....
+</body>
+</html>
+```
+
+A plunker demonstration http://plnkr.co/edit/w8oaELXwQldv6AeZjnhD?p=preview
+
+## Screen 
+![example image](extension/images/example.png)
+
+## Documentation
+http://outbrain.github.io/Leonardo
+
+
+## Running and contributing
+
+#### Compile
 
 `cd` into the project folder
 
@@ -11,7 +66,7 @@ npm run compile
 
 This compiles the code as well as documentation.
 
-## Auto Recompile
+#### Auto Recompile
 
 To automatically recompile the files on each change run
 
@@ -23,7 +78,7 @@ Note that this does not recompile the documentation.
 
 Note that this does not auto-refreshes the browser.
 
-## Compile Documentation
+#### Compile Documentation
 
 Running `npm run compile` compiles the documentation. But if you need to recompile it later also,
 (for example when running with `gulp watch`) run
@@ -32,10 +87,7 @@ Running `npm run compile` compiles the documentation. But if you need to recompi
 npm run compile:docs
 ```
 
-## Running
+#### Running
 
 Run local server and navigate to `index.html`.
 
-## Documentation and example
-
-http://outbrain.github.io/Leonardo
