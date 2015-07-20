@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html ng-app="example">
+<html ng-app="flicker-example">
 <head>
   <title>Leonardo Example</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -8,8 +8,7 @@
 
 
   <link rel="icon" type="image/x-icon" href="leonardo.png">
-  <link rel="stylesheet" media="all" href="docs/public/docco.css" />
-  <link rel="stylesheet" media="all" href="docs/public/leonardo/leonardo.min.css" />
+  <link rel="stylesheet" media="all" href="dist/leonardo.min.css" />
 
   <style>
     p, h4 { margin: 4px 0; max-height: 44px; overflow: hidden }
@@ -30,16 +29,30 @@
 
   </style>
 </head>
-<body activator>
+<body leo-activator>
   <a href="https://github.com/outbrain/Leonardo">Github</a>
   <a href="docs/module.html">Documentation</a>
   <a href="http://plnkr.co/edit/w8oaELXwQldv6AeZjnhD?p=preview">Plunker</a>
   <a href="index.js">Example javascript source</a>
 
-  <script src="bower_components/"></script>
+  <div class="clearfix">
+    <div class="error" ng-show="error">Failed To Load</div>
+    <div class="media-item clearfix" ng-repeat="item in images">
+      <a ng-href="{{ item.page }}" target="_blank">
+        <img ng-src="{{ item.thumbnail }}" />
+      </a>
+      <div class="media-item-meta">
+        <h4>{{ item.title }}</h4>
+        <p>by <a ng-href="#/flickers/{{ item.author_id }}">{{ item.author }}</a></p>
+        <p>Taken {{ item.date_taken }}</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="bower_components/moment/moment.js"></script>
   <script src='bower_components/angular/angular.min.js'></script>
   <script src="bower_components/angular-mocks/angular-mocks.js"></script>
-  <script src="docs/public/leonardo/leonardo.js"></script>
+  <script src="dist/leonardo.js"></script>
   <script src="index.js"></script>
   <script src="leonardo-mocking.js"></script>
 </body>

@@ -104,7 +104,7 @@ parameters… it just does something.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>).directive(<span class="hljs-string">'windowBody'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">windowBodyDirective</span><span class="hljs-params">($http, leoConfiguration)</span> </span>{
+            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>).directive(<span class="hljs-string">'leoWindowBody'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">windowBodyDirective</span><span class="hljs-params">($http, leoConfiguration)</span> </span>{
   <span class="hljs-keyword">return</span> {
     restrict: <span class="hljs-string">'E'</span>,
     templateUrl: <span class="hljs-string">'window-body.html'</span>,
@@ -127,7 +127,7 @@ parameters… it just does something.</p>
       };
 
       $scope.updateState = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`update state: <span class="hljs-subst">${state.name}</span> <span class="hljs-subst">${state.activeOption.name}</span> <span class="hljs-subst">${state.active}</span>`</span>);
+        <span class="hljs-built_in">console</span>.log(`update state: ${state.name} ${state.activeOption.name} ${state.active}`);
         leoConfiguration.upsertOption(state.name, state.activeOption.name, state.active);
       };
 
@@ -167,6 +167,5 @@ parameters… it just does something.</p>
   <script src='public/leonardo/angular.min.js'></script>
   <script src="public/leonardo/angular-mocks.js"></script>
   <script src="public/leonardo/leonardo.js"></script>
-  <script src="public/leonardo/index.js"></script>
 </body>
 </html>

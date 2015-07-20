@@ -67,7 +67,12 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
 
   function getResponseHandler(state) {
     if (!responseHandlers[state.name]) {
-      responseHandlers[state.name] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
+      if (state.verb === 'jsonp'){
+        responseHandlers[state.name] = $httpBackend.whenJSONP(new RegExp(state.url));
+      }
+      else {
+        responseHandlers[state.name] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
+      }
     }
     return responseHandlers[state.name];
   }

@@ -9,7 +9,7 @@
 //
 // The `DoSomething` method does something! It doesn't take any
 // parameters... it just does something.
-angular.module('leonardo').directive('windowBody', function windowBodyDirective($http, leoConfiguration) {
+angular.module('leonardo').directive('leoWindowBody', function windowBodyDirective($http, leoConfiguration) {
   return {
     restrict: 'E',
     templateUrl: 'window-body.html',

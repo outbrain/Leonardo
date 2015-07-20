@@ -142,7 +142,12 @@
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getResponseHandler</span><span class="hljs-params">(state)</span> </span>{
     <span class="hljs-keyword">if</span> (!responseHandlers[state.name]) {
-      responseHandlers[state.name] = $httpBackend.when(state.verb || <span class="hljs-string">'GET'</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(state.url));
+      <span class="hljs-keyword">if</span> (state.verb === <span class="hljs-string">'jsonp'</span>){
+        responseHandlers[state.name] = $httpBackend.whenJSONP(<span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(state.url));
+      }
+      <span class="hljs-keyword">else</span> {
+        responseHandlers[state.name] = $httpBackend.when(state.verb || <span class="hljs-string">'GET'</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(state.url));
+      }
     }
     <span class="hljs-keyword">return</span> responseHandlers[state.name];
   }
@@ -346,6 +351,5 @@
   <script src='public/leonardo/angular.min.js'></script>
   <script src="public/leonardo/angular-mocks.js"></script>
   <script src="public/leonardo/leonardo.js"></script>
-  <script src="public/leonardo/index.js"></script>
 </body>
 </html>

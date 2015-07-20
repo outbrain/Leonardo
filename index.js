@@ -1,6 +1,6 @@
 "use strict";
 
-var Flicker = angular.module('flicker', ["leonardo"])
+var Flicker = angular.module('flicker-example', ["leonardo"])
   .config(function ($locationProvider) {
     $locationProvider.html5Mode(false);
   })
@@ -17,6 +17,7 @@ Flicker.factory('flickerGetter', function ($q, $http) {
 
       $http.jsonp('http://api.flickr.com/services/feeds/photos_public.gne', {
         params: {
+          group_id: 'tmnt',
           format: 'json',
           jsoncallback: 'JSON_CALLBACK'
         }
