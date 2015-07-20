@@ -3,7 +3,7 @@
 // ----------------
 //* Add leonardo module as a dependancy to your app
 //* You done!
-export default angular.module('example', ['leonardo'])
+angular.module('example', ['leonardo'])
             .run(run);
 
 //well almost...

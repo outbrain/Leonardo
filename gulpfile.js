@@ -13,7 +13,8 @@ require("gulp-help")(gulp);
 gulp.task('copy', function() {
   return gulp.src([
       "./bower_components/angular/angular.min.js",
-      "./bower_components/angular-mocks/angular-mocks.js"
+      "./bower_components/angular-mocks/angular-mocks.js",
+      "./index.js"
   ])
   .pipe(gulp.dest('./docs/public/leonardo'));
 });
@@ -45,35 +46,33 @@ gulp.task("build-templates", false, function () {
     .pipe(rename('leonardo.templates.min.js'))
     .pipe(gulp.dest('./docs/public/leonardo'));
 });
+gulp.task('build-js', function(){
+  return gulp.src(
+      [
+        './src/leonardo/module.js',
+        './src/leonardo/configuration.srv.js',
+        './src/leonardo/storage.srv.js',
+        './src/leonardo/activator.drv.js',
+        './src/leonardo/windows-body.drv.js',
+        './docs/public/leonardo/leonardo.templates.min.js'
+      ])
+      .pipe(concat('leonardo.js'))
+      .pipe(gulp.dest('./dist'))
+      .pipe(gulp.dest('./docs/public/leonardo'));
+});
 
 gulp.task('build', function(cb) {
   runSequence(
-    ['transpile', 'build-less', 'build-templates', 'transpile-example'],
+    ['build-less', 'build-templates', 'build-js'],
     'copy',
-    'combine-scripts',
     cb);
 });
 
 gulp.task('watch', "Watch file changes and auto compile for development", ['build'], function () {
   gulp.watch(["./src/leonardo/style/*.less"], ['build-less']);
-  gulp.watch(["./src/leonardo/*.js"], ['transpile']);
-  gulp.watch(["./index.js"], ['transpile-example']);
-  gulp.watch(["./src/leonardo/templates/*.html"], ['build-templates']);
+  gulp.watch(["./src/leonardo/*.js"], ['build-js']);
+  gulp.watch(["./src/leonardo/templates/*.html"], ['build-templates','build-js']);
 });
 
-gulp.task('combine-scripts', function() {
-  return gulp.src(
-      [
-      'traceur-runtime.min.js',
-      'module.js',
-      'leonardo.templates.min.js'].
-      map(function(file){
-        return './docs/public/leonardo/' + file
-      })
-  )
-  .pipe(concat('leonardo.js'))
-  .pipe(gulp.dest('./dist'))
-  .pipe(gulp.dest('./docs/public/leonardo'));
-});
 
 gulp.task('default', ['build']);

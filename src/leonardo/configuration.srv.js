@@ -16,10 +16,12 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
 
   function fetchStates(){
     var activeStates = storage.getStates();
-    var _states = states.map(state => angular.copy(state));
+    var _states = states.map(function(state) {
+      return angular.copy(state)
+    });
 
     _states.forEach(function(state) {
-      let option = activeStates[state.name];
+      var option = activeStates[state.name];
       state.active = !!option && option.active;
       state.activeOption = !!option ? state.options.find(_option => _option.name === option.name) : state.options[0];
     });
@@ -138,7 +140,9 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
     },
     //todo doc
     upsertMany: function(items){
-      items.forEach(item => this.upsert(item));
+      items.forEach(function(item) {
+        this.upsert(item);
+      }.bind(this));
     },
     deactivateAll: deactivateAll
   };

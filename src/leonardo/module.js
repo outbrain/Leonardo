@@ -27,7 +27,7 @@ angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
       for(var key in $delegate) {
         proxy[key] = $delegate[key];
       }
-      proxy.setDelay = (delay) => {
+      proxy.setDelay = function(delay) {
         proxy.delay = delay;
       };
       return proxy;

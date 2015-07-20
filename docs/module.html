@@ -73,14 +73,13 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> activatorDirective <span class="hljs-keyword">from</span> <span class="hljs-string">'./activator.drv.js'</span>;
-<span class="hljs-keyword">import</span> configurationService <span class="hljs-keyword">from</span> <span class="hljs-string">'./configuration.srv.js'</span>;
-<span class="hljs-keyword">import</span> storageService <span class="hljs-keyword">from</span> <span class="hljs-string">'./storage.srv.js'</span>;
-<span class="hljs-keyword">import</span> windowBodyDirective <span class="hljs-keyword">from</span> <span class="hljs-string">'./window-body.drv.js'</span>;
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> angular.module(<span class="hljs-string">'leonardo'</span>, [<span class="hljs-string">'leonardo.templates'</span>, <span class="hljs-string">'ngMockE2E'</span>])
-  .factory(<span class="hljs-string">'storage'</span>, storageService)
+            <div class="content"><div class='highlight'><pre>
+angular.module(<span class="hljs-string">'leonardo'</span>, [<span class="hljs-string">'leonardo.templates'</span>, <span class="hljs-string">'ngMockE2E'</span>])
   .factory(<span class="hljs-string">'configuration'</span>, configurationService)
+  .factory(<span class="hljs-string">'activeStatesStore'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(store)</span> </span>{
+    <span class="hljs-keyword">return</span> store.getNamespacedStore(<span class="hljs-string">'active_states'</span>);
+  })
+  .factory(<span class="hljs-string">'storage'</span>, storageService)
   .directive(<span class="hljs-string">'activator'</span>, activatorDirective)
   .directive(<span class="hljs-string">'windowBody'</span>, windowBodyDirective)
   <span class="hljs-comment">/* wrap $httpbackend with a proxy in order to support delaying its responses
@@ -103,7 +102,7 @@
       <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> key <span class="hljs-keyword">in</span> $delegate) {
         proxy[key] = $delegate[key];
       }
-      proxy.setDelay = (delay) =&gt; {
+      proxy.setDelay = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(delay)</span> </span>{
         proxy.delay = delay;
       };
       <span class="hljs-keyword">return</span> proxy;

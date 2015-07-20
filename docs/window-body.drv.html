@@ -104,7 +104,7 @@ parameters… it just does something.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">windowBodyDirective</span><span class="hljs-params">($http, configuration)</span> </span>{
+            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>).directive(<span class="hljs-string">'windowBody'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">windowBodyDirective</span><span class="hljs-params">($http, configuration)</span> </span>{
   <span class="hljs-keyword">return</span> {
     restrict: <span class="hljs-string">'E'</span>,
     templateUrl: <span class="hljs-string">'window-body.html'</span>,
@@ -150,9 +150,7 @@ parameters… it just does something.</p>
       };
     }
   };
-}
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> windowBodyDirective</pre></div></div>
+});</pre></div></div>
             
         </li>
         

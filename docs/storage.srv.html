@@ -73,7 +73,7 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">storageService</span><span class="hljs-params">()</span> </span>{
+            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>).factory(<span class="hljs-string">'storage'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">storageService</span><span class="hljs-params">()</span> </span>{
   <span class="hljs-keyword">var</span> STATES_STORE_KEY = <span class="hljs-string">'states'</span>;
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getItem</span><span class="hljs-params">(key)</span> </span>{
     <span class="hljs-keyword">var</span> item = localStorage.getItem(key);
@@ -101,9 +101,7 @@
     setStates: setStates,
     getStates: getStates
   };
-}
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> storageService;</pre></div></div>
+});</pre></div></div>
             
         </li>
         
