@@ -155,10 +155,10 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
       }.bind(this));
     },
     deactivateAll: deactivateAll,
-    addSenario: function(){
+    addScenario: function(){
       //TODO
     },
-    addSenarios: function(){
+    addScenarios: function(){
       //TODO
     },
     getScenarios: function(){
@@ -171,6 +171,13 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
           option: 'get dogs'
         }
       ];
+    },
+    setActiveScenario: function(name){
+      this.deactivateAll();
+      this.getScenario(name).forEach(function(state){
+        debugger;
+        upsertOption(state.name, state.option, true);
+      });
     }
   };
 });

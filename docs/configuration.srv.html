@@ -307,7 +307,57 @@
         <span class="hljs-keyword">this</span>.upsert(item);
       }.bind(<span class="hljs-keyword">this</span>));
     },
-    deactivateAll: deactivateAll
+    deactivateAll: deactivateAll,
+    addScenario: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>TODO</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    },
+    addScenarios: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>TODO</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    },
+    getScenarios: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+      <span class="hljs-keyword">return</span> [<span class="hljs-string">"3g"</span>, <span class="hljs-string">"xx"</span>];
+    },
+    getScenario: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span></span>{
+      <span class="hljs-keyword">return</span> [
+        {
+          name: <span class="hljs-string">'state_animals_non_ajax'</span>,
+          option: <span class="hljs-string">'get dogs'</span>
+        }
+      ];
+    },
+    setActiveScenario: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span></span>{
+      <span class="hljs-keyword">this</span>.deactivateAll();
+      <span class="hljs-keyword">this</span>.getScenario(name).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
+        debugger;
+        upsertOption(state.name, state.option, <span class="hljs-literal">true</span>);
+      });
+    }
   };
 });</pre></div></div>
             

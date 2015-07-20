@@ -35,9 +35,7 @@
       <div class="leonardo-menu">
         <ul>
           <li>Secenarios:</li>
-          <li>Senario a</li>
-          <li class="selected">Senario a</li>
-          <li>Senario b</li>
+          <li ng-class="{ 'selected': scenario === activeScenario }" ng-repeat="scenario in scenarios" ng-click="activateScenario(scenario)">{{scenario}}</li>
         </ul>
       </div>
       <ul>
