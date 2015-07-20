@@ -42,39 +42,39 @@
       </div>
       <ul>
         <li><h3>Non Ajax State</h3></li>
-        <li ng-repeat="state in ::states | filter:NothasUrl">
+        <li ng-repeat="state in states | filter:NothasUrl">
           <div>
             <div class="onoffswitch">
-              <input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{::state.name}}" type="checkbox" name="{{::state.name}}" value="{{::state.name}}">
-              <label class="onoffswitch-label" for="{{::state.name}}">
+              <input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}">
+              <label class="onoffswitch-label" for="{{state.name}}">
                 <span class="onoffswitch-inner"></span>
                 <span class="onoffswitch-switch"></span>
               </label>
             </div>
           </div>
           <div>
-            <h4>{{::state.name}}</h4>
+            <h4>{{state.name}}</h4>
           </div>
           <div>
-            <select ng-model="state.activeOption" ng-options="option.name for option in ::state.options" ng-change="updateState(state)"></select>
+            <select ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="updateState(state)"></select>
           </div>
         </li>
         <li><h3>Ajax State</h3></li>
-        <li ng-repeat="state in ::states | filter:hasUrl">
+        <li ng-repeat="state in states | filter:hasUrl">
           <div>
             <div class="onoffswitch">
-              <input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{::state.name}}" type="checkbox" name="{{::state.name}}" value="{{::state.name}}">
-              <label class="onoffswitch-label" for="{{::state.name}}">
+              <input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}">
+              <label class="onoffswitch-label" for="{{state.name}}">
                 <span class="onoffswitch-inner"></span>
                 <span class="onoffswitch-switch"></span>
               </label>
             </div>
           </div>
           <div>
-            <h4>{{::state.name}}</h4>&nbsp;&nbsp; - {{::state.url}}
+            <h4>{{state.name}}</h4>&nbsp;&nbsp; - {{state.url}}
           </div>
           <div>
-            <select ng-model="state.activeOption" ng-options="option.name for option in ::state.options" ng-change="updateState(state)"></select>
+            <select ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="updateState(state)"></select>
           </div>
         </li>
       </ul>

@@ -3,7 +3,7 @@
 // ----------------
 //* Add leonardo module as a dependancy to your app
 //* You done!
-export default angular.module('example', ['leonardo'])
+angular.module('example', ['leonardo'])
             .run(run);
 
 //well almost...
@@ -45,9 +45,12 @@ function run($rootScope, configuration){
       ]
     },
     {
-      name: "state 4",
+      name: "state 4 - PUT",
+      url: 'http://url4.com',
+      verb: 'PUT',
       options: [
-        {name: 'get url4 bbbb', data: ["url4 bbb"]}
+        {name: 'with delay', data: ["response"], delay: 2000},
+        {name: 'without delay', data: ["response"]}
       ]
     }
   ]);

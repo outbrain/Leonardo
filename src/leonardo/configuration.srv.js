@@ -1,4 +1,4 @@
-function configurationService(storage, $httpBackend) {
+angular.module('leonardo').factory('configuration', function(storage, $httpBackend) {
   var states = [];
   var responseHandlers = {};
 
@@ -16,12 +16,17 @@ function configurationService(storage, $httpBackend) {
 
   function fetchStates(){
     var activeStates = storage.getStates();
-    var _states = states.map(state => angular.copy(state));
+    var _states = states.map(function(state) {
+      return angular.copy(state);
+    });
 
     _states.forEach(function(state) {
-      let option = activeStates[state.name];
+      var option = activeStates[state.name];
       state.active = !!option && option.active;
-      state.activeOption = !!option ? state.options.find(_option => _option.name === option.name) : state.options[0];
+      state.activeOption = !!option ?
+        state.options.filter(function (_option) {
+          return _option.name === option.name;
+        })[0] : state.options[0];
     });
 
     return _states;
@@ -38,7 +43,7 @@ function configurationService(storage, $httpBackend) {
   }
 
   function findStateOption(name){
-    return fetchStates().find(state => state.name === name).activeOption;
+    return fetchStates().filter(function(state){ return state.name === name;})[0].activeOption;
   }
 
   function sync(){
@@ -76,29 +81,36 @@ function configurationService(storage, $httpBackend) {
     //todo doc
     fetchStates: fetchStates,
     getState: function(name){
-      var state = fetchStates().find(state => state.name === name);
+      var state = fetchStates().filter(function(state) { return state.name === name})[0];
       return (state && state.active && findStateOption(name)) || null;
     },
     addState: function(stateObj) {
-      stateObj.options.forEach((option) => {
+      stateObj.options.forEach(function (option) {
         this.upsert({
           state: stateObj.name,
           url: stateObj.url,
-          verb: option.verb,
+          verb: stateObj.verb,
           name: option.name,
           status: option.status,
           data: option.data,
           delay: option.delay
         });
-      });
+      }.bind(this));
     },
     addStates: function(statesArr) {
-      statesArr.forEach((stateObj) => {
+      statesArr.forEach(function(stateObj) {
         this.addState(stateObj);
-      });
+      }.bind(this));
     },
     //insert or replace an option by insert or updateing a state.
-    upsert: function({ verb, state, name, url, status = 200, data = {}, delay = 0}){
+    upsert: function(stateObj) {
+      var verb = stateObj.verb || 'GET',
+          state = stateObj.state,
+          name = stateObj.name,
+          url = stateObj.url,
+          status = stateObj.status || 200,
+          data = stateObj.data || {},
+          delay = stateObj.delay || 0;
       var defaultState = {};
 
       var defaultOption = {};
@@ -108,12 +120,12 @@ function configurationService(storage, $httpBackend) {
         return;
       }
 
-      var stateItem = states.find(_state => _state.name === state) || defaultState;
+      var stateItem = states.filter(function(_state) { return _state.name === state;})[0] || defaultState;
 
       angular.extend(stateItem, {
         name: state,
         url: url || stateItem.url,
-        verb: verb || stateItem.verb,
+        verb: verb,
         options: stateItem.options || []
       });
 
@@ -122,7 +134,7 @@ function configurationService(storage, $httpBackend) {
         states.push(stateItem);
       }
 
-      var option = stateItem.options.find(_option => _option.name === name) || defaultOption;
+      var option = stateItem.options.filter(function(_option) {return _option.name === name})[0] || defaultOption;
 
       angular.extend(option, {
         name: name,
@@ -138,10 +150,10 @@ function configurationService(storage, $httpBackend) {
     },
     //todo doc
     upsertMany: function(items){
-      items.forEach(item => this.upsert(item));
+      items.forEach(function(item) {
+        this.upsert(item);
+      }.bind(this));
     },
     deactivateAll: deactivateAll
   };
-}
-
-export default configurationService;
+});

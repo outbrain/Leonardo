@@ -1,4 +1,4 @@
-function activatorDirective($compile) {
+angular.module('leonardo').directive('activator', function activatorDirective($compile) {
   return {
     restrict: 'A',
     link: function(scope, elem) {
@@ -35,6 +35,4 @@ function activatorDirective($compile) {
       };
     }
   };
-}
-
-export default activatorDirective
+});

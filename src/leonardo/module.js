@@ -1,13 +1,5 @@
-import activatorDirective from './activator.drv.js';
-import configurationService from './configuration.srv.js';
-import storageService from './storage.srv.js';
-import windowBodyDirective from './window-body.drv.js';
 
-export default angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
-  .factory('storage', storageService)
-  .factory('configuration', configurationService)
-  .directive('activator', activatorDirective)
-  .directive('windowBody', windowBodyDirective)
+angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
   /* wrap $httpbackend with a proxy in order to support delaying its responses
    * we are using the approach described in Endless Indirection:
    * https://endlessindirection.wordpress.com/2013/05/18/angularjs-delay-response-from-httpbackend/
@@ -28,7 +20,7 @@ export default angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
       for(var key in $delegate) {
         proxy[key] = $delegate[key];
       }
-      proxy.setDelay = (delay) => {
+      proxy.setDelay = function(delay) {
         proxy.delay = delay;
       };
       return proxy;

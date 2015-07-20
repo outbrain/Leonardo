@@ -73,16 +73,8 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>import activatorDirective from <span class="hljs-string">'./activator.drv.js'</span>;
-import configurationService from <span class="hljs-string">'./configuration.srv.js'</span>;
-import storageService from <span class="hljs-string">'./storage.srv.js'</span>;
-import windowBodyDirective from <span class="hljs-string">'./window-body.drv.js'</span>;
-
-export <span class="hljs-keyword">default</span> angular.module(<span class="hljs-string">'leonardo'</span>, [<span class="hljs-string">'leonardo.templates'</span>, <span class="hljs-string">'ngMockE2E'</span>])
-  .factory(<span class="hljs-string">'storage'</span>, storageService)
-  .factory(<span class="hljs-string">'configuration'</span>, configurationService)
-  .directive(<span class="hljs-string">'activator'</span>, activatorDirective)
-  .directive(<span class="hljs-string">'windowBody'</span>, windowBodyDirective)
+            <div class="content"><div class='highlight'><pre>
+angular.module(<span class="hljs-string">'leonardo'</span>, [<span class="hljs-string">'leonardo.templates'</span>, <span class="hljs-string">'ngMockE2E'</span>])
   <span class="hljs-comment">/* wrap $httpbackend with a proxy in order to support delaying its responses
    * we are using the approach described in Endless Indirection:
    * https://endlessindirection.wordpress.com/2013/05/18/angularjs-delay-response-from-httpbackend/
@@ -103,7 +95,7 @@ export <span class="hljs-keyword">default</span> angular.module(<span class="hlj
       <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> key <span class="hljs-keyword">in</span> $delegate) {
         proxy[key] = $delegate[key];
       }
-      proxy.setDelay = (delay) =&gt; {
+      proxy.setDelay = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(delay)</span> </span>{
         proxy.delay = delay;
       };
       <span class="hljs-keyword">return</span> proxy;
