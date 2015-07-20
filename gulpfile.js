@@ -1,5 +1,6 @@
 var gulp = require('gulp'),
   path = require('path'),
+  del = require('del'),
   runSequence = require('run-sequence'),
   less = require('gulp-less'),
   rename = require("gulp-rename"),
@@ -10,17 +11,16 @@ var gulp = require('gulp'),
 
 require("gulp-help")(gulp);
 
-gulp.task('copy', function() {
-  return gulp.src([
-      "./bower_components/angular/angular.min.js",
-      "./bower_components/angular-mocks/angular-mocks.js",
-      "./index.js"
-  ])
-  .pipe(gulp.dest('./docs/public/leonardo'));
+gulp.task('clean:tmp', function() {
+  del(['tmp/**/*']);
 });
 
-gulp.task("build-less", false, function () {
-    return gulp.src("./src/leonardo/style/app.less")
+gulp.task('clean:dist', function() {
+  del(['dist/**/*']);
+});
+
+gulp.task("build:less", false, function () {
+  return gulp.src("./src/leonardo/style/app.less")
       .pipe(less())
       .on('error', function (err) {
         console.log(err.message);
@@ -29,24 +29,24 @@ gulp.task("build-less", false, function () {
       .pipe(minifyCSS({
         keepSpecialComments: 0
       }))
-      .pipe(gulp.dest('./dist'))
-      .pipe(gulp.dest('./docs/public/leonardo'));
+      .pipe(gulp.dest('./tmp'))
 });
 
-gulp.task("build-templates", false, function () {
+gulp.task("build:templates", false, function () {
   return gulp.src("./src/leonardo/templates/*.html")
-    .pipe(minifyHtml({
-      empty: true,
-      spare: true,
-      quotes: true
-    }))
-    .pipe(ngHtml2Js({
-      moduleName: 'leonardo.templates'
-    }))
-    .pipe(rename('leonardo.templates.min.js'))
-    .pipe(gulp.dest('./docs/public/leonardo'));
+      .pipe(minifyHtml({
+        empty: true,
+        spare: true,
+        quotes: true
+      }))
+      .pipe(ngHtml2Js({
+        moduleName: 'leonardo.templates'
+      }))
+      .pipe(rename('leonardo.templates.min.js'))
+      .pipe(gulp.dest('./tmp'));
 });
-gulp.task('build-js', function(){
+
+gulp.task('build:js', function(){
   return gulp.src(
       [
         './src/leonardo/module.js',
@@ -54,24 +54,49 @@ gulp.task('build-js', function(){
         './src/leonardo/storage.srv.js',
         './src/leonardo/activator.drv.js',
         './src/leonardo/window-body.drv.js',
-        './docs/public/leonardo/leonardo.templates.min.js'
+        './tmp/leonardo.templates.min.js'
       ])
       .pipe(concat('leonardo.js'))
-      .pipe(gulp.dest('./dist'))
-      .pipe(gulp.dest('./docs/public/leonardo'));
+      .pipe(gulp.dest('./tmp'));
 });
+
+
+gulp.task('copy:docs', function() {
+  return gulp.src([
+      "./bower_components/angular/angular.min.js",
+      "./bower_components/angular-mocks/angular-mocks.js",
+      "./tmp/leonardo.js",
+      "./tmp/leonardo.min.css",
+      "./index.js"
+  ])
+  .pipe(gulp.dest('./docs/public/leonardo'));
+});
+
+gulp.task('copy:dist', function() {
+  return gulp.src([
+    "./tmp/leonardo.js",
+    "./tmp/leonardo.min.css"
+  ])
+  .pipe(gulp.dest('./dist'));
+});
+
+
+
 
 gulp.task('build', function(cb) {
   runSequence(
-    ['build-less', 'build-templates', 'build-js'],
-    'copy',
+    'build:less',
+    'build:templates',
+    'build:js',
+    'clean:dist',
+    'copy:docs',
+    'copy:dist',
+    'clean:tmp',
     cb);
 });
 
 gulp.task('watch', "Watch file changes and auto compile for development", ['build'], function () {
-  gulp.watch(["./src/leonardo/style/*.less"], ['build-less']);
-  gulp.watch(["./src/leonardo/*.js"], ['build-js']);
-  gulp.watch(["./src/leonardo/templates/*.html"], ['build-templates','build-js']);
+  gulp.watch(["./src/leonardo/**/*"], ['build']);
 });
 
 
