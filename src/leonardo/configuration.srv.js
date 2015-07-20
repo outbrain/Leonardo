@@ -1,21 +1,21 @@
-angular.module('leonardo').factory('configuration', function(storage, $httpBackend) {
+angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $httpBackend) {
   var states = [];
   var responseHandlers = {};
 
   var upsertOption = function(state, name, active) {
-    var _states = storage.getStates();
+    var _states = leoStorage.getStates();
     _states[state] = {
       name: name,
       active: active
     };
 
-    storage.setStates(_states);
+    leoStorage.setStates(_states);
 
     sync();
   };
 
   function fetchStates(){
-    var activeStates = storage.getStates();
+    var activeStates = leoStorage.getStates();
     var _states = states.map(function(state) {
       return angular.copy(state);
     });
@@ -33,11 +33,11 @@ angular.module('leonardo').factory('configuration', function(storage, $httpBacke
   }
 
   function deactivateAll() {
-    var _states = storage.getStates();
+    var _states = leoStorage.getStates();
     Object.keys(_states).forEach(function(stateKey) {
       _states[stateKey].active = false;
     });
-    storage.setStates(_states);
+    leoStorage.setStates(_states);
 
     sync();
   }

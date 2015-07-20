@@ -9,7 +9,7 @@
 //
 // The `DoSomething` method does something! It doesn't take any
 // parameters... it just does something.
-angular.module('leonardo').directive('windowBody', function windowBodyDirective($http, configuration) {
+angular.module('leonardo').directive('windowBody', function windowBodyDirective($http, leoConfiguration) {
   return {
     restrict: 'E',
     templateUrl: 'window-body.html',
@@ -28,15 +28,15 @@ angular.module('leonardo').directive('windowBody', function windowBodyDirective(
         $scope.states.forEach(function(state){
             state.active = false;
         });
-        configuration.deactivateAll();
+        leoConfiguration.deactivateAll();
       };
 
       $scope.updateState = function(state){
         console.log(`update state: ${state.name} ${state.activeOption.name} ${state.active}`);
-        configuration.upsertOption(state.name, state.activeOption.name, state.active);
+        leoConfiguration.upsertOption(state.name, state.activeOption.name, state.active);
       };
 
-      $scope.states = configuration.fetchStates();
+      $scope.states = leoConfiguration.fetchStates();
     },
     link: function(scope) {
       scope.test = {

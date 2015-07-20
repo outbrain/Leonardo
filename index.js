@@ -7,13 +7,13 @@ angular.module('example', ['leonardo'])
             .run(run);
 
 //well almost...
-function run($rootScope, configuration){
+function run($rootScope, leoConfiguration){
 
   // Adding states
   // ----------------
   //* via api - you can look at the results by clicking leonardo and looking in the configure tab
   //* via ui - coming soon...
-  configuration.addStates([
+  leoConfiguration.addStates([
     {
       name: 'state_animals_non_ajax',
       options: [
@@ -63,7 +63,7 @@ function run($rootScope, configuration){
 
 
   $rootScope.showAnimals = function(){
-    var option = configuration.getState("state_animals_non_ajax");
+    var option = leoConfiguration.getState("state_animals_non_ajax");
     alert(option ? option.data : 'No Active' );
   };
 }
