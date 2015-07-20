@@ -1,6 +1,7 @@
 angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $httpBackend) {
-  var states = [];
-  var responseHandlers = {};
+  var states = [],
+    _scenarios = {},
+    responseHandlers = {};
 
   var upsertOption = function(state, name, active) {
     var _states = leoStorage.getStates();
@@ -154,6 +155,33 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
         this.upsert(item);
       }.bind(this));
     },
-    deactivateAll: deactivateAll
+    deactivateAll: deactivateAll,
+    addScenario: function(scenario){
+      if (scenario && typeof scenario.name === 'string') {
+        _scenarios[scenario.name] = scenario;
+      } else {
+        throw 'addScnerio method expects a scenario object with name property';
+      }
+    },
+    addScenarios: function(scenarios){
+      angular.forEach(scenarios, this.addScenario);
+    },
+    getScenarios: function(){
+      return Object.keys(_scenarios);
+    },
+    getScenario: function(name){
+      console.log(name); 
+      if (!_scenarios[name]) {
+        return
+      }
+      console.log('return scenario', _scenarios[name].states); 
+      return _scenarios[name].states;
+    },
+    setActiveScenario: function(name){
+      this.deactivateAll();
+      this.getScenario(name).forEach(function(state){
+        upsertOption(state.name, state.option, true);
+      });
+    }
   };
 });

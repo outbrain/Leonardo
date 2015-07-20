@@ -9,7 +9,7 @@
   <link rel="stylesheet" media="all" href="docs/public/docco.css" />
   <link rel="stylesheet" media="all" href="docs/public/leonardo/leonardo.min.css" />
 </head>
-<body leo-activator>
+<body leo-activator class="pull-top">
   <div id="container">
     <div id="background"></div>
     <ul id="jump_to">
@@ -122,7 +122,51 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  configuration.addStates([
+            <div class="content"><div class='highlight'><pre>
+  
+  configuration.addScenario({
+    name: <span class="hljs-string">'3g'</span>,
+    states: [
+      {
+        name: <span class="hljs-string">'state_animals_non_ajax'</span>,
+        option: <span class="hljs-string">'get dogs'</span>
+      },
+      {
+        name: <span class="hljs-string">'state1'</span>,
+        option: <span class="hljs-string">'get url1 bbbb'</span>
+      }
+    ]
+  });
+
+  configuration.addScenario({
+    name: <span class="hljs-string">'A test'</span>,
+    states: [
+      {
+        name: <span class="hljs-string">'state_animals_non_ajax'</span>,
+        option: <span class="hljs-string">'get kittens'</span>
+      },
+      {
+        name: <span class="hljs-string">'state2'</span>,
+        option: <span class="hljs-string">'get url2 bbbb'</span>
+      }
+    ]
+  });
+
+  configuration.addScenario({
+    name: <span class="hljs-string">'B test'</span>,
+    states: [
+      {
+        name: <span class="hljs-string">'state_animals_non_ajax'</span>,
+        option: <span class="hljs-string">'get kittens'</span>
+      },
+      {
+        name: <span class="hljs-string">'state1'</span>,
+        option: <span class="hljs-string">'get url1 cccc'</span>
+      }
+    ]
+  });
+
+  configuration.addStates([
     {
       name: <span class="hljs-string">'state_animals_non_ajax'</span>,
       options: [

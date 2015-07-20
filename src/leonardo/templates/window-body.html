@@ -32,6 +32,12 @@
       </table>
     </div>
     <div ng-switch-when="activate" class="leonardo-activate">
+      <div class="leonardo-menu">
+        <ul>
+          <li>Secenarios:</li>
+          <li ng-class="{ 'selected': scenario === activeScenario }" ng-repeat="scenario in scenarios" ng-click="activateScenario(scenario)">{{scenario}}</li>
+        </ul>
+      </div>
       <ul>
         <li><h3>Non Ajax States</h3></li>
         <li ng-repeat="state in states | filter:NothasUrl">

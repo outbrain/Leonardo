@@ -1,5 +1,40 @@
 .leonardo-activate {
-  ul {
+
+  display: flex;
+  height: 100%;
+
+  .leonardo-menu {
+    flex: 1;
+    border-right: 1px solid black;
+
+
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      border: 1px solid black;
+      border-width: 0 0 1px 0;
+      display: block;
+      line-height: 50px;
+      height: 50px;
+      padding: 10px;
+
+      &:first-child {
+        border-top: 1px solid black;
+        height: 20px;
+        line-height: 20px;
+      }
+
+      &.selected {
+        background: orange;
+      }
+    }
+  }
+
+  > ul {
+    flex: 3;
     list-style: none;
     display: table;
   }
@@ -26,4 +61,5 @@
   select {
     width: 200px;
   }
+
 }

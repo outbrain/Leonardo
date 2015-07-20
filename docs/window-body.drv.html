@@ -132,6 +132,14 @@ parameters… it just does something.</p>
       };
 
       $scope.states = configuration.fetchStates();
+
+      $scope.scenarios = configuration.getScenarios();
+
+      $scope.activateScenario = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(scenario)</span></span>{
+        $scope.activeScenario = scenario;
+        configuration.setActiveScenario(scenario);
+        $scope.states = configuration.fetchStates();
+      };
     },
     link: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(scope)</span> </span>{
       scope.test = {

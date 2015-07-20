@@ -37,6 +37,14 @@ angular.module('leonardo').directive('windowBody', function windowBodyDirective(
       };
 
       $scope.states = leoConfiguration.fetchStates();
+
+      $scope.scenarios = leoConfiguration.getScenarios();
+
+      $scope.activateScenario = function(scenario){
+        $scope.activeScenario = scenario;
+        configuration.setActiveScenario(scenario);
+        $scope.states = leoConfiguration.fetchStates();
+      };
     },
     link: function(scope) {
       scope.test = {
