@@ -68,7 +68,7 @@ A plunker demonstration http://plnkr.co/edit/w8oaELXwQldv6AeZjnhD?p=preview
 ![example image](extension/images/example.png)
 
 ## Documentation
-http://outbrain.github.io/Leonardo
+http://outbrain.github.io/Leonardo/docs/configuration.srv.html
 
 
 ## Running and contributing
