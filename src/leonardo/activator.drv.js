@@ -6,8 +6,17 @@ angular.module('leonardo').directive('leoActivator', function activatorDirective
 
       var win = angular.element([
       '<div class="leonardo-window">',
-        '<div class="leonardo-header">Leonardo Configuration</div>',
-          '<leo-window-body></leo-window-body>',
+        '<div class="leonardo-header">',
+          '<div class="menu">',
+            '<ul>',
+              '<li class="logo">',
+                '<div></div>',
+              '</li>', 
+              '<li>Scenarios</li>', 
+            '</ul>',
+          '</div>',
+        '</div>',
+        '<leo-window-body></leo-window-body>',
         '</div>',
       '</div>'
       ].join(''));
