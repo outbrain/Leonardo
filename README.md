@@ -1,26 +1,43 @@
 ![Leonardo logo](extension/images/leonardo.png)  Leonardo Docs 
 =============
 
-Mocking made simple and consistent.
+Mocking and testing made simple and consistent.
 Developed by Outbrain.
 
 ## Requirements 
 
 #### Load Dependency scripts
 
-AngularJS (tested with v1.3)
+Angular (tested with v1.3)
+Angular Mocks module  (tested with v1.3)
 
-#### Load Leonardo scripts
+#### Load Leonardo script
 
 ```html
 <!DOCTYPE HTML>
 <html>
 <body ng-app="app">
   //.....
-  <script src="src/js/leonardos.js"></script>
+  <script src="[bower_componenets|node_modules|other]/angular/angular.js"></script>
+  <script src="[bower_componenets|node_modules|other]/angular-mocks/angular-mocks.js"></script>
+  //.....
+  <script src="[bower_componenets|node_modules|other]/leonardos/leonardos.js"></script>
 </body>
 </html>
 ```
+
+#### Load Leonardo css
+
+```html
+<!DOCTYPE HTML>
+<html>
+<head>
+  //.....
+  <link rel="stylesheet" media="all" href="[bower_componenets|node_modules|other]/leonardos/leonardo.min.css" />
+</head>
+</html>
+```
+
 #### Add Angular module dependancy
 
 ```html
@@ -39,7 +56,7 @@ AngularJS (tested with v1.3)
 ```html
 <!DOCTYPE HTML>
 <html>
-<body ng-app="app" activator>
+<body ng-app="app" leo-activator>
   //.....
 </body>
 </html>
@@ -51,7 +68,7 @@ A plunker demonstration http://plnkr.co/edit/w8oaELXwQldv6AeZjnhD?p=preview
 ![example image](extension/images/example.png)
 
 ## Documentation
-http://outbrain.github.io/Leonardo
+http://outbrain.github.io/Leonardo/docs/configuration.srv.html
 
 
 ## Running and contributing
