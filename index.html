@@ -29,7 +29,7 @@
 
   </style>
 </head>
-<body leo-activator class="pull-top">
+<body leo-activator  ng-controller="flickerCtrl">
   <a href="https://github.com/outbrain/Leonardo">Github</a>
   <a href="docs/module.html">Documentation</a>
   <a href="http://plnkr.co/edit/w8oaELXwQldv6AeZjnhD?p=preview">Plunker</a>
@@ -39,6 +39,7 @@
 
   <div class="clearfix">
     <div class="error" ng-show="error">Failed To Load</div>
+    <button ng-click="loadClicked()">Load<span ng-if="loading">ing...</span></button>
     <div class="media-item clearfix" ng-repeat="item in images">
       <a ng-href="{{ item.page }}" target="_blank">
         <img ng-src="{{ item.thumbnail }}" />

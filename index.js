@@ -4,10 +4,16 @@ var Flicker = angular.module('flicker-example', ["leonardo"])
   .config(function ($locationProvider) {
     $locationProvider.html5Mode(false);
   })
-  .run(function($rootScope, flickerGetter){
-    flickerGetter.getData().then(function(data){
-      $rootScope.images = data;
-    });
+  .controller('flickerCtrl', function ($scope, flickerGetter) {
+    $scope.loadClicked = function () {
+      $scope.loading = true;
+      flickerGetter.getData().then(function(data){
+        $scope.images = data;
+        $scope.loading = false;
+      }, function () {
+        $scope.loading = false;
+      });
+    }
   });
 
 Flicker.factory('flickerGetter', function ($q, $http) {
