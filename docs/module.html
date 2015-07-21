@@ -73,14 +73,13 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>
-angular.module(<span class="hljs-string">'leonardo'</span>, [<span class="hljs-string">'leonardo.templates'</span>, <span class="hljs-string">'ngMockE2E'</span>])
+            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>, [<span class="hljs-string">'leonardo.templates'</span>, <span class="hljs-string">'ngMockE2E'</span>])
   <span class="hljs-comment">/* wrap $httpbackend with a proxy in order to support delaying its responses
    * we are using the approach described in Endless Indirection:
    * https://endlessindirection.wordpress.com/2013/05/18/angularjs-delay-response-from-httpbackend/
    */</span>
-  .config(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($provide)</span> </span>{
-    $provide.decorator(<span class="hljs-string">'$httpBackend'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($delegate)</span> </span>{
+  .config([<span class="hljs-string">'$provide'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($provide)</span> </span>{
+    $provide.decorator(<span class="hljs-string">'$httpBackend'</span>, [<span class="hljs-string">'$delegate'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($delegate)</span> </span>{
       <span class="hljs-keyword">var</span> proxy = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(method, url, data, callback, headers)</span> </span>{
         <span class="hljs-keyword">var</span> interceptor = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
           <span class="hljs-keyword">var</span> _this = <span class="hljs-keyword">this</span>,
@@ -99,8 +98,8 @@ angular.module(<span class="hljs-string">'leonardo'</span>, [<span class="hljs-s
         proxy.delay = delay;
       };
       <span class="hljs-keyword">return</span> proxy;
-    });
-  });</pre></div></div>
+    }]);
+  }]);</pre></div></div>
             
         </li>
         

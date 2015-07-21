@@ -1,11 +1,10 @@
-
 angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
   /* wrap $httpbackend with a proxy in order to support delaying its responses
    * we are using the approach described in Endless Indirection:
    * https://endlessindirection.wordpress.com/2013/05/18/angularjs-delay-response-from-httpbackend/
    */
-  .config(function($provide) {
-    $provide.decorator('$httpBackend', function($delegate) {
+  .config(['$provide', function($provide) {
+    $provide.decorator('$httpBackend', ['$delegate', function($delegate) {
       var proxy = function(method, url, data, callback, headers) {
         var interceptor = function() {
           var _this = this,
@@ -24,26 +23,43 @@ angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
         proxy.delay = delay;
       };
       return proxy;
-    });
-  });
+    }]);
+  }]);
 
 
-angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $httpBackend) {
+angular.module('leonardo').factory('leoConfiguration',
+    ['leoStorage', '$httpBackend', function(leoStorage, $httpBackend) {
   var states = [],
-    _scenarios = {},
-    responseHandlers = {};
+      _scenarios = {},
+      responseHandlers = {},
+      self = this,
+      api = {
+        getState: getState,
+        getStates: fetchStates,
+        addState: addState,
+        addStates: addStates,
+        deactivateState: deactivateState,
+        deactivateAllStates: deactivateAll,
+        activateStateOption: activateStateOption,
+        addScenario: addScenario,
+        addScenarios: addScenarios,
+        getScenario: getScenario,
+        getScenarios: getScenarios,
+        setActiveScenario: setActiveScenario
+      };
+  return api;
 
-  var upsertOption = function(state, name, active) {
+  function upsertOption(state, name, active) {
     var _states = leoStorage.getStates();
     _states[state] = {
-      name: name,
+      name: name || findStateOption(state).name,
       active: active
     };
 
     leoStorage.setStates(_states);
 
     sync();
-  };
+  }
 
   function fetchStates(){
     var activeStates = leoStorage.getStates();
@@ -114,7 +130,7 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
 
   function addState(stateObj) {
     stateObj.options.forEach(function (option) {
-      this.upsert({
+      upsert({
         state: stateObj.name,
         url: stateObj.url,
         verb: stateObj.verb,
@@ -123,13 +139,13 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
         data: option.data,
         delay: option.delay
       });
-    }.bind(this));
+    });
   }
 
   function addStates(statesArr) {
     statesArr.forEach(function(stateObj) {
-      this.addState(stateObj);
-    }.bind(this));
+      addState(stateObj);
+    });
   }
 
   //insert or replace an option by insert or updateing a state.
@@ -181,8 +197,8 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
 
   function upsertMany(items){
     items.forEach(function(item) {
-      this.upsert(item);
-    }.bind(this));
+      self.upsert(item);
+    });
   }
 
   function addScenario(scenario){
@@ -194,7 +210,7 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
   }
 
   function addScenarios(scenarios){
-    angular.forEach(scenarios, this.addScenario);
+    angular.forEach(scenarios, self.addScenario);
   }
 
   function getScenarios(){
@@ -211,30 +227,21 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
   }
 
   function setActiveScenario(name){
-    this.deactivateAll();
-    this.getScenario(name).forEach(function(state){
+    self.deactivateAll();
+    self.getScenario(name).forEach(function(state){
       upsertOption(state.name, state.option, true);
     });
   }
 
-  return {
-    states: states,
-    active_states_option: [],
-    upsertOption: upsertOption,
-    fetchStates: fetchStates,
-    getState: getState,
-    addState: addState,
-    addStates: addStates,
-    upsert: upsert,
-    upsertMany: upsertMany,
-    deactivateAll: deactivateAll,
-    addScenario: addScenario,
-    addScenarios: addScenarios,
-    getScenarios: getScenarios,
-    getScenario: getScenario,
-    setActiveScenario: setActiveScenario
-  };
-});
+  function activateStateOption(state, optionName) {
+    upsertOption(state, optionName, true);
+  }
+
+  function deactivateState(state) {
+    upsertOption(state, null, false);
+  }
+
+}]);
 
 angular.module('leonardo').factory('leoStorage', function storageService() {
   var STATES_STORE_KEY = 'leonardo-states';
@@ -266,7 +273,7 @@ angular.module('leonardo').factory('leoStorage', function storageService() {
   };
 });
 
-angular.module('leonardo').directive('leoActivator', function activatorDirective($compile) {
+angular.module('leonardo').directive('leoActivator', ['$compile', function activatorDirective($compile) {
   return {
     restrict: 'A',
     link: function(scope, elem) {
@@ -303,7 +310,7 @@ angular.module('leonardo').directive('leoActivator', function activatorDirective
       };
     }
   };
-});
+}]);
 
 // This Is A Header
 // ----------------
@@ -316,13 +323,14 @@ angular.module('leonardo').directive('leoActivator', function activatorDirective
 //
 // The `DoSomething` method does something! It doesn't take any
 // parameters... it just does something.
-angular.module('leonardo').directive('leoWindowBody', function windowBodyDirective($http, leoConfiguration) {
+angular.module('leonardo').directive('leoWindowBody',
+    ['$http', 'leoConfiguration', function windowBodyDirective($http, leoConfiguration) {
   return {
     restrict: 'E',
     templateUrl: 'window-body.html',
     scope: true,
     replace: true,
-    controller: function($scope){
+    controller: ['$scope', function($scope){
       $scope.selectedItem = 'activate';
       $scope.NothasUrl = function(option){
         return !option.url;
@@ -335,24 +343,29 @@ angular.module('leonardo').directive('leoWindowBody', function windowBodyDirecti
         $scope.states.forEach(function(state){
             state.active = false;
         });
-        leoConfiguration.deactivateAll();
+        leoConfiguration.deactivateAllStates();
       };
 
       $scope.updateState = function(state){
-        console.log(`update state: ${state.name} ${state.activeOption.name} ${state.active}`);
-        leoConfiguration.upsertOption(state.name, state.activeOption.name, state.active);
+        if (state.active) {
+          console.log('activate state option:' +  state.name + ': ' + state.activeOption.name);
+          leoConfiguration.activateStateOption(state.name, state.activeOption.name);
+        } else {
+          console.log('deactivating state: ' +  state.name);
+          leoConfiguration.deactivateState(state.name);
+        }
       };
 
-      $scope.states = leoConfiguration.fetchStates();
+      $scope.states = leoConfiguration.getStates();
 
       $scope.scenarios = leoConfiguration.getScenarios();
 
       $scope.activateScenario = function(scenario){
         $scope.activeScenario = scenario;
         leoConfiguration.setActiveScenario(scenario);
-        $scope.states = leoConfiguration.fetchStates();
+        $scope.states = leoConfiguration.getStates();
       };
-    },
+    }],
     link: function(scope) {
       scope.test = {
         url: '',
@@ -370,7 +383,7 @@ angular.module('leonardo').directive('leoWindowBody', function windowBodyDirecti
       };
     }
   };
-});
+}]);
 
 (function(module) {
 try {

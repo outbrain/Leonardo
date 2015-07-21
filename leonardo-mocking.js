@@ -1,4 +1,4 @@
-angular.module('leonardo').run(function(leoConfiguration){
+angular.module('leonardo').run(['leoConfiguration', function(leoConfiguration) {
   leoConfiguration.addStates([
     {
       name: 'flicker-images',
@@ -53,4 +53,4 @@ angular.module('leonardo').run(function(leoConfiguration){
       ]
     }
   ]);
-});
+}]);

@@ -73,7 +73,7 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>).directive(<span class="hljs-string">'leoActivator'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">activatorDirective</span><span class="hljs-params">($compile)</span> </span>{
+            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>).directive(<span class="hljs-string">'leoActivator'</span>, [<span class="hljs-string">'$compile'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">activatorDirective</span><span class="hljs-params">($compile)</span> </span>{
   <span class="hljs-keyword">return</span> {
     restrict: <span class="hljs-string">'A'</span>,
     link: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(scope, elem)</span> </span>{
@@ -110,7 +110,7 @@
       };
     }
   };
-});</pre></div></div>
+}]);</pre></div></div>
             
         </li>
         

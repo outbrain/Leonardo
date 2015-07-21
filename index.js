@@ -1,16 +1,16 @@
 "use strict";
 
 var Flicker = angular.module('flicker-example', ["leonardo"])
-  .config(function ($locationProvider) {
+  .config(['$locationProvider', function ($locationProvider) {
     $locationProvider.html5Mode(false);
-  })
-  .run(function($rootScope, flickerGetter){
+  }])
+  .run(['$rootScope','flickerGetter', function($rootScope, flickerGetter){
     flickerGetter.getData().then(function(data){
       $rootScope.images = data;
     });
-  });
+  }]);
 
-Flicker.factory('flickerGetter', function ($q, $http) {
+Flicker.factory('flickerGetter', ['$q', '$http', function ($q, $http) {
   return {
     getData: function () {
       var defer = $q.defer();
@@ -49,4 +49,4 @@ Flicker.factory('flickerGetter', function ($q, $http) {
       return defer.promise;
     }
   };
-});
+}]);

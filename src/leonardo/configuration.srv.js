@@ -1,19 +1,36 @@
-angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $httpBackend) {
+angular.module('leonardo').factory('leoConfiguration',
+    ['leoStorage', '$httpBackend', function(leoStorage, $httpBackend) {
   var states = [],
-    _scenarios = {},
-    responseHandlers = {};
+      _scenarios = {},
+      responseHandlers = {},
+      self = this,
+      api = {
+        getState: getState,
+        getStates: fetchStates,
+        addState: addState,
+        addStates: addStates,
+        deactivateState: deactivateState,
+        deactivateAllStates: deactivateAll,
+        activateStateOption: activateStateOption,
+        addScenario: addScenario,
+        addScenarios: addScenarios,
+        getScenario: getScenario,
+        getScenarios: getScenarios,
+        setActiveScenario: setActiveScenario
+      };
+  return api;
 
-  var upsertOption = function(state, name, active) {
+  function upsertOption(state, name, active) {
     var _states = leoStorage.getStates();
     _states[state] = {
-      name: name,
+      name: name || findStateOption(state).name,
       active: active
     };
 
     leoStorage.setStates(_states);
 
     sync();
-  };
+  }
 
   function fetchStates(){
     var activeStates = leoStorage.getStates();
@@ -84,7 +101,7 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
 
   function addState(stateObj) {
     stateObj.options.forEach(function (option) {
-      this.upsert({
+      upsert({
         state: stateObj.name,
         url: stateObj.url,
         verb: stateObj.verb,
@@ -93,13 +110,13 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
         data: option.data,
         delay: option.delay
       });
-    }.bind(this));
+    });
   }
 
   function addStates(statesArr) {
     statesArr.forEach(function(stateObj) {
-      this.addState(stateObj);
-    }.bind(this));
+      addState(stateObj);
+    });
   }
 
   //insert or replace an option by insert or updateing a state.
@@ -151,8 +168,8 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
 
   function upsertMany(items){
     items.forEach(function(item) {
-      this.upsert(item);
-    }.bind(this));
+      self.upsert(item);
+    });
   }
 
   function addScenario(scenario){
@@ -164,7 +181,7 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
   }
 
   function addScenarios(scenarios){
-    angular.forEach(scenarios, this.addScenario);
+    angular.forEach(scenarios, self.addScenario);
   }
 
   function getScenarios(){
@@ -181,27 +198,18 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
   }
 
   function setActiveScenario(name){
-    this.deactivateAll();
-    this.getScenario(name).forEach(function(state){
+    self.deactivateAll();
+    self.getScenario(name).forEach(function(state){
       upsertOption(state.name, state.option, true);
     });
   }
 
-  return {
-    states: states,
-    active_states_option: [],
-    upsertOption: upsertOption,
-    fetchStates: fetchStates,
-    getState: getState,
-    addState: addState,
-    addStates: addStates,
-    upsert: upsert,
-    upsertMany: upsertMany,
-    deactivateAll: deactivateAll,
-    addScenario: addScenario,
-    addScenarios: addScenarios,
-    getScenarios: getScenarios,
-    getScenario: getScenario,
-    setActiveScenario: setActiveScenario
-  };
-});
+  function activateStateOption(state, optionName) {
+    upsertOption(state, optionName, true);
+  }
+
+  function deactivateState(state) {
+    upsertOption(state, null, false);
+  }
+
+}]);

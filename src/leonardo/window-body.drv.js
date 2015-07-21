@@ -9,13 +9,14 @@
 //
 // The `DoSomething` method does something! It doesn't take any
 // parameters... it just does something.
-angular.module('leonardo').directive('leoWindowBody', function windowBodyDirective($http, leoConfiguration) {
+angular.module('leonardo').directive('leoWindowBody',
+    ['$http', 'leoConfiguration', function windowBodyDirective($http, leoConfiguration) {
   return {
     restrict: 'E',
     templateUrl: 'window-body.html',
     scope: true,
     replace: true,
-    controller: function($scope){
+    controller: ['$scope', function($scope){
       $scope.selectedItem = 'activate';
       $scope.NothasUrl = function(option){
         return !option.url;
@@ -28,24 +29,29 @@ angular.module('leonardo').directive('leoWindowBody', function windowBodyDirecti
         $scope.states.forEach(function(state){
             state.active = false;
         });
-        leoConfiguration.deactivateAll();
+        leoConfiguration.deactivateAllStates();
       };
 
       $scope.updateState = function(state){
-        console.log(`update state: ${state.name} ${state.activeOption.name} ${state.active}`);
-        leoConfiguration.upsertOption(state.name, state.activeOption.name, state.active);
+        if (state.active) {
+          console.log('activate state option:' +  state.name + ': ' + state.activeOption.name);
+          leoConfiguration.activateStateOption(state.name, state.activeOption.name);
+        } else {
+          console.log('deactivating state: ' +  state.name);
+          leoConfiguration.deactivateState(state.name);
+        }
       };
 
-      $scope.states = leoConfiguration.fetchStates();
+      $scope.states = leoConfiguration.getStates();
 
       $scope.scenarios = leoConfiguration.getScenarios();
 
       $scope.activateScenario = function(scenario){
         $scope.activeScenario = scenario;
         leoConfiguration.setActiveScenario(scenario);
-        $scope.states = leoConfiguration.fetchStates();
+        $scope.states = leoConfiguration.getStates();
       };
-    },
+    }],
     link: function(scope) {
       scope.test = {
         url: '',
@@ -63,4 +69,4 @@ angular.module('leonardo').directive('leoWindowBody', function windowBodyDirecti
       };
     }
   };
-});
+}]);

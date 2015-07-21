@@ -104,13 +104,14 @@ parameters… it just does something.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>).directive(<span class="hljs-string">'leoWindowBody'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">windowBodyDirective</span><span class="hljs-params">($http, leoConfiguration)</span> </span>{
+            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>).directive(<span class="hljs-string">'leoWindowBody'</span>,
+    [<span class="hljs-string">'$http'</span>, <span class="hljs-string">'leoConfiguration'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">windowBodyDirective</span><span class="hljs-params">($http, leoConfiguration)</span> </span>{
   <span class="hljs-keyword">return</span> {
     restrict: <span class="hljs-string">'E'</span>,
     templateUrl: <span class="hljs-string">'window-body.html'</span>,
     scope: <span class="hljs-literal">true</span>,
     replace: <span class="hljs-literal">true</span>,
-    controller: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($scope)</span></span>{
+    controller: [<span class="hljs-string">'$scope'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($scope)</span></span>{
       $scope.selectedItem = <span class="hljs-string">'activate'</span>;
       $scope.NothasUrl = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(option)</span></span>{
         <span class="hljs-keyword">return</span> !option.url;
@@ -123,24 +124,29 @@ parameters… it just does something.</p>
         $scope.states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
             state.active = <span class="hljs-literal">false</span>;
         });
-        leoConfiguration.deactivateAll();
+        leoConfiguration.deactivateAllStates();
       };
 
       $scope.updateState = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`update state: <span class="hljs-subst">${state.name}</span> <span class="hljs-subst">${state.activeOption.name}</span> <span class="hljs-subst">${state.active}</span>`</span>);
-        leoConfiguration.upsertOption(state.name, state.activeOption.name, state.active);
+        <span class="hljs-keyword">if</span> (state.active) {
+          <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'activate state option:'</span> +  state.name + <span class="hljs-string">': '</span> + state.activeOption.name);
+          leoConfiguration.activateStateOption(state.name, state.activeOption.name);
+        } <span class="hljs-keyword">else</span> {
+          <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'deactivating state: '</span> +  state.name);
+          leoConfiguration.deactivateState(state.name);
+        }
       };
 
-      $scope.states = leoConfiguration.fetchStates();
+      $scope.states = leoConfiguration.getStates();
 
       $scope.scenarios = leoConfiguration.getScenarios();
 
       $scope.activateScenario = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(scenario)</span></span>{
         $scope.activeScenario = scenario;
         leoConfiguration.setActiveScenario(scenario);
-        $scope.states = leoConfiguration.fetchStates();
+        $scope.states = leoConfiguration.getStates();
       };
-    },
+    }],
     link: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(scope)</span> </span>{
       scope.test = {
         url: <span class="hljs-string">''</span>,
@@ -158,7 +164,7 @@ parameters… it just does something.</p>
       };
     }
   };
-});</pre></div></div>
+}]);</pre></div></div>
             
         </li>
         
