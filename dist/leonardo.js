@@ -107,117 +107,132 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
     return responseHandlers[state.name];
   }
 
-  return {
-    //configured states todo doc
-    states: states,
-    //todo doc
-    active_states_option: [],
-    //todo doc
-    upsertOption: upsertOption,
-    //todo doc
-    fetchStates: fetchStates,
-    getState: function(name){
-      var state = fetchStates().filter(function(state) { return state.name === name})[0];
-      return (state && state.active && findStateOption(name)) || null;
-    },
-    addState: function(stateObj) {
-      stateObj.options.forEach(function (option) {
-        this.upsert({
-          state: stateObj.name,
-          url: stateObj.url,
-          verb: stateObj.verb,
-          name: option.name,
-          status: option.status,
-          data: option.data,
-          delay: option.delay
-        });
-      }.bind(this));
-    },
-    addStates: function(statesArr) {
-      statesArr.forEach(function(stateObj) {
-        this.addState(stateObj);
-      }.bind(this));
-    },
-    //insert or replace an option by insert or updateing a state.
-    upsert: function(stateObj) {
-      var verb = stateObj.verb || 'GET',
-          state = stateObj.state,
-          name = stateObj.name,
-          url = stateObj.url,
-          status = stateObj.status || 200,
-          data = stateObj.data || {},
-          delay = stateObj.delay || 0;
-      var defaultState = {};
+  function getState(name){
+    var state = fetchStates().filter(function(state) { return state.name === name})[0];
+    return (state && state.active && findStateOption(name)) || null;
+  }
 
-      var defaultOption = {};
-
-      if (!state) {
-        console.log("cannot upsert - state is mandatory");
-        return;
-      }
-
-      var stateItem = states.filter(function(_state) { return _state.name === state;})[0] || defaultState;
-
-      angular.extend(stateItem, {
-        name: state,
-        url: url || stateItem.url,
-        verb: verb,
-        options: stateItem.options || []
+  function addState(stateObj) {
+    stateObj.options.forEach(function (option) {
+      this.upsert({
+        state: stateObj.name,
+        url: stateObj.url,
+        verb: stateObj.verb,
+        name: option.name,
+        status: option.status,
+        data: option.data,
+        delay: option.delay
       });
+    }.bind(this));
+  }
 
+  function addStates(statesArr) {
+    statesArr.forEach(function(stateObj) {
+      this.addState(stateObj);
+    }.bind(this));
+  }
 
-      if (stateItem === defaultState) {
-        states.push(stateItem);
-      }
+  //insert or replace an option by insert or updateing a state.
+  function upsert(stateObj) {
+    var verb = stateObj.verb || 'GET',
+        state = stateObj.state,
+        name = stateObj.name,
+        url = stateObj.url,
+        status = stateObj.status || 200,
+        data = stateObj.data || {},
+        delay = stateObj.delay || 0;
+    var defaultState = {};
 
-      var option = stateItem.options.filter(function(_option) {return _option.name === name})[0] || defaultOption;
+    var defaultOption = {};
 
-      angular.extend(option, {
-        name: name,
-        status: status,
-        data: data,
-        delay: delay
-      });
-
-      if (option === defaultOption) {
-        stateItem.options.push(option);
-      }
-      sync();
-    },
-    //todo doc
-    upsertMany: function(items){
-      items.forEach(function(item) {
-        this.upsert(item);
-      }.bind(this));
-    },
-    deactivateAll: deactivateAll,
-    addScenario: function(scenario){
-      if (scenario && typeof scenario.name === 'string') {
-        _scenarios[scenario.name] = scenario;
-      } else {
-        throw 'addScnerio method expects a scenario object with name property';
-      }
-    },
-    addScenarios: function(scenarios){
-      angular.forEach(scenarios, this.addScenario);
-    },
-    getScenarios: function(){
-      return Object.keys(_scenarios);
-    },
-    getScenario: function(name){
-      console.log(name); 
-      if (!_scenarios[name]) {
-        return
-      }
-      console.log('return scenario', _scenarios[name].states); 
-      return _scenarios[name].states;
-    },
-    setActiveScenario: function(name){
-      this.deactivateAll();
-      this.getScenario(name).forEach(function(state){
-        upsertOption(state.name, state.option, true);
-      });
+    if (!state) {
+      console.log("cannot upsert - state is mandatory");
+      return;
     }
+
+    var stateItem = states.filter(function(_state) { return _state.name === state;})[0] || defaultState;
+
+    angular.extend(stateItem, {
+      name: state,
+      url: url || stateItem.url,
+      verb: verb,
+      options: stateItem.options || []
+    });
+
+
+    if (stateItem === defaultState) {
+      states.push(stateItem);
+    }
+
+    var option = stateItem.options.filter(function(_option) {return _option.name === name})[0] || defaultOption;
+
+    angular.extend(option, {
+      name: name,
+      status: status,
+      data: data,
+      delay: delay
+    });
+
+    if (option === defaultOption) {
+      stateItem.options.push(option);
+    }
+    sync();
+  }
+
+  function upsertMany(items){
+    items.forEach(function(item) {
+      this.upsert(item);
+    }.bind(this));
+  }
+
+  function addScenario(scenario){
+    if (scenario && typeof scenario.name === 'string') {
+      _scenarios[scenario.name] = scenario;
+    } else {
+      throw 'addScnerio method expects a scenario object with name property';
+    }
+  }
+
+  function addScenarios(scenarios){
+    angular.forEach(scenarios, this.addScenario);
+  }
+
+  function getScenarios(){
+    return Object.keys(_scenarios);
+  }
+
+  function getScenario(name){
+    console.log(name);
+    if (!_scenarios[name]) {
+      return
+    }
+    console.log('return scenario', _scenarios[name].states);
+    return _scenarios[name].states;
+  }
+
+  function setActiveScenario(name){
+    this.deactivateAll();
+    this.getScenario(name).forEach(function(state){
+      upsertOption(state.name, state.option, true);
+    });
+  }
+
+  return {
+    states: states,
+    active_states_option: [],
+    upsertOption: upsertOption,
+    fetchStates: fetchStates,
+    getState: getState,
+    addState: addState,
+    addStates: addStates,
+    upsert: upsert,
+    upsertMany: upsertMany,
+    deactivateAll: deactivateAll,
+    addScenario: addScenario,
+    addScenarios: addScenarios,
+    getScenarios: getScenarios,
+    getScenario: getScenario,
+    setActiveScenario: setActiveScenario
   };
 });
 
