@@ -8,7 +8,7 @@ Developed by Outbrain.
 
 #### Load Dependency scripts
 
-AngularJS v1.2+
+AngularJS (tested with v1.3)
 
 #### Load Leonardo scripts
 
