@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="icon" type="image/x-icon" href="public/leonardo.png">
   <link rel="stylesheet" media="all" href="public/docco.css" />
-  <link rel="stylesheet" media="all" href="public/leonardo/app.min.css" />
+  <link rel="stylesheet" media="all" href="public/leonardo/leonardo.min.css" />
 </head>
 <body activator>
   <div id="container">
@@ -37,6 +37,11 @@
                 
                 <a class="source" href="module.html">
                   module.js
+                </a>
+              
+                
+                <a class="source" href="storage.srv.html">
+                  storage.srv.js
                 </a>
               
                 
@@ -99,35 +104,49 @@ parameters… it just does something.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">windowBodyDirective</span><span class="hljs-params">($http, configuration)</span> </span>{
+            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>).directive(<span class="hljs-string">'leoWindowBody'</span>,
+    [<span class="hljs-string">'$http'</span>, <span class="hljs-string">'leoConfiguration'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">windowBodyDirective</span><span class="hljs-params">($http, leoConfiguration)</span> </span>{
   <span class="hljs-keyword">return</span> {
     restrict: <span class="hljs-string">'E'</span>,
     templateUrl: <span class="hljs-string">'window-body.html'</span>,
     scope: <span class="hljs-literal">true</span>,
     replace: <span class="hljs-literal">true</span>,
-    controller: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($scope)</span></span>{
+    controller: [<span class="hljs-string">'$scope'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($scope)</span></span>{
       $scope.selectedItem = <span class="hljs-string">'activate'</span>;
+      $scope.NothasUrl = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(option)</span></span>{
+        <span class="hljs-keyword">return</span> !option.url;
+      };
+      $scope.hasUrl = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(option)</span></span>{
+        <span class="hljs-keyword">return</span> !!option.url;
+      };
 
-      configuration.fetchStates().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(states)</span></span>{
-
-        $scope.states = states;
-        $scope.changeActive = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
-          <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"activate: "</span> + state.name + <span class="hljs-string">" "</span> + state.active);
-          configuration.upsertOption(state.name, state.activeOption.name, state.active);
-        };
-
-        states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
-          $scope.$watch(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
-            <span class="hljs-keyword">return</span> state.activeOption;
-          }, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(activeOption, oldValue)</span></span>{
-            <span class="hljs-keyword">if</span> (activeOption !== oldValue){
-              <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"select: "</span> + state.name + <span class="hljs-string">" "</span> + activeOption.name + <span class="hljs-string">" "</span> + state.active);
-              configuration.upsertOption(state.name, activeOption.name, state.active);
-            }
-          });
+      $scope.deactivate = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        $scope.states.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
+            state.active = <span class="hljs-literal">false</span>;
         });
-      });
-    },
+        leoConfiguration.deactivateAllStates();
+      };
+
+      $scope.updateState = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
+        <span class="hljs-keyword">if</span> (state.active) {
+          <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'activate state option:'</span> +  state.name + <span class="hljs-string">': '</span> + state.activeOption.name);
+          leoConfiguration.activateStateOption(state.name, state.activeOption.name);
+        } <span class="hljs-keyword">else</span> {
+          <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'deactivating state: '</span> +  state.name);
+          leoConfiguration.deactivateState(state.name);
+        }
+      };
+
+      $scope.states = leoConfiguration.getStates();
+
+      $scope.scenarios = leoConfiguration.getScenarios();
+
+      $scope.activateScenario = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(scenario)</span></span>{
+        $scope.activeScenario = scenario;
+        leoConfiguration.setActiveScenario(scenario);
+        $scope.states = leoConfiguration.getStates();
+      };
+    }],
     link: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(scope)</span> </span>{
       scope.test = {
         url: <span class="hljs-string">''</span>,
@@ -145,9 +164,7 @@ parameters… it just does something.</p>
       };
     }
   };
-}
-
-export <span class="hljs-keyword">default</span> windowBodyDirective</pre></div></div>
+}]);</pre></div></div>
             
         </li>
         
@@ -155,9 +172,6 @@ export <span class="hljs-keyword">default</span> windowBodyDirective</pre></div>
   </div>
   <script src='public/leonardo/angular.min.js'></script>
   <script src="public/leonardo/angular-mocks.js"></script>
-  <script src='public/leonardo/traceur-runtime.min.js'></script>
-  <script src="public/leonardo/leonardo.templates.min.js"></script>
-  <script src="public/leonardo/module.js"></script>
-  <script src="public/leonardo/index.js"></script>
+  <script src="public/leonardo/leonardo.js"></script>
 </body>
 </html>

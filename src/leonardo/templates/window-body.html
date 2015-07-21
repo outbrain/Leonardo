@@ -1,16 +1,21 @@
 <div class="leonardo-window-body">
-  <div class="tabs">
-    <div ng-click="selectedItem = 'configure'" ng-class="{ 'selected': selectedItem == 'configure' }">Configure</div>
-    <div ng-click="selectedItem = 'activate'" ng-class="{ 'selected': selectedItem == 'activate' }">Activate</div>
-    <div ng-click="selectedItem = 'test'" ng-class="{ 'selected': selectedItem == 'test' }">Test</div>
+  <div class="leonardo-scenario-nav">
+    <div class="leonardo-breadcrumbs">
+      SCENARIOS > {{activeScenario}}
+    </div>
+    <div class="leonardo-scenario-title">
+      SCENARIOS
+    </div>
   </div>
   <div ng-switch="selectedItem" class="leonardo-window-options">
     <div ng-switch-when="configure" class="leonardo-configure">
       <table>
         <thead>
-          <th>State</th>
-          <th>URL</th>
-          <th>Options</th>
+          <tr>
+            <th>State</th>
+            <th>URL</th>
+            <th>Options</th>
+          </tr>
         </thead>
         <tbody>
           <tr ng-repeat="state in states">
@@ -30,22 +35,46 @@
       </table>
     </div>
     <div ng-switch-when="activate" class="leonardo-activate">
+      <div class="leonardo-menu">
+        <ul>
+          <li ng-class="{ 'selected': scenario === activeScenario }" ng-repeat="scenario in scenarios" ng-click="activateScenario(scenario)">{{scenario}}</li>
+        </ul>
+      </div>
       <ul>
-        <li ng-repeat="state in ::states">
+        <li><h3>Non Ajax States</h3></li>
+        <li ng-repeat="state in states | filter:NothasUrl">
           <div>
             <div class="onoffswitch">
-              <input ng-model="state.active" ng-click="changeActive(state)" class="onoffswitch-checkbox" id="{{::state.name}}" type="checkbox" name="{{::state.name}}" value="{{::state.name}}">
-              <label class="onoffswitch-label" for="{{::state.name}}">
+              <input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}">
+              <label class="onoffswitch-label" for="{{state.name}}">
                 <span class="onoffswitch-inner"></span>
                 <span class="onoffswitch-switch"></span>
               </label>
             </div>
           </div>
           <div>
-            <h4>{{::state.name}}</h4>&nbsp;&nbsp; - {{::state.url}}
+            <h4>{{state.name}}</h4>
           </div>
           <div>
-            <select ng-model="state.activeOption" ng-options="option.name for option in ::state.options"></select>
+            <select ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="updateState(state)"></select>
+          </div>
+        </li>
+        <li><h3>Ajax States</h3></li>
+        <li ng-repeat="state in states | filter:hasUrl">
+          <div>
+            <div class="onoffswitch">
+              <input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}">
+              <label class="onoffswitch-label" for="{{state.name}}">
+                <span class="onoffswitch-inner"></span>
+                <span class="onoffswitch-switch"></span>
+              </label>
+            </div>
+          </div>
+          <div>
+            <h4>{{state.name}}</h4>&nbsp;&nbsp; - {{state.url}}
+          </div>
+          <div>
+            <select ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="updateState(state)"></select>
           </div>
         </li>
       </ul>

@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="icon" type="image/x-icon" href="public/leonardo.png">
   <link rel="stylesheet" media="all" href="public/docco.css" />
-  <link rel="stylesheet" media="all" href="public/leonardo/app.min.css" />
+  <link rel="stylesheet" media="all" href="public/leonardo/leonardo.min.css" />
 </head>
 <body activator>
   <div id="container">
@@ -40,6 +40,11 @@
                 </a>
               
                 
+                <a class="source" href="storage.srv.html">
+                  storage.srv.js
+                </a>
+              
+                
                 <a class="source" href="window-body.drv.html">
                   window-body.drv.js
                 </a>
@@ -68,14 +73,33 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>import activatorDirective from <span class="hljs-string">'./activator.drv.js'</span>;
-import configurationService from <span class="hljs-string">'./configuration.srv.js'</span>;
-import windowBodyDirective from <span class="hljs-string">'./window-body.drv.js'</span>;
-
-export <span class="hljs-keyword">default</span> angular.module(<span class="hljs-string">'leonardo'</span>, [<span class="hljs-string">'leonardo.templates'</span>, <span class="hljs-string">'ngMockE2E'</span>])
-  .factory(<span class="hljs-string">'configuration'</span>, configurationService)
-  .directive(<span class="hljs-string">'activator'</span>, activatorDirective)
-  .directive(<span class="hljs-string">'windowBody'</span>, windowBodyDirective);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>, [<span class="hljs-string">'leonardo.templates'</span>, <span class="hljs-string">'ngMockE2E'</span>])
+  <span class="hljs-comment">/* wrap $httpbackend with a proxy in order to support delaying its responses
+   * we are using the approach described in Endless Indirection:
+   * https://endlessindirection.wordpress.com/2013/05/18/angularjs-delay-response-from-httpbackend/
+   */</span>
+  .config([<span class="hljs-string">'$provide'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($provide)</span> </span>{
+    $provide.decorator(<span class="hljs-string">'$httpBackend'</span>, [<span class="hljs-string">'$delegate'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($delegate)</span> </span>{
+      <span class="hljs-keyword">var</span> proxy = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(method, url, data, callback, headers)</span> </span>{
+        <span class="hljs-keyword">var</span> interceptor = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-keyword">var</span> _this = <span class="hljs-keyword">this</span>,
+              _arguments = <span class="hljs-built_in">arguments</span>;
+          setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            callback.apply(_this, _arguments);
+          }, proxy.delay || <span class="hljs-number">0</span>);
+          proxy.delay = <span class="hljs-number">0</span>;
+        };
+        <span class="hljs-keyword">return</span> $delegate.call(<span class="hljs-keyword">this</span>, method, url, data, interceptor, headers);
+      };
+      <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> key <span class="hljs-keyword">in</span> $delegate) {
+        proxy[key] = $delegate[key];
+      }
+      proxy.setDelay = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(delay)</span> </span>{
+        proxy.delay = delay;
+      };
+      <span class="hljs-keyword">return</span> proxy;
+    }]);
+  }]);</pre></div></div>
             
         </li>
         
@@ -83,9 +107,6 @@ export <span class="hljs-keyword">default</span> angular.module(<span class="hlj
   </div>
   <script src='public/leonardo/angular.min.js'></script>
   <script src="public/leonardo/angular-mocks.js"></script>
-  <script src='public/leonardo/traceur-runtime.min.js'></script>
-  <script src="public/leonardo/leonardo.templates.min.js"></script>
-  <script src="public/leonardo/module.js"></script>
-  <script src="public/leonardo/index.js"></script>
+  <script src="public/leonardo/leonardo.js"></script>
 </body>
 </html>

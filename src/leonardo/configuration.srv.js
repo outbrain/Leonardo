@@ -1,139 +1,231 @@
-function configurationService($q, $httpBackend) {
-  var states = [];
-  var activeStates = {};
-  var stateReq = {};
+angular.module('leonardo').factory('leoConfiguration',
+    ['leoStorage', '$httpBackend', function(leoStorage, $httpBackend) {
+  var states = [],
+      _scenarios = {},
+      responseHandlers = {},
+      api = {
+        getState: getState,
+        getStates: fetchStates,
+        addState: addState,
+        addStates: addStates,
+        deactivateState: deactivateState,
+        deactivateAllStates: deactivateAll,
+        activateStateOption: activateStateOption,
+        addScenario: addScenario,
+        addScenarios: addScenarios,
+        getScenario: getScenario,
+        getScenarios: getScenarios,
+        setActiveScenario: setActiveScenario,
+        _requestSubmitted: requestSubmitted
+      };
+  return api;
 
-  var db = openDatabase("leonardo.db", '1.0', "Leonardo WebSQL Database", 2 * 1024 * 1024);
+  function upsertOption(state, name, active) {
+    var _states = leoStorage.getStates();
+    _states[state] = {
+      name: name || findStateOption(state).name,
+      active: active
+    };
 
-  db.transaction(function (tx) {
-    tx.executeSql("CREATE TABLE IF NOT EXISTS active_states_option (state PRIMARY KEY, name text, active text)");
+    leoStorage.setStates(_states);
+
     sync();
-  });
-
-  var upsertOption = function(state, name, active) {
-    db.transaction(function (tx) {
-      tx.executeSql("INSERT OR REPLACE into active_states_option (state, name, active) VALUES (?,?, ?)", [state, name, active]);
-      sync();
-    });
   }
 
-  var select = function() {
-    var defer = $q.defer();
-
-    db.transaction(function (tx) {
-      tx.executeSql("SELECT * from active_states_option", [], function(tx, results) {
-        defer.resolve(results.rows);
-      });
-    });
-
-    return defer.promise;
-  };
+  function fetchStatesByUrl(url){
+   return fetchStates().filter(function(state){
+    return state.url === url;
+   });
+  }
 
   function fetchStates(){
-    return select().then(function(rows){
-      for(var i = 0; i < rows.length; i++) {
-        activeStates[rows.item(i).state] = { name: rows.item(i).name, active: (rows.item(i).active === "true") };
-      }
-
-      var _states = states.map(state => angular.copy(state));
-
-      _states.forEach(function(state) {
-        let option = activeStates[state.name];
-        state.active = !!option && option.active;
-        state.activeOption = !!option ? state.options.find(_option => _option.name === option.name) : state.options[0];
-      });
-
-      return _states;
+    var activeStates = leoStorage.getStates();
+    var _states = states.map(function(state) {
+      return angular.copy(state);
     });
+
+    _states.forEach(function(state) {
+      var option = activeStates[state.name];
+      state.active = !!option && option.active;
+      state.activeOption = !!option ?
+        state.options.filter(function (_option) {
+          return _option.name === option.name;
+        })[0] : state.options[0];
+    });
+
+    return _states;
+  }
+
+  function deactivateAll() {
+    var _states = leoStorage.getStates();
+    Object.keys(_states).forEach(function(stateKey) {
+      _states[stateKey].active = false;
+    });
+    leoStorage.setStates(_states);
+
+    sync();
   }
 
   function findStateOption(name){
-    return fetchStates().then(function(states){
-      return states.find(state => state.name === name).activeOption;
-    });
-
+    return fetchStates().filter(function(state){ return state.name === name;})[0].activeOption;
   }
 
   function sync(){
-    return fetchStates().then(function(states) {
-      var defer = $q.defer();
-      var promise = defer.promise;
-      defer.resolve();
-      states.forEach(function (state) {
-        promise = promise.then(function(){
-          return findStateOption(state.name).then(function(option){
-            if (state.active)
-            {
-              stateReq[state.name].respond(function () {
-                return [option.status, option.data];
-              });
-            }
-            else {
-              stateReq[state.name].passThrough();
-            }
+    fetchStates().forEach(function (state) {
+      var option, responseHandler;
+      if (state.url) {
+        option = findStateOption(state.name);
+        responseHandler = getResponseHandler(state);
+        if (state.active) {
+          responseHandler.respond(function () {
+            $httpBackend.setDelay(option.delay);
+            return [option.status, angular.isFunction(option.data) ? option.data() : option.data];
           });
-        });
-      });
-
-      return promise;
+        } else {
+          responseHandler.passThrough();
+        }
+      }
     });
   }
 
-  var initialized = fetchStates().then(function(states) {
-    states.forEach(function (state) {
-      stateReq[state.name] = $httpBackend.when('GET', new RegExp(state.url));
-    });
-  });
-
-
-  return {
-    //configured states todo doc
-    states: states,
-    initialize: function(){
-      return initialized.then(sync);
-    },
-    //todo doc
-    active_states_option: [],
-    //todo doc
-    upsertOption: upsertOption,
-    //todo doc
-    fetchStates: fetchStates,
-    //insert or replace an option by insert or updateing a state.
-    upsert: function({ state, name, url, status = 200, data = {}, delay = 0}){
-      var defaultState = {};
-
-      var defaultOption = {};
-
-      var stateItem = states.find(_state => (url ? _state.url === url : _state.name === state)) || defaultState;
-
-      angular.extend(stateItem, {
-        name: state || stateItem.name || url,
-        url: url || stateItem.url,
-        options: stateItem.options || []
-      });
-
-      if (stateItem === defaultState) {
-        states.push(stateItem);
+  function getResponseHandler(state) {
+    if (!responseHandlers[state.url + '_' + state.verb]) {
+      if (state.verb === 'jsonp'){
+        responseHandlers[state.url + '_' + state.verb] = $httpBackend.whenJSONP(new RegExp(state.url));
       }
-
-      var option = stateItem.options.find(_option => _option.name === name) || defaultOption;
-
-      angular.extend(option, {
-        name: name,
-        status: status,
-        data: data,
-        delay: delay
-      });
-
-      if (option === defaultOption) {
-        stateItem.options.push(option);
+      else {
+        responseHandlers[state.url + '_' + state.verb] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
       }
-    },
-    //todo doc
-    upsertMany: function(items){
-      items.forEach(item => this.upsert(item));
     }
-  };
-}
+    return responseHandlers[state.url + '_' + state.verb];
+  }
 
-export default configurationService;
+  function getState(name){
+    var state = fetchStates().filter(function(state) { return state.name === name})[0];
+    return (state && state.active && findStateOption(name)) || null;
+  }
+
+  function addState(stateObj) {
+    stateObj.options.forEach(function (option) {
+      upsert({
+        state: stateObj.name,
+        url: stateObj.url,
+        verb: stateObj.verb,
+        name: option.name,
+        status: option.status,
+        data: option.data,
+        delay: option.delay
+      });
+    });
+  }
+
+  function addStates(statesArr) {
+    statesArr.forEach(function(stateObj) {
+      addState(stateObj);
+    });
+  }
+
+  //insert or replace an option by insert or updateing a state.
+  function upsert(stateObj) {
+    var verb = stateObj.verb || 'GET',
+        state = stateObj.state,
+        name = stateObj.name,
+        url = stateObj.url,
+        status = stateObj.status || 200,
+        data = stateObj.data || {},
+        delay = stateObj.delay || 0;
+    var defaultState = {};
+
+    var defaultOption = {};
+
+    if (!state) {
+      console.log("cannot upsert - state is mandatory");
+      return;
+    }
+
+    var stateItem = states.filter(function(_state) { return _state.name === state;})[0] || defaultState;
+
+    angular.extend(stateItem, {
+      name: state,
+      url: url || stateItem.url,
+      verb: verb,
+      options: stateItem.options || []
+    });
+
+
+    if (stateItem === defaultState) {
+      states.push(stateItem);
+    }
+
+    var option = stateItem.options.filter(function(_option) {return _option.name === name})[0] || defaultOption;
+
+    angular.extend(option, {
+      name: name,
+      status: status,
+      data: data,
+      delay: delay
+    });
+
+    if (option === defaultOption) {
+      stateItem.options.push(option);
+    }
+    sync();
+  }
+
+  function upsertMany(items){
+    items.forEach(function(item) {
+      upsert(item);
+    });
+  }
+
+  function addScenario(scenario){
+    if (scenario && typeof scenario.name === 'string') {
+      _scenarios[scenario.name] = scenario;
+    } else {
+      throw 'addScnerio method expects a scenario object with name property';
+    }
+  }
+
+  function addScenarios(scenarios){
+    angular.forEach(scenarios, addScenario);
+  }
+
+  function getScenarios(){
+    return Object.keys(_scenarios);
+  }
+
+  function getScenario(name){
+    console.log(name);
+    if (!_scenarios[name]) {
+      return
+    }
+    console.log('return scenario', _scenarios[name].states);
+    return _scenarios[name].states;
+  }
+
+  function setActiveScenario(name){
+    deactivateAll();
+    getScenario(name).forEach(function(state){
+      upsertOption(state.name, state.option, true);
+    });
+  }
+
+  function activateStateOption(state, optionName) {
+    upsertOption(state, optionName, true);
+  }
+
+  function deactivateState(state) {
+    upsertOption(state, null, false);
+  }
+
+  function requestSubmitted(requestConfig){
+    var state = fetchStatesByUrl(requestConfig.url)[0];
+    var handler = getResponseHandler(state || {
+        url: requestConfig.url,
+        verb:  requestConfig.method
+      });
+    if (!state) {
+      handler.passThrough();
+    }
+  }
+}]);

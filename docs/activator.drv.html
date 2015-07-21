@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="icon" type="image/x-icon" href="public/leonardo.png">
   <link rel="stylesheet" media="all" href="public/docco.css" />
-  <link rel="stylesheet" media="all" href="public/leonardo/app.min.css" />
+  <link rel="stylesheet" media="all" href="public/leonardo/leonardo.min.css" />
 </head>
 <body activator>
   <div id="container">
@@ -40,6 +40,11 @@
                 </a>
               
                 
+                <a class="source" href="storage.srv.html">
+                  storage.srv.js
+                </a>
+              
+                
                 <a class="source" href="window-body.drv.html">
                   window-body.drv.js
                 </a>
@@ -68,7 +73,7 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">activatorDirective</span><span class="hljs-params">($compile)</span> </span>{
+            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>).directive(<span class="hljs-string">'leoActivator'</span>, [<span class="hljs-string">'$compile'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">activatorDirective</span><span class="hljs-params">($compile)</span> </span>{
   <span class="hljs-keyword">return</span> {
     restrict: <span class="hljs-string">'A'</span>,
     link: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(scope, elem)</span> </span>{
@@ -76,8 +81,17 @@
 
       <span class="hljs-keyword">var</span> win = angular.element([
       <span class="hljs-string">'&lt;div class="leonardo-window"&gt;'</span>,
-        <span class="hljs-string">'&lt;div class="leonardo-header"&gt;Leonardo Configuration&lt;/div&gt;'</span>,
-          <span class="hljs-string">'&lt;window-body&gt;&lt;/window-body&gt;'</span>,
+        <span class="hljs-string">'&lt;div class="leonardo-header"&gt;'</span>,
+          <span class="hljs-string">'&lt;div class="menu"&gt;'</span>,
+            <span class="hljs-string">'&lt;ul&gt;'</span>,
+              <span class="hljs-string">'&lt;li class="logo"&gt;'</span>,
+                <span class="hljs-string">'&lt;div&gt;&lt;/div&gt;'</span>,
+              <span class="hljs-string">'&lt;/li&gt;'</span>, 
+              <span class="hljs-string">'&lt;li&gt;Scenarios&lt;/li&gt;'</span>, 
+            <span class="hljs-string">'&lt;/ul&gt;'</span>,
+          <span class="hljs-string">'&lt;/div&gt;'</span>,
+        <span class="hljs-string">'&lt;/div&gt;'</span>,
+        <span class="hljs-string">'&lt;leo-window-body&gt;&lt;/leo-window-body&gt;'</span>,
         <span class="hljs-string">'&lt;/div&gt;'</span>,
       <span class="hljs-string">'&lt;/div&gt;'</span>
       ].join(<span class="hljs-string">''</span>));
@@ -105,9 +119,7 @@
       };
     }
   };
-}
-
-export <span class="hljs-keyword">default</span> activatorDirective</pre></div></div>
+}]);</pre></div></div>
             
         </li>
         
@@ -115,9 +127,6 @@ export <span class="hljs-keyword">default</span> activatorDirective</pre></div><
   </div>
   <script src='public/leonardo/angular.min.js'></script>
   <script src="public/leonardo/angular-mocks.js"></script>
-  <script src='public/leonardo/traceur-runtime.min.js'></script>
-  <script src="public/leonardo/leonardo.templates.min.js"></script>
-  <script src="public/leonardo/module.js"></script>
-  <script src="public/leonardo/index.js"></script>
+  <script src="public/leonardo/leonardo.js"></script>
 </body>
 </html>

@@ -1,12 +1,41 @@
 .leonardo-activate {
-  ul {
+
+  border-top: 1px solid #cccccc;
+  display: flex;
+  height: 100%;
+
+  .leonardo-menu {
+    flex: 0.5;
+    border-right: 1px solid #cccccc;
+
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      border-width: 0 0 1px 0;
+      display: block;
+      padding: 10px 20px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: lighten(@orange, 30%);
+      }
+      &.selected {
+        background-color: @orange;
+      }
+    }
+  }
+
+  > ul {
+    flex: 3;
     list-style: none;
     display: table;
   }
 
   li {
     display: table-row;
-    height: 50px;
 
     > div {
       display: table-cell;
@@ -26,4 +55,5 @@
   select {
     width: 200px;
   }
+
 }

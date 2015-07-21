@@ -1,179 +1,53 @@
 <!DOCTYPE html>
 
-<html ng-app="example">
+<html ng-app="flicker-example" ng-strict-di>
 <head>
   <title>Leonardo Example</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
- <link rel="icon" type="image/x-icon" href="leonardo.png">
-  <link rel="stylesheet" media="all" href="docs/public/docco.css" />
-  <link rel="stylesheet" media="all" href="docs/public/leonardo/app.min.css" />
+
+
+  <link rel="icon" type="image/x-icon" href="leonardo.png">
+  <link rel="stylesheet" media="all" href="dist/leonardo.min.css" />
+
+  <style>
+    p, h4 { margin: 4px 0; max-height: 44px; overflow: hidden }
+    .clearfix:after { content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }
+    html[xmlns] .clearfix { display: block; }
+    * html .clearfix { height: 1%; }
+
+    .media-item { padding: 10px; border: 1px solid black; float: left; margin: 5px; position: relative; }
+    .media-item h2 { font-size: 12px; width: 100px; float: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .media-item img { float: left; border: 1px solid rgba(128, 128, 128, 0.5); }
+    .media-item-meta { position: absolute; bottom: 0; clear: both; }
+
+  </style>
 </head>
-<body activator>
-  <div id="container">
-    <div id="background"></div>
-    <ul id="jump_to">
-      <li>
-        <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
-        <a class="small" href="javascript:void(0);">+</a>
-        <div id="jump_wrapper">
-          <div id="jump_page_wrapper">
-            <div id="jump_page">
-              <a class="source" href="docs/module.html">
-                Leonardo - module.js
-              </a>
-            </div>
-          </div>
-        </div>
-      </li>
-    </ul>
-    <ul class="sections">
-        
-          <li id="title">
-              <div class="annotation">
-                  <h1>Leonardo Live Example</h1>
-              </div>
-          </li>
-        
-        
-        
-        <li id="section-1">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-1">&#182;</a>
-              </div>
-              
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-2">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              <h2 id="steps-stages">Steps Stages</h2>
+<body leo-activator class="pull-top">
+  <a href="https://github.com/outbrain/Leonardo">Github</a>
+  <a href="docs/module.html">Documentation</a>
+  <a href="http://plnkr.co/edit/w8oaELXwQldv6AeZjnhD?p=preview">Plunker</a>
+  <br/>
+  <a href="index.js">Example javascript source</a>
+  <a href="leonardo-mocking.js">Example mocking source</a>
 
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-3">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
-              </div>
-              <ul>
-<li>Add leonardo module as a dependancy to your app</li>
-<li>You done!</li>
-</ul>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>export <span class="hljs-keyword">default</span> angular.module(<span class="hljs-string">'example'</span>, [<span class="hljs-string">'leonardo'</span>])
-            .run(run);</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-4">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
-              </div>
-              <p>well almost…</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">run</span><span class="hljs-params">(configuration)</span></span>{</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-5">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
-              </div>
-              <h2 id="adding-states">Adding states</h2>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-6">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
-              <ul>
-<li>via api - you can look at the results by clicking leonardo and looking in the configure tab</li>
-<li>via ui - coming soon…</li>
-</ul>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  configuration.upsert({ state: <span class="hljs-string">'state1'</span>, name: <span class="hljs-string">'get url1 aaaa'</span>, url: <span class="hljs-string">'http://url1.com'</span>, status: <span class="hljs-number">200</span>, data: [<span class="hljs-string">"url1 aaa"</span>]});
-  configuration.upsertMany([
-    { state: <span class="hljs-string">'state1'</span>, name: <span class="hljs-string">'get url1 bbbb'</span>, status:<span class="hljs-number">200</span>,  data: [<span class="hljs-string">"url1 bbb"</span>]},
-    { url: <span class="hljs-string">'http://url1.com'</span>, name: <span class="hljs-string">'get url1 cccc'</span>, status:<span class="hljs-number">200</span>,  data: [<span class="hljs-string">"url1 ccc"</span>]},
-    { url: <span class="hljs-string">'http://url2.com'</span>, name: <span class="hljs-string">'get url2 a'</span>, status:<span class="hljs-number">200</span>,  data: [<span class="hljs-string">"url2 aaa"</span>]},
-    { url: <span class="hljs-string">'http://url2.com'</span>, name: <span class="hljs-string">'get url2 b'</span>, status:<span class="hljs-number">200</span>,  data: [<span class="hljs-string">"url2 bbb"</span>]}
-  ]);</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-7">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
-              </div>
-              <h2 id="setting-options">Setting options</h2>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-8">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
-              </div>
-              <ul>
-<li>via ui - click on leonardo and hit the activate tabs</li>
-<li>via api - coming soon…</li>
-</ul>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>
-  configuration.initialize().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
-      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Leonardo has initialized'</span>);
-  });
-}</pre></div></div>
-            
-        </li>
-        
-    </ul>
+  <div class="clearfix">
+    <div class="error" ng-show="error">Failed To Load</div>
+    <div class="media-item clearfix" ng-repeat="item in images">
+      <a ng-href="{{ item.page }}" target="_blank">
+        <img style="max-height: 300px; max-height: 300px" ng-src="{{ item.thumbnail }}" />
+      </a>
+      <div class="media-item-meta">
+        <h4>{{ item.title }}</h4>
+        <p>by {{ item.author }}</p>
+      </div>
+    </div>
   </div>
-  <script src='docs/public/leonardo/angular.min.js'></script>
-  <script src="docs/public/leonardo/angular-mocks.js"></script>
-  <script src='docs/public/leonardo/traceur-runtime.min.js'></script>
-  <script src="docs/public/leonardo/leonardo.templates.min.js"></script>
-  <script src="docs/public/leonardo/module.js"></script>
-  <script src="docs/public/leonardo/index.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-mocks.js"></script>
+  <script src="dist/leonardo.js"></script>
+  <script src="index.js"></script>
+  <script src="leonardo-mocking.js"></script>
 </body>
 </html>

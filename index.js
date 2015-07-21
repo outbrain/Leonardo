@@ -1,33 +1,52 @@
+"use strict";
 
-// Steps Stages
-// ----------------
-//* Add leonardo module as a dependancy to your app
-//* You done!
-export default angular.module('example', ['leonardo'])
-            .run(run);
+var Flicker = angular.module('flicker-example', ["leonardo"])
+  .config(['$locationProvider', function ($locationProvider) {
+    $locationProvider.html5Mode(false);
+  }])
+  .run(['$rootScope','flickerGetter', function($rootScope, flickerGetter){
+    flickerGetter.getData().then(function(data){
+      $rootScope.images = data;
+    });
+  }]);
 
-//well almost...
-function run(configuration){
+Flicker.factory('flickerGetter', ['$q', '$http', function ($q, $http) {
+  return {
+    getData: function () {
+      var defer = $q.defer();
 
-  // Adding states
-  // ----------------
-  //* via api - you can look at the results by clicking leonardo and looking in the configure tab
-  //* via ui - coming soon...
-  configuration.upsert({ state: 'state1', name: 'get url1 aaaa', url: 'http://url1.com', status: 200, data: ["url1 aaa"]});
-  configuration.upsertMany([
-    { state: 'state1', name: 'get url1 bbbb', status:200,  data: ["url1 bbb"]},
-    { url: 'http://url1.com', name: 'get url1 cccc', status:200,  data: ["url1 ccc"]},
-    { url: 'http://url2.com', name: 'get url2 a', status:200,  data: ["url2 aaa"]},
-    { url: 'http://url2.com', name: 'get url2 b', status:200,  data: ["url2 bbb"]}
-  ]);
+      $http.jsonp(' http://api.flickr.com/services/feeds/photos_public.gne', {
+        method: 'jsonp',
+        params: {
+          group_id: 'tmnt',
+          format: 'json',
+          jsoncallback: 'JSON_CALLBACK'
+        }
+      }).success(function (data) {
+        data = data.items.map(function (item) {
+          var author,
+            thumbnail = item.media.m;
 
+          angular.forEach(['m.jpg', 'm.gif', 'm.png'], function (item) {
+            thumbnail = thumbnail.replace(item, 't.' + item.split('.')[1]);
+          });
 
-  // Setting options
-  // ----------------
-  //* via ui - click on leonardo and hit the activate tabs
-  //* via api - coming soon...
+          author = item.author.split(' ')[1];
+          return {
+            author_id: item.author_id,
+            media: item.media,
+            page: item.link,
+            title: item.title.length > 60 ? item.title.substr(0, 50) + '...' : item.title,
+            author: author,
+            thumbnail: thumbnail
+          };
+        });
+        defer.resolve(data);
+      }).error(function () {
+        defer.resolve();
+      });
 
-  configuration.initialize().then(function(){
-      console.log('Leonardo has initialized');
-  });
-}
+      return defer.promise;
+    }
+  };
+}]);
