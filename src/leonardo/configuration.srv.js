@@ -1,8 +1,3 @@
-
-angular.module('leonardo').run(["$http", "leoConfiguration", function($http, leoConfiguration){
-  $http.setActivator(leoConfiguration);
-}]);
-
 angular.module('leonardo').factory('leoConfiguration',
     ['leoStorage', '$httpBackend', function(leoStorage, $httpBackend) {
   var states = [],

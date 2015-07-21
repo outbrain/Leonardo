@@ -15,8 +15,7 @@ Flicker.factory('flickerGetter', ['$q', '$http', function ($q, $http) {
     getData: function () {
       var defer = $q.defer();
 
-      $http({
-        url: 'http://api.flickr.com/services/feeds/photos_public.gne',
+      $http.jsonp(' http://api.flickr.com/services/feeds/photos_public.gne', {
         method: 'jsonp',
         params: {
           group_id: 'tmnt',

@@ -8,7 +8,7 @@ angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
       var proxy = function(method, url, data, callback, headers) {
         var interceptor = function() {
           var _this = this,
-              _arguments = arguments;
+            _arguments = arguments;
           setTimeout(function() {
             callback.apply(_this, _arguments);
           }, proxy.delay || 0);
@@ -16,12 +16,59 @@ angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
         };
         return $delegate.call(this, method, url, data, interceptor, headers);
       };
+
       for(var key in $delegate) {
-        proxy[key] = $delegate[key];
+        if ($delegate.hasOwnProperty(key)) {
+          proxy[key] = $delegate[key];
+        }
       }
+
       proxy.setDelay = function(delay) {
         proxy.delay = delay;
       };
+
+      return proxy;
+    }]);
+
+    $provide.decorator('$http', ['leoConfiguration', '$delegate', function(leoConfiguration, $delegate) {
+      var proxy = function(requestConfig) {
+        leoConfiguration._requestSubmitted(requestConfig);
+        return $delegate.call(this, requestConfig);
+      };
+
+      for(var key in $delegate) {
+        if ($delegate.hasOwnProperty(key)) {
+          proxy[key] = $delegate[key];
+        }
+      }
+
+      createShortMethodsWithData('post', 'put', 'patch');
+
+      createShortMethods('get', 'delete', 'head', 'jsonp');
+
+      function createShortMethods() {
+        angular.forEach(arguments, function(name) {
+          proxy[name] = function(url, config) {
+            return proxy(angular.extend({}, config || {}, {
+              method: name,
+              url: url
+            }));
+          };
+        });
+      }
+
+      function createShortMethodsWithData() {
+        angular.forEach(arguments, function(name) {
+          proxy[name] = function(url, data, config) {
+            return proxy(angular.extend({}, config || {}, {
+              method: name,
+              url: url,
+              data: data
+            }));
+          };
+        });
+      }
+
       return proxy;
     }]);
   }]);
@@ -32,7 +79,6 @@ angular.module('leonardo').factory('leoConfiguration',
   var states = [],
       _scenarios = {},
       responseHandlers = {},
-      self = this,
       api = {
         getState: getState,
         getStates: fetchStates,
@@ -45,7 +91,8 @@ angular.module('leonardo').factory('leoConfiguration',
         addScenarios: addScenarios,
         getScenario: getScenario,
         getScenarios: getScenarios,
-        setActiveScenario: setActiveScenario
+        setActiveScenario: setActiveScenario,
+        _requestSubmitted: requestSubmitted
       };
   return api;
 
@@ -59,6 +106,12 @@ angular.module('leonardo').factory('leoConfiguration',
     leoStorage.setStates(_states);
 
     sync();
+  }
+
+  function fetchStatesByUrl(url){
+   return fetchStates().filter(function(state){
+    return state.url === url;
+   });
   }
 
   function fetchStates(){
@@ -112,15 +165,15 @@ angular.module('leonardo').factory('leoConfiguration',
   }
 
   function getResponseHandler(state) {
-    if (!responseHandlers[state.name]) {
+    if (!responseHandlers[state.url + '_' + state.verb]) {
       if (state.verb === 'jsonp'){
-        responseHandlers[state.name] = $httpBackend.whenJSONP(new RegExp(state.url));
+        responseHandlers[state.url + '_' + state.verb] = $httpBackend.whenJSONP(new RegExp(state.url));
       }
       else {
-        responseHandlers[state.name] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
+        responseHandlers[state.url + '_' + state.verb] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
       }
     }
-    return responseHandlers[state.name];
+    return responseHandlers[state.url + '_' + state.verb];
   }
 
   function getState(name){
@@ -197,7 +250,7 @@ angular.module('leonardo').factory('leoConfiguration',
 
   function upsertMany(items){
     items.forEach(function(item) {
-      self.upsert(item);
+      upsert(item);
     });
   }
 
@@ -210,7 +263,7 @@ angular.module('leonardo').factory('leoConfiguration',
   }
 
   function addScenarios(scenarios){
-    angular.forEach(scenarios, self.addScenario);
+    angular.forEach(scenarios, addScenario);
   }
 
   function getScenarios(){
@@ -227,8 +280,8 @@ angular.module('leonardo').factory('leoConfiguration',
   }
 
   function setActiveScenario(name){
-    self.deactivateAll();
-    self.getScenario(name).forEach(function(state){
+    deactivateAll();
+    getScenario(name).forEach(function(state){
       upsertOption(state.name, state.option, true);
     });
   }
@@ -241,6 +294,16 @@ angular.module('leonardo').factory('leoConfiguration',
     upsertOption(state, null, false);
   }
 
+  function requestSubmitted(requestConfig){
+    var state = fetchStatesByUrl(requestConfig.url)[0];
+    var handler = getResponseHandler(state || {
+        url: requestConfig.url,
+        verb:  requestConfig.method
+      });
+    if (!state) {
+      handler.passThrough();
+    }
+  }
 }]);
 
 angular.module('leonardo').factory('leoStorage', function storageService() {
