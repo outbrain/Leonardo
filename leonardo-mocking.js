@@ -1,4 +1,4 @@
-angular.module('leonardo').run(function(leoConfiguration){
+angular.module('leonardo').run(['leoConfiguration', function(leoConfiguration) {
   leoConfiguration.addStates([
     {
       name: 'flicker-images',
@@ -53,4 +53,19 @@ angular.module('leonardo').run(function(leoConfiguration){
       ]
     }
   ]);
-});
+
+  leoConfiguration.addScenario({
+      name: 'flicker-images',
+      states: [
+        'get ninja turtles'
+      ]
+  });
+
+  leoConfiguration.addScenario({
+      name: 'reneissance artists',
+      states: [
+        'get ninja turtles'
+      ]
+  });
+
+}]);

@@ -3,16 +3,32 @@ angular.module('leonardo').run(function($http, leoConfiguration){
   $http.setActivator(leoConfiguration);
 });
 
-angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $httpBackend, $http) {
+angular.module('leonardo').factory('leoConfiguration',
+    ['leoStorage', '$httpBackend', '$http', function(leoStorage, $httpBackend, $http) {
   var states = [],
-    _scenarios = {},
-    responseHandlers = {};
+      _scenarios = {},
+      responseHandlers = {},
+      api = {
+        getState: getState,
+        getStates: fetchStates,
+        addState: addState,
+        addStates: addStates,
+        deactivateState: deactivateState,
+        deactivateAllStates: deactivateAll,
+        activateStateOption: activateStateOption,
+        addScenario: addScenario,
+        addScenarios: addScenarios,
+        getScenario: getScenario,
+        getScenarios: getScenarios,
+        setActiveScenario: setActiveScenario,
+        _requestSubmitted: requestSubmitted
+      };
+  return api;
 
-
-  var upsertOption = function(state, name, active) {
+  function upsertOption(state, name, active) {
     var _states = leoStorage.getStates();
     _states[state] = {
-      name: name,
+      name: name || findStateOption(state).name,
       active: active
     };
 
@@ -89,126 +105,132 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
     return responseHandlers[state.url + '_' + state.verb];
   }
 
-  return {
-    //configured states todo doc
-    states: states,
-    //todo doc
-    active_states_option: [],
-    //todo doc
-    upsertOption: upsertOption,
-    //todo doc
-    fetchStates: fetchStates,
-    getState: function(name){
-      var state = fetchStates().filter(function(state) { return state.name === name})[0];
-      return (state && state.active && findStateOption(name)) || null;
-    },
-    addState: function(stateObj) {
-      stateObj.options.forEach(function (option) {
-        this.upsert({
-          state: stateObj.name,
-          url: stateObj.url,
-          verb: stateObj.verb,
-          name: option.name,
-          status: option.status,
-          data: option.data,
-          delay: option.delay
-        });
-      }.bind(this));
-    },
-    addStates: function(statesArr) {
-      statesArr.forEach(function(stateObj) {
-        this.addState(stateObj);
-      }.bind(this));
-    },
-    //insert or replace an option by insert or updateing a state.
-    upsert: function(stateObj) {
-      var verb = stateObj.verb || 'GET',
-          state = stateObj.state,
-          name = stateObj.name,
-          url = stateObj.url,
-          status = stateObj.status || 200,
-          data = stateObj.data || {},
-          delay = stateObj.delay || 0;
-      var defaultState = {};
+  function getState(name){
+    var state = fetchStates().filter(function(state) { return state.name === name})[0];
+    return (state && state.active && findStateOption(name)) || null;
+  }
 
-      var defaultOption = {};
-
-      if (!state) {
-        console.log("cannot upsert - state is mandatory");
-        return;
-      }
-
-      var stateItem = states.filter(function(_state) { return _state.name === state;})[0] || defaultState;
-
-      angular.extend(stateItem, {
-        name: state,
-        url: url || stateItem.url,
-        verb: verb,
-        options: stateItem.options || []
+  function addState(stateObj) {
+    stateObj.options.forEach(function (option) {
+      upsert({
+        state: stateObj.name,
+        url: stateObj.url,
+        verb: stateObj.verb,
+        name: option.name,
+        status: option.status,
+        data: option.data,
+        delay: option.delay
       });
+    });
+  }
+
+  function addStates(statesArr) {
+    statesArr.forEach(function(stateObj) {
+      addState(stateObj);
+    });
+  }
+
+  //insert or replace an option by insert or updateing a state.
+  function upsert(stateObj) {
+    var verb = stateObj.verb || 'GET',
+        state = stateObj.state,
+        name = stateObj.name,
+        url = stateObj.url,
+        status = stateObj.status || 200,
+        data = stateObj.data || {},
+        delay = stateObj.delay || 0;
+    var defaultState = {};
+
+    var defaultOption = {};
+
+    if (!state) {
+      console.log("cannot upsert - state is mandatory");
+      return;
+    }
+
+    var stateItem = states.filter(function(_state) { return _state.name === state;})[0] || defaultState;
+
+    angular.extend(stateItem, {
+      name: state,
+      url: url || stateItem.url,
+      verb: verb,
+      options: stateItem.options || []
+    });
 
 
-      if (stateItem === defaultState) {
-        states.push(stateItem);
-      }
+    if (stateItem === defaultState) {
+      states.push(stateItem);
+    }
 
-      var option = stateItem.options.filter(function(_option) {return _option.name === name})[0] || defaultOption;
+    var option = stateItem.options.filter(function(_option) {return _option.name === name})[0] || defaultOption;
 
-      angular.extend(option, {
-        name: name,
-        status: status,
-        data: data,
-        delay: delay
-      });
+    angular.extend(option, {
+      name: name,
+      status: status,
+      data: data,
+      delay: delay
+    });
 
-      if (option === defaultOption) {
-        stateItem.options.push(option);
-      }
-      sync();
-    },
-    //todo doc
-    upsertMany: function(items){
-      items.forEach(function(item) {
-        this.upsert(item);
-      }.bind(this));
-    },
-    deactivateAll: deactivateAll,
-    addScenario: function(scenario){
-      if (scenario && typeof scenario.name === 'string') {
-        _scenarios[scenario.name] = scenario;
-      } else {
-        throw 'addScnerio method expects a scenario object with name property';
-      }
-    },
-    addScenarios: function(scenarios){
-      angular.forEach(scenarios, this.addScenario);
-    },
-    getScenarios: function(){
-      return Object.keys(_scenarios);
-    },
-    getScenario: function(name){
-      console.log(name); 
-      if (!_scenarios[name]) {
-        return
-      }
-      console.log('return scenario', _scenarios[name].states); 
-      return _scenarios[name].states;
-    },
-    setActiveScenario: function(name){
-      this.deactivateAll();
-      this.getScenario(name).forEach(function(state){
-        upsertOption(state.name, state.option, true);
-      });
-    },
-    requestSubmitted: function(requestConfig){
-      var state = fetchStatesByUrl(requestConfig.url)[0];
-      var handler = getResponseHandler(state || {
+    if (option === defaultOption) {
+      stateItem.options.push(option);
+    }
+    sync();
+  }
+
+  function upsertMany(items){
+    items.forEach(function(item) {
+      upsert(item);
+    });
+  }
+
+  function addScenario(scenario){
+    if (scenario && typeof scenario.name === 'string') {
+      _scenarios[scenario.name] = scenario;
+    } else {
+      throw 'addScnerio method expects a scenario object with name property';
+    }
+  }
+
+  function addScenarios(scenarios){
+    angular.forEach(scenarios, addScenario);
+  }
+
+  function getScenarios(){
+    return Object.keys(_scenarios);
+  }
+
+  function getScenario(name){
+    console.log(name);
+    if (!_scenarios[name]) {
+      return
+    }
+    console.log('return scenario', _scenarios[name].states);
+    return _scenarios[name].states;
+  }
+
+  function setActiveScenario(name){
+    deactivateAll();
+    getScenario(name).forEach(function(state){
+      upsertOption(state.name, state.option, true);
+    });
+  }
+
+  function activateStateOption(state, optionName) {
+    upsertOption(state, optionName, true);
+  }
+
+  function deactivateState(state) {
+    upsertOption(state, null, false);
+  }
+
+  function requestSubmitted(requestConfig){
+    var state = fetchStatesByUrl(requestConfig.url)[0];
+    var handler = getResponseHandler(state || {
         url: requestConfig.url,
         verb:  requestConfig.method
       });
-      if (!state) {
-        handler.passThrough();
-      }
+    if (!state) {
+      handler.passThrough();
     }
-  };
-});
+  }
+}]);
