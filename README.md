@@ -8,17 +8,20 @@ Developed by Outbrain.
 
 #### Load Dependency scripts
 
-AngularJS (tested with v1.3)
+Angular (tested with v1.3)
+Angular Mocks module  (tested with v1.3)
 
-#### Load Leonardo script and it's dependancies
+#### Load Leonardo script
 
 ```html
 <!DOCTYPE HTML>
 <html>
 <body ng-app="app">
   //.....
-  <script src="[bower_componenets|node_modules|other]/leonardos/leonardos.js"></script>
+  <script src="[bower_componenets|node_modules|other]/angular/angular.js"></script>
   <script src="[bower_componenets|node_modules|other]/angular-mocks/angular-mocks.js"></script>
+  //.....
+  <script src="[bower_componenets|node_modules|other]/leonardos/leonardos.js"></script>
 </body>
 </html>
 ```
