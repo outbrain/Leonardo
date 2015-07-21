@@ -78,6 +78,8 @@
     _scenarios = {},
     responseHandlers = {};
 
+  $httpBackend.when(<span class="hljs-string">'*'</span>).passThrough();
+  
   <span class="hljs-keyword">var</span> upsertOption = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state, name, active)</span> </span>{
     <span class="hljs-keyword">var</span> _states = leoStorage.getStates();
     _states[state] = {

@@ -1,7 +1,13 @@
-angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $httpBackend) {
+
+angular.module('leonardo').run(function($http, leoConfiguration){
+  $http.setActivator(leoConfiguration);
+});
+
+angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $httpBackend, $http) {
   var states = [],
     _scenarios = {},
     responseHandlers = {};
+
 
   var upsertOption = function(state, name, active) {
     var _states = leoStorage.getStates();
@@ -13,7 +19,13 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
     leoStorage.setStates(_states);
 
     sync();
-  };
+  }
+
+  function fetchStatesByUrl(url){
+   return fetchStates().filter(function(state){
+    return state.url === url;
+   });
+  }
 
   function fetchStates(){
     var activeStates = leoStorage.getStates();
@@ -66,15 +78,15 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
   }
 
   function getResponseHandler(state) {
-    if (!responseHandlers[state.name]) {
+    if (!responseHandlers[state.url + '_' + state.verb]) {
       if (state.verb === 'jsonp'){
-        responseHandlers[state.name] = $httpBackend.whenJSONP(new RegExp(state.url));
+        responseHandlers[state.url + '_' + state.verb] = $httpBackend.whenJSONP(new RegExp(state.url));
       }
       else {
-        responseHandlers[state.name] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
+        responseHandlers[state.url + '_' + state.verb] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
       }
     }
-    return responseHandlers[state.name];
+    return responseHandlers[state.url + '_' + state.verb];
   }
 
   return {
@@ -187,6 +199,16 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
       this.getScenario(name).forEach(function(state){
         upsertOption(state.name, state.option, true);
       });
+    },
+    requestSubmitted: function(requestConfig){
+      var state = fetchStatesByUrl(requestConfig.url)[0];
+      var handler = getResponseHandler(state || {
+        url: requestConfig.url,
+        verb:  requestConfig.method
+      });
+      if (!state) {
+        handler.passThrough();
+      }
     }
   };
 });

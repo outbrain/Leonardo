@@ -16,13 +16,7 @@
     html[xmlns] .clearfix { display: block; }
     * html .clearfix { height: 1%; }
 
-    body { background: cornflowerblue; font-size: 12px }
-    body .main-view  h1 { text-align: center; font-size: 6em; color: white; font-family: 'Helvetica Neue', helvetica, arial, verdana, sans-serif; text-shadow: rgba(0, 0, 0, 0.247059) 0px 1px 1px;}
-    body .main-view > div { background: white; margin: auto auto; width: 698px; padding: 5px; border: 1px solid gray; min-height: 300px; }
-
-    .error { text-align: center; font-size: 24px; color: Red; vertical-align: middle; padding: 130px }
-
-    .media-item { height: 200px; width: 200px; padding: 10px; border: 1px solid black; float: left; margin: 5px; position: relative; }
+    .media-item { padding: 10px; border: 1px solid black; float: left; margin: 5px; position: relative; }
     .media-item h2 { font-size: 12px; width: 100px; float: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .media-item img { float: left; border: 1px solid rgba(128, 128, 128, 0.5); }
     .media-item-meta { position: absolute; bottom: 0; clear: both; }
@@ -41,7 +35,7 @@
     <div class="error" ng-show="error">Failed To Load</div>
     <div class="media-item clearfix" ng-repeat="item in images">
       <a ng-href="{{ item.page }}" target="_blank">
-        <img ng-src="{{ item.thumbnail }}" />
+        <img style="max-height: 300px; max-height: 300px" ng-src="{{ item.thumbnail }}" />
       </a>
       <div class="media-item-meta">
         <h4>{{ item.title }}</h4>

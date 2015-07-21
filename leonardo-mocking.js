@@ -17,7 +17,7 @@ angular.module('leonardo').run(function(leoConfiguration){
               {
                 "title": " ",
                 "link": "http://www.flickr.com/photos/96262590@N07/19233636364/",
-                "media": {"m":"http://farm1.staticflickr.com/504/19233636364_4c716652b0_m.jpg"},
+                "media": {"m":"https://c1.staticflickr.com/1/507/19029348913_f643c33350_h.jpg"},
                 "date_taken": "2015-07-20T08:21:12-08:00",
                 "description": " <p><a href=\"http://www.flickr.com/people/96262590@N07/\">tranvhoa96<\/a> posted a photo:<\/p> <p><a href=\"http://www.flickr.com/photos/96262590@N07/19233636364/\" title=\" \"><img src=\"http://farm1.staticflickr.com/504/19233636364_4c716652b0_m.jpg\" width=\"240\" height=\"240\" alt=\" \" /><\/a><\/p> ",
                 "published": "2015-07-20T12:15:11Z",

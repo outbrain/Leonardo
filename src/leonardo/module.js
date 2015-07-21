@@ -25,5 +25,24 @@ angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
       };
       return proxy;
     });
+
+    $provide.decorator('$http', function($delegate) {
+      var activator;
+
+      var proxy = function(requestConfig) {
+        debugger;
+        activator.requestSubmitted(requestConfig);
+        return $delegate.call(this, requestConfig);
+      };
+      for(var key in $delegate) {
+        proxy[key] = $delegate[key];
+      }
+
+      proxy.setActivator = function(_activator){
+        activator = _activator;
+      };
+
+      return proxy;
+    });
   });
 
