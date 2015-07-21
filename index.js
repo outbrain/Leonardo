@@ -38,7 +38,6 @@ Flicker.factory('flickerGetter', ['$q', '$http', function ($q, $http) {
             page: item.link,
             title: item.title.length > 60 ? item.title.substr(0, 50) + '...' : item.title,
             author: author,
-            date_taken: moment(item.date_taken).format("MMM Do YYYY"),
             thumbnail: thumbnail
           };
         });
