@@ -1,7 +1,7 @@
 ![Leonardo logo](extension/images/leonardo.png)  Leonardo Docs 
 =============
 
-Mocking made simple and consistent.
+Mocking and testing made simple and consistent.
 Developed by Outbrain.
 
 ## Requirements 
