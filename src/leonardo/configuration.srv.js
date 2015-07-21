@@ -3,11 +3,14 @@ angular.module('leonardo').factory('leoConfiguration',
   var states = [],
       _scenarios = {},
       responseHandlers = {},
+      // Core API
+      // ----------------
       api = {
-        getState: getState,
-        getStates: fetchStates,
+        // Add a new state which you wish to mock - there a two types of states - one with url and one without.
         addState: addState,
         addStates: addStates,
+        getState: getState,
+        getStates: fetchStates,
         deactivateState: deactivateState,
         deactivateAllStates: deactivateAll,
         activateStateOption: activateStateOption,
@@ -16,6 +19,7 @@ angular.module('leonardo').factory('leoConfiguration',
         getScenario: getScenario,
         getScenarios: getScenarios,
         setActiveScenario: setActiveScenario,
+        //Private api for passing through unregistered urls to $htto
         _requestSubmitted: requestSubmitted
       };
   return api;
@@ -125,7 +129,6 @@ angular.module('leonardo').factory('leoConfiguration',
     });
   }
 
-  //insert or replace an option by insert or updateing a state.
   function upsert(stateObj) {
     var verb = stateObj.verb || 'GET',
         state = stateObj.state,
