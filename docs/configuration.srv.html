@@ -78,7 +78,6 @@
   <span class="hljs-keyword">var</span> states = [],
       _scenarios = {},
       responseHandlers = {},
-      self = <span class="hljs-keyword">this</span>,
       api = {
         getState: getState,
         getStates: fetchStates,
@@ -255,7 +254,7 @@
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">upsertMany</span><span class="hljs-params">(items)</span></span>{
     items.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(item)</span> </span>{
-      self.upsert(item);
+      upsert(item);
     });
   }
 
@@ -268,7 +267,7 @@
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addScenarios</span><span class="hljs-params">(scenarios)</span></span>{
-    angular.forEach(scenarios, self.addScenario);
+    angular.forEach(scenarios, addScenario);
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getScenarios</span><span class="hljs-params">()</span></span>{
@@ -285,8 +284,8 @@
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setActiveScenario</span><span class="hljs-params">(name)</span></span>{
-    self.deactivateAll();
-    self.getScenario(name).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
+    deactivateAll();
+    getScenario(name).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
       upsertOption(state.name, state.option, <span class="hljs-literal">true</span>);
     });
   }

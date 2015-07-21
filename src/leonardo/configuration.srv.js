@@ -3,7 +3,6 @@ angular.module('leonardo').factory('leoConfiguration',
   var states = [],
       _scenarios = {},
       responseHandlers = {},
-      self = this,
       api = {
         getState: getState,
         getStates: fetchStates,
@@ -168,7 +167,7 @@ angular.module('leonardo').factory('leoConfiguration',
 
   function upsertMany(items){
     items.forEach(function(item) {
-      self.upsert(item);
+      upsert(item);
     });
   }
 
@@ -181,7 +180,7 @@ angular.module('leonardo').factory('leoConfiguration',
   }
 
   function addScenarios(scenarios){
-    angular.forEach(scenarios, self.addScenario);
+    angular.forEach(scenarios, addScenario);
   }
 
   function getScenarios(){
@@ -198,8 +197,8 @@ angular.module('leonardo').factory('leoConfiguration',
   }
 
   function setActiveScenario(name){
-    self.deactivateAll();
-    self.getScenario(name).forEach(function(state){
+    deactivateAll();
+    getScenario(name).forEach(function(state){
       upsertOption(state.name, state.option, true);
     });
   }
