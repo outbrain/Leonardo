@@ -1,6 +1,6 @@
 "use strict";
 
-var Flicker = angular.module('flicker-example', ["leonardo"])
+var Flicker = angular.module('flicker-example', ['leonardo','akoenig.deckgrid'])
   .config(function ($locationProvider) {
     $locationProvider.html5Mode(false);
   })
@@ -8,7 +8,8 @@ var Flicker = angular.module('flicker-example', ["leonardo"])
     $scope.loadClicked = function () {
       $scope.loading = true;
       flickerGetter.getData().then(function(data){
-        $scope.images = data;
+        $scope.photos = data;
+        console.log(data);
         $scope.loading = false;
       }, function () {
         $scope.loading = false;
@@ -30,10 +31,10 @@ Flicker.factory('flickerGetter', function ($q, $http) {
       }).success(function (data) {
         data = data.items.map(function (item) {
           var author,
-            thumbnail = item.media.m;
+            imageUrl = item.media.m;
 
           angular.forEach(['m.jpg', 'm.gif', 'm.png'], function (item) {
-            thumbnail = thumbnail.replace(item, 't.' + item.split('.')[1]);
+            imageUrl = imageUrl.replace(item, 'b.' + item.split('.')[1]);
           });
 
           author = item.author.split(' ')[1];
@@ -44,7 +45,7 @@ Flicker.factory('flickerGetter', function ($q, $http) {
             title: item.title.length > 60 ? item.title.substr(0, 50) + '...' : item.title,
             author: author,
             date_taken: moment(item.date_taken).format("MMM Do YYYY"),
-            thumbnail: thumbnail
+            imageUrl: imageUrl
           };
         });
         defer.resolve(data);

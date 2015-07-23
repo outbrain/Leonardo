@@ -16,7 +16,7 @@
     html[xmlns] .clearfix { display: block; }
     * html .clearfix { height: 1%; }
 
-    body { background: cornflowerblue; font-size: 12px }
+    body {font-size:12px}
     body .main-view  h1 { text-align: center; font-size: 6em; color: white; font-family: 'Helvetica Neue', helvetica, arial, verdana, sans-serif; text-shadow: rgba(0, 0, 0, 0.247059) 0px 1px 1px;}
     body .main-view > div { background: white; margin: auto auto; width: 698px; padding: 5px; border: 1px solid gray; min-height: 300px; }
 
@@ -26,28 +26,48 @@
     .media-item h2 { font-size: 12px; width: 100px; float: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .media-item img { float: left; border: 1px solid rgba(128, 128, 128, 0.5); }
     .media-item-meta { position: absolute; bottom: 0; clear: both; }
+    .load-container {text-align:center;position:fixed;top:50%;left:50%;}
+    .deckgrid {margin-left: auto;margin-right: auto}
+    .deckgrid[deckgrid]::before {content: '5 .column.column-1-5';font-size: 0;visibility: hidden;}
+    .deckgrid .column {float: left;}
+    .deckgrid .column-1-5 {width: 20%;}
+    .deckgrid img{width:100%;}
+    .deckgrid .photo-description {display: none;}
+    nav li {display:inline-block;float:left;padding;10px;}
+    nav ul {text-align:center;}
+
 
   </style>
 </head>
 <body leo-activator  ng-controller="flickerCtrl">
-  <a href="https://github.com/outbrain/Leonardo">Github</a>
-  <a href="docs/module.html">Documentation</a>
-  <a href="http://plnkr.co/edit/w8oaELXwQldv6AeZjnhD?p=preview">Plunker</a>
-  <br/>
-  <a href="index.js">Example javascript source</a>
-  <a href="leonardo-mocking.js">Example mocking source</a>
+  <nav>
+    <ul>
+      <li><a href="https://github.com/outbrain/Leonardo">Github</a></li>
+      <li><a href="docs/module.html">Documentation</a></li>
+      <li><a href="http://plnkr.co/edit/w8oaELXwQldv6AeZjnhD?p=preview">Plunker</a></li>
+      <li><a href="index.js">Example javascript source</a></li>
+      <li><a href="leonardo-mocking.js">Example mocking source</a></li>
+    </ul>
+  </nav>
+  
 
+  <div class="load-container">
+    <button ng-click="loadClicked()" class="load">Load<span ng-if="loading">ing...</span></button>
+  </div>
   <div class="clearfix">
     <div class="error" ng-show="error">Failed To Load</div>
-    <button ng-click="loadClicked()">Load<span ng-if="loading">ing...</span></button>
-    <div class="media-item clearfix" ng-repeat="item in images">
-      <a ng-href="{{ item.page }}" target="_blank">
-        <img ng-src="{{ item.thumbnail }}" />
-      </a>
-      <div class="media-item-meta">
-        <h4>{{ item.title }}</h4>
-        <p>by {{ item.author }}</p>
-        <p>Taken {{ item.date_taken }}</p>
+    <div deckgrid class="deckgrid" source="photos">
+      <div class="photo">
+          <a href="">
+              <div class="photo-wrapper">
+                  <img src="" data-ng-src="{{card.imageUrl}}" class="animation-fade" data-imageloaded data-loadedclass="animation-faded">
+              </div>
+
+              <div class="photo-description">
+                  <h3>{{card.title}}</h3>
+                  <p>Nice photo, eh.</p>
+              </div>
+          </a>
       </div>
     </div>
   </div>
@@ -55,6 +75,7 @@
   <script src="bower_components/moment/moment.js"></script>
   <script src='bower_components/angular/angular.min.js'></script>
   <script src="bower_components/angular-mocks/angular-mocks.js"></script>
+  <script src="bower_components/angular-deckgrid/angular-deckgrid.js"></script>
   <script src="dist/leonardo.js"></script>
   <script src="index.js"></script>
   <script src="leonardo-mocking.js"></script>
