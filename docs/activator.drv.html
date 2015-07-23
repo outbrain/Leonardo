@@ -55,6 +55,10 @@
       </ul>
     
     <ul class="sections">
+       <li>
+        <a href="https://github.com/outbrain/Leonardo">GitHub</a><br/>
+        <a href="http://outbrain.github.io/Leonardo">Live Example</a>
+        </li>
         
           <li id="title">
               <div class="annotation">
@@ -73,7 +77,7 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>).directive(<span class="hljs-string">'leoActivator'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">activatorDirective</span><span class="hljs-params">($compile)</span> </span>{
+            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>).directive(<span class="hljs-string">'leoActivator'</span>, [<span class="hljs-string">'$compile'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">activatorDirective</span><span class="hljs-params">($compile)</span> </span>{
   <span class="hljs-keyword">return</span> {
     restrict: <span class="hljs-string">'A'</span>,
     link: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(scope, elem)</span> </span>{
@@ -81,8 +85,17 @@
 
       <span class="hljs-keyword">var</span> win = angular.element([
       <span class="hljs-string">'&lt;div class="leonardo-window"&gt;'</span>,
-        <span class="hljs-string">'&lt;div class="leonardo-header"&gt;Leonardo Configuration&lt;/div&gt;'</span>,
-          <span class="hljs-string">'&lt;leo-window-body&gt;&lt;/leo-window-body&gt;'</span>,
+        <span class="hljs-string">'&lt;div class="leonardo-header"&gt;'</span>,
+          <span class="hljs-string">'&lt;div class="menu"&gt;'</span>,
+            <span class="hljs-string">'&lt;ul&gt;'</span>,
+              <span class="hljs-string">'&lt;li class="logo"&gt;'</span>,
+                <span class="hljs-string">'&lt;div&gt;&lt;/div&gt;'</span>,
+              <span class="hljs-string">'&lt;/li&gt;'</span>, 
+              <span class="hljs-string">'&lt;li&gt;Scenarios&lt;/li&gt;'</span>, 
+            <span class="hljs-string">'&lt;/ul&gt;'</span>,
+          <span class="hljs-string">'&lt;/div&gt;'</span>,
+        <span class="hljs-string">'&lt;/div&gt;'</span>,
+        <span class="hljs-string">'&lt;leo-window-body&gt;&lt;/leo-window-body&gt;'</span>,
         <span class="hljs-string">'&lt;/div&gt;'</span>,
       <span class="hljs-string">'&lt;/div&gt;'</span>
       ].join(<span class="hljs-string">''</span>));
@@ -110,7 +123,7 @@
       };
     }
   };
-});</pre></div></div>
+}]);</pre></div></div>
             
         </li>
         

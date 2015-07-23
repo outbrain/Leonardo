@@ -1,19 +1,46 @@
-angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $httpBackend) {
+angular.module('leonardo').factory('leoConfiguration',
+    ['leoStorage', '$httpBackend', function(leoStorage, $httpBackend) {
   var states = [],
-    _scenarios = {},
-    responseHandlers = {};
+      _scenarios = {},
+      responseHandlers = {},
+      // Core API
+      // ----------------
+      api = {
+        // Add a new state which you wish to mock - there a two types of states - one with url and one without.
+        addState: addState,
+        addStates: addStates,
+        getState: getState,
+        getStates: fetchStates,
+        deactivateState: deactivateState,
+        deactivateAllStates: deactivateAll,
+        activateStateOption: activateStateOption,
+        addScenario: addScenario,
+        addScenarios: addScenarios,
+        getScenario: getScenario,
+        getScenarios: getScenarios,
+        setActiveScenario: setActiveScenario,
+        //Private api for passing through unregistered urls to $htto
+        _requestSubmitted: requestSubmitted
+      };
+  return api;
 
-  var upsertOption = function(state, name, active) {
+  function upsertOption(state, name, active) {
     var _states = leoStorage.getStates();
     _states[state] = {
-      name: name,
+      name: name || findStateOption(state).name,
       active: active
     };
 
     leoStorage.setStates(_states);
 
     sync();
-  };
+  }
+
+  function fetchStatesByUrl(url){
+   return fetchStates().filter(function(state){
+    return state.url === url;
+   });
+  }
 
   function fetchStates(){
     var activeStates = leoStorage.getStates();
@@ -66,15 +93,15 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
   }
 
   function getResponseHandler(state) {
-    if (!responseHandlers[state.name]) {
+    if (!responseHandlers[state.url + '_' + state.verb]) {
       if (state.verb === 'jsonp'){
-        responseHandlers[state.name] = $httpBackend.whenJSONP(new RegExp(state.url));
+        responseHandlers[state.url + '_' + state.verb] = $httpBackend.whenJSONP(new RegExp(state.url));
       }
       else {
-        responseHandlers[state.name] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
+        responseHandlers[state.url + '_' + state.verb] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
       }
     }
-    return responseHandlers[state.name];
+    return responseHandlers[state.url + '_' + state.verb];
   }
 
   function getState(name){
@@ -84,7 +111,7 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
 
   function addState(stateObj) {
     stateObj.options.forEach(function (option) {
-      this.upsert({
+      upsert({
         state: stateObj.name,
         url: stateObj.url,
         verb: stateObj.verb,
@@ -93,16 +120,15 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
         data: option.data,
         delay: option.delay
       });
-    }.bind(this));
+    });
   }
 
   function addStates(statesArr) {
     statesArr.forEach(function(stateObj) {
-      this.addState(stateObj);
-    }.bind(this));
+      addState(stateObj);
+    });
   }
 
-  //insert or replace an option by insert or updateing a state.
   function upsert(stateObj) {
     var verb = stateObj.verb || 'GET',
         state = stateObj.state,
@@ -151,8 +177,8 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
 
   function upsertMany(items){
     items.forEach(function(item) {
-      this.upsert(item);
-    }.bind(this));
+      upsert(item);
+    });
   }
 
   function addScenario(scenario){
@@ -164,7 +190,7 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
   }
 
   function addScenarios(scenarios){
-    angular.forEach(scenarios, this.addScenario);
+    angular.forEach(scenarios, addScenario);
   }
 
   function getScenarios(){
@@ -181,27 +207,28 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
   }
 
   function setActiveScenario(name){
-    this.deactivateAll();
-    this.getScenario(name).forEach(function(state){
+    deactivateAll();
+    getScenario(name).forEach(function(state){
       upsertOption(state.name, state.option, true);
     });
   }
 
-  return {
-    states: states,
-    active_states_option: [],
-    upsertOption: upsertOption,
-    fetchStates: fetchStates,
-    getState: getState,
-    addState: addState,
-    addStates: addStates,
-    upsert: upsert,
-    upsertMany: upsertMany,
-    deactivateAll: deactivateAll,
-    addScenario: addScenario,
-    addScenarios: addScenarios,
-    getScenarios: getScenarios,
-    getScenario: getScenario,
-    setActiveScenario: setActiveScenario
-  };
-});
+  function activateStateOption(state, optionName) {
+    upsertOption(state, optionName, true);
+  }
+
+  function deactivateState(state) {
+    upsertOption(state, null, false);
+  }
+
+  function requestSubmitted(requestConfig){
+    var state = fetchStatesByUrl(requestConfig.url)[0];
+    var handler = getResponseHandler(state || {
+        url: requestConfig.url,
+        verb:  requestConfig.method
+      });
+    if (!state) {
+      handler.passThrough();
+    }
+  }
+}]);

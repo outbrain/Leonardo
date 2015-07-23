@@ -1,4 +1,4 @@
-angular.module('leonardo').directive('leoActivator', function activatorDirective($compile) {
+angular.module('leonardo').directive('leoActivator', ['$compile', function activatorDirective($compile) {
   return {
     restrict: 'A',
     link: function(scope, elem) {
@@ -42,4 +42,4 @@ angular.module('leonardo').directive('leoActivator', function activatorDirective
       };
     }
   };
-});
+}]);

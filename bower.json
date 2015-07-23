@@ -29,7 +29,5 @@
     "test",
     "tests"
   ],
-  "devDependencies": {
-    "moment": "~2.10.3"
-  }
+  "devDependencies": {}
 }

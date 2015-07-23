@@ -55,6 +55,10 @@
       </ul>
     
     <ul class="sections">
+       <li>
+        <a href="https://github.com/outbrain/Leonardo">GitHub</a><br/>
+        <a href="http://outbrain.github.io/Leonardo">Live Example</a>
+        </li>
         
           <li id="title">
               <div class="annotation">
@@ -73,18 +77,17 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>
-angular.module(<span class="hljs-string">'leonardo'</span>, [<span class="hljs-string">'leonardo.templates'</span>, <span class="hljs-string">'ngMockE2E'</span>])
+            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>, [<span class="hljs-string">'leonardo.templates'</span>, <span class="hljs-string">'ngMockE2E'</span>])
   <span class="hljs-comment">/* wrap $httpbackend with a proxy in order to support delaying its responses
    * we are using the approach described in Endless Indirection:
    * https://endlessindirection.wordpress.com/2013/05/18/angularjs-delay-response-from-httpbackend/
    */</span>
-  .config(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($provide)</span> </span>{
-    $provide.decorator(<span class="hljs-string">'$httpBackend'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($delegate)</span> </span>{
+  .config([<span class="hljs-string">'$provide'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($provide)</span> </span>{
+    $provide.decorator(<span class="hljs-string">'$httpBackend'</span>, [<span class="hljs-string">'$delegate'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($delegate)</span> </span>{
       <span class="hljs-keyword">var</span> proxy = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(method, url, data, callback, headers)</span> </span>{
         <span class="hljs-keyword">var</span> interceptor = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
           <span class="hljs-keyword">var</span> _this = <span class="hljs-keyword">this</span>,
-              _arguments = <span class="hljs-built_in">arguments</span>;
+            _arguments = <span class="hljs-built_in">arguments</span>;
           setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
             callback.apply(_this, _arguments);
           }, proxy.delay || <span class="hljs-number">0</span>);
@@ -92,15 +95,62 @@ angular.module(<span class="hljs-string">'leonardo'</span>, [<span class="hljs-s
         };
         <span class="hljs-keyword">return</span> $delegate.call(<span class="hljs-keyword">this</span>, method, url, data, interceptor, headers);
       };
+
       <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> key <span class="hljs-keyword">in</span> $delegate) {
-        proxy[key] = $delegate[key];
+        <span class="hljs-keyword">if</span> ($delegate.hasOwnProperty(key)) {
+          proxy[key] = $delegate[key];
+        }
       }
+
       proxy.setDelay = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(delay)</span> </span>{
         proxy.delay = delay;
       };
+
       <span class="hljs-keyword">return</span> proxy;
-    });
-  });</pre></div></div>
+    }]);
+
+    $provide.decorator(<span class="hljs-string">'$http'</span>, [<span class="hljs-string">'leoConfiguration'</span>, <span class="hljs-string">'$delegate'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(leoConfiguration, $delegate)</span> </span>{
+      <span class="hljs-keyword">var</span> proxy = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(requestConfig)</span> </span>{
+        leoConfiguration._requestSubmitted(requestConfig);
+        <span class="hljs-keyword">return</span> $delegate.call(<span class="hljs-keyword">this</span>, requestConfig);
+      };
+
+      <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> key <span class="hljs-keyword">in</span> $delegate) {
+        <span class="hljs-keyword">if</span> ($delegate.hasOwnProperty(key)) {
+          proxy[key] = $delegate[key];
+        }
+      }
+
+      createShortMethodsWithData(<span class="hljs-string">'post'</span>, <span class="hljs-string">'put'</span>, <span class="hljs-string">'patch'</span>);
+
+      createShortMethods(<span class="hljs-string">'get'</span>, <span class="hljs-string">'delete'</span>, <span class="hljs-string">'head'</span>, <span class="hljs-string">'jsonp'</span>);
+
+      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createShortMethods</span><span class="hljs-params">()</span> </span>{
+        angular.forEach(<span class="hljs-built_in">arguments</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> </span>{
+          proxy[name] = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(url, config)</span> </span>{
+            <span class="hljs-keyword">return</span> proxy(angular.extend({}, config || {}, {
+              method: name,
+              url: url
+            }));
+          };
+        });
+      }
+
+      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createShortMethodsWithData</span><span class="hljs-params">()</span> </span>{
+        angular.forEach(<span class="hljs-built_in">arguments</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> </span>{
+          proxy[name] = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(url, data, config)</span> </span>{
+            <span class="hljs-keyword">return</span> proxy(angular.extend({}, config || {}, {
+              method: name,
+              url: url,
+              data: data
+            }));
+          };
+        });
+      }
+
+      <span class="hljs-keyword">return</span> proxy;
+    }]);
+  }]);</pre></div></div>
             
         </li>
         

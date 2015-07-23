@@ -1,15 +1,14 @@
-
 angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
   /* wrap $httpbackend with a proxy in order to support delaying its responses
    * we are using the approach described in Endless Indirection:
    * https://endlessindirection.wordpress.com/2013/05/18/angularjs-delay-response-from-httpbackend/
    */
-  .config(function($provide) {
-    $provide.decorator('$httpBackend', function($delegate) {
+  .config(['$provide', function($provide) {
+    $provide.decorator('$httpBackend', ['$delegate', function($delegate) {
       var proxy = function(method, url, data, callback, headers) {
         var interceptor = function() {
           var _this = this,
-              _arguments = arguments;
+            _arguments = arguments;
           setTimeout(function() {
             callback.apply(_this, _arguments);
           }, proxy.delay || 0);
@@ -17,33 +16,107 @@ angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
         };
         return $delegate.call(this, method, url, data, interceptor, headers);
       };
+
       for(var key in $delegate) {
-        proxy[key] = $delegate[key];
+        if ($delegate.hasOwnProperty(key)) {
+          proxy[key] = $delegate[key];
+        }
       }
+
       proxy.setDelay = function(delay) {
         proxy.delay = delay;
       };
+
       return proxy;
-    });
-  });
+    }]);
+
+    $provide.decorator('$http', ['leoConfiguration', '$delegate', function(leoConfiguration, $delegate) {
+      var proxy = function(requestConfig) {
+        leoConfiguration._requestSubmitted(requestConfig);
+        return $delegate.call(this, requestConfig);
+      };
+
+      for(var key in $delegate) {
+        if ($delegate.hasOwnProperty(key)) {
+          proxy[key] = $delegate[key];
+        }
+      }
+
+      createShortMethodsWithData('post', 'put', 'patch');
+
+      createShortMethods('get', 'delete', 'head', 'jsonp');
+
+      function createShortMethods() {
+        angular.forEach(arguments, function(name) {
+          proxy[name] = function(url, config) {
+            return proxy(angular.extend({}, config || {}, {
+              method: name,
+              url: url
+            }));
+          };
+        });
+      }
+
+      function createShortMethodsWithData() {
+        angular.forEach(arguments, function(name) {
+          proxy[name] = function(url, data, config) {
+            return proxy(angular.extend({}, config || {}, {
+              method: name,
+              url: url,
+              data: data
+            }));
+          };
+        });
+      }
+
+      return proxy;
+    }]);
+  }]);
 
 
-angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $httpBackend) {
+angular.module('leonardo').factory('leoConfiguration',
+    ['leoStorage', '$httpBackend', function(leoStorage, $httpBackend) {
   var states = [],
-    _scenarios = {},
-    responseHandlers = {};
+      _scenarios = {},
+      responseHandlers = {},
+      // Core API
+      // ----------------
+      api = {
+        // Add a new state which you wish to mock - there a two types of states - one with url and one without.
+        addState: addState,
+        addStates: addStates,
+        getState: getState,
+        getStates: fetchStates,
+        deactivateState: deactivateState,
+        deactivateAllStates: deactivateAll,
+        activateStateOption: activateStateOption,
+        addScenario: addScenario,
+        addScenarios: addScenarios,
+        getScenario: getScenario,
+        getScenarios: getScenarios,
+        setActiveScenario: setActiveScenario,
+        //Private api for passing through unregistered urls to $htto
+        _requestSubmitted: requestSubmitted
+      };
+  return api;
 
-  var upsertOption = function(state, name, active) {
+  function upsertOption(state, name, active) {
     var _states = leoStorage.getStates();
     _states[state] = {
-      name: name,
+      name: name || findStateOption(state).name,
       active: active
     };
 
     leoStorage.setStates(_states);
 
     sync();
-  };
+  }
+
+  function fetchStatesByUrl(url){
+   return fetchStates().filter(function(state){
+    return state.url === url;
+   });
+  }
 
   function fetchStates(){
     var activeStates = leoStorage.getStates();
@@ -96,15 +169,15 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
   }
 
   function getResponseHandler(state) {
-    if (!responseHandlers[state.name]) {
+    if (!responseHandlers[state.url + '_' + state.verb]) {
       if (state.verb === 'jsonp'){
-        responseHandlers[state.name] = $httpBackend.whenJSONP(new RegExp(state.url));
+        responseHandlers[state.url + '_' + state.verb] = $httpBackend.whenJSONP(new RegExp(state.url));
       }
       else {
-        responseHandlers[state.name] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
+        responseHandlers[state.url + '_' + state.verb] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
       }
     }
-    return responseHandlers[state.name];
+    return responseHandlers[state.url + '_' + state.verb];
   }
 
   function getState(name){
@@ -114,7 +187,7 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
 
   function addState(stateObj) {
     stateObj.options.forEach(function (option) {
-      this.upsert({
+      upsert({
         state: stateObj.name,
         url: stateObj.url,
         verb: stateObj.verb,
@@ -123,16 +196,15 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
         data: option.data,
         delay: option.delay
       });
-    }.bind(this));
+    });
   }
 
   function addStates(statesArr) {
     statesArr.forEach(function(stateObj) {
-      this.addState(stateObj);
-    }.bind(this));
+      addState(stateObj);
+    });
   }
 
-  //insert or replace an option by insert or updateing a state.
   function upsert(stateObj) {
     var verb = stateObj.verb || 'GET',
         state = stateObj.state,
@@ -181,8 +253,8 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
 
   function upsertMany(items){
     items.forEach(function(item) {
-      this.upsert(item);
-    }.bind(this));
+      upsert(item);
+    });
   }
 
   function addScenario(scenario){
@@ -194,7 +266,7 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
   }
 
   function addScenarios(scenarios){
-    angular.forEach(scenarios, this.addScenario);
+    angular.forEach(scenarios, addScenario);
   }
 
   function getScenarios(){
@@ -211,30 +283,31 @@ angular.module('leonardo').factory('leoConfiguration', function(leoStorage, $htt
   }
 
   function setActiveScenario(name){
-    this.deactivateAll();
-    this.getScenario(name).forEach(function(state){
+    deactivateAll();
+    getScenario(name).forEach(function(state){
       upsertOption(state.name, state.option, true);
     });
   }
 
-  return {
-    states: states,
-    active_states_option: [],
-    upsertOption: upsertOption,
-    fetchStates: fetchStates,
-    getState: getState,
-    addState: addState,
-    addStates: addStates,
-    upsert: upsert,
-    upsertMany: upsertMany,
-    deactivateAll: deactivateAll,
-    addScenario: addScenario,
-    addScenarios: addScenarios,
-    getScenarios: getScenarios,
-    getScenario: getScenario,
-    setActiveScenario: setActiveScenario
-  };
-});
+  function activateStateOption(state, optionName) {
+    upsertOption(state, optionName, true);
+  }
+
+  function deactivateState(state) {
+    upsertOption(state, null, false);
+  }
+
+  function requestSubmitted(requestConfig){
+    var state = fetchStatesByUrl(requestConfig.url)[0];
+    var handler = getResponseHandler(state || {
+        url: requestConfig.url,
+        verb:  requestConfig.method
+      });
+    if (!state) {
+      handler.passThrough();
+    }
+  }
+}]);
 
 angular.module('leonardo').factory('leoStorage', function storageService() {
   var STATES_STORE_KEY = 'leonardo-states';
@@ -266,7 +339,7 @@ angular.module('leonardo').factory('leoStorage', function storageService() {
   };
 });
 
-angular.module('leonardo').directive('leoActivator', function activatorDirective($compile) {
+angular.module('leonardo').directive('leoActivator', ['$compile', function activatorDirective($compile) {
   return {
     restrict: 'A',
     link: function(scope, elem) {
@@ -312,26 +385,16 @@ angular.module('leonardo').directive('leoActivator', function activatorDirective
       };
     }
   };
-});
+}]);
 
-// This Is A Header
-// ----------------
-
-
-// This is a normal comment, that will become part of the
-// annotations after running through the Docco tool. Use this
-// space to describe the function or other code just below
-// this comment. For example:
-//
-// The `DoSomething` method does something! It doesn't take any
-// parameters... it just does something.
-angular.module('leonardo').directive('leoWindowBody', function windowBodyDirective($http, leoConfiguration) {
+angular.module('leonardo').directive('leoWindowBody',
+    ['$http', 'leoConfiguration', function windowBodyDirective($http, leoConfiguration) {
   return {
     restrict: 'E',
     templateUrl: 'window-body.html',
     scope: true,
     replace: true,
-    controller: function($scope){
+    controller: ['$scope', function($scope){
       $scope.selectedItem = 'activate';
       $scope.NothasUrl = function(option){
         return !option.url;
@@ -344,24 +407,29 @@ angular.module('leonardo').directive('leoWindowBody', function windowBodyDirecti
         $scope.states.forEach(function(state){
             state.active = false;
         });
-        leoConfiguration.deactivateAll();
+        leoConfiguration.deactivateAllStates();
       };
 
       $scope.updateState = function(state){
-        console.log(`update state: ${state.name} ${state.activeOption.name} ${state.active}`);
-        leoConfiguration.upsertOption(state.name, state.activeOption.name, state.active);
+        if (state.active) {
+          console.log('activate state option:' +  state.name + ': ' + state.activeOption.name);
+          leoConfiguration.activateStateOption(state.name, state.activeOption.name);
+        } else {
+          console.log('deactivating state: ' +  state.name);
+          leoConfiguration.deactivateState(state.name);
+        }
       };
 
-      $scope.states = leoConfiguration.fetchStates();
+      $scope.states = leoConfiguration.getStates();
 
       $scope.scenarios = leoConfiguration.getScenarios();
 
       $scope.activateScenario = function(scenario){
         $scope.activeScenario = scenario;
         leoConfiguration.setActiveScenario(scenario);
-        $scope.states = leoConfiguration.fetchStates();
+        $scope.states = leoConfiguration.getStates();
       };
-    },
+    }],
     link: function(scope) {
       scope.test = {
         url: '',
@@ -379,7 +447,7 @@ angular.module('leonardo').directive('leoWindowBody', function windowBodyDirecti
       };
     }
   };
-});
+}]);
 
 (function(module) {
 try {

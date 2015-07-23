@@ -55,6 +55,10 @@
       </ul>
     
     <ul class="sections">
+       <li>
+        <a href="https://github.com/outbrain/Leonardo">GitHub</a><br/>
+        <a href="http://outbrain.github.io/Leonardo">Live Example</a>
+        </li>
         
           <li id="title">
               <div class="annotation">
@@ -73,22 +77,99 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>).factory(<span class="hljs-string">'leoConfiguration'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(leoStorage, $httpBackend)</span> </span>{
+            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>).factory(<span class="hljs-string">'leoConfiguration'</span>,
+    [<span class="hljs-string">'leoStorage'</span>, <span class="hljs-string">'$httpBackend'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(leoStorage, $httpBackend)</span> </span>{
   <span class="hljs-keyword">var</span> states = [],
-    _scenarios = {},
-    responseHandlers = {};
+      _scenarios = {},
+      responseHandlers = {},</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2 id="core-api">Core API</h2>
 
-  <span class="hljs-keyword">var</span> upsertOption = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state, name, active)</span> </span>{
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      api = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Add a new state which you wish to mock - there a two types of states - one with url and one without.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        addState: addState,
+        addStates: addStates,
+        getState: getState,
+        getStates: fetchStates,
+        deactivateState: deactivateState,
+        deactivateAllStates: deactivateAll,
+        activateStateOption: activateStateOption,
+        addScenario: addScenario,
+        addScenarios: addScenarios,
+        getScenario: getScenario,
+        getScenarios: getScenarios,
+        setActiveScenario: setActiveScenario,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Private api for passing through unregistered urls to $htto</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        _requestSubmitted: requestSubmitted
+      };
+  <span class="hljs-keyword">return</span> api;
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">upsertOption</span><span class="hljs-params">(state, name, active)</span> </span>{
     <span class="hljs-keyword">var</span> _states = leoStorage.getStates();
     _states[state] = {
-      name: name,
+      name: name || findStateOption(state).name,
       active: active
     };
 
     leoStorage.setStates(_states);
 
     sync();
-  };
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetchStatesByUrl</span><span class="hljs-params">(url)</span></span>{
+   <span class="hljs-keyword">return</span> fetchStates().filter(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
+    <span class="hljs-keyword">return</span> state.url === url;
+   });
+  }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetchStates</span><span class="hljs-params">()</span></span>{
     <span class="hljs-keyword">var</span> activeStates = leoStorage.getStates();
@@ -141,15 +222,15 @@
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getResponseHandler</span><span class="hljs-params">(state)</span> </span>{
-    <span class="hljs-keyword">if</span> (!responseHandlers[state.name]) {
+    <span class="hljs-keyword">if</span> (!responseHandlers[state.url + <span class="hljs-string">'_'</span> + state.verb]) {
       <span class="hljs-keyword">if</span> (state.verb === <span class="hljs-string">'jsonp'</span>){
-        responseHandlers[state.name] = $httpBackend.whenJSONP(<span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(state.url));
+        responseHandlers[state.url + <span class="hljs-string">'_'</span> + state.verb] = $httpBackend.whenJSONP(<span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(state.url));
       }
       <span class="hljs-keyword">else</span> {
-        responseHandlers[state.name] = $httpBackend.when(state.verb || <span class="hljs-string">'GET'</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(state.url));
+        responseHandlers[state.url + <span class="hljs-string">'_'</span> + state.verb] = $httpBackend.when(state.verb || <span class="hljs-string">'GET'</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(state.url));
       }
     }
-    <span class="hljs-keyword">return</span> responseHandlers[state.name];
+    <span class="hljs-keyword">return</span> responseHandlers[state.url + <span class="hljs-string">'_'</span> + state.verb];
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getState</span><span class="hljs-params">(name)</span></span>{
@@ -159,7 +240,7 @@
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addState</span><span class="hljs-params">(stateObj)</span> </span>{
     stateObj.options.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(option)</span> </span>{
-      <span class="hljs-keyword">this</span>.upsert({
+      upsert({
         state: stateObj.name,
         url: stateObj.url,
         verb: stateObj.verb,
@@ -168,29 +249,16 @@
         data: option.data,
         delay: option.delay
       });
-    }.bind(<span class="hljs-keyword">this</span>));
+    });
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addStates</span><span class="hljs-params">(statesArr)</span> </span>{
     statesArr.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(stateObj)</span> </span>{
-      <span class="hljs-keyword">this</span>.addState(stateObj);
-    }.bind(<span class="hljs-keyword">this</span>));
-  }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-2">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              <p>insert or replace an option by insert or updateing a state.</p>
+      addState(stateObj);
+    });
+  }
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">upsert</span><span class="hljs-params">(stateObj)</span> </span>{
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">upsert</span><span class="hljs-params">(stateObj)</span> </span>{
     <span class="hljs-keyword">var</span> verb = stateObj.verb || <span class="hljs-string">'GET'</span>,
         state = stateObj.state,
         name = stateObj.name,
@@ -238,8 +306,8 @@
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">upsertMany</span><span class="hljs-params">(items)</span></span>{
     items.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(item)</span> </span>{
-      <span class="hljs-keyword">this</span>.upsert(item);
-    }.bind(<span class="hljs-keyword">this</span>));
+      upsert(item);
+    });
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addScenario</span><span class="hljs-params">(scenario)</span></span>{
@@ -251,7 +319,7 @@
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addScenarios</span><span class="hljs-params">(scenarios)</span></span>{
-    angular.forEach(scenarios, <span class="hljs-keyword">this</span>.addScenario);
+    angular.forEach(scenarios, addScenario);
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getScenarios</span><span class="hljs-params">()</span></span>{
@@ -268,30 +336,31 @@
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setActiveScenario</span><span class="hljs-params">(name)</span></span>{
-    <span class="hljs-keyword">this</span>.deactivateAll();
-    <span class="hljs-keyword">this</span>.getScenario(name).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
+    deactivateAll();
+    getScenario(name).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
       upsertOption(state.name, state.option, <span class="hljs-literal">true</span>);
     });
   }
 
-  <span class="hljs-keyword">return</span> {
-    states: states,
-    active_states_option: [],
-    upsertOption: upsertOption,
-    fetchStates: fetchStates,
-    getState: getState,
-    addState: addState,
-    addStates: addStates,
-    upsert: upsert,
-    upsertMany: upsertMany,
-    deactivateAll: deactivateAll,
-    addScenario: addScenario,
-    addScenarios: addScenarios,
-    getScenarios: getScenarios,
-    getScenario: getScenario,
-    setActiveScenario: setActiveScenario
-  };
-});</pre></div></div>
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">activateStateOption</span><span class="hljs-params">(state, optionName)</span> </span>{
+    upsertOption(state, optionName, <span class="hljs-literal">true</span>);
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">deactivateState</span><span class="hljs-params">(state)</span> </span>{
+    upsertOption(state, <span class="hljs-literal">null</span>, <span class="hljs-literal">false</span>);
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">requestSubmitted</span><span class="hljs-params">(requestConfig)</span></span>{
+    <span class="hljs-keyword">var</span> state = fetchStatesByUrl(requestConfig.url)[<span class="hljs-number">0</span>];
+    <span class="hljs-keyword">var</span> handler = getResponseHandler(state || {
+        url: requestConfig.url,
+        verb:  requestConfig.method
+      });
+    <span class="hljs-keyword">if</span> (!state) {
+      handler.passThrough();
+    }
+  }
+}]);</pre></div></div>
             
         </li>
         

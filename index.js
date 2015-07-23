@@ -17,12 +17,13 @@ var Flicker = angular.module('flicker-example', ['leonardo','akoenig.deckgrid'])
     }
   });
 
-Flicker.factory('flickerGetter', function ($q, $http) {
+Flicker.factory('flickerGetter', ['$q', '$http', function ($q, $http) {
   return {
     getData: function () {
       var defer = $q.defer();
 
-      $http.jsonp('http://api.flickr.com/services/feeds/photos_public.gne', {
+      $http.jsonp(' http://api.flickr.com/services/feeds/photos_public.gne', {
+        method: 'jsonp',
         params: {
           group_id: 'tmnt',
           format: 'json',
@@ -44,7 +45,6 @@ Flicker.factory('flickerGetter', function ($q, $http) {
             page: item.link,
             title: item.title.length > 60 ? item.title.substr(0, 50) + '...' : item.title,
             author: author,
-            date_taken: moment(item.date_taken).format("MMM Do YYYY"),
             imageUrl: imageUrl
           };
         });
@@ -56,4 +56,4 @@ Flicker.factory('flickerGetter', function ($q, $http) {
       return defer.promise;
     }
   };
-});
+}]);
