@@ -1,14 +1,21 @@
 "use strict";
 
-var Flicker = angular.module('flicker-example', ["leonardo"])
-  .config(['$locationProvider', function ($locationProvider) {
+var Flicker = angular.module('flicker-example', ['leonardo','akoenig.deckgrid'])
+  .config(function ($locationProvider) {
     $locationProvider.html5Mode(false);
-  }])
-  .run(['$rootScope','flickerGetter', function($rootScope, flickerGetter){
-    flickerGetter.getData().then(function(data){
-      $rootScope.images = data;
-    });
-  }]);
+  })
+  .controller('flickerCtrl', function ($scope, flickerGetter) {
+    $scope.loadClicked = function () {
+      $scope.loading = true;
+      flickerGetter.getData().then(function(data){
+        $scope.photos = data;
+        console.log(data);
+        $scope.loading = false;
+      }, function () {
+        $scope.loading = false;
+      });
+    }
+  });
 
 Flicker.factory('flickerGetter', ['$q', '$http', function ($q, $http) {
   return {
@@ -25,10 +32,10 @@ Flicker.factory('flickerGetter', ['$q', '$http', function ($q, $http) {
       }).success(function (data) {
         data = data.items.map(function (item) {
           var author,
-            thumbnail = item.media.m;
+            imageUrl = item.media.m;
 
           angular.forEach(['m.jpg', 'm.gif', 'm.png'], function (item) {
-            thumbnail = thumbnail.replace(item, 't.' + item.split('.')[1]);
+            imageUrl = imageUrl.replace(item, 'b.' + item.split('.')[1]);
           });
 
           author = item.author.split(' ')[1];
@@ -38,7 +45,7 @@ Flicker.factory('flickerGetter', ['$q', '$http', function ($q, $http) {
             page: item.link,
             title: item.title.length > 60 ? item.title.substr(0, 50) + '...' : item.title,
             author: author,
-            thumbnail: thumbnail
+            imageUrl: imageUrl
           };
         });
         defer.resolve(data);

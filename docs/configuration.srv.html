@@ -55,6 +55,10 @@
       </ul>
     
     <ul class="sections">
+       <li>
+        <a href="https://github.com/outbrain/Leonardo">GitHub</a><br/>
+        <a href="http://outbrain.github.io/Leonardo">Live Example</a>
+        </li>
         
           <li id="title">
               <div class="annotation">
@@ -77,12 +81,52 @@
     [<span class="hljs-string">'leoStorage'</span>, <span class="hljs-string">'$httpBackend'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(leoStorage, $httpBackend)</span> </span>{
   <span class="hljs-keyword">var</span> states = [],
       _scenarios = {},
-      responseHandlers = {},
-      api = {
+      responseHandlers = {},</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2 id="core-api">Core API</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      api = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Add a new state which you wish to mock - there a two types of states - one with url and one without.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        addState: addState,
+        addStates: addStates,
         getState: getState,
         getStates: fetchStates,
-        addState: addState,
-        addStates: addStates,
         deactivateState: deactivateState,
         deactivateAllStates: deactivateAll,
         activateStateOption: activateStateOption,
@@ -90,7 +134,22 @@
         addScenarios: addScenarios,
         getScenario: getScenario,
         getScenarios: getScenarios,
-        setActiveScenario: setActiveScenario
+        setActiveScenario: setActiveScenario,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Private api for passing through unregistered urls to $htto</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        _requestSubmitted: requestSubmitted
       };
   <span class="hljs-keyword">return</span> api;
 
@@ -104,6 +163,12 @@
     leoStorage.setStates(_states);
 
     sync();
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetchStatesByUrl</span><span class="hljs-params">(url)</span></span>{
+   <span class="hljs-keyword">return</span> fetchStates().filter(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span></span>{
+    <span class="hljs-keyword">return</span> state.url === url;
+   });
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetchStates</span><span class="hljs-params">()</span></span>{
@@ -157,15 +222,15 @@
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getResponseHandler</span><span class="hljs-params">(state)</span> </span>{
-    <span class="hljs-keyword">if</span> (!responseHandlers[state.name]) {
+    <span class="hljs-keyword">if</span> (!responseHandlers[state.url + <span class="hljs-string">'_'</span> + state.verb]) {
       <span class="hljs-keyword">if</span> (state.verb === <span class="hljs-string">'jsonp'</span>){
-        responseHandlers[state.name] = $httpBackend.whenJSONP(<span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(state.url));
+        responseHandlers[state.url + <span class="hljs-string">'_'</span> + state.verb] = $httpBackend.whenJSONP(<span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(state.url));
       }
       <span class="hljs-keyword">else</span> {
-        responseHandlers[state.name] = $httpBackend.when(state.verb || <span class="hljs-string">'GET'</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(state.url));
+        responseHandlers[state.url + <span class="hljs-string">'_'</span> + state.verb] = $httpBackend.when(state.verb || <span class="hljs-string">'GET'</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(state.url));
       }
     }
-    <span class="hljs-keyword">return</span> responseHandlers[state.name];
+    <span class="hljs-keyword">return</span> responseHandlers[state.url + <span class="hljs-string">'_'</span> + state.verb];
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getState</span><span class="hljs-params">(name)</span></span>{
@@ -191,22 +256,9 @@
     statesArr.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(stateObj)</span> </span>{
       addState(stateObj);
     });
-  }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-2">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              <p>insert or replace an option by insert or updateing a state.</p>
+  }
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">upsert</span><span class="hljs-params">(stateObj)</span> </span>{
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">upsert</span><span class="hljs-params">(stateObj)</span> </span>{
     <span class="hljs-keyword">var</span> verb = stateObj.verb || <span class="hljs-string">'GET'</span>,
         state = stateObj.state,
         name = stateObj.name,
@@ -298,6 +350,16 @@
     upsertOption(state, <span class="hljs-literal">null</span>, <span class="hljs-literal">false</span>);
   }
 
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">requestSubmitted</span><span class="hljs-params">(requestConfig)</span></span>{
+    <span class="hljs-keyword">var</span> state = fetchStatesByUrl(requestConfig.url)[<span class="hljs-number">0</span>];
+    <span class="hljs-keyword">var</span> handler = getResponseHandler(state || {
+        url: requestConfig.url,
+        verb:  requestConfig.method
+      });
+    <span class="hljs-keyword">if</span> (!state) {
+      handler.passThrough();
+    }
+  }
 }]);</pre></div></div>
             
         </li>

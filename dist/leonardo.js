@@ -79,11 +79,14 @@ angular.module('leonardo').factory('leoConfiguration',
   var states = [],
       _scenarios = {},
       responseHandlers = {},
+      // Core API
+      // ----------------
       api = {
-        getState: getState,
-        getStates: fetchStates,
+        // Add a new state which you wish to mock - there a two types of states - one with url and one without.
         addState: addState,
         addStates: addStates,
+        getState: getState,
+        getStates: fetchStates,
         deactivateState: deactivateState,
         deactivateAllStates: deactivateAll,
         activateStateOption: activateStateOption,
@@ -92,6 +95,7 @@ angular.module('leonardo').factory('leoConfiguration',
         getScenario: getScenario,
         getScenarios: getScenarios,
         setActiveScenario: setActiveScenario,
+        //Private api for passing through unregistered urls to $htto
         _requestSubmitted: requestSubmitted
       };
   return api;
@@ -201,7 +205,6 @@ angular.module('leonardo').factory('leoConfiguration',
     });
   }
 
-  //insert or replace an option by insert or updateing a state.
   function upsert(stateObj) {
     var verb = stateObj.verb || 'GET',
         state = stateObj.state,
@@ -347,9 +350,7 @@ angular.module('leonardo').directive('leoActivator', ['$compile', function activ
         '<div class="leonardo-header">',
           '<div class="menu">',
             '<ul>',
-              '<li class="logo">',
-                '<div></div>',
-              '</li>', 
+              '<li>LEONARDO</li>', 
               '<li>Scenarios</li>', 
             '</ul>',
           '</div>',
@@ -384,17 +385,6 @@ angular.module('leonardo').directive('leoActivator', ['$compile', function activ
   };
 }]);
 
-// This Is A Header
-// ----------------
-
-
-// This is a normal comment, that will become part of the
-// annotations after running through the Docco tool. Use this
-// space to describe the function or other code just below
-// this comment. For example:
-//
-// The `DoSomething` method does something! It doesn't take any
-// parameters... it just does something.
 angular.module('leonardo').directive('leoWindowBody',
     ['$http', 'leoConfiguration', function windowBodyDirective($http, leoConfiguration) {
   return {
