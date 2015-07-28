@@ -1,6 +1,5 @@
 var gulp = require('gulp'),
   path = require('path'),
-  express = require('express'),
   webserver = require('gulp-webserver'),
   del = require('del'),
   runSequence = require('run-sequence'),
