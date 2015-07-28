@@ -1,5 +1,7 @@
 var gulp = require('gulp'),
   path = require('path'),
+  express = require('express'),
+  webserver = require('gulp-webserver'),
   del = require('del'),
   runSequence = require('run-sequence'),
   less = require('gulp-less'),
@@ -79,8 +81,17 @@ gulp.task('build', function(cb) {
     cb);
 });
 
-gulp.task('watch', "Watch file changes and auto compile for development", ['build'], function () {
-  gulp.watch(["./src/leonardo/**/*"], ['build']);
+gulp.task('serve', "Serve files after build and watch", ['build', 'watch'], function () {
+  gulp.src('')
+    .pipe(webserver({
+      livereload: true,
+      open: true,
+      fallback: 'index.html'
+    }));
 });
 
-gulp.task('default', ['build']);
+gulp.task('watch', "Watch file changes and auto compile for development", ['build'], function () {
+  gulp.watch(["index.html", "./src/leonardo/**/*"], ['build']);
+});
+
+gulp.task("default", "Runs help task", ["help"], function() {});
