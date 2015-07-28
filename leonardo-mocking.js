@@ -1,4 +1,21 @@
-angular.module('leonardo').run(['leoConfiguration', function(leoConfiguration) {
+angular.module('leonardo').run(['$rootScope', 'leoConfiguration', function($rootScope, leoConfiguration) {
+  var getUrl = function(photo){
+    return 'https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}_b.jpg'.replace('{farm-id}', photo.farm).replace('{server-id}', photo.server).replace('{id}', photo.id).replace('{secret}', photo.secret);
+  };
+
+  var configMission = function(){
+    var mission = leoConfiguration.getState('Set Mission');
+    $rootScope.mission = mission ? mission.data : "";
+  };
+
+  leoConfiguration.addState({
+    name: 'Set Mission',
+    options: [
+      { name: 'turtles', data: "Protect April o'neil" },
+      { name: 'shredder', data: 'Destroy the ninja turtles' }
+    ]
+  });
+
   leoConfiguration.addStates([
     {
       name: 'flicker-images',
@@ -8,64 +25,127 @@ angular.module('leonardo').run(['leoConfiguration', function(leoConfiguration) {
         {
           name: 'get ninja turtles', status: 200,
           data: {
-            "title": "Uploads from everyone",
-            "link": "http://www.flickr.com/photos/",
-            "description": "",
-            "modified": "2015-07-20T12:15:11Z",
-            "generator": "http://www.flickr.com/",
             "items": [
               {
-                "title": " ",
-                "link": "http://www.flickr.com/photos/96262590@N07/19233636364/",
-                "media": {"m":"https://c1.staticflickr.com/1/507/19029348913_f643c33350_h.jpg"},
-                "date_taken": "2015-07-20T08:21:12-08:00",
-                "description": " <p><a href=\"http://www.flickr.com/people/96262590@N07/\">tranvhoa96<\/a> posted a photo:<\/p> <p><a href=\"http://www.flickr.com/photos/96262590@N07/19233636364/\" title=\" \"><img src=\"http://farm1.staticflickr.com/504/19233636364_4c716652b0_m.jpg\" width=\"240\" height=\"240\" alt=\" \" /><\/a><\/p> ",
-                "published": "2015-07-20T12:15:11Z",
-                "author": "nobody@flickr.com (tranvhoa96)",
-                "author_id": "96262590@N07",
-                "tags": ""
+                "id": "20054214406",
+                "secret": "5a0800532b",
+                "server": "328",
+                "farm": 1,
+                "title": "leo1",
+                "isprimary": "1",
+                "ispublic": 1,
+                "isfriend": 0,
+                "isfamily": 0
               },
               {
-                "title": "Expo",
-                "link": "http://www.flickr.com/photos/123560819@N08/19233637204/",
-                "media": {"m":"http://farm4.staticflickr.com/3801/19233637204_0a6ae5fd23_m.jpg"},
-                "date_taken": "2015-07-11T13:43:10-08:00",
-                "description": " <p><a href=\"http://www.flickr.com/people/123560819@N08/\">Italian Reporter<\/a> posted a photo:<\/p> <p><a href=\"http://www.flickr.com/photos/123560819@N08/19233637204/\" title=\"Expo\"><img src=\"http://farm4.staticflickr.com/3801/19233637204_0a6ae5fd23_m.jpg\" width=\"180\" height=\"240\" alt=\"Expo\" /><\/a><\/p> ",
-                "published": "2015-07-20T12:15:13Z",
-                "author": "nobody@flickr.com (Italian Reporter)",
-                "author_id": "123560819@N08",
-                "tags": ""
+                "id": "19896041068",
+                "secret": "3b3c6a45e9",
+                "server": "402",
+                "farm": 1,
+                "title": "017580",
+                "isprimary": "0",
+                "ispublic": 1,
+                "isfriend": 0,
+                "isfamily": 0
               },
               {
-                "title": " ",
-                "link": "http://www.flickr.com/photos/133936086@N02/19235375243/",
-                "media": {"m":"http://farm1.staticflickr.com/469/19235375243_9343ef91c7_m.jpg"},
-                "date_taken": "2015-07-19T17:03:05-08:00",
-                "description": " <p><a href=\"http://www.flickr.com/people/133936086@N02/\">James.GC<\/a> posted a photo:<\/p> <p><a href=\"http://www.flickr.com/photos/133936086@N02/19235375243/\" title=\" \"><img src=\"http://farm1.staticflickr.com/469/19235375243_9343ef91c7_m.jpg\" width=\"240\" height=\"160\" alt=\" \" /><\/a><\/p> ",
-                "published": "2015-07-20T12:15:09Z",
-                "author": "nobody@flickr.com (James.GC)",
-                "author_id": "133936086@N02",
-                "tags": ""
+                "id": "20084284365",
+                "secret": "6d6b780089",
+                "server": "3782",
+                "farm": 4,
+                "title": "4034607-turtle2119",
+                "isprimary": "0",
+                "ispublic": 1,
+                "isfriend": 0,
+                "isfamily": 0
+              },
+              {
+                "id": "19896162428",
+                "secret": "4d70df22b9",
+                "server": "3718",
+                "farm": 4,
+                "title": "1990, TEENAGE MUTANT NINJA TURTLES",
+                "isprimary": "0",
+                "ispublic": 1,
+                "isfriend": 0,
+                "isfamily": 0
               }
-            ]
+            ].map(function(photo) {
+              return {
+                media: {
+                  m: getUrl(photo)
+                }
+              };
+            })
+          }
+        },
+        {
+          name: 'get ninja enemies', status: 200,
+          data: {
+            "items": [
+              {
+                "id": "20058148116",
+                "secret": "5be49c9aa2",
+                "server": "312",
+                "farm": 1,
+                "title": "the_shredder_2014_by_araghenxd-d7r04sc",
+                "isprimary": "1",
+                "ispublic": 1,
+                "isfriend": 0,
+                "isfamily": 0
+              },
+              {
+                "id": "20102720711",
+                "secret": "0494812a0b",
+                "server": "408",
+                "farm": 1,
+                "title": "bebop-rocksteady",
+                "isprimary": "0",
+                "ispublic": 1,
+                "isfriend": 0,
+                "isfamily": 0
+              },
+              {
+                "id": "19909252418",
+                "secret": "eff51f40ba",
+                "server": "502",
+                "farm": 1,
+                "title": "tartarugasninja2_3",
+                "isprimary": "0",
+                "ispublic": 1,
+                "isfriend": 0,
+                "isfamily": 0
+              }
+            ].map(function(photo) {
+                return {
+                  media: {
+                    m: getUrl(photo)
+                  }
+                };
+              })
           }
         }
+
       ]
     }
   ]);
 
   leoConfiguration.addScenario({
-      name: 'flicker-images',
+      name: 'I am a ninja',
       states: [
-        'get ninja turtles'
+        { name: 'flicker-images', option: 'get ninja turtles' },
+        { name: 'Set Mission', option: 'turtles' }
       ]
   });
 
   leoConfiguration.addScenario({
-      name: 'reneissance artists',
+      name: 'I am shredder',
       states: [
-        'get ninja turtles'
+        { name: 'flicker-images', option: 'get ninja enemies' },
+        { name: 'Set Mission', option: 'shredder' }
       ]
   });
 
+  $rootScope.$on('leonardo:setStates', configMission);
+  configMission();
 }]);

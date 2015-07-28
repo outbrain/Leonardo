@@ -29,5 +29,7 @@
     "test",
     "tests"
   ],
-  "devDependencies": {}
+  "devDependencies": {
+    "tether-shepherd": "~1.1.3"
+  }
 }
