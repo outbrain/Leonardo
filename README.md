@@ -1,10 +1,33 @@
-![Leonardo logo](extension/images/leonardo.png)  Leonardo Docs 
-=============
+## Leonardo
 
-Mocking and testing made simple and consistent.
-Developed by Outbrain.
+[![npm
+version](https://badge.fury.io/js/leonardojs.svg)](http://badge.fury.io/js/leonardojs)
+[![Bower
+version](https://badge.fury.io/bo/leonardo.svg)](http://badge.fury.io/bo/leonardo)
 
-## Requirements 
+![Mocking and testing made simple and consistent. Developed by Outbrain.](extension/images/example.png)
+
+[Demo](http://outbrain.github.io/Leonardo/)
+
+
+## Install
+
+__Dependencies__
+
+* __[Angular](https://github.com/angular/bower-angular)__
+* __[Angular Mocks](https://github.com/angular/bower-angular-mocks)__
+
+Installing via `npm` and `bower` will bring in the above dependencies as well.
+
+__npm__
+```sh
+$ npm install leonardojs
+```
+
+__bower__
+```sh
+$ bower install leonardo
+```
 
 #### Load Dependency scripts
 
@@ -62,11 +85,6 @@ Angular Mocks module  (tested with v1.3)
 </html>
 ```
 
-A plunker demonstration http://plnkr.co/edit/w8oaELXwQldv6AeZjnhD?p=preview
-
-## Screen 
-![example image](extension/images/example.png)
-
 ## Documentation
 http://outbrain.github.io/Leonardo/docs/configuration.srv.html
 
@@ -108,3 +126,11 @@ npm run compile:docs
 
 Run local server and navigate to `index.html`.
 
+or `cd` into the project folder
+
+```bash
+gulp serve
+```
+
+## License
+Copyright &copy; 2015 MIT License
