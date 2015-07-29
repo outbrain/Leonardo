@@ -3,12 +3,17 @@
   "version": "1.0.0",
   "homepage": "https://github.com/outbrain/Leonardo",
   "authors": [
-    "sagivf <sagivf@gmail.com>"
+    "sagivf <sagivf@gmail.com> (www.sagivfrankel.com)"
   ],
   "description": "secnario runner",
-  "main": "main.js",
+  "main": [
+    "dist/leonardo.js",
+    "dist/leonardo.min.css"
+  ],
   "keywords": [
-    "angularjs"
+    "angularjs",
+    "leonardo",
+    "mocking"
   ],
   "license": "MIT",
   "dependencies": {
