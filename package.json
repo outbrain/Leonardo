@@ -1,5 +1,5 @@
 {
-  "name": "Leonardo",
+  "name": "leonardojs",
   "version": "1.0.0",
   "description": "Leonardo ========",
   "main": "index.js",
@@ -13,13 +13,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://sagivf@github.com/outbrain/Leonardo.git"
+    "url": "git://github.com/outbrain/Leonardo.git"
   },
   "keywords": [
     "angularjs"
   ],
   "author": "Sagiv Frankel",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/outbrain/Leonardo/issues"
   },

@@ -29,7 +29,16 @@
     }
 
     p, h4 { margin: 4px 0; max-height: 44px; overflow: hidden }
-    h2 { text-align: center; }
+    h2 { text-align: center; font-size: 16px; line-height: 1;  }
+
+    .mission-label {
+      font-weight: bold;
+    }
+    .mission {
+      font-size: 18px;
+      line-height: 1;
+      color: #002451;
+    }
 
     body {margin:0;font-family:'Open Sans', sans-serif}
     body .main-view  h1 { text-align: center; font-size: 6em; color: white; font-family: 'Helvetica Neue', helvetica, arial, verdana, sans-serif; text-shadow: rgba(0, 0, 0, 0.247059) 0px 1px 1px;}
@@ -41,7 +50,7 @@
     .deckgrid[deckgrid]::before {content: '5 .column.column-1-5';font-size: 0;visibility: hidden;}
     .deckgrid .column {float: left;}
     .deckgrid .column-1-5 {width: 20%;}
-    .deckgrid img{width:100%;}
+    .deckgrid img{width:100%; cursor: default}
     .deckgrid .photo-description {display: none;}
 
     nav li {
@@ -98,7 +107,7 @@
     <button ng-click="loadClicked()" class="load">Load<span ng-cloak="" ng-if="loading">ing...</span></button>
   </div>
   <h2 ng-cloak ng-show="mission">
-    Your mission: {{ mission }}
+      <span class="mission-label">Your mission:</span> <span class="mission">"{{ mission }}!!!"</span>
   </h2>
   <div class="clearfix">
     <div deckgrid class="deckgrid" source="photos">
