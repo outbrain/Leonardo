@@ -1,4 +1,4 @@
-angular.module('leonardo').factory('leoStorage', function storageService() {
+angular.module('leonardo').factory('leoStorage', ['$rootScope', function storageService($rootScope) {
   var STATES_STORE_KEY = 'leonardo-states';
   function getItem(key) {
     var item = localStorage.getItem(key);
@@ -18,6 +18,7 @@ angular.module('leonardo').factory('leoStorage', function storageService() {
 
   function setStates(states) {
     setItem(STATES_STORE_KEY, states);
+    $rootScope.$emit('leonardo:setStates');
   }
 
   return {
@@ -26,4 +27,4 @@ angular.module('leonardo').factory('leoStorage', function storageService() {
     setStates: setStates,
     getStates: getStates
   };
-});
+}]);

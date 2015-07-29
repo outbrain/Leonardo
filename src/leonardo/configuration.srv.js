@@ -200,7 +200,7 @@ angular.module('leonardo').factory('leoConfiguration',
   function getScenario(name){
     console.log(name);
     if (!_scenarios[name]) {
-      return
+      return;
     }
     console.log('return scenario', _scenarios[name].states);
     return _scenarios[name].states;

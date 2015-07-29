@@ -276,7 +276,7 @@ angular.module('leonardo').factory('leoConfiguration',
   function getScenario(name){
     console.log(name);
     if (!_scenarios[name]) {
-      return
+      return;
     }
     console.log('return scenario', _scenarios[name].states);
     return _scenarios[name].states;
@@ -309,7 +309,7 @@ angular.module('leonardo').factory('leoConfiguration',
   }
 }]);
 
-angular.module('leonardo').factory('leoStorage', function storageService() {
+angular.module('leonardo').factory('leoStorage', ['$rootScope', function storageService($rootScope) {
   var STATES_STORE_KEY = 'leonardo-states';
   function getItem(key) {
     var item = localStorage.getItem(key);
@@ -329,6 +329,7 @@ angular.module('leonardo').factory('leoStorage', function storageService() {
 
   function setStates(states) {
     setItem(STATES_STORE_KEY, states);
+    $rootScope.$emit('leonardo:setStates');
   }
 
   return {
@@ -337,7 +338,7 @@ angular.module('leonardo').factory('leoStorage', function storageService() {
     setStates: setStates,
     getStates: getStates
   };
-});
+}]);
 
 angular.module('leonardo').directive('leoActivator', ['$compile', function activatorDirective($compile) {
   return {
