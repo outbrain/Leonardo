@@ -85,9 +85,6 @@ Angular Mocks module  (tested with v1.3)
 </html>
 ```
 
-## Screen 
-![example image](extension/images/example.png)
-
 ## Documentation
 http://outbrain.github.io/Leonardo/docs/configuration.srv.html
 
@@ -128,7 +125,9 @@ npm run compile:docs
 #### Running
 
 Run local server and navigate to `index.html`.
+
 or
+
 `cd` into the project folder
 
 ```bash
