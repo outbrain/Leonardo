@@ -2,6 +2,10 @@
   "name": "leonardo",
   "version": "1.0.0",
   "homepage": "https://github.com/outbrain/Leonardo",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/outbrain/Leonardo.git"
+  },
   "authors": [
     "sagivf <sagivf@gmail.com> (www.sagivfrankel.com)"
   ],
