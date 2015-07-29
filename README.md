@@ -4,7 +4,28 @@
 Mocking and testing made simple and consistent.
 Developed by Outbrain.
 
-## Requirements 
+
+[Demo](http://outbrain.github.io/Leonardo/)
+
+
+## Install
+
+__Dependencies__
+
+* __[Angular](https://github.com/angular/bower-angular)__
+* __[Angular Mocks](https://github.com/angular/bower-angular-mocks)__
+
+Installing via `npm` and `bower` will bring in the above dependencies as well.
+
+__npm__
+```sh
+$ npm install leonardojs
+```
+
+__bower__
+```sh
+$ bower install leonardo
+```
 
 #### Load Dependency scripts
 
@@ -62,8 +83,6 @@ Angular Mocks module  (tested with v1.3)
 </html>
 ```
 
-A plunker demonstration http://plnkr.co/edit/w8oaELXwQldv6AeZjnhD?p=preview
-
 ## Screen 
 ![example image](extension/images/example.png)
 
@@ -107,4 +126,12 @@ npm run compile:docs
 #### Running
 
 Run local server and navigate to `index.html`.
+or
+`cd` into the project folder
 
+```bash
+gulp serve
+```
+
+## License
+Copyright &copy; 2015 MIT License
