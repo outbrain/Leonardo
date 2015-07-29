@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://sagivf@github.com/outbrain/Leonardo.git"
+    "url": "git://github.com/outbrain/Leonardo.git"
   },
   "keywords": [
     "angularjs"
