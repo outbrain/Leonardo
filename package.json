@@ -1,5 +1,5 @@
 {
-  "name": "leonardo",
+  "name": "leonardojs",
   "version": "1.0.0",
   "description": "Leonardo ========",
   "main": "index.js",
@@ -19,7 +19,7 @@
     "angularjs"
   ],
   "author": "Sagiv Frankel",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/outbrain/Leonardo/issues"
   },
