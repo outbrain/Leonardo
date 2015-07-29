@@ -5,7 +5,7 @@ version](https://badge.fury.io/js/leonardojs.svg)](http://badge.fury.io/js/leona
 [![Bower
 version](https://badge.fury.io/bo/leonardo.svg)](http://badge.fury.io/bo/leonardo)
 
-[![Mocking and testing made simple and consistent. Developed by Outbrain.](extension/images/example.png)]
+![Mocking and testing made simple and consistent. Developed by Outbrain.](extension/images/example.png)
 
 [Demo](http://outbrain.github.io/Leonardo/)
 
