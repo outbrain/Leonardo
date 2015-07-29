@@ -126,9 +126,7 @@ npm run compile:docs
 
 Run local server and navigate to `index.html`.
 
-or
-
-`cd` into the project folder
+or `cd` into the project folder
 
 ```bash
 gulp serve
