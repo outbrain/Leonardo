@@ -1,9 +1,11 @@
-![Leonardo logo](extension/images/leonardo.png)  Leonardo Docs 
-=============
+## Leonardo
 
-Mocking and testing made simple and consistent.
-Developed by Outbrain.
+[![npm
+version](https://badge.fury.io/js/leonardojs.svg)](http://badge.fury.io/js/leonardojs)
+[![Bower
+version](https://badge.fury.io/bo/leonardo.svg)](http://badge.fury.io/bo/leonardo)
 
+[![Mocking and testing made simple and consistent. Developed by Outbrain.](extension/images/example.png)](http://github.hubspot.com/shepherd/docs/welcome)
 
 [Demo](http://outbrain.github.io/Leonardo/)
 
