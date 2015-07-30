@@ -1,9 +1,9 @@
 ## Leonardo
 
-[![npm
-version](https://badge.fury.io/js/leonardojs.svg)](http://badge.fury.io/js/leonardojs)
-[![Bower
-version](https://badge.fury.io/bo/leonardo.svg)](http://badge.fury.io/bo/leonardo)
+[![npm version](https://badge.fury.io/js/leonardojs.svg)](http://badge.fury.io/js/leonardojs)
+[![Bower version](https://badge.fury.io/bo/leonardo.svg)](http://badge.fury.io/bo/leonardo)
+
+[![Package Quality](http://npm.packagequality.com/badge/leonardojs.png)](http://packagequality.com/#?package=leonardojs)
 
 ![Mocking and testing made simple and consistent. Developed by Outbrain.](extension/images/example.png)
 
