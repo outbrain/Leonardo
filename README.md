@@ -17,7 +17,7 @@ __Dependencies__
 * __[Angular](https://github.com/angular/bower-angular)__
 * __[Angular Mocks](https://github.com/angular/bower-angular-mocks)__
 
-Installing via `npm` and `bower` will bring in the above dependencies as well.
+Installing via `npm` or `bower` will bring in the above dependencies as well.
 
 __npm__
 ```sh
@@ -44,7 +44,7 @@ Angular Mocks module  (tested with v1.3)
   <script src="[bower_componenets|node_modules|other]/angular/angular.js"></script>
   <script src="[bower_componenets|node_modules|other]/angular-mocks/angular-mocks.js"></script>
   //.....
-  <script src="[bower_componenets|node_modules|other]/leonardos/leonardos.js"></script>
+  <script src="[bower_componenets|node_modules|other]/leonardo/leonardo.js"></script>
 </body>
 </html>
 ```
@@ -56,12 +56,12 @@ Angular Mocks module  (tested with v1.3)
 <html>
 <head>
   //.....
-  <link rel="stylesheet" media="all" href="[bower_componenets|node_modules|other]/leonardos/leonardo.min.css" />
+  <link rel="stylesheet" media="all" href="[bower_componenets|node_modules|other]/leonardo/leonardo.min.css" />
 </head>
 </html>
 ```
 
-#### Add Angular module dependancy
+#### Add Angular module dependency
 
 ```html
 <!DOCTYPE HTML>
@@ -70,6 +70,7 @@ Angular Mocks module  (tested with v1.3)
   //.....
    <script>
     var myApp = angular.module("app", ["leonardo"]);
+    //.....    
    </script>
 </body>
 </html>
@@ -83,6 +84,59 @@ Angular Mocks module  (tested with v1.3)
   //.....
 </body>
 </html>
+```
+
+## API
+#### Add States
+```javascript
+ //.....
+    myApp.run(["leoConfiguration", function(leoConfiguration){
+      leoConfiguration.addStates([
+        {
+          name: 'Get Data',
+          url: '/api/user/43435',
+          options: [
+            {name: 'success', status: 200, data: { name: "Master Splinter" }},
+            {name: 'error 500', status: 500},
+            {name: 'error 401', status: 401}
+          ]
+        },
+        {
+          name: 'Update Data',
+          url: '/api/user/43435',
+          verb: 'PUT',
+          options: [
+            {name: 'success', status: 200},
+            {name: 'error 500', status: 500},
+            {name: 'error 400', status: 400}
+          ]
+        }
+      ]);
+    }]);
+```
+
+#### Activate State Option
+Activates state option, mocked response will be returned when calling the state url
+```javascript
+//.....
+    leoConfiguration.activateStateOption('Update Data', 'success');
+    $http.put('/api/user/43435', { name: "Master Splinter" }).success(function(data, status) {
+        console.log(status); // 200 
+    });
+    
+    leoConfiguration.activateStateOption('Update Data', 'error 500');
+    $http.put('/api/user/43435', { name: "Master Splinter" }).error(function(data, status) {
+        console.log(status); // 500 
+    });
+//.....
+```
+
+#### Deactivate State
+Deactivates a specific state, when calling the state url request will pass through to the server
+```javascript
+//.....
+    leoConfiguration.deactivateState('Update Data');
+//.....
 ```
 
 ## Documentation
