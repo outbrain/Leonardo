@@ -1,10 +1,33 @@
-![Leonardo logo](extension/images/leonardo.png)  Leonardo Docs 
-=============
+## Leonardo
 
-Mocking and testing made simple and consistent.
-Developed by Outbrain.
+[![npm version](https://badge.fury.io/js/leonardojs.svg)](http://badge.fury.io/js/leonardojs)
+[![Bower version](https://badge.fury.io/bo/leonardo.svg)](http://badge.fury.io/bo/leonardo)
 
-## Requirements 
+[![Package Quality](http://npm.packagequality.com/badge/leonardojs.png)](http://packagequality.com/#?package=leonardojs)
+
+![Mocking and testing made simple and consistent. Developed by Outbrain.](extension/images/example.png)
+
+[Demo](http://outbrain.github.io/Leonardo/)
+
+
+## Install
+
+__Dependencies__
+
+* __[Angular](https://github.com/angular/bower-angular)__
+* __[Angular Mocks](https://github.com/angular/bower-angular-mocks)__
+
+Installing via `npm` or `bower` will bring in the above dependencies as well.
+
+__npm__
+```sh
+$ npm install leonardojs
+```
+
+__bower__
+```sh
+$ bower install leonardo
+```
 
 #### Load Dependency scripts
 
@@ -21,7 +44,7 @@ Angular Mocks module  (tested with v1.3)
   <script src="[bower_componenets|node_modules|other]/angular/angular.js"></script>
   <script src="[bower_componenets|node_modules|other]/angular-mocks/angular-mocks.js"></script>
   //.....
-  <script src="[bower_componenets|node_modules|other]/leonardos/leonardos.js"></script>
+  <script src="[bower_componenets|node_modules|other]/leonardo/leonardo.js"></script>
 </body>
 </html>
 ```
@@ -33,12 +56,12 @@ Angular Mocks module  (tested with v1.3)
 <html>
 <head>
   //.....
-  <link rel="stylesheet" media="all" href="[bower_componenets|node_modules|other]/leonardos/leonardo.min.css" />
+  <link rel="stylesheet" media="all" href="[bower_componenets|node_modules|other]/leonardo/leonardo.min.css" />
 </head>
 </html>
 ```
 
-#### Add Angular module dependancy
+#### Add Angular module dependency
 
 ```html
 <!DOCTYPE HTML>
@@ -47,6 +70,7 @@ Angular Mocks module  (tested with v1.3)
   //.....
    <script>
     var myApp = angular.module("app", ["leonardo"]);
+    //.....    
    </script>
 </body>
 </html>
@@ -62,10 +86,58 @@ Angular Mocks module  (tested with v1.3)
 </html>
 ```
 
-A plunker demonstration http://plnkr.co/edit/w8oaELXwQldv6AeZjnhD?p=preview
+## API
+#### Add States
+```javascript
+ //.....
+    myApp.run(["leoConfiguration", function(leoConfiguration){
+      leoConfiguration.addStates([
+        {
+          name: 'Get Data',
+          url: '/api/user/43435',
+          options: [
+            {name: 'success', status: 200, data: { name: "Master Splinter" }},
+            {name: 'error 500', status: 500},
+            {name: 'error 401', status: 401}
+          ]
+        },
+        {
+          name: 'Update Data',
+          url: '/api/user/43435',
+          verb: 'PUT',
+          options: [
+            {name: 'success', status: 200},
+            {name: 'error 500', status: 500},
+            {name: 'error 400', status: 400}
+          ]
+        }
+      ]);
+    }]);
+```
 
-## Screen 
-![example image](extension/images/example.png)
+#### Activate State Option
+Activates state option, mocked response will be returned when calling the state url
+```javascript
+//.....
+    leoConfiguration.activateStateOption('Update Data', 'success');
+    $http.put('/api/user/43435', { name: "Master Splinter" }).success(function(data, status) {
+        console.log(status); // 200 
+    });
+    
+    leoConfiguration.activateStateOption('Update Data', 'error 500');
+    $http.put('/api/user/43435', { name: "Master Splinter" }).error(function(data, status) {
+        console.log(status); // 500 
+    });
+//.....
+```
+
+#### Deactivate State
+Deactivates a specific state, when calling the state url request will pass through to the server
+```javascript
+//.....
+    leoConfiguration.deactivateState('Update Data');
+//.....
+```
 
 ## Documentation
 http://outbrain.github.io/Leonardo/docs/configuration.srv.html
@@ -108,3 +180,11 @@ npm run compile:docs
 
 Run local server and navigate to `index.html`.
 
+or `cd` into the project folder
+
+```bash
+gulp serve
+```
+
+## License
+Copyright &copy; 2015 MIT License
