@@ -40,7 +40,7 @@
           <li ng-class="{ 'selected': scenario === activeScenario }" ng-repeat="scenario in scenarios" ng-click="activateScenario(scenario)">{{scenario}}</li>
         </ul>
       </div>
-      <ul>
+      <ul class="leo-non-ajax">
         <li><h3>Non Ajax States</h3></li>
         <li ng-repeat="state in states | filter:NothasUrl">
           <div>
