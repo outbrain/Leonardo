@@ -42,6 +42,7 @@
     > div {
       display: table-cell;
       vertical-align: middle;
+      padding: 10px 0;
     }
 
     > div:nth-child(2) {
@@ -56,6 +57,10 @@
 
   select {
     width: 200px;
+
+    &[disabled] {
+      opacity: 0.5;
+    }
   }
 
 }
