@@ -30,7 +30,7 @@ gulp.task("build:less", false, function () {
       .pipe(minifyCSS({
         keepSpecialComments: 0
       }))
-      .pipe(gulp.dest('./tmp'))
+      .pipe(gulp.dest('./tmp'));
 });
 
 gulp.task("build:templates", false, function () {

@@ -56,7 +56,7 @@
             <h4>{{state.name}}</h4>
           </div>
           <div>
-            <select ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="updateState(state)"></select>
+            <select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="updateState(state)"></select>
           </div>
         </li>
         <li><h3>Ajax States</h3></li>
@@ -74,7 +74,7 @@
             <h4>{{state.name}}</h4>&nbsp;&nbsp; - {{state.url}}
           </div>
           <div>
-            <select ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="updateState(state)"></select>
+            <select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="updateState(state)"></select>
           </div>
         </li>
       </ul>
