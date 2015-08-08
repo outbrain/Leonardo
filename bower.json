@@ -7,9 +7,11 @@
     "url": "git://github.com/outbrain/Leonardo.git"
   },
   "authors": [
-    "sagivf <sagivf@gmail.com> (www.sagivfrankel.com)"
+    "sagivf <sagivf@gmail.com>",
+    "dwido <dbuchbut@outbrain.com>",
+    "tsachis <tsachishushan@gmail.com>"
   ],
-  "description": "secnario runner",
+  "description": "scenario runner",
   "main": [
     "dist/leonardo.js",
     "dist/leonardo.min.css"
