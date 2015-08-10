@@ -4,12 +4,12 @@ angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
    * https://endlessindirection.wordpress.com/2013/05/18/angularjs-delay-response-from-httpbackend/
    */
   .config(['$provide', function($provide) {
-    $provide.decorator('$httpBackend', ['$delegate', function($delegate) {
+    $provide.decorator('$httpBackend', ['$delegate', '$timeout', function($delegate, $timeout) {
       var proxy = function(method, url, data, callback, headers) {
         var interceptor = function() {
           var _this = this,
             _arguments = arguments;
-          setTimeout(function() {
+          $timeout(function() {
             callback.apply(_this, _arguments);
           }, proxy.delay || 0);
           proxy.delay = 0;
