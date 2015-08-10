@@ -4,12 +4,12 @@ angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
    * https://endlessindirection.wordpress.com/2013/05/18/angularjs-delay-response-from-httpbackend/
    */
   .config(['$provide', function($provide) {
-    $provide.decorator('$httpBackend', ['$delegate', function($delegate) {
+    $provide.decorator('$httpBackend', ['$delegate', '$timeout', function($delegate, $timeout) {
       var proxy = function(method, url, data, callback, headers) {
         var interceptor = function() {
           var _this = this,
             _arguments = arguments;
-          setTimeout(function() {
+          $timeout(function() {
             callback.apply(_this, _arguments);
           }, proxy.delay || 0);
           proxy.delay = 0;
@@ -312,10 +312,10 @@ angular.module('leonardo').factory('leoConfiguration',
   }
 }]);
 
-angular.module('leonardo').factory('leoStorage', ['$rootScope', function storageService($rootScope) {
+angular.module('leonardo').factory('leoStorage', ['$rootScope', '$window', function storageService($rootScope, $window) {
   var STATES_STORE_KEY = 'leonardo-states';
   function getItem(key) {
-    var item = localStorage.getItem(key);
+    var item = $window.localStorage.getItem(key);
     if (!item) {
       return null;
     }
@@ -323,7 +323,7 @@ angular.module('leonardo').factory('leoStorage', ['$rootScope', function storage
   }
 
   function setItem(key, data) {
-    localStorage.setItem(key, angular.toJson(data));
+    $window.localStorage.setItem(key, angular.toJson(data));
   }
 
   function getStates() {
