@@ -93,15 +93,18 @@ angular.module('leonardo').factory('leoConfiguration',
   }
 
   function getResponseHandler(state) {
-    if (!responseHandlers[state.url + '_' + state.verb]) {
+    var url = state.url;
+    var verb = state.verb === 'jsonp' ? state.verb : state.verb.toUpperCase();
+
+    if (!responseHandlers[url + '_' + verb]) {
       if (state.verb === 'jsonp'){
-        responseHandlers[state.url + '_' + state.verb] = $httpBackend.whenJSONP(new RegExp(state.url));
+        responseHandlers[url + '_' + verb] = $httpBackend.whenJSONP(new RegExp(url));
       }
       else {
-        responseHandlers[state.url + '_' + state.verb] = $httpBackend.when(state.verb || 'GET', new RegExp(state.url));
+        responseHandlers[url + '_' + verb] = $httpBackend.when(verb || 'GET', new RegExp(url));
       }
     }
-    return responseHandlers[state.url + '_' + state.verb];
+    return responseHandlers[url + '_' + verb];
   }
 
   function getState(name){
