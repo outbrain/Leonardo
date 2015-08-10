@@ -1,7 +1,7 @@
-angular.module('leonardo').factory('leoStorage', ['$rootScope', function storageService($rootScope) {
+angular.module('leonardo').factory('leoStorage', ['$rootScope', '$window', function storageService($rootScope, $window) {
   var STATES_STORE_KEY = 'leonardo-states';
   function getItem(key) {
-    var item = localStorage.getItem(key);
+    var item = $window.localStorage.getItem(key);
     if (!item) {
       return null;
     }
@@ -9,7 +9,7 @@ angular.module('leonardo').factory('leoStorage', ['$rootScope', function storage
   }
 
   function setItem(key, data) {
-    localStorage.setItem(key, angular.toJson(data));
+    $window.localStorage.setItem(key, angular.toJson(data));
   }
 
   function getStates() {
