@@ -12,7 +12,6 @@ var Flicker = angular.module('flicker-example', ['leonardo','akoenig.deckgrid'])
       $scope.loading = true;
       flickerGetter.getData().then(function(data){
         $scope.photos = data;
-        console.log(data);
         $scope.loading = false;
       }, function () {
         $scope.loading = false;

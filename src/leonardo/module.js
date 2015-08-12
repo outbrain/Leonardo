@@ -1,9 +1,8 @@
 angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
-  /* wrap $httpbackend with a proxy in order to support delaying its responses
-   * we are using the approach described in Endless Indirection:
-   * https://endlessindirection.wordpress.com/2013/05/18/angularjs-delay-response-from-httpbackend/
-   */
-  .config(['$provide', function($provide) {
+  .config(['$provide', '$httpProvider', function($provide, $httpProvider) {
+
+    $httpProvider.interceptors.push('leoHttpInterceptor');
+
     $provide.decorator('$httpBackend', ['$delegate', '$timeout', function($delegate, $timeout) {
       var proxy = function(method, url, data, callback, headers) {
         var interceptor = function() {
@@ -72,4 +71,3 @@ angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
       return proxy;
     }]);
   }]);
-
