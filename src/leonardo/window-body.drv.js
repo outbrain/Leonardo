@@ -45,8 +45,11 @@ angular.module('leonardo').directive('leoWindowBody',
       $scope.unregisteredStates = leoConfiguration.getRequestsLog();
 
       $scope.$watch('detail.value', function(value){
+        if (!value) {
+          return;
+        }
         try {
-          $scope.detail.stringValue = JSON.stringify(value, null, 4);
+          $scope.detail.stringValue = value ? JSON.stringify(value, null, 4) : '';
           $scope.detail.error = '';
         }
         catch (e) {
@@ -56,7 +59,7 @@ angular.module('leonardo').directive('leoWindowBody',
 
       $scope.$watch('detail.stringValue', function(value){
         try {
-          $scope.detail.value = JSON.parse(value);
+          $scope.detail.value = value ? JSON.parse(value) : {};
           $scope.detail.error = '';
         }
         catch(e) {
@@ -66,7 +69,6 @@ angular.module('leonardo').directive('leoWindowBody',
 
       $scope.unregisteredStateSelect = function (unregistered) {
         angular.extend($scope.detail, {
-          stringValue: '',
           state : (unregistered.state && unregistered.state.name) || '',
           option: '',
           delay: 0,
