@@ -64,7 +64,7 @@ angular.module('leonardo').directive('leoWindowBody',
         }
       });
 
-      $scope.stateSelect = function (unregistered) {
+      $scope.unregisteredStateSelect = function (unregistered) {
         angular.extend($scope.detail, {
           stringValue: '',
           state : (unregistered.state && unregistered.state.name) || '',
@@ -74,13 +74,26 @@ angular.module('leonardo').directive('leoWindowBody',
           stateActive: !!unregistered,
           value: unregistered.data || {}
         });
-
-        $scope.detail.stateActive = !!unregistered.state;
+        $scope.detail._unregisteredState = unregistered;
       };
 
       $scope.$on('leonardo:stateChanged', function() {
         $scope.states = leoConfiguration.getStates();
       });
+
+      $scope.saveUnregisteredState = function () {
+        leoConfiguration.addSavedState({
+          name: $scope.detail.state,
+          verb: $scope.detail._unregisteredState.verb,
+          url: $scope.detail._unregisteredState.url,
+          options: [
+            {
+              name: $scope.detail.option,
+              status: $scope.detail.status
+            }
+          ]
+        });
+      };
     }],
     link: function(scope) {
       scope.test = {
@@ -96,11 +109,6 @@ angular.module('leonardo').directive('leoWindowBody',
             scope.test.value = res;
           });
         }
-      };
-
-
-      scope.saveState = function (state) {
-        console.log('saveState');
       };
     }
   };

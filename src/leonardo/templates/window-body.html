@@ -50,7 +50,7 @@
           <unregistered-state 
             ng-repeat="state in unregisteredStates"
             state="state"
-            state-select="stateSelect(state)">
+            state-select="unregisteredStateSelect(state)">
           </unregistered-state>
         </ul>
       </div>
@@ -67,6 +67,9 @@
             {{detail.error}}
           </div>
           <textarea ng-model="detail.stringValue"></textarea>
+        </div>
+        <div class="leo-action-row">
+          <button ng-click="saveUnregisteredState()">Add State</button>
         </div>
       </div>
     </div>
