@@ -76,7 +76,7 @@ angular.module('leonardo').factory('leoConfiguration',
   var states = [],
       _scenarios = {},
       responseHandlers = {},
-      _requestsLog = {},
+      _requestsLog = [],
       // Core API
       // ----------------
       api = {
@@ -93,7 +93,8 @@ angular.module('leonardo').factory('leoConfiguration',
         getScenario: getScenario,
         getScenarios: getScenarios,
         setActiveScenario: setActiveScenario,
-        getUnregisteredStates: getUnregisteredStates,
+        getRecordedStates: getRecordedStates,
+        getRequestsLog: getRequestsLog,
         //Private api for passing through unregistered urls to $htto
         _requestSubmitted: requestSubmitted,
         _logRequest: logRequest
@@ -313,32 +314,35 @@ angular.module('leonardo').factory('leoConfiguration',
 
   function logRequest(method, url, data, status) {
     if (method && url && !(url.indexOf(".html") > 0)) {
-      _requestsLog[method.toUpperCase() + " " + url.trim()] = {
+      var req = {
         verb: method,
         data: data,
         url: url.trim(),
-        status: status
+        status: status,
+        timestamp: new Date()
       };
+      req.state = getStateByRequest(req);
+      _requestsLog.push(req);
     }
   }
 
- function isRequestRegistered(_states, req) {
-   return _states.some(function(state) {
-     if (!state.url) return false;
-     return state.url === req.url && state.verb.toLowerCase() === req.verb.toLowerCase() ;
-   });
- }
+  function getStateByRequest(req) {
+    return states.filter(function(state) {
+      if (!state.url) return false;
+      return state.url === req.url && state.verb.toLowerCase() === req.verb.toLowerCase();
+    })[0];
+  }
 
-  function getUnregisteredStates() {
-    var _states = fetchStates(),
-        requestsArr = Object.keys(_requestsLog)
-          .filter(function(key) {
-            return !isRequestRegistered(_states, _requestsLog[key]);
-          })
-          .map(function(key){
-            var req = _requestsLog[key];
+  function getRequestsLog() {
+    return _requestsLog;
+  }
+
+  function getRecordedStates() {
+    var requestsArr = _requestsLog
+          .map(function(req){
+            var state = getStateByRequest(req);
             return {
-              name: key,
+              name: state ? state.name : req.verb + " " + req.url,
               verb: req.verb,
               url: req.url,
               options: [{
@@ -356,7 +360,7 @@ angular.module('leonardo').factory('leoConfiguration',
 angular.module('leonardo').factory('leoHttpInterceptor', ['leoConfiguration', function(leoConfiguration) {
   return {
     'request': function(request) {
-      leoConfiguration._logRequest(request.method, request.url);
+      //leoConfiguration._logRequest(request.method, request.url);
       return request;
     },
     'response': function(response) {
