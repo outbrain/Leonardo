@@ -40,8 +40,13 @@ angular.module('leonardo').directive('leoWindowBody',
         $scope.states = leoConfiguration.getStates();
       };
 
+
       $scope.detail = {
         stringValue: '',
+        state : '',
+        option: '',
+        delay: 0,
+        status: 200,
         value: {
           asdasd: "Asd"
         }
