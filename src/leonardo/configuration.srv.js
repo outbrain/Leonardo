@@ -1,9 +1,10 @@
 angular.module('leonardo').factory('leoConfiguration',
-    ['leoStorage', '$httpBackend', function(leoStorage, $httpBackend) {
+    ['leoStorage', '$httpBackend', '$rootScope', function(leoStorage, $httpBackend, $rootScope) {
   var states = [],
       _scenarios = {},
       responseHandlers = {},
       _requestsLog = [],
+      _savedStates = [],
       // Core API
       // ----------------
       api = {
@@ -22,6 +23,8 @@ angular.module('leonardo').factory('leoConfiguration',
         setActiveScenario: setActiveScenario,
         getRecordedStates: getRecordedStates,
         getRequestsLog: getRequestsLog,
+        loadSavedStates: loadSavedStates,
+        addSavedState: addSavedState,
         //Private api for passing through unregistered urls to $htto
         _requestSubmitted: requestSubmitted,
         _logRequest: logRequest
@@ -128,12 +131,18 @@ angular.module('leonardo').factory('leoConfiguration',
         delay: option.delay
       });
     });
+
+    $rootScope.$broadcast('leonardo:stateChanged', stateObj);
   }
 
   function addStates(statesArr) {
-    statesArr.forEach(function(stateObj) {
-      addState(stateObj);
-    });
+    if (angular.isArray(statesArr)) {
+      statesArr.forEach(function(stateObj) {
+        addState(stateObj);
+      });
+    } else {
+      console.warn('addStates should get an array');
+    }
   }
 
   function upsert(stateObj) {
@@ -262,6 +271,17 @@ angular.module('leonardo').factory('leoConfiguration',
 
   function getRequestsLog() {
     return _requestsLog;
+  }
+
+  function loadSavedStates() {
+    _savedStates = leoStorage.getSavedStates();
+    addStates(_savedStates);
+  }
+
+  function addSavedState(state) {
+    _savedStates.push(state);
+    leoStorage.setSavedStates(_savedStates);
+    addState(state);
   }
 
   function getRecordedStates() {

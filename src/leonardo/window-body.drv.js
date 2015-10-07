@@ -77,6 +77,10 @@ angular.module('leonardo').directive('leoWindowBody',
 
         $scope.detail.stateActive = !!unregistered.state;
       };
+
+      $scope.$on('leonardo:stateChanged', function() {
+        $scope.states = leoConfiguration.getStates();
+      });
     }],
     link: function(scope) {
       scope.test = {
