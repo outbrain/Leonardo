@@ -51,6 +51,7 @@ gulp.task('build:js', function(){
   return gulp.src(
       [
         './src/leonardo/module.js',
+        './src/leonardo/leonardo.prov.js',
         './src/leonardo/configuration.srv.js',
         './src/leonardo/httpInterceptor.srv.js',
         './src/leonardo/storage.srv.js',
