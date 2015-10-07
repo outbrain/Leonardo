@@ -45,7 +45,12 @@
       </table>
     </div>
     <div ng-switch-when="recorder" class="leonardo-recorder">
-      <div class="leo-list"></div>
+      <div class="leo-list">
+        <ul>
+          <unregistered-state ng-repeat="state in unregisteredStates" on-save="saveUnregisteredState(state)">
+          </unregistered-state>
+        </ul>
+      </div>
       <div class="leo-detail">
         <div ng-if="detail.state">State Name: {{detail.state}}</div>
         <div ng-if="!detail.state">State Name: <input ng-model="detail.state" /></div>

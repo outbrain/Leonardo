@@ -40,7 +40,7 @@ angular.module('leonardo').directive('leoWindowBody',
         $scope.states = leoConfiguration.getStates();
       };
 
-
+      $scope.unregisteredStates = leoConfiguration.getRequestsLog();
       $scope.detail = {
         stringValue: '',
         state : '',
@@ -87,6 +87,24 @@ angular.module('leonardo').directive('leoWindowBody',
           });
         }
       };
+
+      scope.saveState = function (state) {
+        console.log('saveState');
+      };
     }
   };
 }]);
+
+angular.module('leonardo').directive('unregisteredState', function () {
+  return {
+    restrict: 'E',
+    templateUrl: 'unregistered-state.html',
+    controller: function ($scope) {
+      console.log($scope);
+      $scope.saveUnregisteredState = function (state) {
+        console.log('saveUnregisteredState');
+        $scope.saveState();
+      };
+    }
+  }
+});
