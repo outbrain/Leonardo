@@ -6,7 +6,6 @@ angular.module('leonardo').directive('leoWindowBody',
     scope: true,
     replace: true,
     controller: ['$scope', function($scope){
-      $scope.selectedItem = 'activate';
       $scope.NothasUrl = function(option){
         return !option.url;
       };

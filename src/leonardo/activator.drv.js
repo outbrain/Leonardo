@@ -1,6 +1,14 @@
 angular.module('leonardo').directive('leoActivator', ['$compile', function activatorDirective($compile) {
   return {
     restrict: 'A',
+    controllerAs: 'leonardo',
+    controller: function () {
+      this.activeTab = 'scenarios';
+      this.selectTab = function (name) {
+        this.activeTab = name;
+        console.log(name);
+      }
+    },
     link: function(scope, elem) {
       var el = angular.element('<div ng-click="activate()" class="leonardo-activator"></div>');
 
@@ -10,7 +18,8 @@ angular.module('leonardo').directive('leoActivator', ['$compile', function activ
           '<div class="menu">',
             '<ul>',
               '<li>LEONARDO</li>', 
-              '<li>Scenarios</li>', 
+              '<li ng-click="leonardo.selectTab(\'scenarios\')">Scenarios</li>', 
+              '<li ng-click="leonardo.selectTab(\'recorder\')">Recorder</li>', 
             '</ul>',
           '</div>',
         '</div>',
