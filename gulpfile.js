@@ -43,7 +43,7 @@ gulp.task("build:templates", false, function () {
       .pipe(ngHtml2Js({
         moduleName: 'leonardo.templates'
       }))
-      .pipe(rename('leonardo.templates.min.js'))
+      .pipe(concat('leonardo.templates.min.js'))
       .pipe(gulp.dest('./tmp'));
 });
 

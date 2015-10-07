@@ -45,8 +45,27 @@
       </table>
     </div>
     <div ng-switch-when="recorder" class="leonardo-recorder">
-      <div class="leo-list"></div>
-      <div class="leo-detail"></div>
+      <div class="leo-list">
+        <ul>
+          <unregistered-state ng-repeat="state in unregisteredStates" on-save="saveUnregisteredState(state)">
+          </unregistered-state>
+        </ul>
+      </div>
+      <div class="leo-detail">
+        <div ng-if="detail.state">State Name: {{detail.state}}</div>
+        <div ng-if="!detail.state">State Name: <input ng-model="detail.state" /></div>
+        <div>
+          <div>Option: <input ng-model="detail.option"/></div>
+          <div>Delay: <input ng-model="detail.delay"/></div>
+          <div>Status: <input ng-model="detail.status"/></div>
+        </div>
+        <div class="leo-row-flex">
+          <div class="leo-error">
+            {{detail.error}}
+          </div>
+          <textarea ng-model="detail.stringValue"></textarea>
+        </div>
+      </div>
     </div>
     <div ng-switch-when="scenarios" class="leonardo-activate">
       <div class="leonardo-menu">

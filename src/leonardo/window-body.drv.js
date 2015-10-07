@@ -5,27 +5,27 @@ angular.module('leonardo').directive('leoWindowBody',
     templateUrl: 'window-body.html',
     scope: true,
     replace: true,
-    controller: ['$scope', function($scope){
-      $scope.NothasUrl = function(option){
+    controller: ['$scope', function($scope) {
+      $scope.NothasUrl = function (option) {
         return !option.url;
       };
-      $scope.hasUrl = function(option){
+      $scope.hasUrl = function (option) {
         return !!option.url;
       };
 
-      $scope.deactivate = function() {
-        $scope.states.forEach(function(state){
-            state.active = false;
+      $scope.deactivate = function () {
+        $scope.states.forEach(function (state) {
+          state.active = false;
         });
         leoConfiguration.deactivateAllStates();
       };
 
-      $scope.updateState = function(state){
+      $scope.updateState = function (state) {
         if (state.active) {
-          console.log('activate state option:' +  state.name + ': ' + state.activeOption.name);
+          console.log('activate state option:' + state.name + ': ' + state.activeOption.name);
           leoConfiguration.activateStateOption(state.name, state.activeOption.name);
         } else {
-          console.log('deactivating state: ' +  state.name);
+          console.log('deactivating state: ' + state.name);
           leoConfiguration.deactivateState(state.name);
         }
       };
@@ -34,11 +34,43 @@ angular.module('leonardo').directive('leoWindowBody',
 
       $scope.scenarios = leoConfiguration.getScenarios();
 
-      $scope.activateScenario = function(scenario){
+      $scope.activateScenario = function (scenario) {
         $scope.activeScenario = scenario;
         leoConfiguration.setActiveScenario(scenario);
         $scope.states = leoConfiguration.getStates();
       };
+
+      $scope.unregisteredStates = leoConfiguration.getRequestsLog();
+      $scope.detail = {
+        stringValue: '',
+        state : '',
+        option: '',
+        delay: 0,
+        status: 200,
+        value: {
+          asdasd: "Asd"
+        }
+      };
+
+      $scope.$watch('detail.value', function(value){
+        try {
+          $scope.detail.stringValue = JSON.stringify(value, null, 4);
+          $scope.detail.error = '';
+        }
+        catch (e) {
+          $scope.detail.error = e.message;
+        }
+      });
+
+      $scope.$watch('detail.stringValue', function(value){
+        try {
+          $scope.detail.value = JSON.parse(value);
+          $scope.detail.error = '';
+        }
+        catch(e) {
+          $scope.detail.error = e.message;
+        }
+      });
 
       $scope.$on('leonardo:stateChanged', function() {
         $scope.states = leoConfiguration.getStates();
@@ -59,6 +91,24 @@ angular.module('leonardo').directive('leoWindowBody',
           });
         }
       };
+
+      scope.saveState = function (state) {
+        console.log('saveState');
+      };
     }
   };
 }]);
+
+angular.module('leonardo').directive('unregisteredState', function () {
+  return {
+    restrict: 'E',
+    templateUrl: 'unregistered-state.html',
+    controller: function ($scope) {
+      console.log($scope);
+      $scope.saveUnregisteredState = function (state) {
+        console.log('saveUnregisteredState');
+        $scope.saveState();
+      };
+    }
+  }
+});
