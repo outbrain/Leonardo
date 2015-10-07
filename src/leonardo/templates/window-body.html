@@ -74,7 +74,7 @@
           </div>
         </li>
         <li><h3>Ajax States</h3></li>
-        <li ng-repeat="state in states | filter:hasUrl">
+        <li ng-repeat="state in states | filter:hasUrl track by $index">
           <div>
             <div class="onoffswitch">
               <input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}">

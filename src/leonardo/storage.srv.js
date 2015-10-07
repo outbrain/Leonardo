@@ -1,5 +1,6 @@
 angular.module('leonardo').factory('leoStorage', ['$rootScope', '$window', function storageService($rootScope, $window) {
-  var STATES_STORE_KEY = 'leonardo-states';
+  var STATES_STORE_KEY = 'leonardo-states',
+      SAVED_STATES_KEY = 'leonardo-unregistered-states';
   function getItem(key) {
     var item = $window.localStorage.getItem(key);
     if (!item) {
@@ -21,10 +22,20 @@ angular.module('leonardo').factory('leoStorage', ['$rootScope', '$window', funct
     $rootScope.$emit('leonardo:setStates');
   }
 
+  function getSavedStates() {
+    return getItem(SAVED_STATES_KEY) || [];
+  }
+
+  function setSavedStates(states) {
+    setItem(SAVED_STATES_KEY, states);
+  }
+
   return {
     getItem: getItem,
     setItem: setItem,
     setStates: setStates,
-    getStates: getStates
+    getStates: getStates,
+    getSavedStates: getSavedStates,
+    setSavedStates: setSavedStates
   };
 }]);
