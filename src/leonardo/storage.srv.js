@@ -1,7 +1,9 @@
-angular.module('leonardo').factory('leoStorage', ['$rootScope', '$window', function storageService($rootScope, $window) {
-  var STATES_STORE_KEY = 'leonardo-states',
-      SAVED_STATES_KEY = 'leonardo-unregistered-states';
+angular.module('leonardo').factory('leoStorage', ['$rootScope', '$window', '$leonardo', function storageService($rootScope, $window, $leonardo) {
+  var APP_PREFIX = $leonardo.getAppPrefix() + '_',
+      STATES_STORE_KEY = APP_PREFIX + 'leonardo-states',
+      SAVED_STATES_KEY = APP_PREFIX + 'leonardo-unregistered-states';
   function getItem(key) {
+    key = APP_PREFIX + key;
     var item = $window.localStorage.getItem(key);
     if (!item) {
       return null;
@@ -10,6 +12,7 @@ angular.module('leonardo').factory('leoStorage', ['$rootScope', '$window', funct
   }
 
   function setItem(key, data) {
+    key = APP_PREFIX + key;
     $window.localStorage.setItem(key, angular.toJson(data));
   }
 

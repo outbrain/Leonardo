@@ -3,8 +3,9 @@ function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-var Flicker = angular.module('flicker-example', ['leonardo','akoenig.deckgrid'])
-  .config(function ($locationProvider) {
+var Flicker = angular.module('flicker-example', ['leonardo', 'akoenig.deckgrid'])
+  .config(function ($locationProvider, $leonardoProvider) {
+      $leonardoProvider.setAppPrefix('flicker-example');
     $locationProvider.html5Mode(false);
   })
   .controller('flickerCtrl', function ($scope, flickerGetter) {
