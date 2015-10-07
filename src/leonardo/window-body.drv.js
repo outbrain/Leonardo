@@ -43,6 +43,10 @@ angular.module('leonardo').directive('leoWindowBody',
       $scope.unregisteredStates = leoConfiguration.getRequestsLog();
       $scope.detail = {
         stringValue: '',
+        state : '',
+        option: '',
+        delay: 0,
+        status: 200,
         value: {
           asdasd: "Asd"
         }

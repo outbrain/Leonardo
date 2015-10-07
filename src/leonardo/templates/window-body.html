@@ -55,10 +55,19 @@
         </ul>
       </div>
       <div class="leo-detail">
-        <div class="leo-error">
-          {{detail.error}}
+        <div ng-if="detail.state">State Name: {{detail.state}}</div>
+        <div ng-if="!detail.state">State Name: <input ng-model="detail.state" /></div>
+        <div>
+          <div>Option: <input ng-model="detail.option"/></div>
+          <div>Delay: <input ng-model="detail.delay"/></div>
+          <div>Status: <input ng-model="detail.status"/></div>
         </div>
-        <textarea ng-model="detail.stringValue"></textarea>
+        <div class="leo-row-flex">
+          <div class="leo-error">
+            {{detail.error}}
+          </div>
+          <textarea ng-model="detail.stringValue"></textarea>
+        </div>
       </div>
     </div>
     <div ng-switch-when="scenarios" class="leonardo-activate">
