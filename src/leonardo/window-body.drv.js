@@ -84,6 +84,10 @@ angular.module('leonardo').directive('leoWindowBody',
         }
       };
 
+      scope.stateSelect = function (state) {
+        console.log('enter ctrl stateSelect', state);
+      };
+
       scope.saveState = function (state) {
         console.log('saveState');
       };
@@ -95,12 +99,16 @@ angular.module('leonardo').directive('unregisteredState', function () {
   return {
     restrict: 'E',
     templateUrl: 'unregistered-state.html',
+    scope: {
+      state: '=',
+      stateSelect: '&'
+    },
     controller: function ($scope) {
       console.log($scope);
-      $scope.saveUnregisteredState = function (state) {
-        console.log('saveUnregisteredState');
-        $scope.saveState();
-      };
+      $scope.onSelect = function () {
+        console.log('stateSelect');
+        $scope.stateSelect();
+      }
     }
   }
 });

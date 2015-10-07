@@ -47,7 +47,10 @@
     <div ng-switch-when="recorder" class="leonardo-recorder">
       <div class="leo-list">
         <ul>
-          <unregistered-state ng-repeat="state in unregisteredStates" on-save="saveUnregisteredState(state)">
+          <unregistered-state 
+            ng-repeat="state in unregisteredStates"
+            state="state"
+            state-select="stateSelect(state)">
           </unregistered-state>
         </ul>
       </div>

@@ -4,7 +4,19 @@
   border-top: 1px solid @lightGray;
   .leo-list {
     flex: 3;
+    ul {
+      padding: 0;
+      margin: 0;
+    }
     border-right: 1px solid @lightGray;
+    .leo-recorded-item {
+      cursor: pointer;
+      &:hover {
+        background: lightblue;
+      }
+      padding: 5px;
+      border-radius: 2px;
+    }
   }
   .leo-detail {
     flex: 1;
