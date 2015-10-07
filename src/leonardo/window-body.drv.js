@@ -68,9 +68,13 @@ angular.module('leonardo').directive('leoWindowBody',
       });
 
       $scope.unregisteredStateSelect = function (unregistered) {
+        if (unregistered.state && unregistered.state.name) {
+          var optionName = unregistered.state.name + ' option ' + unregistered.state.options.length;
+        }
+
         angular.extend($scope.detail, {
           state : (unregistered.state && unregistered.state.name) || '',
-          option: '',
+          option: optionName || '',
           delay: 0,
           status: 200,
           stateActive: !!unregistered,
