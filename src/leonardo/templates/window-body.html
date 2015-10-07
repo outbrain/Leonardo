@@ -46,7 +46,12 @@
     </div>
     <div ng-switch-when="recorder" class="leonardo-recorder">
       <div class="leo-list"></div>
-      <div class="leo-detail"></div>
+      <div class="leo-detail">
+        <div class="leo-error">
+          {{detail.error}}
+        </div>
+        <textarea ng-model="detail.stringValue"></textarea>
+      </div>
     </div>
     <div ng-switch-when="scenarios" class="leonardo-activate">
       <div class="leonardo-menu">

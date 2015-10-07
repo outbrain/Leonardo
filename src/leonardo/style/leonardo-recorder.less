@@ -1,11 +1,27 @@
 .leonardo-recorder {
   height: 100%;
   display: flex;
+  border-top: 1px solid @lightGray;
   .leo-list {
     flex: 3;
-    border-right: 1px solid pink;
+    border-right: 1px solid @lightGray;
   }
   .leo-detail {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    textarea {
+      flex: 1;
+      border: 0;
+      padding: 20px;
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .leo-error {
+      color: Red;
+    }
   }
 }
