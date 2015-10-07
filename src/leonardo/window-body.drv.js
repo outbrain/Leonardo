@@ -6,6 +6,8 @@ angular.module('leonardo').directive('leoWindowBody',
     scope: true,
     replace: true,
     controller: ['$scope', function($scope) {
+      $scope.detail = {};
+
       $scope.NothasUrl = function (option) {
         return !option.url;
       };
@@ -41,16 +43,6 @@ angular.module('leonardo').directive('leoWindowBody',
       };
 
       $scope.unregisteredStates = leoConfiguration.getRequestsLog();
-      $scope.detail = {
-        stringValue: '',
-        state : '',
-        option: '',
-        delay: 0,
-        status: 200,
-        value: {
-          asdasd: "Asd"
-        }
-      };
 
       $scope.$watch('detail.value', function(value){
         try {
@@ -71,6 +63,20 @@ angular.module('leonardo').directive('leoWindowBody',
           $scope.detail.error = e.message;
         }
       });
+
+      $scope.stateSelect = function (unregistered) {
+        angular.extend($scope.detail, {
+          stringValue: '',
+          state : (unregistered.state && unregistered.state.name) || '',
+          option: '',
+          delay: 0,
+          status: 200,
+          stateActive: !!unregistered,
+          value: unregistered.data || {}
+        });
+
+        $scope.detail.stateActive = !!unregistered.state;
+      };
     }],
     link: function(scope) {
       scope.test = {
@@ -88,9 +94,6 @@ angular.module('leonardo').directive('leoWindowBody',
         }
       };
 
-      scope.stateSelect = function (state) {
-        console.log('enter ctrl stateSelect', state);
-      };
 
       scope.saveState = function (state) {
         console.log('saveState');
