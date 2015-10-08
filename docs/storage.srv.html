@@ -77,10 +77,10 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>).factory(<span class="hljs-string">'leoStorage'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">storageService</span><span class="hljs-params">()</span> </span>{
+            <div class="content"><div class='highlight'><pre>angular.module(<span class="hljs-string">'leonardo'</span>).factory(<span class="hljs-string">'leoStorage'</span>, [<span class="hljs-string">'$rootScope'</span>, <span class="hljs-string">'$window'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">storageService</span><span class="hljs-params">($rootScope, $window)</span> </span>{
   <span class="hljs-keyword">var</span> STATES_STORE_KEY = <span class="hljs-string">'leonardo-states'</span>;
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getItem</span><span class="hljs-params">(key)</span> </span>{
-    <span class="hljs-keyword">var</span> item = localStorage.getItem(key);
+    <span class="hljs-keyword">var</span> item = $<span class="hljs-built_in">window</span>.localStorage.getItem(key);
     <span class="hljs-keyword">if</span> (!item) {
       <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
     }
@@ -88,7 +88,7 @@
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setItem</span><span class="hljs-params">(key, data)</span> </span>{
-    localStorage.setItem(key, angular.toJson(data));
+    $<span class="hljs-built_in">window</span>.localStorage.setItem(key, angular.toJson(data));
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getStates</span><span class="hljs-params">()</span> </span>{
@@ -97,6 +97,7 @@
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setStates</span><span class="hljs-params">(states)</span> </span>{
     setItem(STATES_STORE_KEY, states);
+    $rootScope.$emit(<span class="hljs-string">'leonardo:setStates'</span>);
   }
 
   <span class="hljs-keyword">return</span> {
@@ -105,7 +106,7 @@
     setStates: setStates,
     getStates: getStates
   };
-});</pre></div></div>
+}]);</pre></div></div>
             
         </li>
         

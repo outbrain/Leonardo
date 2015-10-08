@@ -3,6 +3,7 @@ angular.module('leonardo').factory('leoConfiguration',
   var states = [],
       _scenarios = {},
       responseHandlers = {},
+      _requestsLog = {},
       // Core API
       // ----------------
       api = {
@@ -19,8 +20,10 @@ angular.module('leonardo').factory('leoConfiguration',
         getScenario: getScenario,
         getScenarios: getScenarios,
         setActiveScenario: setActiveScenario,
+        getUnregisteredStates: getUnregisteredStates,
         //Private api for passing through unregistered urls to $htto
-        _requestSubmitted: requestSubmitted
+        _requestSubmitted: requestSubmitted,
+        _logRequest: logRequest
       };
   return api;
 
@@ -233,5 +236,46 @@ angular.module('leonardo').factory('leoConfiguration',
     if (!state) {
       handler.passThrough();
     }
+  }
+
+  function logRequest(method, url, data, status) {
+    if (method && url && !(url.indexOf(".html") > 0)) {
+      _requestsLog[method.toUpperCase() + " " + url.trim()] = {
+        verb: method,
+        data: data,
+        url: url.trim(),
+        status: status
+      };
+    }
+  }
+
+ function isRequestRegistered(_states, req) {
+   return _states.some(function(state) {
+     if (!state.url) return false;
+     return state.url === req.url && state.verb.toLowerCase() === req.verb.toLowerCase() ;
+   });
+ }
+
+  function getUnregisteredStates() {
+    var _states = fetchStates(),
+        requestsArr = Object.keys(_requestsLog)
+          .filter(function(key) {
+            return !isRequestRegistered(_states, _requestsLog[key]);
+          })
+          .map(function(key){
+            var req = _requestsLog[key];
+            return {
+              name: key,
+              verb: req.verb,
+              url: req.url,
+              options: [{
+                name: req.status >= 200 && req.status < 300 ? 'Success' : 'Failure',
+                status: req.status,
+                data: req.data
+              }]
+            }
+          });
+    console.log(angular.toJson(requestsArr, true));
+    return requestsArr;
   }
 }]);

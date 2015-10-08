@@ -81,7 +81,8 @@
     [<span class="hljs-string">'leoStorage'</span>, <span class="hljs-string">'$httpBackend'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(leoStorage, $httpBackend)</span> </span>{
   <span class="hljs-keyword">var</span> states = [],
       _scenarios = {},
-      responseHandlers = {},</pre></div></div>
+      responseHandlers = {},
+      _requestsLog = {},</pre></div></div>
             
         </li>
         
@@ -134,7 +135,8 @@
         addScenarios: addScenarios,
         getScenario: getScenario,
         getScenarios: getScenarios,
-        setActiveScenario: setActiveScenario,</pre></div></div>
+        setActiveScenario: setActiveScenario,
+        extractLoggedRequests: extractLoggedRequests,</pre></div></div>
             
         </li>
         
@@ -145,11 +147,12 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Private api for passing through unregistered urls to $htto</p>
+              <p>Private api for passing through unregistered urls to $http</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        _requestSubmitted: requestSubmitted
+            <div class="content"><div class='highlight'><pre>        _requestSubmitted: requestSubmitted,
+        _logRequest: logRequest
       };
   <span class="hljs-keyword">return</span> api;
 
@@ -222,15 +225,18 @@
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getResponseHandler</span><span class="hljs-params">(state)</span> </span>{
-    <span class="hljs-keyword">if</span> (!responseHandlers[state.url + <span class="hljs-string">'_'</span> + state.verb]) {
+    <span class="hljs-keyword">var</span> url = state.url;
+    <span class="hljs-keyword">var</span> verb = state.verb === <span class="hljs-string">'jsonp'</span> ? state.verb : state.verb.toUpperCase();
+
+    <span class="hljs-keyword">if</span> (!responseHandlers[url + <span class="hljs-string">'_'</span> + verb]) {
       <span class="hljs-keyword">if</span> (state.verb === <span class="hljs-string">'jsonp'</span>){
-        responseHandlers[state.url + <span class="hljs-string">'_'</span> + state.verb] = $httpBackend.whenJSONP(<span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(state.url));
+        responseHandlers[url + <span class="hljs-string">'_'</span> + verb] = $httpBackend.whenJSONP(<span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(url));
       }
       <span class="hljs-keyword">else</span> {
-        responseHandlers[state.url + <span class="hljs-string">'_'</span> + state.verb] = $httpBackend.when(state.verb || <span class="hljs-string">'GET'</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(state.url));
+        responseHandlers[url + <span class="hljs-string">'_'</span> + verb] = $httpBackend.when(verb || <span class="hljs-string">'GET'</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(url));
       }
     }
-    <span class="hljs-keyword">return</span> responseHandlers[state.url + <span class="hljs-string">'_'</span> + state.verb];
+    <span class="hljs-keyword">return</span> responseHandlers[url + <span class="hljs-string">'_'</span> + verb];
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getState</span><span class="hljs-params">(name)</span></span>{
@@ -329,7 +335,7 @@
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getScenario</span><span class="hljs-params">(name)</span></span>{
     <span class="hljs-built_in">console</span>.log(name);
     <span class="hljs-keyword">if</span> (!_scenarios[name]) {
-      <span class="hljs-keyword">return</span>
+      <span class="hljs-keyword">return</span>;
     }
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'return scenario'</span>, _scenarios[name].states);
     <span class="hljs-keyword">return</span> _scenarios[name].states;
@@ -359,6 +365,30 @@
     <span class="hljs-keyword">if</span> (!state) {
       handler.passThrough();
     }
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">logRequest</span><span class="hljs-params">(method, url, data)</span> </span>{
+    <span class="hljs-keyword">if</span> (url &amp;&amp; !(url <span class="hljs-keyword">in</span> _requestsLog)) {
+      _requestsLog[url] = {
+        verb: method,
+        data: data
+      };
+    }
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">extractLoggedRequests</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">Object</span>.keys(_requestsLog).map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(url)</span></span>{
+      <span class="hljs-keyword">return</span> {
+        name: url,
+        verb: _requestsLog.verb,
+        url: url,
+        options: [{
+          name: <span class="hljs-string">'Success'</span>,
+          status: <span class="hljs-number">200</span>,
+          data: _requestsLog.data
+        }]
+      }
+    }));
   }
 }]);</pre></div></div>
             
