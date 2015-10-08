@@ -2,8 +2,7 @@ angular.module('leonardo').factory('leoStorage', ['$rootScope', '$window', '$leo
   var APP_PREFIX = $leonardo.getAppPrefix() + '_',
       STATES_STORE_KEY = APP_PREFIX + 'leonardo-states',
       SAVED_STATES_KEY = APP_PREFIX + 'leonardo-unregistered-states';
-  function getItem(key) {
-    key = APP_PREFIX + key;
+  function _getItem(key) {
     var item = $window.localStorage.getItem(key);
     if (!item) {
       return null;
@@ -11,31 +10,28 @@ angular.module('leonardo').factory('leoStorage', ['$rootScope', '$window', '$leo
     return angular.fromJson(item);
   }
 
-  function setItem(key, data) {
-    key = APP_PREFIX + key;
+  function _setItem(key, data) {
     $window.localStorage.setItem(key, angular.toJson(data));
   }
 
   function getStates() {
-    return getItem(STATES_STORE_KEY) || {};
+    return _getItem(STATES_STORE_KEY) || {};
   }
 
   function setStates(states) {
-    setItem(STATES_STORE_KEY, states);
+    _setItem(STATES_STORE_KEY, states);
     $rootScope.$emit('leonardo:setStates');
   }
 
   function getSavedStates() {
-    return getItem(SAVED_STATES_KEY) || [];
+    return _getItem(SAVED_STATES_KEY) || [];
   }
 
   function setSavedStates(states) {
-    setItem(SAVED_STATES_KEY, states);
+    _setItem(SAVED_STATES_KEY, states);
   }
 
   return {
-    getItem: getItem,
-    setItem: setItem,
     setStates: setStates,
     getStates: getStates,
     getSavedStates: getSavedStates,

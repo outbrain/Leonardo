@@ -95,7 +95,8 @@ angular.module('leonardo').directive('leoWindowBody',
           options: [
             {
               name: $scope.detail.option,
-              status: $scope.detail.status
+              status: $scope.detail.status,
+              data: $scope.detail.value
             }
           ]
         });

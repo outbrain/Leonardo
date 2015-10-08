@@ -82,13 +82,14 @@ angular.module('leonardo').factory('leoConfiguration',
   }
 
   function sync(){
-    fetchStates().forEach(function (state) {
+    fetchStates().forEach(function (state, i) {
       var option, responseHandler;
       if (state.url) {
         option = findStateOption(state.name);
         responseHandler = getResponseHandler(state);
         if (state.active) {
           responseHandler.respond(function () {
+            console.log(i);
             $httpBackend.setDelay(option.delay);
             return [option.status, angular.isFunction(option.data) ? option.data() : option.data];
           });
@@ -102,16 +103,17 @@ angular.module('leonardo').factory('leoConfiguration',
   function getResponseHandler(state) {
     var url = state.url;
     var verb = state.verb === 'jsonp' ? state.verb : state.verb.toUpperCase();
+    var key = (url + '_' + verb).toUpperCase();
 
-    if (!responseHandlers[url + '_' + verb]) {
+    if (!responseHandlers[key]) {
       if (state.verb === 'jsonp'){
-        responseHandlers[url + '_' + verb] = $httpBackend.whenJSONP(new RegExp(url));
+        responseHandlers[key] = $httpBackend.whenJSONP(new RegExp(url));
       }
       else {
-        responseHandlers[url + '_' + verb] = $httpBackend.when(verb || 'GET', new RegExp(url));
+        responseHandlers[key] = $httpBackend.when(verb || 'GET', new RegExp(url));
       }
     }
-    return responseHandlers[url + '_' + verb];
+    return responseHandlers[key];
   }
 
   function getState(name){
