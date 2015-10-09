@@ -13,8 +13,7 @@ var Flicker = angular.module('flicker-example', ['leonardo', 'akoenig.deckgrid']
       $scope.loading = true;
       flickerGetter.getData().then(function(data){
         $scope.photos = data;
-        $scope.loading = false;
-      }, function () {
+      }).finally(function () {
         $scope.loading = false;
       });
 
@@ -58,9 +57,7 @@ Flicker.factory('flickerGetter', ['$q', '$http', function ($q, $http) {
 
   return {
     getData: function(){
-      var defer = $q.defer();
-
-      $http.jsonp(' http://api.flickr.com/services/feeds/photos_public.gne', {
+      return $http.jsonp('http://api.flickr.com/services/feeds/photos_public.gne', {
         method: 'jsonp',
         params: {
           tags: tags[getRandomIntInclusive(0, tags.length - 1)],
@@ -68,24 +65,17 @@ Flicker.factory('flickerGetter', ['$q', '$http', function ($q, $http) {
           format: 'json',
           jsoncallback: 'JSON_CALLBACK'
         }
-      }).success(function (data) {
-        data = data.items.map(function (item) {
+      }).then(function (response) {
+        return response.data.items.map(function (item) {
           var imageUrl = item.media.m;
           return {
             imageUrl: imageUrl
           };
         });
-        defer.resolve(data);
-      }).error(function () {
-        defer.resolve();
       });
-
-      return defer.promise;
     },
     getNinjaData: function () {
-      var defer = $q.defer();
-
-      $http.jsonp('https://api.flickr.com/services/rest', {
+      return $http.jsonp('https://api.flickr.com/services/rest', {
         method: 'jsonp',
         params: {
           method: "flickr.photosets.getPhotos",
@@ -95,17 +85,13 @@ Flicker.factory('flickerGetter', ['$q', '$http', function ($q, $http) {
           "format": "json",
           jsoncallback: 'JSON_CALLBACK'
         }
-      }).success(function (data) {
-        defer.resolve(data.photoset.photo.map(function (photo) {
+      }).then(function (response) {
+        return response.data.photoset.photo.map(function (photo) {
           return {
             imageUrl: 'https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}_b.jpg'.replace('{farm-id}', photo.farm).replace('{server-id}', photo.server).replace('{id}', photo.id).replace('{secret}', photo.secret)
           };
-        }));
-      }).error(function () {
-        defer.resolve();
+        });
       });
-
-      return defer.promise;
     }
   };
 }]);
