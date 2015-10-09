@@ -42,7 +42,7 @@ angular.module('leonardo').directive('leoWindowBody',
         $scope.states = leoConfiguration.getStates();
       };
 
-      $scope.unregisteredStates = leoConfiguration.getRequestsLog();
+      $scope.requests = leoConfiguration.getRequestsLog();
 
       $scope.$watch('detail.value', function(value){
         if (!value) {
@@ -67,20 +67,26 @@ angular.module('leonardo').directive('leoWindowBody',
         }
       });
 
-      $scope.unregisteredStateSelect = function (unregistered) {
-        if (unregistered.state && unregistered.state.name) {
-          var optionName = unregistered.state.name + ' option ' + unregistered.state.options.length;
+      $scope.requestSelect = function (request) {
+        $scope.requests.forEach(function (request) {
+          request.active = false;
+        });
+
+        request.active = true;
+
+        if (request.state && request.state.name) {
+          var optionName = request.state.name + ' option ' + request.state.options.length;
         }
 
         angular.extend($scope.detail, {
-          state : (unregistered.state && unregistered.state.name) || '',
+          state : (request.state && request.state.name) || '',
           option: optionName || '',
           delay: 0,
           status: 200,
-          stateActive: !!unregistered,
-          value: unregistered.data || {}
+          stateActive: !!request,
+          value: request.data || {}
         });
-        $scope.detail._unregisteredState = unregistered;
+        $scope.detail._unregisteredState = request;
       };
 
       $scope.$on('leonardo:stateChanged', function() {
@@ -121,19 +127,18 @@ angular.module('leonardo').directive('leoWindowBody',
   };
 }]);
 
-angular.module('leonardo').directive('unregisteredState', function () {
+angular.module('leonardo').directive('request', function () {
   return {
     restrict: 'E',
-    templateUrl: 'unregistered-state.html',
+    templateUrl: 'request.html',
+    replace: true,
     scope: {
-      state: '=',
-      stateSelect: '&'
+      request: '=',
+      onSelect: '&'
     },
     controller: function ($scope) {
-      console.log($scope);
-      $scope.onSelect = function () {
-        console.log('stateSelect');
-        $scope.stateSelect();
+      $scope.select = function () {
+        $scope.onSelect();
       }
     }
   }

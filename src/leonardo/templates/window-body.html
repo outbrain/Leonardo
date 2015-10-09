@@ -46,13 +46,13 @@
     </div>
     <div ng-switch-when="recorder" class="leonardo-recorder">
       <div class="leo-list">
-        <ul>
-          <unregistered-state 
-            ng-repeat="state in unregisteredStates"
-            state="state"
-            state-select="unregisteredStateSelect(state)">
-          </unregistered-state>
-        </ul>
+        <div class="list-group">
+          <request
+            ng-repeat="request in requests"
+            request="request"
+            on-select="requestSelect(request)">
+          </request>
+        </div>
       </div>
       <div class="leo-detail">
         <div ng-if="detail.stateActive">State Name: {{detail.state}}</div>

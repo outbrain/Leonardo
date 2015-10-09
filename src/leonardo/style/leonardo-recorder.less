@@ -9,13 +9,28 @@
       margin: 0;
     }
     border-right: 1px solid @lightGray;
-    .leo-recorded-item {
-      cursor: pointer;
-      &:hover {
-        background: lightblue;
+
+    .leo-list-item {
+      position: relative;
+      display: block;
+      padding: 10px 15px;
+      margin-bottom: -1px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      text-decoration: none;
+      color: #555;
+      &.active {
+        color: #fff;
+        background-color: #2FCCFF;
+        border-color: #2FCCFF;
       }
-      padding: 5px;
-      border-radius: 2px;
+    }
+  }
+  a.leo-list-item {
+    &:hover {
+      color: #555;
+      text-decoration: none;
+      background-color: #f5f5f5;
     }
   }
   .leo-detail {
