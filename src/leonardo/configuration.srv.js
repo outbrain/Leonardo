@@ -141,7 +141,7 @@ angular.module('leonardo').factory('leoConfiguration',
         name = stateObj.name,
         url = stateObj.url,
         status = stateObj.status || 200,
-        data = stateObj.data || {},
+        data = angular.isDefined(stateObj.data) ? stateObj.data : {},
         delay = stateObj.delay || 0;
     var defaultState = {};
 
