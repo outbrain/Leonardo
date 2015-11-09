@@ -4,11 +4,11 @@ function getRandomIntInclusive(min, max) {
 }
 
 var Flicker = angular.module('flicker-example', ['leonardo', 'akoenig.deckgrid'])
-  .config(function ($locationProvider, $leonardoProvider) {
+  .config(['$locationProvider', '$leonardoProvider', function ($locationProvider, $leonardoProvider) {
       $leonardoProvider.setAppPrefix('flicker-example');
     $locationProvider.html5Mode(false);
-  })
-  .controller('flickerCtrl', function ($scope, flickerGetter) {
+  }])
+  .controller('flickerCtrl', ['$scope', 'flickerGetter', function ($scope, flickerGetter) {
     $scope.loadClicked = function () {
       $scope.loading = true;
       flickerGetter.getData().then(function(data){
@@ -50,7 +50,7 @@ var Flicker = angular.module('flicker-example', ['leonardo', 'akoenig.deckgrid']
       tour.start();
     }, 800);
 
-  });
+  }]);
 
 Flicker.factory('flickerGetter', ['$q', '$http', function ($q, $http) {
   var tags = ['cartoons', 'smurfs', 'nature', 'space'];
