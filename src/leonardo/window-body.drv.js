@@ -84,7 +84,7 @@ angular.module('leonardo').directive('leoWindowBody',
           option: optionName || '',
           delay: 0,
           status: 200,
-          stateActive: !!request,
+          stateActive: !!request.state,
           value: request.data || {}
         });
         $scope.detail._unregisteredState = request;
@@ -104,7 +104,11 @@ angular.module('leonardo').directive('leoWindowBody',
           }, 1000);
         }
       });
-
+      
+      $scope.getStatesForExport = function () {
+        $scope.exportStates = leoConfiguration.getStates();
+      }
+      
     }],
     link: function(scope, el, attr, leoActivator) {
       scope.saveUnregisteredState = function () {
@@ -144,20 +148,3 @@ angular.module('leonardo').directive('leoWindowBody',
     }
   };
 }]);
-
-angular.module('leonardo').directive('request', function () {
-  return {
-    restrict: 'E',
-    templateUrl: 'request.html',
-    replace: true,
-    scope: {
-      request: '=',
-      onSelect: '&'
-    },
-    controller: function ($scope) {
-      $scope.select = function () {
-        $scope.onSelect();
-      }
-    }
-  }
-});
