@@ -126,20 +126,3 @@ angular.module('leonardo').directive('leoWindowBody',
     }
   };
 }]);
-
-angular.module('leonardo').directive('request', function () {
-  return {
-    restrict: 'E',
-    templateUrl: 'request.html',
-    replace: true,
-    scope: {
-      request: '=',
-      onSelect: '&'
-    },
-    controller: function ($scope) {
-      $scope.select = function () {
-        $scope.onSelect();
-      }
-    }
-  }
-});

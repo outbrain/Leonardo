@@ -47,11 +47,11 @@
     <div ng-switch-when="recorder" class="leonardo-recorder">
       <div class="leo-list">
         <div class="list-group">
-          <request
+          <leo-request
             ng-repeat="request in requests"
             request="request"
             on-select="requestSelect(request)">
-          </request>
+          </leo-request>
         </div>
       </div>
       <div class="leo-detail">
