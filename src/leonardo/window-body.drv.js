@@ -101,7 +101,7 @@ angular.module('leonardo').directive('leoWindowBody',
           state.highlight = true;
           $timeout(function(){
             state.highlight = false;
-          }, 1000);
+          }, 3000);
         }
       });
       
