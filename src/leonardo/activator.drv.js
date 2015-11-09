@@ -6,7 +6,6 @@ angular.module('leonardo').directive('leoActivator', ['$compile', function activ
       this.activeTab = 'recorder';
       this.selectTab = function (name) {
         this.activeTab = name;
-        console.log(name);
       };
     },
     link: function(scope, elem) {
