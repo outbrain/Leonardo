@@ -401,13 +401,8 @@ angular.module('leonardo').factory('leoConfiguration',
 angular.module('leonardo').factory('leoHttpInterceptor', ['leoConfiguration', '$q', function(leoConfiguration, $q) {
   return {
     'request': function(request) {
-<<<<<<< HEAD
-      //leoConfiguration._logRequest(request.method, request.url);
-      return request;
-=======
       leoConfiguration._logRequest(request.method, request.url);
       return $q.when(request);
->>>>>>> master
     },
     'response': function(response) {
       leoConfiguration._logRequest(response.config.method, response.config.url, response.data, response.status);
