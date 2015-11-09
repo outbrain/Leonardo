@@ -43,7 +43,7 @@ gulp.task("build:templates", false, function () {
       .pipe(ngHtml2Js({
         moduleName: 'leonardo.templates'
       }))
-      .pipe(rename('leonardo.templates.min.js'))
+      .pipe(concat('leonardo.templates.min.js'))
       .pipe(gulp.dest('./tmp'));
 });
 
@@ -51,11 +51,13 @@ gulp.task('build:js', function(){
   return gulp.src(
       [
         './src/leonardo/module.js',
+        './src/leonardo/leonardo.prov.js',
         './src/leonardo/configuration.srv.js',
         './src/leonardo/httpInterceptor.srv.js',
         './src/leonardo/storage.srv.js',
         './src/leonardo/activator.drv.js',
         './src/leonardo/window-body.drv.js',
+        './src/leonardo/request.drv.js',
         './tmp/leonardo.templates.min.js'
       ])
       .pipe(concat('leonardo.js'))

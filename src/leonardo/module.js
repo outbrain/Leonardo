@@ -70,4 +70,7 @@ angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
 
       return proxy;
     }]);
-  }]);
+  }])
+  .run(['leoConfiguration', function(leoConfiguration) {
+      leoConfiguration.loadSavedStates();
+    }]);

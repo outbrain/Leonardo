@@ -3,11 +3,12 @@ function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-var Flicker = angular.module('flicker-example', ['leonardo','akoenig.deckgrid'])
-  .config(function ($locationProvider) {
+var Flicker = angular.module('flicker-example', ['leonardo', 'akoenig.deckgrid'])
+  .config(['$locationProvider', '$leonardoProvider', function ($locationProvider, $leonardoProvider) {
+      $leonardoProvider.setAppPrefix('flicker-example');
     $locationProvider.html5Mode(false);
-  })
-  .controller('flickerCtrl', function ($scope, flickerGetter) {
+  }])
+  .controller('flickerCtrl', ['$scope', 'flickerGetter', function ($scope, flickerGetter) {
     $scope.loadClicked = function () {
       $scope.loading = true;
       flickerGetter.getData().then(function(data){
@@ -49,17 +50,14 @@ var Flicker = angular.module('flicker-example', ['leonardo','akoenig.deckgrid'])
       tour.start();
     }, 800);
 
-  });
+  }]);
 
 Flicker.factory('flickerGetter', ['$q', '$http', function ($q, $http) {
-  var tags = ['cartoons', 'smurfs', 'nature', 'space'];
-
   return {
     getData: function(){
       return $http.jsonp('http://api.flickr.com/services/feeds/photos_public.gne', {
         method: 'jsonp',
         params: {
-          tags: tags[getRandomIntInclusive(0, tags.length - 1)],
           tagmode: "any",
           format: 'json',
           jsoncallback: 'JSON_CALLBACK'

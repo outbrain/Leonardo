@@ -4,7 +4,7 @@
   top: 0;
   left: 0;
   right: 0;
-  border-bottom: 1px solid #cccccc;
+  border-bottom: 1px solid @lightGray;
   display: inline-block;
   min-height: 44px;
   
@@ -26,7 +26,8 @@
         text-transform: uppercase;
         font-size: 12px;
         width: 170px;
-        &:first-child + li {
+        cursor: pointer;
+        &.leo-selected-tab {
           border-top: 3px solid #f08222;
         }
         &:first-child {

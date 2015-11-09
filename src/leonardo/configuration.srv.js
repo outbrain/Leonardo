@@ -1,9 +1,10 @@
 angular.module('leonardo').factory('leoConfiguration',
-    ['leoStorage', '$httpBackend', function(leoStorage, $httpBackend) {
+    ['leoStorage', '$httpBackend', '$rootScope', function(leoStorage, $httpBackend, $rootScope) {
   var states = [],
       _scenarios = {},
       responseHandlers = {},
-      _requestsLog = {},
+      _requestsLog = [],
+      _savedStates = [],
       // Core API
       // ----------------
       api = {
@@ -20,7 +21,10 @@ angular.module('leonardo').factory('leoConfiguration',
         getScenario: getScenario,
         getScenarios: getScenarios,
         setActiveScenario: setActiveScenario,
-        getUnregisteredStates: getUnregisteredStates,
+        getRecordedStates: getRecordedStates,
+        getRequestsLog: getRequestsLog,
+        loadSavedStates: loadSavedStates,
+        addSavedState: addSavedState,
         //Private api for passing through unregistered urls to $htto
         _requestSubmitted: requestSubmitted,
         _logRequest: logRequest
@@ -78,13 +82,14 @@ angular.module('leonardo').factory('leoConfiguration',
   }
 
   function sync(){
-    fetchStates().forEach(function (state) {
+    fetchStates().forEach(function (state, i) {
       var option, responseHandler;
       if (state.url) {
         option = findStateOption(state.name);
         responseHandler = getResponseHandler(state);
         if (state.active) {
           responseHandler.respond(function () {
+            console.log(i);
             $httpBackend.setDelay(option.delay);
             return [option.status, angular.isFunction(option.data) ? option.data() : option.data];
           });
@@ -98,16 +103,17 @@ angular.module('leonardo').factory('leoConfiguration',
   function getResponseHandler(state) {
     var url = state.url;
     var verb = state.verb === 'jsonp' ? state.verb : state.verb.toUpperCase();
+    var key = (url + '_' + verb).toUpperCase();
 
-    if (!responseHandlers[url + '_' + verb]) {
+    if (!responseHandlers[key]) {
       if (state.verb === 'jsonp'){
-        responseHandlers[url + '_' + verb] = $httpBackend.whenJSONP(new RegExp(url));
+        responseHandlers[key] = $httpBackend.whenJSONP(new RegExp(url));
       }
       else {
-        responseHandlers[url + '_' + verb] = $httpBackend.when(verb || 'GET', new RegExp(url));
+        responseHandlers[key] = $httpBackend.when(verb || 'GET', new RegExp(url));
       }
     }
-    return responseHandlers[url + '_' + verb];
+    return responseHandlers[key];
   }
 
   function getState(name){
@@ -127,12 +133,18 @@ angular.module('leonardo').factory('leoConfiguration',
         delay: option.delay
       });
     });
+
+    $rootScope.$broadcast('leonardo:stateChanged', stateObj);
   }
 
   function addStates(statesArr) {
-    statesArr.forEach(function(stateObj) {
-      addState(stateObj);
-    });
+    if (angular.isArray(statesArr)) {
+      statesArr.forEach(function(stateObj) {
+        addState(stateObj);
+      });
+    } else {
+      console.warn('addStates should get an array');
+    }
   }
 
   function upsert(stateObj) {
@@ -141,7 +153,7 @@ angular.module('leonardo').factory('leoConfiguration',
         name = stateObj.name,
         url = stateObj.url,
         status = stateObj.status || 200,
-        data = stateObj.data || {},
+        data = angular.isDefined(stateObj.data) ? stateObj.data : {},
         delay = stateObj.delay || 0;
     var defaultState = {};
 
@@ -240,32 +252,46 @@ angular.module('leonardo').factory('leoConfiguration',
 
   function logRequest(method, url, data, status) {
     if (method && url && !(url.indexOf(".html") > 0)) {
-      _requestsLog[method.toUpperCase() + " " + url.trim()] = {
+      var req = {
         verb: method,
         data: data,
         url: url.trim(),
-        status: status
+        status: status,
+        timestamp: new Date()
       };
+      req.state = getStateByRequest(req);
+      _requestsLog.push(req);
     }
   }
 
- function isRequestRegistered(_states, req) {
-   return _states.some(function(state) {
-     if (!state.url) return false;
-     return state.url === req.url && state.verb.toLowerCase() === req.verb.toLowerCase() ;
-   });
- }
+  function getStateByRequest(req) {
+    return states.filter(function(state) {
+      if (!state.url) return false;
+      return state.url === req.url && state.verb.toLowerCase() === req.verb.toLowerCase();
+    })[0];
+  }
 
-  function getUnregisteredStates() {
-    var _states = fetchStates(),
-        requestsArr = Object.keys(_requestsLog)
-          .filter(function(key) {
-            return !isRequestRegistered(_states, _requestsLog[key]);
-          })
-          .map(function(key){
-            var req = _requestsLog[key];
+  function getRequestsLog() {
+    return _requestsLog;
+  }
+
+  function loadSavedStates() {
+    _savedStates = leoStorage.getSavedStates();
+    addStates(_savedStates);
+  }
+
+  function addSavedState(state) {
+    _savedStates.push(state);
+    leoStorage.setSavedStates(_savedStates);
+    addState(state);
+  }
+
+  function getRecordedStates() {
+    var requestsArr = _requestsLog
+          .map(function(req){
+            var state = getStateByRequest(req);
             return {
-              name: key,
+              name: state ? state.name : req.verb + " " + req.url,
               verb: req.verb,
               url: req.url,
               options: [{
