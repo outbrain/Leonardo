@@ -1,4 +1,3 @@
-
 angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
   .config(['$provide', '$httpProvider', function($provide, $httpProvider) {
 
@@ -75,6 +74,7 @@ angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
   .run(['leoConfiguration', function(leoConfiguration) {
       leoConfiguration.loadSavedStates();
     }]);
+
 angular.module('leonardo').provider('$leonardo', function LeonardoProvider() {
     var pref = '';
 
@@ -198,12 +198,13 @@ angular.module('leonardo').factory('leoConfiguration',
     var verb = state.verb === 'jsonp' ? state.verb : state.verb.toUpperCase();
     var key = (url + '_' + verb).toUpperCase();
 
+    var escapedUrl = url.replace(/[?]/g, '\\?');
     if (!responseHandlers[key]) {
       if (state.verb === 'jsonp'){
-        responseHandlers[key] = $httpBackend.whenJSONP(new RegExp(url));
+        responseHandlers[key] = $httpBackend.whenJSONP(new RegExp(escapedUrl));
       }
       else {
-        responseHandlers[key] = $httpBackend.when(verb || 'GET', new RegExp(url));
+        responseHandlers[key] = $httpBackend.when(verb || 'GET', new RegExp(escapedUrl));
       }
     }
     return responseHandlers[key];
@@ -358,7 +359,7 @@ angular.module('leonardo').factory('leoConfiguration',
   }
 
   function getStateByRequest(req) {
-    return states.filter(function(state) {
+    return fetchStates().filter(function(state) {
       if (!state.url) return false;
       return state.url === req.url && state.verb.toLowerCase() === req.verb.toLowerCase();
     })[0];
@@ -402,7 +403,7 @@ angular.module('leonardo').factory('leoConfiguration',
 angular.module('leonardo').factory('leoHttpInterceptor', ['leoConfiguration', '$q', function(leoConfiguration, $q) {
   return {
     'request': function(request) {
-      leoConfiguration._logRequest(request.method, request.url);
+      //leoConfiguration._logRequest(request.method, request.url);
       return $q.when(request);
     },
     'response': function(response) {
@@ -667,12 +668,12 @@ angular.module('leonardo').directive('leoRequest', function () {
   return {
     restrict: 'E',
     templateUrl: 'request.html',
-    replace: true,
     scope: {
       request: '=',
       onSelect: '&'
     },
     controller: ['$scope', function ($scope) {
+      console.log($scope.request);
       $scope.select = function () {
         $scope.onSelect();
       }
@@ -688,7 +689,7 @@ try {
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('request.html',
-    '<a href="#" class="leo-list-item" ng-click="select()" ng-class="{active:request.active}">{{request.url}}</a>');
+    '<a href="#" class="leo-list-item" ng-click="select()" ng-class="{active:request.active}">{{request.url}} <span ng-if="!!request.state" class="leo-request leo-request-existing">{{request.state.name}}</span> <span ng-if="!request.state" class="leo-request leo-request-new">new</span> <span ng-if="!!request.state && request.state.active" class="leo-request leo-request-mocked">mocked</span></a>');
 }]);
 })();
 

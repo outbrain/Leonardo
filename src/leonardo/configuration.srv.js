@@ -266,7 +266,7 @@ angular.module('leonardo').factory('leoConfiguration',
   }
 
   function getStateByRequest(req) {
-    return states.filter(function(state) {
+    return fetchStates().filter(function(state) {
       if (!state.url) return false;
       return state.url === req.url && state.verb.toLowerCase() === req.verb.toLowerCase();
     })[0];
