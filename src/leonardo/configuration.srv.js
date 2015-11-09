@@ -105,12 +105,13 @@ angular.module('leonardo').factory('leoConfiguration',
     var verb = state.verb === 'jsonp' ? state.verb : state.verb.toUpperCase();
     var key = (url + '_' + verb).toUpperCase();
 
+    var escapedUrl = url.replace(/[?]/g, '\\?');
     if (!responseHandlers[key]) {
       if (state.verb === 'jsonp'){
-        responseHandlers[key] = $httpBackend.whenJSONP(new RegExp(url));
+        responseHandlers[key] = $httpBackend.whenJSONP(new RegExp(escapedUrl));
       }
       else {
-        responseHandlers[key] = $httpBackend.when(verb || 'GET', new RegExp(url));
+        responseHandlers[key] = $httpBackend.when(verb || 'GET', new RegExp(escapedUrl));
       }
     }
     return responseHandlers[key];
