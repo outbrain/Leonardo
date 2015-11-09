@@ -107,6 +107,10 @@ angular.module('leonardo').directive('leoWindowBody',
           ]
         });
       };
+
+      $scope.getStatesForExport = function () {
+        $scope.exportStates = leoConfiguration.getStates();
+      }
     }],
     link: function(scope) {
       scope.test = {

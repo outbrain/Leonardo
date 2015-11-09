@@ -73,6 +73,21 @@
         </div>
       </div>
     </div>
+    <div ng-switch-when="export" class="leonardo-export" style="padding: 30px">
+      <code contenteditable ng-init="getStatesForExport()">
+
+        <div>angular.module('leonardo').run(['leoConfiguration', function(leoConfiguration) {</div>
+
+        <div ng-repeat="state in exportStates">
+          <div style="margin-left: 10px">leoConfiguration.addStates([</div>
+          <pre style="margin-left: 20px">{{state | json}}</pre>
+          <div style="margin-left: 10px">])</div>
+        </div>
+
+        <div>])</div>
+
+      </code>
+    </div>
     <div ng-switch-when="scenarios" class="leonardo-activate">
       <div class="leonardo-menu">
         <ul>
