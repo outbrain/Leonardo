@@ -83,7 +83,7 @@ angular.module('leonardo').directive('leoWindowBody',
           option: optionName || '',
           delay: 0,
           status: 200,
-          stateActive: !!request,
+          stateActive: !!request.state,
           value: request.data || {}
         });
         $scope.detail._unregisteredState = request;
