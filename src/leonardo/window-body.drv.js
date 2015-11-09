@@ -7,7 +7,11 @@ angular.module('leonardo').directive('leoWindowBody',
     replace: true,
     require: '^leoActivator',
     controller: ['$scope', function($scope) {
-      $scope.detail = {};
+      $scope.detail = {
+        option: 'success',
+        delay: 0,
+        status: 200
+      };
 
       $scope.NothasUrl = function (option) {
         return !option.url;

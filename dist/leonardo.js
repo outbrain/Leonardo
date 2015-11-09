@@ -403,7 +403,6 @@ angular.module('leonardo').factory('leoConfiguration',
 angular.module('leonardo').factory('leoHttpInterceptor', ['leoConfiguration', '$q', function(leoConfiguration, $q) {
   return {
     'request': function(request) {
-      //leoConfiguration._logRequest(request.method, request.url);
       return $q.when(request);
     },
     'response': function(response) {
@@ -522,7 +521,11 @@ angular.module('leonardo').directive('leoWindowBody',
     replace: true,
     require: '^leoActivator',
     controller: ['$scope', function($scope) {
-      $scope.detail = {};
+      $scope.detail = {
+        option: 'success',
+        delay: 0,
+        status: 200
+      };
 
       $scope.NothasUrl = function (option) {
         return !option.url;
@@ -673,7 +676,6 @@ angular.module('leonardo').directive('leoRequest', function () {
       onSelect: '&'
     },
     controller: ['$scope', function ($scope) {
-      console.log($scope.request);
       $scope.select = function () {
         $scope.onSelect();
       }
@@ -689,7 +691,7 @@ try {
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('request.html',
-    '<a href="#" class="leo-list-item" ng-click="select()" ng-class="{active:request.active}">{{request.url}} <span ng-if="!!request.state" class="leo-request leo-request-existing">{{request.state.name}}</span> <span ng-if="!request.state" class="leo-request leo-request-new">new</span> <span ng-if="!!request.state && request.state.active" class="leo-request leo-request-mocked">mocked</span></a>');
+    '<a href="#" class="leo-list-item" ng-click="select()" ng-class="{active:request.active}"><span class="leo-request-name">{{request.url}}</span> <span ng-if="!!request.state" class="leo-request leo-request-existing">{{request.state.name}}</span> <span ng-if="!request.state" class="leo-request leo-request-new">new</span> <span ng-if="!!request.state && request.state.active" class="leo-request leo-request-mocked">mocked</span></a>');
 }]);
 })();
 
@@ -701,7 +703,7 @@ try {
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('window-body.html',
-    '<div class="leonardo-window-body"><div ng-switch="leonardo.activeTab" class="leonardo-window-options"><div ng-switch-when="configure" class="leonardo-configure"><table><thead><tr><th>State</th><th>URL</th><th>Options</th></tr></thead><tbody><tr ng-repeat="state in states"><td>{{state.name}}</td><td>{{state.url}}</td><td><ul><li ng-repeat="option in state.options">Name: {{option.name}}<br>Status: {{option.status}}<br>Data: {{option.data}}<br></li></ul></td></tr></tbody></table></div><div ng-switch-when="recorder" class="leonardo-recorder"><div class="leo-list"><div class="list-group"><leo-request ng-repeat="request in requests" request="request" on-select="requestSelect(request)"></leo-request></div></div><div class="leo-detail"><div ng-if="detail.stateActive">State Name: {{detail.state}}</div><div ng-if="!detail.stateActive">State Name: <input ng-model="detail.state"></div><div><div>Option: <input ng-model="detail.option"></div><div>Delay: <input ng-model="detail.delay"></div><div>Status: <input ng-model="detail.status"></div></div><div class="leo-row-flex"><div class="leo-error">{{detail.error}}</div><textarea ng-model="detail.stringValue"></textarea></div><div class="leo-action-row"><button ng-click="saveUnregisteredState()">{{ detail.stateActive ? \'Add Option\' : \'Add State\' }}</button></div></div></div><div ng-switch-when="export" class="leonardo-export" style="padding: 30px"><code contenteditable="" ng-init="getStatesForExport()">\n' +
+    '<div class="leonardo-window-body"><div ng-switch="leonardo.activeTab" class="leonardo-window-options"><div ng-switch-when="configure" class="leonardo-configure"><table><thead><tr><th>State</th><th>URL</th><th>Options</th></tr></thead><tbody><tr ng-repeat="state in states"><td>{{state.name}}</td><td>{{state.url}}</td><td><ul><li ng-repeat="option in state.options">Name: {{option.name}}<br>Status: {{option.status}}<br>Data: {{option.data}}<br></li></ul></td></tr></tbody></table></div><div ng-switch-when="recorder" class="leonardo-recorder"><div class="leo-list"><div class="list-group"><leo-request ng-repeat="request in requests" request="request" on-select="requestSelect(request)"></leo-request></div></div><div class="leo-detail"><div class="leo-detail-header"><div ng-if="!detail.stateActive"><span>Add new state:</span> <input class="leo-detail-state" ng-model="detail.state" placeholder="Enter state name"></div><div ng-if="detail.stateActive" class="leo-detail-state">Add response for {{detail.state}}</div></div><div class="leo-detail-option-name"><div>Response name: <input ng-model="detail.option"></div></div><div class="leo-detail-option-props"><div>Status code: <input ng-model="detail.status"></div><div>Delay: <input ng-model="detail.delay"></div></div><div class="leo-row-flex">Response JSON:<div class="leo-error">{{detail.error}}</div><textarea ng-model="detail.stringValue"></textarea></div><div class="leo-action-row"><button ng-click="saveUnregisteredState()">{{ detail.stateActive ? \'Add Option\' : \'Add State\' }}</button></div></div></div><div ng-switch-when="export" class="leonardo-export" style="padding: 30px"><code contenteditable="" ng-init="getStatesForExport()">\n' +
     '\n' +
     '        <div>angular.module(\'leonardo\').run([\'leoConfiguration\', function(leoConfiguration) {</div>\n' +
     '\n' +
@@ -713,6 +715,6 @@ module.run(['$templateCache', function($templateCache) {
     '\n' +
     '        <div>])</div>\n' +
     '\n' +
-    '      </code></div><div ng-switch-when="scenarios" class="leonardo-activate"><div class="leonardo-menu"><div>> Scenarios</div><ul><li ng-class="{ \'selected\': scenario === activeScenario }" ng-repeat="scenario in scenarios" ng-click="activateScenario(scenario)">{{scenario}}</li></ul></div><ul><li class="leo-non-ajax"><h3>Non Ajax States</h3></li><li ng-repeat="state in states | filter:NothasUrl"><div><div class="onoffswitch"><input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}"> <label class="onoffswitch-label" for="{{state.name}}"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div><h4>{{state.name}}</h4></div><div><select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="updateState(state)"></select></div></li><li><h3>Ajax States</h3></li><li ng-repeat="state in states | filter:hasUrl track by $index" ng-class="{ \'leo-highlight\': state.highlight }"><div><div class="onoffswitch"><input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}"> <label class="onoffswitch-label" for="{{state.name}}"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div><h4>{{state.name}}</h4>&nbsp;&nbsp; - {{state.url}}</div><div><select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="updateState(state)"></select></div></li></ul></div><div ng-switch-when="test" class="leonardo-test"><div><label for="url"></label>URL: <input id="url" type="text" ng-model="test.url"> <input type="button" ng-click="submit(test.url)" value="submit"></div><textarea>{{test.value | json}}</textarea></div></div></div>');
+    '      </code></div><div ng-switch-when="scenarios" class="leonardo-activate"><div class="leonardo-menu"><div>SCENARIOS</div><ul><li ng-class="{ \'selected\': scenario === activeScenario }" ng-repeat="scenario in scenarios" ng-click="activateScenario(scenario)">{{scenario}}</li></ul></div><ul><li class="leo-non-ajax"><h3>Non Ajax States</h3></li><li ng-repeat="state in states | filter:NothasUrl"><div><div class="onoffswitch"><input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}"> <label class="onoffswitch-label" for="{{state.name}}"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div><h4>{{state.name}}</h4></div><div><select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="updateState(state)"></select></div></li><li><h3>Ajax States</h3></li><li ng-repeat="state in states | filter:hasUrl track by $index" ng-class="{ \'leo-highlight\': state.highlight }"><div><div class="onoffswitch"><input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}"> <label class="onoffswitch-label" for="{{state.name}}"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div><h4>{{state.name}}</h4>&nbsp;&nbsp; - {{state.url}}</div><div><select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="updateState(state)"></select></div></li></ul></div><div ng-switch-when="test" class="leonardo-test"><div><label for="url"></label>URL: <input id="url" type="text" ng-model="test.url"> <input type="button" ng-click="submit(test.url)" value="submit"></div><textarea>{{test.value | json}}</textarea></div></div></div>');
 }]);
 })();

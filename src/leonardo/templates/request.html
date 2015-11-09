@@ -1,4 +1,5 @@
-<a href="#" class="leo-list-item" ng-click="select()" ng-class="{active:request.active}">{{request.url}}
+<a href="#" class="leo-list-item" ng-click="select()" ng-class="{active:request.active}">
+  <span class="leo-request-name">{{request.url}}</span>
   <span ng-if="!!request.state" class="leo-request leo-request-existing">{{request.state.name}}</span>
   <span ng-if="!request.state" class="leo-request leo-request-new">new</span>
   <span ng-if="!!request.state && request.state.active" class="leo-request leo-request-mocked">mocked</span>
