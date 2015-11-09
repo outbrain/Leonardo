@@ -37,14 +37,22 @@
         </div>
       </div>
       <div class="leo-detail">
-        <div ng-if="detail.stateActive">State Name: {{detail.state}}</div>
-        <div ng-if="!detail.stateActive">State Name: <input ng-model="detail.state" /></div>
-        <div>
-          <div>Option: <input ng-model="detail.option"/></div>
+        <div class="leo-detail-header">
+          <div ng-if="!detail.stateActive">
+            <span>Add new state: </span>
+            <input  class="leo-detail-state" ng-model="detail.state" placeholder="Enter state name"/>
+          </div>
+          <div ng-if="detail.stateActive" class="leo-detail-state">Add response for {{detail.state}}</div>
+        </div>
+        <div class="leo-detail-option-name">
+          <div>Response name: <input ng-model="detail.option"/></div>
+        </div>
+        <div class="leo-detail-option-props">
+          <div>Status code: <input ng-model="detail.status"/></div>
           <div>Delay: <input ng-model="detail.delay"/></div>
-          <div>Status: <input ng-model="detail.status"/></div>
         </div>
         <div class="leo-row-flex">
+          Response JSON:
           <div class="leo-error">
             {{detail.error}}
           </div>
@@ -73,7 +81,7 @@
     <div ng-switch-when="scenarios" class="leonardo-activate">
       <div class="leonardo-menu">
         <div>
-          > Scenarios
+          SCENARIOS
         </div>
         <ul>
           <li ng-class="{ 'selected': scenario === activeScenario }" ng-repeat="scenario in scenarios" ng-click="activateScenario(scenario)">{{scenario}}</li>

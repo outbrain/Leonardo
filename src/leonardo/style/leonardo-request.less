@@ -1,0 +1,31 @@
+leo-request {
+  .leo-request {
+    border-radius: 4px;
+    display: inline-block;
+    padding: 3px 10px;
+    float: right;
+    font-size: small;
+    margin: 0 2px;
+    color: white;
+    justify-content: flex-end;
+    white-space: nowrap;
+    &-name {
+      flex-grow: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-right: 5px;
+    }
+    &-new {
+      background: @blue;
+    }
+
+    &-mocked {
+      background: @green;
+    }
+
+    &-existing {
+      background: @orange;
+    }
+  }
+}
