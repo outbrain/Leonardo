@@ -1,10 +1,11 @@
 angular.module('leonardo').directive('leoWindowBody',
-    ['$http', 'leoConfiguration', function windowBodyDirective($http, leoConfiguration) {
+    ['$http', 'leoConfiguration', '$timeout', function windowBodyDirective($http, leoConfiguration, $timeout) {
   return {
     restrict: 'E',
     templateUrl: 'window-body.html',
     scope: true,
     replace: true,
+    require: '^leoActivator',
     controller: ['$scope', function($scope) {
       $scope.detail = {};
 
@@ -89,26 +90,43 @@ angular.module('leonardo').directive('leoWindowBody',
         $scope.detail._unregisteredState = request;
       };
 
-      $scope.$on('leonardo:stateChanged', function() {
+      $scope.$on('leonardo:stateChanged', function(event, stateObj) {
         $scope.states = leoConfiguration.getStates();
+
+        var state = $scope.states.filter(function(state){
+          return state.name === stateObj.name;
+        })[0];
+
+        if (state) {
+          state.highlight = true;
+          $timeout(function(){
+            state.highlight = false;
+          }, 1000);
+        }
       });
 
-      $scope.saveUnregisteredState = function () {
+    }],
+    link: function(scope, el, attr, leoActivator) {
+      scope.saveUnregisteredState = function () {
+        var stateName = scope.detail.state;
+
         leoConfiguration.addSavedState({
-          name: $scope.detail.state,
-          verb: $scope.detail._unregisteredState.verb,
-          url: $scope.detail._unregisteredState.url,
+          name: stateName,
+          verb: scope.detail._unregisteredState.verb,
+          url: scope.detail._unregisteredState.url,
           options: [
             {
-              name: $scope.detail.option,
-              status: $scope.detail.status,
-              data: $scope.detail.value
+              name: scope.detail.option,
+              status: scope.detail.status,
+              data: scope.detail.value
             }
           ]
         });
+
+        leoActivator.selectTab('scenarios');
       };
-    }],
-    link: function(scope) {
+
+
       scope.test = {
         url: '',
         value: undefined
