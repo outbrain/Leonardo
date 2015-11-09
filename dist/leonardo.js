@@ -1,3 +1,4 @@
+
 angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
   .config(['$provide', '$httpProvider', function($provide, $httpProvider) {
 
