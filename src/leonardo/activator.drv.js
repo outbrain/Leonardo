@@ -3,7 +3,7 @@ angular.module('leonardo').directive('leoActivator', ['$compile', function activ
     restrict: 'A',
     controllerAs: 'leonardo',
     controller: function () {
-      this.activeTab = 'recorder';
+      this.activeTab = 'scenarios';
       this.selectTab = function (name) {
         this.activeTab = name;
       };

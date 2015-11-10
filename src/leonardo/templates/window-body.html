@@ -42,22 +42,20 @@
             <span>Add new state: </span>
             <input  class="leo-detail-state" ng-model="detail.state" placeholder="Enter state name"/>
           </div>
-          <div ng-if="detail.stateActive" class="leo-detail-state">Add response for {{detail.state}}</div>
+          <div ng-if="detail.stateActive" class="leo-detail-state">Add mocked response for "{{detail.state}}"</div>
         </div>
-        <div class="leo-detail-option-name">
+        <div class="leo-detail-option">
           <div>Response name: <input ng-model="detail.option"/></div>
-        </div>
-        <div class="leo-detail-option-props">
           <div>Status code: <input ng-model="detail.status"/></div>
           <div>Delay: <input ng-model="detail.delay"/></div>
-        </div>
-        <div class="leo-row-flex">
-          Response JSON:
-          <div class="leo-error">
-            {{detail.error}}
+          <div class="leo-detail-option-json">Response JSON:
+            <div class="leo-error">
+              {{detail.error}}
+            </div>
+            <textarea ng-model="detail.stringValue"></textarea>
           </div>
-          <textarea ng-model="detail.stringValue"></textarea>
         </div>
+
         <div class="leo-action-row">
           <button ng-click="saveUnregisteredState()">{{ detail.stateActive ? 'Add Option' : 'Add State' }}</button>
         </div>

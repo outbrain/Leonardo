@@ -44,15 +44,30 @@
       margin-left: 5px;
       width: 200px;
     }
-    .leo-detail-option-name, .leo-detail-option-props {
-      padding: 10px 20px;
+    .leo-detail-option {
+
       display: flex;
       font-size: 13px;
+      flex-direction: column;
       > div {
-        flex-grow: 1;
+        display: flex;
         white-space: nowrap;
+        padding: 10px 20px;
         input {
           width: 150px;
+        }
+        &.leo-detail-option-json {
+          flex-direction: column;
+          textarea {
+            height: 250px;
+            width: 100%;
+            margin-top: 10px;
+            font-size: 13px;
+            border: 1px solid #eee;
+            &:focus {
+              outline: none;
+            }
+          }
         }
       }
     }
@@ -62,16 +77,7 @@
       padding: 20px;
       height: 300px;
     }
-    textarea {
-      height: 250px;
-      width: 100%;
-      margin-top: 10px;
-      font-size: 1.2em;
-      border: 1px solid #eee;
-      &:focus {
-        outline: none;
-      }
-    }
+
 
     .leo-error {
       color: Red;
