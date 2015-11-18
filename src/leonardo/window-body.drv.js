@@ -29,10 +29,10 @@ angular.module('leonardo').directive('leoWindowBody',
 
       $scope.updateState = function (state) {
         if (state.active) {
-          console.log('activate state option:' + state.name + ': ' + state.activeOption.name);
+          console.log('leonardo: activate state option:' + state.name + ': ' + state.activeOption.name);
           leoConfiguration.activateStateOption(state.name, state.activeOption.name);
         } else {
-          console.log('deactivating state: ' + state.name);
+          console.log('leonardo: deactivating state: ' + state.name);
           leoConfiguration.deactivateState(state.name);
         }
       };

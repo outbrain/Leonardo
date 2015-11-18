@@ -175,14 +175,13 @@ angular.module('leonardo').factory('leoConfiguration',
   }
 
   function sync(){
-    fetchStates().forEach(function (state, i) {
+    fetchStates().forEach(function (state) {
       var option, responseHandler;
       if (state.url) {
         option = findStateOption(state.name);
         responseHandler = getResponseHandler(state);
         if (state.active) {
           responseHandler.respond(function () {
-            console.log(i);
             $httpBackend.setDelay(option.delay);
             return [option.status, angular.isFunction(option.data) ? option.data() : option.data];
           });
@@ -237,7 +236,7 @@ angular.module('leonardo').factory('leoConfiguration',
         addState(stateObj);
       });
     } else {
-      console.warn('addStates should get an array');
+      console.warn('leonardo: addStates should get an array');
     }
   }
 
@@ -254,7 +253,7 @@ angular.module('leonardo').factory('leoConfiguration',
     var defaultOption = {};
 
     if (!state) {
-      console.log("cannot upsert - state is mandatory");
+      console.log("leonardo: cannot upsert - state is mandatory");
       return;
     }
 
@@ -287,17 +286,11 @@ angular.module('leonardo').factory('leoConfiguration',
     sync();
   }
 
-  function upsertMany(items){
-    items.forEach(function(item) {
-      upsert(item);
-    });
-  }
-
   function addScenario(scenario){
     if (scenario && typeof scenario.name === 'string') {
       _scenarios[scenario.name] = scenario;
     } else {
-      throw 'addScnerio method expects a scenario object with name property';
+      throw 'addScenario method expects a scenario object with name property';
     }
   }
 
@@ -310,17 +303,20 @@ angular.module('leonardo').factory('leoConfiguration',
   }
 
   function getScenario(name){
-    console.log(name);
     if (!_scenarios[name]) {
       return;
     }
-    console.log('return scenario', _scenarios[name].states);
     return _scenarios[name].states;
   }
 
   function setActiveScenario(name){
+    var scenario = getScenario(name);
+    if (!scenario) {
+      console.warn("leonardo: could not find scenario named " + name);
+      return;
+    }
     deactivateAll();
-    getScenario(name).forEach(function(state){
+    scenario.forEach(function(state){
       upsertOption(state.name, state.option, true);
     });
   }
@@ -543,10 +539,10 @@ angular.module('leonardo').directive('leoWindowBody',
 
       $scope.updateState = function (state) {
         if (state.active) {
-          console.log('activate state option:' + state.name + ': ' + state.activeOption.name);
+          console.log('leonardo: activate state option:' + state.name + ': ' + state.activeOption.name);
           leoConfiguration.activateStateOption(state.name, state.activeOption.name);
         } else {
-          console.log('deactivating state: ' + state.name);
+          console.log('leonardo: deactivating state: ' + state.name);
           leoConfiguration.deactivateState(state.name);
         }
       };
