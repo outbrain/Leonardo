@@ -3,8 +3,9 @@ angular.module('leonardo').directive('leoActivator', ['$compile', function activ
     restrict: 'A',
     controllerAs: 'leonardo',
     controller: LeoActivator,
+    bindToController: true,
     link: function(scope, elem) {
-      var el = angular.element('<div ng-click="leonardo.activate()" class="leonardo-activator"></div>');
+      var el = angular.element('<div ng-click="leonardo.activate()" class="leonardo-activator" ng-show="leonardo.isLeonardoVisible"></div>');
 
       var win = angular.element([
       '<div class="leonardo-window">',
@@ -38,12 +39,21 @@ angular.module('leonardo').directive('leoActivator', ['$compile', function activ
   };
 }]);
 
-function LeoActivator() {
+LeoActivator.$inject = ['$scope', '$document'];
+function LeoActivator($scope, $document) {
+  this.isLeonardoVisible = true;
   this.activeTab = 'scenarios';
 
   this.selectTab = function (name) {
     this.activeTab = name;
   };
+
+  $document.on('keypress', function(e) {
+    if(e.shiftKey && e.ctrlKey && e.keyCode === 12) {
+      this.isLeonardoVisible = !this.isLeonardoVisible;
+      $scope.$apply();
+    }
+  }.bind(this));
 
   this.activate = function() {
     if (!document.body.classList.contains('pull-top')) {
