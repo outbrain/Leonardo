@@ -6,20 +6,23 @@ angular.module('leonardo').directive('leoWindowBody', ['$http', 'leoConfiguratio
     controller: LeoWindowBody,
     bindToController: true,
     controllerAs: 'leoWindowBody',
-    require: '^leoActivator',
-    link: function (scope, el, attr, leoActivator) {
-      scope.saveUnregisteredState = function () {
-        var stateName = scope.detail.state;
+    require: ['^leoActivator', 'leoWindowBody'],
+    link: function (scope, el, attr, controllers) {
+      var leoActivator = controllers[0];
+      var leoWindowBody = controllers[1];
+
+      leoWindowBody.saveUnregisteredState = function () {
+        var stateName = this.detail.state;
 
         leoConfiguration.addSavedState({
           name: stateName,
-          verb: scope.detail._unregisteredState.verb,
-          url: scope.detail._unregisteredState.url,
+          verb: leoWindowBody.detail._unregisteredState.verb,
+          url: leoWindowBody.detail._unregisteredState.url,
           options: [
             {
-              name: scope.detail.option,
-              status: scope.detail.status,
-              data: scope.detail.value
+              name: leoWindowBody.detail.option,
+              status: leoWindowBody.detail.status,
+              data: leoWindowBody.detail.value
             }
           ]
         });
@@ -92,7 +95,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
 
   this.requests = leoConfiguration.getRequestsLog();
 
-  $scope.$watch('detail.value', function (value) {
+  $scope.$watch('leoWindowBody.detail.value', function (value) {
     if (!value) {
       return;
     }
@@ -105,7 +108,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
     }
   }.bind(this));
 
-  $scope.$watch('detail.stringValue', function (value) {
+  $scope.$watch('leoWindowBody.detail.stringValue', function (value) {
     try {
       this.detail.value = value ? JSON.parse(value) : {};
       this.detail.error = '';

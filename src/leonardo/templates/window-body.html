@@ -32,7 +32,7 @@
           <leo-request
             ng-repeat="request in leoWindowBody.requests"
             request="request"
-            on-select="requestSelect(request)">
+            on-select="leoWindowBody.requestSelect(request)">
           </leo-request>
         </div>
       </div>
@@ -53,6 +53,7 @@
               {{leoWindowBody.detail.error}}
             </div>
             <textarea ng-model="leoWindowBody.detail.stringValue"></textarea>
+            {{leoWindowBody.detail}}
           </div>
         </div>
 
