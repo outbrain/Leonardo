@@ -6,10 +6,14 @@ angular.module('leonardo').directive('leoRequest', function () {
       request: '=',
       onSelect: '&'
     },
-    controller: ['$scope', function ($scope) {
-      $scope.select = function () {
-        $scope.onSelect();
-      }
-    }]
-  }
+    controllerAs: 'leoRequest',
+    bindToController: true,
+    controller: LeoRequest
+  };
 });
+
+function LeoRequest() {
+  this.select = function () {
+    this.onSelect();
+  }
+}
