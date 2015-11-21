@@ -4,7 +4,7 @@ angular.module('leonardo').directive('leoActivator', ['$compile', function activ
     controllerAs: 'leonardo',
     controller: LeoActivator,
     link: function(scope, elem) {
-      var el = angular.element('<div ng-click="activate()" class="leonardo-activator"></div>');
+      var el = angular.element('<div ng-click="leonardo.activate()" class="leonardo-activator"></div>');
 
       var win = angular.element([
       '<div class="leonardo-window">',
@@ -34,16 +34,6 @@ angular.module('leonardo').directive('leoActivator', ['$compile', function activ
           document.body.classList.add("pull-top-closed");
         }
       }, false );
-
-      scope.activate = function(){
-        if (!document.body.classList.contains('pull-top')) {
-          document.body.classList.add('pull-top');
-          document.body.classList.remove('pull-top-closed');
-        }
-        else {
-          document.body.classList.remove('pull-top');
-        }
-      };
     }
   };
 }]);
@@ -53,5 +43,15 @@ function LeoActivator() {
 
   this.selectTab = function (name) {
     this.activeTab = name;
+  };
+
+  this.activate = function() {
+    if (!document.body.classList.contains('pull-top')) {
+      document.body.classList.add('pull-top');
+      document.body.classList.remove('pull-top-closed');
+    }
+    else {
+      document.body.classList.remove('pull-top');
+    }
   };
 }

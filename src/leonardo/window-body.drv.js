@@ -30,7 +30,6 @@ angular.module('leonardo').directive('leoWindowBody', ['$http', 'leoConfiguratio
         leoActivator.selectTab('scenarios');
       };
 
-
       scope.test = {
         url: '',
         value: undefined
