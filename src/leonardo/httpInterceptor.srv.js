@@ -1,7 +1,6 @@
 angular.module('leonardo').factory('leoHttpInterceptor', ['leoConfiguration', '$q', function(leoConfiguration, $q) {
   return {
     'request': function(request) {
-      leoConfiguration._logRequest(request.method, request.url);
       return $q.when(request);
     },
     'response': function(response) {

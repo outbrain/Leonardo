@@ -1,22 +1,4 @@
 <div class="leonardo-window-body">
-  <div ng-switch="leonardo.activeTab">
-    <div class="leonardo-scenario-nav" ng-switch-when="scenarios">
-      <div class="leonardo-breadcrumbs">
-        SCENARIOS > {{activeScenario}}
-      </div>
-      <div class="leonardo-scenario-title">
-        SCENARIOS
-      </div>
-    </div>
-    <div class="leonardo-scenario-nav" ng-switch-when="recorder">
-      <div class="leonardo-breadcrumbs">
-        RECORDER 
-      </div>
-      <div class="leonardo-scenario-title">
-        RECORDER 
-      </div>
-    </div>
-  </div>
   <div ng-switch="leonardo.activeTab" class="leonardo-window-options">
     <div ng-switch-when="configure" class="leonardo-configure">
       <table>
@@ -55,19 +37,25 @@
         </div>
       </div>
       <div class="leo-detail">
-        <div ng-if="detail.stateActive">State Name: {{detail.state}}</div>
-        <div ng-if="!detail.stateActive">State Name: <input ng-model="detail.state" /></div>
-        <div>
-          <div>Option: <input ng-model="detail.option"/></div>
-          <div>Delay: <input ng-model="detail.delay"/></div>
-          <div>Status: <input ng-model="detail.status"/></div>
-        </div>
-        <div class="leo-row-flex">
-          <div class="leo-error">
-            {{detail.error}}
+        <div class="leo-detail-header">
+          <div ng-if="!detail.stateActive">
+            <span>Add new state: </span>
+            <input  class="leo-detail-state" ng-model="detail.state" placeholder="Enter state name"/>
           </div>
-          <textarea ng-model="detail.stringValue"></textarea>
+          <div ng-if="detail.stateActive" class="leo-detail-state">Add mocked response for "{{detail.state}}"</div>
         </div>
+        <div class="leo-detail-option">
+          <div>Response name: <input ng-model="detail.option"/></div>
+          <div>Status code: <input ng-model="detail.status"/></div>
+          <div>Delay: <input ng-model="detail.delay"/></div>
+          <div class="leo-detail-option-json">Response JSON:
+            <div class="leo-error">
+              {{detail.error}}
+            </div>
+            <textarea ng-model="detail.stringValue"></textarea>
+          </div>
+        </div>
+
         <div class="leo-action-row">
           <button ng-click="saveUnregisteredState()">{{ detail.stateActive ? 'Add Option' : 'Add State' }}</button>
         </div>
@@ -90,6 +78,9 @@
     </div>
     <div ng-switch-when="scenarios" class="leonardo-activate">
       <div class="leonardo-menu">
+        <div>
+          SCENARIOS
+        </div>
         <ul>
           <li ng-class="{ 'selected': scenario === activeScenario }" ng-repeat="scenario in scenarios" ng-click="activateScenario(scenario)">{{scenario}}</li>
         </ul>

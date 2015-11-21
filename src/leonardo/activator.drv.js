@@ -3,7 +3,7 @@ angular.module('leonardo').directive('leoActivator', ['$compile', function activ
     restrict: 'A',
     controllerAs: 'leonardo',
     controller: function () {
-      this.activeTab = 'recorder';
+      this.activeTab = 'scenarios';
       this.selectTab = function (name) {
         this.activeTab = name;
       };
@@ -19,7 +19,7 @@ angular.module('leonardo').directive('leoActivator', ['$compile', function activ
               '<li>LEONARDO</li>', 
               '<li ng-class="{ \'leo-selected-tab\': leonardo.activeTab === \'scenarios\' }" ng-click="leonardo.selectTab(\'scenarios\')">Scenarios</li>',
               '<li ng-class="{ \'leo-selected-tab\': leonardo.activeTab === \'recorder\' }"ng-click="leonardo.selectTab(\'recorder\')">Recorder</li>',
-              '<li ng-class="{ \'leo-selected-tab\': leonardo.activeTab === \'export\' }"ng-click="leonardo.selectTab(\'export\')">Export</li>',
+              '<li ng-class="{ \'leo-selected-tab\': leonardo.activeTab === \'export\' }"ng-click="leonardo.selectTab(\'export\')">Exported Code</li>',
             '</ul>',
           '</div>',
         '</div>',

@@ -10,14 +10,15 @@
     margin: 10px 0 15px 0;
   }
 
-  border-top: 1px solid #cccccc;
   display: flex;
   height: 100%;
 
   .leonardo-menu {
     flex: 0.5;
     border-right: 1px solid #cccccc;
-
+    > div {
+      padding: 10px 20px;
+    }
     ul {
       margin: 0;
       padding: 0;
@@ -26,16 +27,13 @@
     li {
       border-width: 0 0 1px 0;
       display: block;
-      padding: 10px 20px;
+      padding: 5px 30px;
       cursor: pointer;
+      font-size: 13px;
+      text-decoration: underline;
 
       &:hover {
-        background-color: lighten(@orange, 30%);
-        color: white;
-      }
-      &.selected {
-        background-color: @orange;
-        color: white;
+        font-weight: bold;
       }
     }
   }

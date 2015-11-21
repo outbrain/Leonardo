@@ -7,7 +7,11 @@ angular.module('leonardo').directive('leoWindowBody',
     replace: true,
     require: '^leoActivator',
     controller: ['$scope', function($scope) {
-      $scope.detail = {};
+      $scope.detail = {
+        option: 'success',
+        delay: 0,
+        status: 200
+      };
 
       $scope.NothasUrl = function (option) {
         return !option.url;
@@ -25,10 +29,10 @@ angular.module('leonardo').directive('leoWindowBody',
 
       $scope.updateState = function (state) {
         if (state.active) {
-          console.log('activate state option:' + state.name + ': ' + state.activeOption.name);
+          console.log('leonardo: activate state option:' + state.name + ': ' + state.activeOption.name);
           leoConfiguration.activateStateOption(state.name, state.activeOption.name);
         } else {
-          console.log('deactivating state: ' + state.name);
+          console.log('leonardo: deactivating state: ' + state.name);
           leoConfiguration.deactivateState(state.name);
         }
       };
@@ -101,7 +105,7 @@ angular.module('leonardo').directive('leoWindowBody',
           state.highlight = true;
           $timeout(function(){
             state.highlight = false;
-          }, 1000);
+          }, 3000);
         }
       });
       
