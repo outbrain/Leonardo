@@ -1,4 +1,3 @@
-@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300);
 * {
   box-sizing: border-box;
   margin: 0;
@@ -7,7 +6,6 @@
 }
 body {
   font-family: 'Source Sans Pro', sans-serif;
-  color: white;
   font-weight: 300;
 }
 body ::-webkit-input-placeholder {
@@ -42,22 +40,17 @@ body :-ms-input-placeholder {
   background: -moz-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
   background: -o-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
   background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);
-  position: absolute;
-  top: 50%;
+  color: white;
   left: 0;
   width: 100%;
-  height: 400px;
-  margin-top: -200px;
   overflow: hidden;
 }
 .wrapper.form-success .container h1 {
   transform: translateY(85px);
 }
 .container {
-  max-width: 600px;
   margin: 0 auto;
   padding: 80px 0;
-  height: 400px;
   text-align: center;
 }
 .container h1 {
@@ -112,11 +105,11 @@ form button:hover {
   background-color: #f5f7f9;
 }
 .bg-bubbles {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
+  display: block;
+  margin: 0;
+  padding: 0;
   width: 100%;
-  height: 100%;
   z-index: 1;
 }
 .bg-bubbles li {
@@ -126,7 +119,6 @@ form button:hover {
   width: 40px;
   height: 40px;
   background-color: rgba(255, 255, 255, 0.15);
-  bottom: -160px;
   -webkit-animation: square 25s infinite;
   animation: square 25s infinite;
   -webkit-transition-timing-function: linear;
@@ -205,4 +197,259 @@ form button:hover {
   100% {
     transform: translateY(-700px) rotate(600deg);
   }
+}
+select {
+  appearance: none;
+  outline: 0;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.2);
+  width: 250px;
+  border-radius: 3px;
+  padding: 10px 15px;
+  margin: 0 auto 10px auto;
+  display: block;
+  font-size: 18px;
+  color: white;
+  transition-duration: 0.25s;
+  font-weight: 300;
+  text-align: center;
+}
+.ins-masonary {
+  width: 80%;
+  padding: 40px 0;
+  margin: auto auto;
+  -webkit-column-count: 3;
+  -moz-column-count: 3;
+  column-count: 3;
+  -webkit-column-gap: 1.8em;
+  -moz-column-gap: 1.8em;
+  column-gap: 1.8em;
+}
+.ins-masonary .ins-masonary-item {
+  display: inline-block;
+  font-size: 1.25em;
+  position: relative;
+  font-family: ProximaNova-Light;
+  line-height: 1.125;
+  width: 100%;
+  border: 1px solid #e4e6ea;
+  -webkit-border-radius: 4px;
+  -webkit-background-clip: padding-box;
+  -moz-border-radius: 4px;
+  -moz-background-clip: padding;
+  border-radius: 4px;
+  background-clip: padding-box;
+  margin-bottom: 20px;
+}
+.ins-masonary .ins-masonary-item .ins-body {
+  padding: 40px;
+}
+.ins-masonary .ins-masonary-item img {
+  width: 100%;
+  height: 100%;
+}
+.list-page label {
+  margin: 0 0 5px 8px;
+  display: block;
+}
+.list-page .column {
+  text-align: left;
+  display: inline-block;
+}
+.list-page h1 {
+  margin-bottom: 20px;
+}
+.list-page button {
+  display: block;
+  margin: auto auto;
+  margin-top: 20px;
+}
+#complete-button {
+  appearance: none;
+  outline: 0;
+  background-color: white;
+  border: 0;
+  padding: 10px 15px;
+  color: #53e3a6;
+  border-radius: 3px;
+  width: 250px;
+  cursor: pointer;
+  font-size: 18px;
+  transition-duration: 0.25s;
+  display: block;
+  margin: auto auto;
+}
+#complete-page {
+  padding: 100px;
+  height: 400px;
+}
+#complete-page h1 {
+  transition-property: font-size;
+  transition-duration: 1.5s;
+  transition-timing-function: ease-in-put;
+}
+#complete-page h1.animate {
+  font-size: 80px;
+}
+body {
+  background: white;
+}
+body.loading #backdrop {
+  opacity: 0.5;
+  display: block;
+  left: 0;
+  right: 0;
+  background: white;
+  top: 0;
+  bottom: 0;
+}
+body.loading #loader {
+  display: block;
+}
+h4 {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  margin: 0;
+  font-weight: 200;
+  opacity: .5;
+  font-family: sans-serif;
+  color: #fff;
+}
+#loader {
+  display: none;
+  width: 100px;
+  height: 40px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -20px -50px;
+}
+#loader div {
+  width: 20px;
+  height: 20px;
+  background: #53e3a6;
+  border-radius: 50%;
+  position: absolute;
+}
+#d1 {
+  animation: animate 2s linear infinite;
+}
+#d2 {
+  animation: animate 2s linear infinite -0.4s;
+}
+#d3 {
+  animation: animate 2s linear infinite -0.8s;
+}
+#d4 {
+  animation: animate 2s linear infinite -1.2s;
+}
+#d5 {
+  animation: animate 2s linear infinite -1.6s;
+}
+@-webkit-keyframes animate {
+  0% {
+    left: 100px;
+    top: 0;
+  }
+  80% {
+    left: 0;
+    top: 0;
+  }
+  85% {
+    left: 0;
+    top: -20px;
+    width: 20px;
+    height: 20px;
+  }
+  90% {
+    width: 40px;
+    height: 15px;
+  }
+  95% {
+    left: 100px;
+    top: -20px;
+    width: 20px;
+    height: 20px;
+  }
+  100% {
+    left: 100px;
+    top: 0;
+  }
+}
+.modal-wrapper {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: lightseagreen;
+  visibility: hidden;
+  z-index: 1;
+  -webkit-transition: all 0.25s ease-in-out;
+  -moz-transition: all 0.25s ease-in-out;
+  -o-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
+}
+body.error .modal-wrapper {
+  opacity: 1;
+  visibility: visible;
+}
+body.error [ng-view] {
+  visibility: hidden;
+}
+body.error .modal-wrapper .modal {
+  margin-top: -200px;
+  opacity: 1;
+}
+.modal {
+  width: 600px;
+  height: 400px;
+  display: block;
+  margin: 50% 0 0 -300px;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  background: #fff;
+  opacity: 0;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+}
+.head {
+  padding: 1.5em 5%;
+  overflow: hidden;
+  background: #01bce5;
+}
+.btn-close {
+  width: 32px;
+  height: 32px;
+  display: block;
+  float: right;
+}
+.btn-close::before,
+.btn-close::after {
+  content: '';
+  width: 32px;
+  height: 6px;
+  display: block;
+  background: #fff;
+}
+.btn-close::before {
+  margin-top: 12px;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.btn-close::after {
+  margin-top: -6px;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+.content {
+  padding: 5%;
 }

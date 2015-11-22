@@ -2,21 +2,17 @@ angular.module('leonardo').directive('leoActivator', ['$compile', function activ
   return {
     restrict: 'A',
     controllerAs: 'leonardo',
-    controller: function () {
-      this.activeTab = 'scenarios';
-      this.selectTab = function (name) {
-        this.activeTab = name;
-      };
-    },
+    controller: LeoActivator,
+    bindToController: true,
     link: function(scope, elem) {
-      var el = angular.element('<div ng-click="activate()" class="leonardo-activator"></div>');
+      var el = angular.element('<div ng-click="leonardo.activate()" class="leonardo-activator" ng-show="leonardo.isLeonardoVisible"></div>');
 
       var win = angular.element([
       '<div class="leonardo-window">',
         '<div class="leonardo-header">',
           '<div class="menu">',
             '<ul>',
-              '<li>LEONARDO</li>', 
+              '<li>LEONARDO</li>',
               '<li ng-class="{ \'leo-selected-tab\': leonardo.activeTab === \'scenarios\' }" ng-click="leonardo.selectTab(\'scenarios\')">Scenarios</li>',
               '<li ng-class="{ \'leo-selected-tab\': leonardo.activeTab === \'recorder\' }"ng-click="leonardo.selectTab(\'recorder\')">Recorder</li>',
               '<li ng-class="{ \'leo-selected-tab\': leonardo.activeTab === \'export\' }"ng-click="leonardo.selectTab(\'export\')">Exported Code</li>',
@@ -39,16 +35,33 @@ angular.module('leonardo').directive('leoActivator', ['$compile', function activ
           document.body.classList.add("pull-top-closed");
         }
       }, false );
-
-      scope.activate = function(){
-        if (!document.body.classList.contains('pull-top')) {
-          document.body.classList.add('pull-top');
-          document.body.classList.remove('pull-top-closed');
-        }
-        else {
-          document.body.classList.remove('pull-top');
-        }
-      };
     }
   };
 }]);
+
+LeoActivator.$inject = ['$scope', '$document'];
+function LeoActivator($scope, $document) {
+  this.isLeonardoVisible = true;
+  this.activeTab = 'scenarios';
+
+  this.selectTab = function (name) {
+    this.activeTab = name;
+  };
+
+  $document.on('keypress', function(e) {
+    if(e.shiftKey && e.ctrlKey && e.keyCode === 12) {
+      this.isLeonardoVisible = !this.isLeonardoVisible;
+      $scope.$apply();
+    }
+  }.bind(this));
+
+  this.activate = function() {
+    if (!document.body.classList.contains('pull-top')) {
+      document.body.classList.add('pull-top');
+      document.body.classList.remove('pull-top-closed');
+    }
+    else {
+      document.body.classList.remove('pull-top');
+    }
+  };
+}

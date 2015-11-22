@@ -1,0 +1,55 @@
+<div class="wrapper list-page">
+  <div class="container">
+    <h1>Create Characters</h1>
+
+    <form class="form" ng-submit="characters.create()">
+      <div class="column">
+        <label>Type:</label>
+        <select ng-model="characters.type">
+          <option value="turtles">Turtles</option>
+          <option value="enemies">Enemies</option>
+        </select>
+      </div>
+      <div class="column">
+        <label>Name:</label>
+        <select ng-model="characters.name">
+          <option ng-repeat="name in characters.names" value="{{name}}">{{name}}</option>
+        </select>
+      </div>
+      <div class="column">
+        <label>Size:</label>
+        <select ng-model="characters.size">
+          <option value="big">Big</option>
+          <option value="small">Small</option>
+        </select>
+      </div>
+      <button type="submit" id="login-button">Create</button>
+    </form>
+    <button type="submit" id="complete-button" ng-show="characters.list.length" ng-click="characters.complete()">Complete</button>
+  </div>
+
+  <ul class="bg-bubbles">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+  </ul>
+</div>
+
+
+<section class="ins-masonary">
+  <article ng-repeat="character in characters.list" class="ins-masonary-item angular-animate">
+    <div class="ins-body">
+      type: {{character.type}}
+      name: {{character.name}}
+      size: {{character.size}}
+    </div>
+    <img ng-src="{{character.image}}">
+  </article>
+</section>

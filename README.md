@@ -139,6 +139,9 @@ Deactivates a specific state, when calling the state url request will pass throu
 //.....
 ```
 
+## Hide/Show Leonardo icon
+You can hide Leonardo activator icon by clicking `ctrl` + `shift` + `l`.
+
 ## Documentation
 http://outbrain.github.io/Leonardo/docs/configuration.srv.html
 

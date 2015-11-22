@@ -10,7 +10,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="state in states">
+          <tr ng-repeat="state in leoWindowBody.states">
             <td>{{state.name}}</td>
             <td>{{state.url}}</td>
             <td>
@@ -30,43 +30,43 @@
       <div class="leo-list">
         <div class="list-group">
           <leo-request
-            ng-repeat="request in requests"
+            ng-repeat="request in leoWindowBody.requests"
             request="request"
-            on-select="requestSelect(request)">
+            on-select="leoWindowBody.requestSelect(request)">
           </leo-request>
         </div>
       </div>
       <div class="leo-detail">
         <div class="leo-detail-header">
-          <div ng-if="!detail.stateActive">
+          <div ng-if="!leoWindowBody.detail.stateActive">
             <span>Add new state: </span>
-            <input  class="leo-detail-state" ng-model="detail.state" placeholder="Enter state name"/>
+            <input  class="leo-detail-state" ng-model="leoWindowBody.detail.state" placeholder="Enter state name"/>
           </div>
-          <div ng-if="detail.stateActive" class="leo-detail-state">Add mocked response for "{{detail.state}}"</div>
+          <div ng-if="leoWindowBody.detail.stateActive" class="leo-detail-state">Add mocked response for "{{leoWindowBody.detail.state}}"</div>
         </div>
         <div class="leo-detail-option">
-          <div>Response name: <input ng-model="detail.option"/></div>
-          <div>Status code: <input ng-model="detail.status"/></div>
-          <div>Delay: <input ng-model="detail.delay"/></div>
+          <div>Response name: <input ng-model="leoWindowBody.detail.option"/></div>
+          <div>Status code: <input ng-model="leoWindowBody.detail.status"/></div>
+          <div>Delay: <input ng-model="leoWindowBody.detail.delay"/></div>
           <div class="leo-detail-option-json">Response JSON:
             <div class="leo-error">
-              {{detail.error}}
+              {{leoWindowBody.detail.error}}
             </div>
-            <textarea ng-model="detail.stringValue"></textarea>
+            <textarea ng-model="leoWindowBody.detail.stringValue"></textarea>
           </div>
         </div>
 
         <div class="leo-action-row">
-          <button ng-click="saveUnregisteredState()">{{ detail.stateActive ? 'Add Option' : 'Add State' }}</button>
+          <button ng-click="leoWindowBody.saveUnregisteredState()">{{ leoWindowBody.detail.stateActive ? 'Add Option' : 'Add State' }}</button>
         </div>
       </div>
     </div>
     <div ng-switch-when="export" class="leonardo-export" style="padding: 30px">
-      <code contenteditable ng-init="getStatesForExport()">
+      <code contenteditable ng-init="leoWindowBody.getStatesForExport()">
 
         <div>angular.module('leonardo').run(['leoConfiguration', function(leoConfiguration) {</div>
 
-        <div ng-repeat="state in exportStates">
+        <div ng-repeat="state in leoWindowBody.exportStates">
           <div style="margin-left: 10px">leoConfiguration.addStates([</div>
           <pre style="margin-left: 20px">{{state | json}}</pre>
           <div style="margin-left: 10px">])</div>
@@ -82,15 +82,15 @@
           SCENARIOS
         </div>
         <ul>
-          <li ng-class="{ 'selected': scenario === activeScenario }" ng-repeat="scenario in scenarios" ng-click="activateScenario(scenario)">{{scenario}}</li>
+          <li ng-class="{ 'selected': scenario === leoWindowBody.activeScenario }" ng-repeat="scenario in leoWindowBody.scenarios" ng-click="leoWindowBody.activateScenario(scenario)">{{scenario}}</li>
         </ul>
       </div>
       <ul>
         <li class="leo-non-ajax"><h3>Non Ajax States</h3></li>
-        <li ng-repeat="state in states | filter:NothasUrl">
+        <li ng-repeat="state in leoWindowBody.states | filter:NothasUrl">
           <div>
             <div class="onoffswitch">
-              <input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}">
+              <input ng-model="state.active" ng-click="leoWindowBody.updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}">
               <label class="onoffswitch-label" for="{{state.name}}">
                 <span class="onoffswitch-inner"></span>
                 <span class="onoffswitch-switch"></span>
@@ -101,14 +101,14 @@
             <h4>{{state.name}}</h4>
           </div>
           <div>
-            <select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="updateState(state)"></select>
+            <select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="leoWindowBody.updateState(state)"></select>
           </div>
         </li>
         <li><h3>Ajax States</h3></li>
-        <li ng-repeat="state in states | filter:hasUrl track by $index" ng-class="{ 'leo-highlight': state.highlight }">
+        <li ng-repeat="state in leoWindowBody.states | filter:hasUrl track by $index" ng-class="{ 'leo-highlight': state.highlight }">
           <div>
             <div class="onoffswitch">
-              <input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}">
+              <input ng-model="state.active" ng-click="leoWindowBody.updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}">
               <label class="onoffswitch-label" for="{{state.name}}">
                 <span class="onoffswitch-inner"></span>
                 <span class="onoffswitch-switch"></span>
@@ -119,17 +119,17 @@
             <h4>{{state.name}}</h4>&nbsp;&nbsp; - {{state.url}}
           </div>
           <div>
-            <select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="updateState(state)"></select>
+            <select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="leoWindowBody.updateState(state)"></select>
           </div>
         </li>
       </ul>
     </div>
     <div ng-switch-when="test" class="leonardo-test">
       <div>
-        <label for="url"></label>URL: <input id="url" type="text" ng-model="test.url"/>
-        <input type="button" ng-click="submit(test.url)" value="submit"/>
+        <label for="url"></label>URL: <input id="url" type="text" ng-model="leoWindowBody.test.url"/>
+        <input type="button" ng-click="leoWindowBody.submit(test.url)" value="submit"/>
       </div>
-      <textarea>{{test.value | json}}</textarea>
+      <textarea>{{leoWindowBody.test.value | json}}</textarea>
     </div>
   </div>
 </div>
