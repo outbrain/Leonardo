@@ -4,31 +4,36 @@
   <meta charset="UTF-8">
   <title>Title</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="lib/leonardo.min.css" />
 </head>
-<body>
-<div class="wrapper">
-  <div class="container">
-    <h1>Welcome</h1>
-
-    <form class="form">
-      <input type="text" placeholder="Username">
-      <input type="password" placeholder="Password">
-      <button type="submit" id="login-button">Login</button>
-    </form>
+<body ng-app="angular-il" leo-activator ng-class="{loading: loading, error: error}">
+  <div ui-view></div>
+  <div id="backdrop"></div>
+  <div id="loader">
+    <div id="d1"></div>
+    <div id="d2"></div>
+    <div id="d3"></div>
+    <div id="d4"></div>
+    <div id="d5"></div>
   </div>
+  <div class="modal-wrapper">
+    <div class="modal">
+      <div class="head">
+        <a class="btn-close trigger" ng-click="error = null"></a>
+      </div>
+      <div class="content">
+        {{error}}
+      </div>
+    </div>
+  </div>
+  <script src="lib/angular.min.js"></script>
+  <script src="lib/angular-ui-router.min.js"></script>
 
-  <ul class="bg-bubbles">
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-  </ul>
-</div>
+  <script src="app.js"></script>
+
+  <!-- if dev -->
+  <script src="lib/angular-mocks.js"></script>
+  <script src="lib/leonardo.js"></script>
+  <script src="mock.js"></script>
 </body>
 </html>
