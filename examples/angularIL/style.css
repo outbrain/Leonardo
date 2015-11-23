@@ -381,11 +381,11 @@ h4 {
   width: 100%;
   height: 100%;
   position: fixed;
+  z-index: 999999;
   top: 0;
   left: 0;
   background: lightseagreen;
   visibility: hidden;
-  z-index: 1;
   -webkit-transition: all 0.25s ease-in-out;
   -moz-transition: all 0.25s ease-in-out;
   -o-transition: all 0.25s ease-in-out;

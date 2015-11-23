@@ -1,6 +1,6 @@
 <div class="wrapper list-page">
   <div class="container">
-    <h1>Create Characters</h1>
+    <h1>{{ user ? ('Hi ' + user + ', ') : ''}} Create Characters</h1>
 
     <form class="form" ng-submit="characters.create()">
       <div class="column">

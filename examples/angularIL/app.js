@@ -2,11 +2,15 @@
 angular.module('angular-il', ['ui.router', 'leonardo'])
 //<!-- else -->
 //angular.module('angular-il', ['ui.router'])
-  .config(function ($urlRouterProvider, $stateProvider, types, charactersList) {
+  .config(function ($compileProvider, $urlRouterProvider, $stateProvider, types, charactersList) {
+    $compileProvider.debugInfoEnabled(false);
+
     $urlRouterProvider.otherwise(function ($injector) {
       var $state = $injector.get('$state');
       var $http = $injector.get('$http');
-      $http.get('/login').then(function(){
+      var $rootScope = $injector.get('$rootScope');
+      $http.get('/auth').then(function(res){
+        $rootScope.user = res.data ? res.data.name : '';
         $state.go('characters');
       }).catch(function(){
         $state.go('login');
@@ -21,21 +25,16 @@ angular.module('angular-il', ['ui.router', 'leonardo'])
           this.login = function () {
             $rootScope.loading = true;
             $http({
-              method: 'post',
-              url: '/login',
-              data: {
-                user: this.user,
-                password: this.password
-              }
-            }).then(function () {
+              method: 'POST',
+              url: '/login'
+            }).then(function (res) {
+              $rootScope.user = res.data ? res.data.name : '';
               $state.go('characters');
             }.bind(this)).catch(function(){
               $rootScope.error = 'Failed to login';
             }).finally(function(){
               $rootScope.loading = false;
             });
-
-
           }
         }
       })
@@ -49,7 +48,10 @@ angular.module('angular-il', ['ui.router', 'leonardo'])
 
           this.create = function () {
             $rootScope.loading = true;
-            $http.put('/characters').then(function () {
+            $http({
+              url: '/characters',
+              method: 'POST'
+            }).then(function () {
               this.list.push({
                 type: this.type,
                 name: this.name,
