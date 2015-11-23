@@ -9,13 +9,47 @@ leo-request {
     color: white;
     justify-content: flex-end;
     white-space: nowrap;
+
     &-name {
       flex-grow: 1;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       padding-right: 5px;
+      line-height: 25px;
     }
+
+    &-verb {
+      margin-right: 10px;
+      width: 40px;
+      padding: 5px;
+      background: black;
+      font-weight: 600;
+      color: white;
+      border-radius: 4px;
+
+      &.post {
+        background: orange;
+      }
+
+      &.get {
+        background: green;
+      }
+
+      &.jsonp {
+        background: green;
+      }
+
+      &.delete {
+        background: red;
+      }
+
+      &.put {
+        background: blue;
+      }
+
+    }
+
     &-new {
       background: @blue;
     }

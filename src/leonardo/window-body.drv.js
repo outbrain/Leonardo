@@ -30,17 +30,17 @@ angular.module('leonardo').directive('leoWindowBody', ['$http', 'leoConfiguratio
         leoActivator.selectTab('scenarios');
       };
 
-      scope.test = {
+      leoWindowBody.test = {
         url: '',
         value: undefined
       };
 
-      scope.submit = function (url) {
-        scope.test.value = undefined;
-        scope.url = url;
+      leoWindowBody.submit = function (url) {
+        leoWindowBody.test.value = undefined;
+        leoWindowBody.url = url;
         if (url) {
           $http.get(url).success(function (res) {
-            scope.test.value = res;
+            leoWindowBody.test.value = res;
           });
         }
       };
@@ -60,7 +60,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
 
   this.scenarios = leoConfiguration.getScenarios();
 
-  this.NothasUrl = function (option) {
+  this.notHasUrl = function (option) {
     return !option.url;
   };
 

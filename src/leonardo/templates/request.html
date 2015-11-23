@@ -1,4 +1,5 @@
 <a href="#" class="leo-list-item" ng-click="leoRequest.select()" ng-class="{active: leoRequest.request.active}">
+  <span class="leo-request-verb {{leoRequest.request.verb.toLowerCase()}}">{{leoRequest.request.verb}}</span>
   <span class="leo-request-name">{{leoRequest.request.url}}</span>
   <span ng-if="!!leoRequest.request.state" class="leo-request leo-request-existing">{{leoRequest.request.state.name}}</span>
   <span ng-if="!leoRequest.request.state" class="leo-request leo-request-new">new</span>
