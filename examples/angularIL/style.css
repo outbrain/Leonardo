@@ -1,6 +1,5 @@
 * {
   box-sizing: border-box;
-  font-weight: 300;
 }
 body {
   font-family: 'Source Sans Pro', sans-serif;
@@ -306,16 +305,6 @@ body.loading #backdrop {
 body.loading #loader {
   display: block;
 }
-h4 {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  margin: 0;
-  font-weight: 200;
-  opacity: .5;
-  font-family: sans-serif;
-  color: #fff;
-}
 #loader {
   display: none;
   width: 100px;
@@ -452,4 +441,11 @@ body.error .modal-wrapper .modal {
 }
 .content {
   padding: 5%;
+}
+.il-arrow {
+  text-align: center;
+  margin-top: 30px;
+  color: red;
+  font-size: 3em;
+  line-height: 1.5em;
 }
