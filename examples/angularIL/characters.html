@@ -43,6 +43,7 @@
 </div>
 
 
+<div ng-if="characters.error" class="il-error">Failed to load characters from server:<br/> {{characters.error}}</div>
 <section class="ins-masonary">
   <article ng-repeat="character in characters.list" class="ins-masonary-item angular-animate">
     <div class="ins-body">

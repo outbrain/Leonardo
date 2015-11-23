@@ -44,7 +44,13 @@ angular.module('angular-il', ['ui.router', 'leonardo'])
         controller: function ($http, $rootScope, $scope, $state, characters) {
           this.type = 'turtles';
           this.size = 'big';
-          this.list = characters;
+          if (characters instanceof Array) {
+            this.list = characters;
+          }
+          else {
+            this.list = [];
+            this.error = characters;
+          }
 
           this.create = function () {
             $rootScope.loading = true;
@@ -52,6 +58,7 @@ angular.module('angular-il', ['ui.router', 'leonardo'])
               url: '/characters',
               method: 'POST'
             }).then(function () {
+              this.error = false;
               this.list.push({
                 type: this.type,
                 name: this.name,
@@ -77,8 +84,10 @@ angular.module('angular-il', ['ui.router', 'leonardo'])
         },
         resolve: {
           characters: function ($http) {
-            return $http.get('/characters').catch(function () {
-              return [];
+            return $http.get('/characters').then(function(res){
+              return res.data;
+            }).catch(function (res) {
+              return (res.data && res.data.msg) || res.status;
             });
           }
         }
