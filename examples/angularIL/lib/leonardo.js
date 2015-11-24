@@ -175,14 +175,13 @@ angular.module('leonardo').factory('leoConfiguration',
   }
 
   function sync(){
-    fetchStates().forEach(function (state, i) {
+    fetchStates().forEach(function (state) {
       var option, responseHandler;
       if (state.url) {
         option = findStateOption(state.name);
         responseHandler = getResponseHandler(state);
         if (state.active) {
           responseHandler.respond(function () {
-            console.log(i);
             $httpBackend.setDelay(option.delay);
             return [option.status, angular.isFunction(option.data) ? option.data() : option.data];
           });
@@ -237,7 +236,7 @@ angular.module('leonardo').factory('leoConfiguration',
         addState(stateObj);
       });
     } else {
-      console.warn('addStates should get an array');
+      console.warn('leonardo: addStates should get an array');
     }
   }
 
@@ -254,7 +253,7 @@ angular.module('leonardo').factory('leoConfiguration',
     var defaultOption = {};
 
     if (!state) {
-      console.log("cannot upsert - state is mandatory");
+      console.log("leonardo: cannot upsert - state is mandatory");
       return;
     }
 
@@ -287,17 +286,11 @@ angular.module('leonardo').factory('leoConfiguration',
     sync();
   }
 
-  function upsertMany(items){
-    items.forEach(function(item) {
-      upsert(item);
-    });
-  }
-
   function addScenario(scenario){
     if (scenario && typeof scenario.name === 'string') {
       _scenarios[scenario.name] = scenario;
     } else {
-      throw 'addScnerio method expects a scenario object with name property';
+      throw 'addScenario method expects a scenario object with name property';
     }
   }
 
@@ -310,17 +303,20 @@ angular.module('leonardo').factory('leoConfiguration',
   }
 
   function getScenario(name){
-    console.log(name);
     if (!_scenarios[name]) {
       return;
     }
-    console.log('return scenario', _scenarios[name].states);
     return _scenarios[name].states;
   }
 
   function setActiveScenario(name){
+    var scenario = getScenario(name);
+    if (!scenario) {
+      console.warn("leonardo: could not find scenario named " + name);
+      return;
+    }
     deactivateAll();
-    getScenario(name).forEach(function(state){
+    scenario.forEach(function(state){
       upsertOption(state.name, state.option, true);
     });
   }
@@ -461,21 +457,17 @@ angular.module('leonardo').directive('leoActivator', ['$compile', function activ
   return {
     restrict: 'A',
     controllerAs: 'leonardo',
-    controller: function () {
-      this.activeTab = 'scenarios';
-      this.selectTab = function (name) {
-        this.activeTab = name;
-      };
-    },
+    controller: LeoActivator,
+    bindToController: true,
     link: function(scope, elem) {
-      var el = angular.element('<div ng-click="activate()" class="leonardo-activator"></div>');
+      var el = angular.element('<div ng-click="leonardo.activate()" class="leonardo-activator" ng-show="leonardo.isLeonardoVisible"></div>');
 
       var win = angular.element([
       '<div class="leonardo-window">',
         '<div class="leonardo-header">',
           '<div class="menu">',
             '<ul>',
-              '<li>LEONARDO</li>', 
+              '<li>LEONARDO</li>',
               '<li ng-class="{ \'leo-selected-tab\': leonardo.activeTab === \'scenarios\' }" ng-click="leonardo.selectTab(\'scenarios\')">Scenarios</li>',
               '<li ng-class="{ \'leo-selected-tab\': leonardo.activeTab === \'recorder\' }"ng-click="leonardo.selectTab(\'recorder\')">Recorder</li>',
               '<li ng-class="{ \'leo-selected-tab\': leonardo.activeTab === \'export\' }"ng-click="leonardo.selectTab(\'export\')">Exported Code</li>',
@@ -498,149 +490,62 @@ angular.module('leonardo').directive('leoActivator', ['$compile', function activ
           document.body.classList.add("pull-top-closed");
         }
       }, false );
-
-      scope.activate = function(){
-        if (!document.body.classList.contains('pull-top')) {
-          document.body.classList.add('pull-top');
-          document.body.classList.remove('pull-top-closed');
-        }
-        else {
-          document.body.classList.remove('pull-top');
-        }
-      };
     }
   };
 }]);
 
-angular.module('leonardo').directive('leoWindowBody',
-    ['$http', 'leoConfiguration', '$timeout', function windowBodyDirective($http, leoConfiguration, $timeout) {
+LeoActivator.$inject = ['$scope', '$document'];
+function LeoActivator($scope, $document) {
+  this.isLeonardoVisible = true;
+  this.activeTab = 'scenarios';
+
+  this.selectTab = function (name) {
+    this.activeTab = name;
+  };
+
+  $document.on('keypress', function(e) {
+    if(e.shiftKey && e.ctrlKey && e.keyCode === 12) {
+      this.isLeonardoVisible = !this.isLeonardoVisible;
+      $scope.$apply();
+    }
+  }.bind(this));
+
+  this.activate = function() {
+    if (!document.body.classList.contains('pull-top')) {
+      document.body.classList.add('pull-top');
+      document.body.classList.remove('pull-top-closed');
+    }
+    else {
+      document.body.classList.remove('pull-top');
+    }
+  };
+}
+angular.module('leonardo').directive('leoWindowBody', ['$http', 'leoConfiguration', '$timeout', function windowBodyDirective($http, leoConfiguration, $timeout) {
   return {
     restrict: 'E',
     templateUrl: 'window-body.html',
     scope: true,
-    replace: true,
-    require: '^leoActivator',
-    controller: ['$scope', function($scope) {
-      $scope.detail = {
-        option: 'success',
-        delay: 0,
-        status: 200
-      };
+    controller: LeoWindowBody,
+    bindToController: true,
+    controllerAs: 'leoWindowBody',
+    require: ['^leoActivator', 'leoWindowBody'],
+    link: function (scope, el, attr, controllers) {
+      var leoActivator = controllers[0];
+      var leoWindowBody = controllers[1];
 
-      $scope.NothasUrl = function (option) {
-        return !option.url;
-      };
-      $scope.hasUrl = function (option) {
-        return !!option.url;
-      };
-
-      $scope.deactivate = function () {
-        $scope.states.forEach(function (state) {
-          state.active = false;
-        });
-        leoConfiguration.deactivateAllStates();
-      };
-
-      $scope.updateState = function (state) {
-        if (state.active) {
-          console.log('activate state option:' + state.name + ': ' + state.activeOption.name);
-          leoConfiguration.activateStateOption(state.name, state.activeOption.name);
-        } else {
-          console.log('deactivating state: ' + state.name);
-          leoConfiguration.deactivateState(state.name);
-        }
-      };
-
-      $scope.states = leoConfiguration.getStates();
-
-      $scope.scenarios = leoConfiguration.getScenarios();
-
-      $scope.activateScenario = function (scenario) {
-        $scope.activeScenario = scenario;
-        leoConfiguration.setActiveScenario(scenario);
-        $scope.states = leoConfiguration.getStates();
-      };
-
-      $scope.requests = leoConfiguration.getRequestsLog();
-
-      $scope.$watch('detail.value', function(value){
-        if (!value) {
-          return;
-        }
-        try {
-          $scope.detail.stringValue = value ? JSON.stringify(value, null, 4) : '';
-          $scope.detail.error = '';
-        }
-        catch (e) {
-          $scope.detail.error = e.message;
-        }
-      });
-
-      $scope.$watch('detail.stringValue', function(value){
-        try {
-          $scope.detail.value = value ? JSON.parse(value) : {};
-          $scope.detail.error = '';
-        }
-        catch(e) {
-          $scope.detail.error = e.message;
-        }
-      });
-
-      $scope.requestSelect = function (request) {
-        $scope.requests.forEach(function (request) {
-          request.active = false;
-        });
-
-        request.active = true;
-
-        if (request.state && request.state.name) {
-          var optionName = request.state.name + ' option ' + request.state.options.length;
-        }
-
-        angular.extend($scope.detail, {
-          state : (request.state && request.state.name) || '',
-          option: optionName || '',
-          delay: 0,
-          status: 200,
-          stateActive: !!request.state,
-          value: request.data || {}
-        });
-        $scope.detail._unregisteredState = request;
-      };
-
-      $scope.$on('leonardo:stateChanged', function(event, stateObj) {
-        $scope.states = leoConfiguration.getStates();
-
-        var state = $scope.states.filter(function(state){
-          return state.name === stateObj.name;
-        })[0];
-
-        if (state) {
-          state.highlight = true;
-          $timeout(function(){
-            state.highlight = false;
-          }, 3000);
-        }
-      });
-      
-      $scope.getStatesForExport = function () {
-        $scope.exportStates = leoConfiguration.getStates();
-      }
-      
-    }],
-    link: function(scope, el, attr, leoActivator) {
-      scope.saveUnregisteredState = function () {
-        var stateName = scope.detail.state;
+      leoWindowBody.saveUnregisteredState = function () {
+        var stateName = this.detail.state;
 
         leoConfiguration.addSavedState({
           name: stateName,
-          verb: scope.detail._unregisteredState.verb,
-          url: scope.detail._unregisteredState.url,
+          verb: leoWindowBody.detail._unregisteredState.verb,
+          url: leoWindowBody.detail._unregisteredState.url,
           options: [
             {
-              name: scope.detail.option,
-              status: scope.detail.status,
-              data: scope.detail.value
+              name: leoWindowBody.detail.option,
+              status: leoWindowBody.detail.status,
+              data: leoWindowBody.detail.value,
+              delay: leoWindowBody.detail.delay
             }
           ]
         });
@@ -648,24 +553,134 @@ angular.module('leonardo').directive('leoWindowBody',
         leoActivator.selectTab('scenarios');
       };
 
-
-      scope.test = {
+      leoWindowBody.test = {
         url: '',
         value: undefined
       };
 
-      scope.submit = function(url){
-        scope.test.value = undefined;
-        scope.url = url;
+      leoWindowBody.submit = function (url) {
+        leoWindowBody.test.value = undefined;
+        leoWindowBody.url = url;
         if (url) {
           $http.get(url).success(function (res) {
-            scope.test.value = res;
+            leoWindowBody.test.value = res;
           });
         }
       };
     }
   };
 }]);
+
+LeoWindowBody.$inject = ['$scope', 'leoConfiguration', '$timeout'];
+function LeoWindowBody($scope, leoConfiguration, $timeout) {
+  this.detail = {
+    option: 'success',
+    delay: 0,
+    status: 200
+  };
+
+  this.states = leoConfiguration.getStates();
+
+  this.scenarios = leoConfiguration.getScenarios();
+
+  this.notHasUrl = function (option) {
+    return !option.url;
+  };
+
+  this.hasUrl = function (option) {
+    return !!option.url;
+  };
+
+  this.deactivate = function () {
+    this.states.forEach(function (state) {
+      state.active = false;
+    });
+    leoConfiguration.deactivateAllStates();
+  };
+
+  this.updateState = function (state) {
+    if (state.active) {
+      console.log('leonardo: activate state option:' + state.name + ': ' + state.activeOption.name);
+      leoConfiguration.activateStateOption(state.name, state.activeOption.name);
+    } else {
+      console.log('leonardo: deactivating state: ' + state.name);
+      leoConfiguration.deactivateState(state.name);
+    }
+  };
+
+
+  this.activateScenario = function (scenario) {
+    this.activeScenario = scenario;
+    leoConfiguration.setActiveScenario(scenario);
+    this.states = leoConfiguration.getStates();
+  }.bind(this);
+
+  this.requests = leoConfiguration.getRequestsLog();
+
+  $scope.$watch('leoWindowBody.detail.value', function (value) {
+    if (!value) {
+      return;
+    }
+    try {
+      this.detail.stringValue = value ? JSON.stringify(value, null, 4) : '';
+      this.detail.error = '';
+    }
+    catch (e) {
+      this.detail.error = e.message;
+    }
+  }.bind(this));
+
+  $scope.$watch('leoWindowBody.detail.stringValue', function (value) {
+    try {
+      this.detail.value = value ? JSON.parse(value) : {};
+      this.detail.error = '';
+    }
+    catch (e) {
+      this.detail.error = e.message;
+    }
+  }.bind(this));
+
+  this.requestSelect = function (request) {
+    this.requests.forEach(function (request) {
+      request.active = false;
+    });
+
+    request.active = true;
+
+    if (request.state && request.state.name) {
+      var optionName = request.state.name + ' option ' + request.state.options.length;
+    }
+
+    angular.extend(this.detail, {
+      state: (request.state && request.state.name) || '',
+      option: optionName || '',
+      delay: 0,
+      status: 200,
+      stateActive: !!request.state,
+      value: request.data || {}
+    });
+    this.detail._unregisteredState = request;
+  }.bind(this);
+
+  $scope.$on('leonardo:stateChanged', function (event, stateObj) {
+    this.states = leoConfiguration.getStates();
+
+    var state = this.states.filter(function (state) {
+      return state.name === stateObj.name;
+    })[0];
+
+    if (state) {
+      state.highlight = true;
+      $timeout(function () {
+        state.highlight = false;
+      }, 3000);
+    }
+  }.bind(this));
+
+  this.getStatesForExport = function () {
+    this.exportStates = leoConfiguration.getStates();
+  }
+}
 
 angular.module('leonardo').directive('leoRequest', function () {
   return {
@@ -675,14 +690,17 @@ angular.module('leonardo').directive('leoRequest', function () {
       request: '=',
       onSelect: '&'
     },
-    controller: ['$scope', function ($scope) {
-      $scope.select = function () {
-        $scope.onSelect();
-      }
-    }]
-  }
+    controllerAs: 'leoRequest',
+    bindToController: true,
+    controller: LeoRequest
+  };
 });
 
+function LeoRequest() {
+  this.select = function () {
+    this.onSelect();
+  }
+}
 (function(module) {
 try {
   module = angular.module('leonardo.templates');
@@ -691,7 +709,7 @@ try {
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('request.html',
-    '<a href="#" class="leo-list-item" ng-click="select()" ng-class="{active:request.active}"><span class="leo-request-name">{{request.url}}</span> <span ng-if="!!request.state" class="leo-request leo-request-existing">{{request.state.name}}</span> <span ng-if="!request.state" class="leo-request leo-request-new">new</span> <span ng-if="!!request.state && request.state.active" class="leo-request leo-request-mocked">mocked</span></a>');
+    '<a href="#" class="leo-list-item" ng-click="leoRequest.select()" ng-class="{active: leoRequest.request.active}"><span class="leo-request-verb {{leoRequest.request.verb.toLowerCase()}}">{{leoRequest.request.verb}}</span> <span class="leo-request-name">{{leoRequest.request.url}}</span> <span ng-if="!!leoRequest.request.state" class="leo-request leo-request-existing">{{leoRequest.request.state.name}}</span> <span ng-if="!leoRequest.request.state" class="leo-request leo-request-new">new</span> <span ng-if="!!leoRequest.request.state && leoRequest.request.state.active" class="leo-request leo-request-mocked">mocked</span></a>');
 }]);
 })();
 
@@ -703,18 +721,18 @@ try {
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('window-body.html',
-    '<div class="leonardo-window-body"><div ng-switch="leonardo.activeTab" class="leonardo-window-options"><div ng-switch-when="configure" class="leonardo-configure"><table><thead><tr><th>State</th><th>URL</th><th>Options</th></tr></thead><tbody><tr ng-repeat="state in states"><td>{{state.name}}</td><td>{{state.url}}</td><td><ul><li ng-repeat="option in state.options">Name: {{option.name}}<br>Status: {{option.status}}<br>Data: {{option.data}}<br></li></ul></td></tr></tbody></table></div><div ng-switch-when="recorder" class="leonardo-recorder"><div class="leo-list"><div class="list-group"><leo-request ng-repeat="request in requests" request="request" on-select="requestSelect(request)"></leo-request></div></div><div class="leo-detail"><div class="leo-detail-header"><div ng-if="!detail.stateActive"><span>Add new state:</span> <input class="leo-detail-state" ng-model="detail.state" placeholder="Enter state name"></div><div ng-if="detail.stateActive" class="leo-detail-state">Add mocked response for "{{detail.state}}"</div></div><div class="leo-detail-option"><div>Response name: <input ng-model="detail.option"></div><div>Status code: <input ng-model="detail.status"></div><div>Delay: <input ng-model="detail.delay"></div><div class="leo-detail-option-json">Response JSON:<div class="leo-error">{{detail.error}}</div><textarea ng-model="detail.stringValue"></textarea></div></div><div class="leo-action-row"><button ng-click="saveUnregisteredState()">{{ detail.stateActive ? \'Add Option\' : \'Add State\' }}</button></div></div></div><div ng-switch-when="export" class="leonardo-export" style="padding: 30px"><code contenteditable="" ng-init="getStatesForExport()">\n' +
+    '<div class="leonardo-window-body"><div ng-switch="leonardo.activeTab" class="leonardo-window-options"><div ng-switch-when="configure" class="leonardo-configure"><table><thead><tr><th>State</th><th>URL</th><th>Options</th></tr></thead><tbody><tr ng-repeat="state in leoWindowBody.states"><td>{{state.name}}</td><td>{{state.url}}</td><td><ul><li ng-repeat="option in state.options">Name: {{option.name}}<br>Status: {{option.status}}<br>Data: {{option.data}}<br></li></ul></td></tr></tbody></table></div><div ng-switch-when="recorder" class="leonardo-recorder"><div class="leo-list"><div class="list-group"><leo-request ng-repeat="request in leoWindowBody.requests" request="request" on-select="leoWindowBody.requestSelect(request)"></leo-request></div></div><div class="leo-detail"><div class="leo-detail-header"><div ng-if="!leoWindowBody.detail.stateActive"><span>Add new state:</span> <input class="leo-detail-state" ng-model="leoWindowBody.detail.state" placeholder="Enter state name"></div><div ng-if="leoWindowBody.detail.stateActive" class="leo-detail-state">Add mocked response for "{{leoWindowBody.detail.state}}"</div></div><div class="leo-detail-option"><div>Response name: <input ng-model="leoWindowBody.detail.option"></div><div>Status code: <input ng-model="leoWindowBody.detail.status"></div><div>Delay: <input ng-model="leoWindowBody.detail.delay"></div><div class="leo-detail-option-json">Response JSON:<div class="leo-error">{{leoWindowBody.detail.error}}</div><textarea ng-model="leoWindowBody.detail.stringValue"></textarea></div></div><div class="leo-action-row"><button ng-click="leoWindowBody.saveUnregisteredState()">{{ leoWindowBody.detail.stateActive ? \'Add Option\' : \'Add State\' }}</button></div></div></div><div ng-switch-when="export" class="leonardo-export" style="padding: 30px"><code contenteditable="" ng-init="leoWindowBody.getStatesForExport()">\n' +
     '\n' +
     '        <div>angular.module(\'leonardo\').run([\'leoConfiguration\', function(leoConfiguration) {</div>\n' +
     '\n' +
-    '        <div ng-repeat="state in exportStates">\n' +
+    '        <div ng-repeat="state in leoWindowBody.exportStates">\n' +
     '          <div style="margin-left: 10px">leoConfiguration.addStates([</div>\n' +
     '          <pre style="margin-left: 20px">{{state | json}}</pre>\n' +
     '          <div style="margin-left: 10px">])</div>\n' +
     '        </div>\n' +
     '\n' +
-    '        <div>])</div>\n' +
+    '        <div>}])</div>\n' +
     '\n' +
-    '      </code></div><div ng-switch-when="scenarios" class="leonardo-activate"><div class="leonardo-menu"><div>SCENARIOS</div><ul><li ng-class="{ \'selected\': scenario === activeScenario }" ng-repeat="scenario in scenarios" ng-click="activateScenario(scenario)">{{scenario}}</li></ul></div><ul><li class="leo-non-ajax"><h3>Non Ajax States</h3></li><li ng-repeat="state in states | filter:NothasUrl"><div><div class="onoffswitch"><input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}"> <label class="onoffswitch-label" for="{{state.name}}"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div><h4>{{state.name}}</h4></div><div><select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="updateState(state)"></select></div></li><li><h3>Ajax States</h3></li><li ng-repeat="state in states | filter:hasUrl track by $index" ng-class="{ \'leo-highlight\': state.highlight }"><div><div class="onoffswitch"><input ng-model="state.active" ng-click="updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}"> <label class="onoffswitch-label" for="{{state.name}}"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div><h4>{{state.name}}</h4>&nbsp;&nbsp; - {{state.url}}</div><div><select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="updateState(state)"></select></div></li></ul></div><div ng-switch-when="test" class="leonardo-test"><div><label for="url"></label>URL: <input id="url" type="text" ng-model="test.url"> <input type="button" ng-click="submit(test.url)" value="submit"></div><textarea>{{test.value | json}}</textarea></div></div></div>');
+    '      </code></div><div ng-switch-when="scenarios" class="leonardo-activate"><div class="leonardo-menu"><div>SCENARIOS</div><ul><li ng-class="{ \'selected\': scenario === leoWindowBody.activeScenario }" ng-repeat="scenario in leoWindowBody.scenarios" ng-click="leoWindowBody.activateScenario(scenario)">{{scenario}}</li></ul></div><ul><li class="leo-non-ajax"><h3>Non Ajax States</h3></li><li ng-repeat="state in leoWindowBody.states | filter:leoWindowBody.notHasUrl track by $index"><div><div class="onoffswitch"><input ng-model="state.active" ng-click="leoWindowBody.updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}"> <label class="onoffswitch-label" for="{{state.name}}"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div><h4>{{state.name}}</h4></div><div><select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="leoWindowBody.updateState(state)"></select></div></li><li><h3>Ajax States</h3></li><li ng-repeat="state in leoWindowBody.states | filter:leoWindowBody.hasUrl track by $index" ng-class="{ \'leo-highlight\': state.highlight }"><div><div class="onoffswitch"><input ng-model="state.active" ng-click="leoWindowBody.updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}"> <label class="onoffswitch-label" for="{{state.name}}"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div><h4>{{state.name}}</h4>&nbsp;&nbsp; - {{state.url}}</div><div><select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="leoWindowBody.updateState(state)"></select></div></li></ul></div><div ng-switch-when="test" class="leonardo-test"><div><label for="url"></label>URL: <input id="url" type="text" ng-model="leoWindowBody.test.url"> <input type="button" ng-click="leoWindowBody.submit(test.url)" value="submit"></div><textarea>{{leoWindowBody.test.value | json}}</textarea></div></div></div>');
 }]);
 })();

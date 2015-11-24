@@ -22,7 +22,8 @@ angular.module('leonardo').directive('leoWindowBody', ['$http', 'leoConfiguratio
             {
               name: leoWindowBody.detail.option,
               status: leoWindowBody.detail.status,
-              data: leoWindowBody.detail.value
+              data: leoWindowBody.detail.value,
+              delay: leoWindowBody.detail.delay
             }
           ]
         });

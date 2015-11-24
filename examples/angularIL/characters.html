@@ -1,6 +1,6 @@
 <div class="wrapper list-page">
   <div class="container">
-    <h1>Create Characters</h1>
+    <h1>{{ user ? ('Hi ' + user + ', ') : ''}} Create Characters</h1>
 
     <form class="form" ng-submit="characters.create()">
       <div class="column">
@@ -23,7 +23,7 @@
           <option value="small">Small</option>
         </select>
       </div>
-      <button type="submit" id="login-button">Create</button>
+      <button type="submit" id="btn-create">Create</button>
     </form>
     <button type="submit" id="complete-button" ng-show="characters.list.length" ng-click="characters.complete()">Complete</button>
   </div>
@@ -43,12 +43,13 @@
 </div>
 
 
+<div ng-if="characters.error" class="il-error">Failed to load characters from server:<br/> {{characters.error}}</div>
+<div ng-if="!characters.list.length" class="il-no-data">You have no characters yet</div>
 <section class="ins-masonary">
-  <article ng-repeat="character in characters.list" class="ins-masonary-item angular-animate">
+  <article ng-repeat="character in characters.list" class="ins-masonary-item angular-animate" ng-class="{ small: character.size === 'small', big: character.size === 'big' }">
     <div class="ins-body">
-      type: {{character.type}}
-      name: {{character.name}}
-      size: {{character.size}}
+      <img class="image-user" src="http://www.gravatar.com/avatar/05375831c9c9cda73859a47d6701f9ac?s=250&d=mm&r=x"/>
+      {{character.name}}
     </div>
     <img ng-src="{{character.image}}">
   </article>

@@ -17,7 +17,7 @@
   ],
   "dependencies": {
     "angular": "~1.4.8",
-    "leonardo": "~1.0.8",
-    "angular-ui-router": "~0.2.15"
+    "angular-ui-router": "~0.2.15",
+    "leonardo": "git://github.com/outbrain/Leonardo#master"
   }
 }
