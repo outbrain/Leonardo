@@ -544,7 +544,8 @@ angular.module('leonardo').directive('leoWindowBody', ['$http', 'leoConfiguratio
             {
               name: leoWindowBody.detail.option,
               status: leoWindowBody.detail.status,
-              data: leoWindowBody.detail.value
+              data: leoWindowBody.detail.value,
+              delay: leoWindowBody.detail.delay
             }
           ]
         });
@@ -730,7 +731,7 @@ module.run(['$templateCache', function($templateCache) {
     '          <div style="margin-left: 10px">])</div>\n' +
     '        </div>\n' +
     '\n' +
-    '        <div>])</div>\n' +
+    '        <div>}])</div>\n' +
     '\n' +
     '      </code></div><div ng-switch-when="scenarios" class="leonardo-activate"><div class="leonardo-menu"><div>SCENARIOS</div><ul><li ng-class="{ \'selected\': scenario === leoWindowBody.activeScenario }" ng-repeat="scenario in leoWindowBody.scenarios" ng-click="leoWindowBody.activateScenario(scenario)">{{scenario}}</li></ul></div><ul><li class="leo-non-ajax"><h3>Non Ajax States</h3></li><li ng-repeat="state in leoWindowBody.states | filter:leoWindowBody.notHasUrl track by $index"><div><div class="onoffswitch"><input ng-model="state.active" ng-click="leoWindowBody.updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}"> <label class="onoffswitch-label" for="{{state.name}}"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div><h4>{{state.name}}</h4></div><div><select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="leoWindowBody.updateState(state)"></select></div></li><li><h3>Ajax States</h3></li><li ng-repeat="state in leoWindowBody.states | filter:leoWindowBody.hasUrl track by $index" ng-class="{ \'leo-highlight\': state.highlight }"><div><div class="onoffswitch"><input ng-model="state.active" ng-click="leoWindowBody.updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}"> <label class="onoffswitch-label" for="{{state.name}}"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div><h4>{{state.name}}</h4>&nbsp;&nbsp; - {{state.url}}</div><div><select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="leoWindowBody.updateState(state)"></select></div></li></ul></div><div ng-switch-when="test" class="leonardo-test"><div><label for="url"></label>URL: <input id="url" type="text" ng-model="leoWindowBody.test.url"> <input type="button" ng-click="leoWindowBody.submit(test.url)" value="submit"></div><textarea>{{leoWindowBody.test.value | json}}</textarea></div></div></div>');
 }]);

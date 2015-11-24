@@ -226,9 +226,7 @@ select {
 }
 .ins-masonary .ins-masonary-item {
   display: inline-block;
-  font-size: 1.25em;
   position: relative;
-  font-family: ProximaNova-Light;
   line-height: 1.125;
   width: 100%;
   border: 1px solid #e4e6ea;
@@ -239,13 +237,21 @@ select {
   border-radius: 4px;
   background-clip: padding-box;
   margin-bottom: 20px;
+  font-size: 0.8em;
+  font-weight: bold;
 }
 .ins-masonary .ins-masonary-item .ins-body {
-  padding: 40px;
+  padding: 18px 0 18px 50px;
 }
 .ins-masonary .ins-masonary-item img {
   width: 100%;
   height: 100%;
+}
+.ins-masonary .ins-masonary-item.big {
+  max-width: 300px;
+}
+.ins-masonary .ins-masonary-item.small {
+  max-width: 200px;
 }
 .list-page label {
   margin: 0 0 5px 8px;
@@ -310,7 +316,7 @@ body.loading #loader {
   width: 100px;
   height: 40px;
   position: absolute;
-  top: 50%;
+  bottom: 15%;
   left: 50%;
   margin: -20px -50px;
 }
@@ -448,4 +454,19 @@ body.error .modal-wrapper .modal {
   color: red;
   font-size: 3em;
   line-height: 1.5em;
+}
+.il-no-data {
+  text-align: center;
+  margin-top: 40px;
+  color: darkolivegreen;
+  font-size: 3em;
+  line-height: 1.5em;
+}
+.image-user {
+  width: 30px !important;
+  height: 30px !important;
+  position: absolute;
+  border-radius: 20px;
+  top: 10px;
+  left: 12px;
 }
