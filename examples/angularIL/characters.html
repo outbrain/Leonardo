@@ -44,7 +44,7 @@
 
 
 <div ng-if="characters.error" class="il-error">Failed to load characters from server:<br/> {{characters.error}}</div>
-<div ng-if="!characters.list.length" class="il-no-data">You have no characters yet</div>
+<div ng-if="!characters.list.length && !characters.error" class="il-no-data">You have no characters yet</div>
 <section class="ins-masonary">
   <article ng-repeat="character in characters.list" class="ins-masonary-item angular-animate" ng-class="{ small: character.size === 'small', big: character.size === 'big' }">
     <div class="ins-body">
