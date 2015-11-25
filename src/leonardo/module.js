@@ -74,3 +74,8 @@ angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
   .run(['leoConfiguration', function(leoConfiguration) {
       leoConfiguration.loadSavedStates();
     }]);
+
+// Common.js package manager support (e.g. ComponentJS, WebPack)
+if (typeof module !== "undefined" && typeof exports !== "undefined" && module.exports === exports) {
+  module.exports = 'leonardo';
+}
