@@ -191,8 +191,8 @@ gulp serve
 
 #### Examples
 
-[Simple Example]http://outbrain.github.io/Leonardo/
-[Full Application Example]http://outbrain.github.io/Leonardo/examples/angularIL/
+* [Simple Example](http://outbrain.github.io/Leonardo/)
+* [Full Application Example](http://outbrain.github.io/Leonardo/examples/angularIL/)
 
 ## License
 Copyright &copy; 2015 MIT License
