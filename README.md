@@ -7,8 +7,10 @@
 
 ![Mocking and testing made simple and consistent. Developed by Outbrain.](extension/images/example.png)
 
-[Demo](http://outbrain.github.io/Leonardo/)
+## Examples
 
+* [Simple Demo](http://outbrain.github.io/Leonardo/)
+* [Full Application Example](http://outbrain.github.io/Leonardo/examples/angularIL/)
 
 ## Install
 
@@ -44,7 +46,7 @@ Angular Mocks module  (tested with v1.3)
   <script src="[bower_componenets|node_modules|other]/angular/angular.js"></script>
   <script src="[bower_componenets|node_modules|other]/angular-mocks/angular-mocks.js"></script>
   //.....
-  <script src="[bower_componenets|node_modules|other]/leonardo/leonardo.js"></script>
+  <script src="[bower_componenets|node_modules|other]/leonardo/dist/leonardo.js"></script>
 </body>
 </html>
 ```
@@ -56,7 +58,7 @@ Angular Mocks module  (tested with v1.3)
 <html>
 <head>
   //.....
-  <link rel="stylesheet" media="all" href="[bower_componenets|node_modules|other]/leonardo/leonardo.min.css" />
+  <link rel="stylesheet" media="all" href="[bower_componenets|node_modules|other]/leonardo/dist/leonardo.min.css" />
 </head>
 </html>
 ```

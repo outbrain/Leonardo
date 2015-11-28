@@ -2,7 +2,7 @@
   "name": "leonardojs",
   "version": "1.0.8",
   "description": "Leonardo ========",
-  "main": "index.js",
+  "main": "dist/leonardo.js",
   "scripts": {
     "test": "test",
     "docs:example": "./node_modules/docco/bin/docco index.js --template=./build/docs/resources/example/docco.jst --output=./",
