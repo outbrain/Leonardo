@@ -136,10 +136,10 @@ angular.module('leonardo').factory('leoConfiguration',
     sync();
   }
 
-  function fetchStatesByUrl(url){
-   return fetchStates().filter(function(state){
-    return state.url === url;
-   });
+  function fetchStatesByUrl(url, method){
+    return fetchStates().filter(function(state){
+      return state.url === url && state.verb.toLowerCase() === method.toLowerCase();
+    });
   }
 
   function fetchStates(){
@@ -330,10 +330,13 @@ angular.module('leonardo').factory('leoConfiguration',
   }
 
   function requestSubmitted(requestConfig){
-    var state = fetchStatesByUrl(requestConfig.url)[0];
+    var url = requestConfig.url;
+    var method = requestConfig.method;
+
+    var state = fetchStatesByUrl(url, method)[0];
     var handler = getResponseHandler(state || {
-        url: requestConfig.url,
-        verb:  requestConfig.method
+        url: url,
+        verb: method
       });
     if (!state) {
       handler.passThrough();
