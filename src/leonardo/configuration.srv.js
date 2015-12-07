@@ -4,32 +4,32 @@ angular.module('leonardo').factory('leoConfiguration',
       _scenarios = {},
       responseHandlers = {},
       _requestsLog = [],
-      _savedStates = [],
-      // Core API
-      // ----------------
-      api = {
-        // Add a new state which you wish to mock - there a two types of states - one with url and one without.
-        addState: addState,
-        addStates: addStates,
-        getState: getState,
-        getStates: fetchStates,
-        deactivateState: deactivateState,
-        deactivateAllStates: deactivateAll,
-        activateStateOption: activateStateOption,
-        addScenario: addScenario,
-        addScenarios: addScenarios,
-        getScenario: getScenario,
-        getScenarios: getScenarios,
-        setActiveScenario: setActiveScenario,
-        getRecordedStates: getRecordedStates,
-        getRequestsLog: getRequestsLog,
-        loadSavedStates: loadSavedStates,
-        addSavedState: addSavedState,
-        //Private api for passing through unregistered urls to $http
-        _requestSubmitted: requestSubmitted,
-        _logRequest: logRequest
-      };
-  return api;
+      _savedStates = [];
+
+  // Core API
+  // ----------------
+  return {
+    // Add a new state which you wish to mock - there a two types of states - one with url and one without.
+    addState: addState,
+    addStates: addStates,
+    getState: getState,
+    getStates: fetchStates,
+    deactivateState: deactivateState,
+    deactivateAllStates: deactivateAll,
+    activateStateOption: activateStateOption,
+    addScenario: addScenario,
+    addScenarios: addScenarios,
+    getScenario: getScenario,
+    getScenarios: getScenarios,
+    setActiveScenario: setActiveScenario,
+    getRecordedStates: getRecordedStates,
+    getRequestsLog: getRequestsLog,
+    loadSavedStates: loadSavedStates,
+    addSavedState: addSavedState,
+    //Private api for passing through unregistered urls to $http
+    _requestSubmitted: requestSubmitted,
+    _logRequest: logRequest
+  };
 
   function upsertOption(state, name, active) {
     var _states = leoStorage.getStates();
@@ -81,7 +81,7 @@ angular.module('leonardo').factory('leoConfiguration',
     return fetchStates().filter(function(state){ return state.name === name;})[0].activeOption;
   }
 
-  function sync(){
+  function sync() {
     fetchStates().forEach(function (state) {
       var option, responseHandler;
       if (state.url) {
