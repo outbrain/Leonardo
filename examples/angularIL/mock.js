@@ -181,10 +181,10 @@ angular.module('leonardo').run(['leoConfiguration', '$rootScope', function (leoC
     ]
   });
 
-  var debug = leoConfiguration.getState('debug');
+  var debug = leoConfiguration.getActiveStateOption('debug');
   var isDebug = debug && debug.name === 'Enabled';
   $rootScope.$on('leonardo:setStates', function () {
-    var debug = leoConfiguration.getState('debug');
+    var debug = leoConfiguration.getActiveStateOption('debug');
     if (!isDebug && debug) {
       angular.reloadWithDebugInfo();
     }
