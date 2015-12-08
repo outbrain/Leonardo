@@ -50,10 +50,11 @@ gulp.task("build:templates", false, function () {
 gulp.task('build:js', function(){
   return gulp.src(
       [
-        './src/leonardo/module.js',
+        './src/leonardo/sinon.js',
+        './src/leonardo/module2.js',
         './src/leonardo/leonardo.prov.js',
-        './src/leonardo/configuration.srv.js',
-        './src/leonardo/httpInterceptor.srv.js',
+        './src/leonardo/configuration2.srv.js',
+        //'./src/leonardo/httpInterceptor.srv.js',
         './src/leonardo/storage.srv.js',
         './src/leonardo/activator.drv.js',
         './src/leonardo/window-body.drv.js',
@@ -69,7 +70,8 @@ gulp.task('copy:dist', function() {
     "./tmp/leonardo.js",
     "./tmp/leonardo.min.css"
   ])
-  .pipe(gulp.dest('./dist'));
+  .pipe(gulp.dest('./dist'))
+  .pipe(gulp.dest('./extension'));
 });
 
 gulp.task('build', function(cb) {

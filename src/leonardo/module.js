@@ -1,77 +1,35 @@
-angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
-  .config(['$provide', '$httpProvider', function($provide, $httpProvider) {
+angular.module('leonardo', ['leonardo.templates'])
+    .run(['leoConfiguration', function(leoConfiguration) {
+      var server = sinon.fakeServer.create({
+        autoRespond: true,
+        autoRespondAfter: 10
+      });
 
-    $httpProvider.interceptors.push('leoHttpInterceptor');
+      sinon.FakeXMLHttpRequest.useFilters = true;
+      sinon.FakeXMLHttpRequest.addFilter(function(method, url) {
+        var state = leoConfiguration.fetchStatesByUrlAndMethod(url, method);
+        return !(state && state.active);
+      });
 
-    $provide.decorator('$httpBackend', ['$delegate', '$timeout', function($delegate, $timeout) {
-      var proxy = function(method, url, data, callback, headers) {
-        var interceptor = function() {
-          var _this = this,
-            _arguments = arguments;
-          $timeout(function() {
-            callback.apply(_this, _arguments);
-          }, proxy.delay || 0);
-          proxy.delay = 0;
-        };
-        return $delegate.call(this, method, url, data, interceptor, headers);
+      sinon.FakeXMLHttpRequest.onResponseEnd = function(xhr) {
+        var res = xhr.response;
+        try { res = JSON.parse(xhr.response); }
+        catch (e) {}
+        leoConfiguration._logRequest(xhr.method, xhr.url, res, xhr.status);
       };
 
-      for(var key in $delegate) {
-        if ($delegate.hasOwnProperty(key)) {
-          proxy[key] = $delegate[key];
+      server.respondWith(function(request) {
+        var state = leoConfiguration.fetchStatesByUrlAndMethod(request.url, request.method),
+            activeOption = leoConfiguration.getActiveStateOption(state.name);
+
+        if (!!activeOption) {
+          var responseData = angular.isFunction(activeOption.data) ? activeOption.data() : activeOption.data;
+          request.respond(activeOption.status, { "Content-Type": "application/json" }, JSON.stringify(responseData));
+          leoConfiguration._logRequest(request.method, request.url, responseData, activeOption.status);
+        } else {
+          console.warn('could not find a state for the following request', request);
         }
-      }
-
-      proxy.setDelay = function(delay) {
-        proxy.delay = delay;
-      };
-
-      return proxy;
-    }]);
-
-    $provide.decorator('$http', ['leoConfiguration', '$delegate', function(leoConfiguration, $delegate) {
-      var proxy = function(requestConfig) {
-        leoConfiguration._requestSubmitted(requestConfig);
-        return $delegate.call(this, requestConfig);
-      };
-
-      for(var key in $delegate) {
-        if ($delegate.hasOwnProperty(key)) {
-          proxy[key] = $delegate[key];
-        }
-      }
-
-      createShortMethodsWithData('post', 'put', 'patch');
-
-      createShortMethods('get', 'delete', 'head', 'jsonp');
-
-      function createShortMethods() {
-        angular.forEach(arguments, function(name) {
-          proxy[name] = function(url, config) {
-            return proxy(angular.extend({}, config || {}, {
-              method: name,
-              url: url
-            }));
-          };
-        });
-      }
-
-      function createShortMethodsWithData() {
-        angular.forEach(arguments, function(name) {
-          proxy[name] = function(url, data, config) {
-            return proxy(angular.extend({}, config || {}, {
-              method: name,
-              url: url,
-              data: data
-            }));
-          };
-        });
-      }
-
-      return proxy;
-    }]);
-  }])
-  .run(['leoConfiguration', function(leoConfiguration) {
+      });
       leoConfiguration.loadSavedStates();
     }]);
 

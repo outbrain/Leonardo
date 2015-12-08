@@ -119,6 +119,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
   }.bind(this));
 
   this.requestSelect = function (request) {
+    var optionName;
     this.requests.forEach(function (request) {
       request.active = false;
     });
@@ -126,14 +127,14 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
     request.active = true;
 
     if (request.state && request.state.name) {
-      var optionName = request.state.name + ' option ' + request.state.options.length;
+      optionName = request.state.name + ' option ' + request.state.options.length;
     }
 
     angular.extend(this.detail, {
       state: (request.state && request.state.name) || '',
       option: optionName || '',
       delay: 0,
-      status: 200,
+      status: request.status || 200,
       stateActive: !!request.state,
       value: request.data || {}
     });
