@@ -23,8 +23,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "angular": "~1.x.x",
-    "angular-mocks": "~1.x.x"
+    "angular": "~1.x.x"
   },
   "ignore": [
     "**/.*",
