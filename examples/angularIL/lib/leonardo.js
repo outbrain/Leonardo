@@ -75,6 +75,11 @@ angular.module('leonardo', ['leonardo.templates', 'ngMockE2E'])
       leoConfiguration.loadSavedStates();
     }]);
 
+// Common.js package manager support (e.g. ComponentJS, WebPack)
+if (typeof module !== "undefined" && typeof exports !== "undefined" && module.exports === exports) {
+  module.exports = 'leonardo';
+}
+
 angular.module('leonardo').provider('$leonardo', function LeonardoProvider() {
     var pref = '';
 
@@ -97,32 +102,32 @@ angular.module('leonardo').factory('leoConfiguration',
       _scenarios = {},
       responseHandlers = {},
       _requestsLog = [],
-      _savedStates = [],
-      // Core API
-      // ----------------
-      api = {
-        // Add a new state which you wish to mock - there a two types of states - one with url and one without.
-        addState: addState,
-        addStates: addStates,
-        getState: getState,
-        getStates: fetchStates,
-        deactivateState: deactivateState,
-        deactivateAllStates: deactivateAll,
-        activateStateOption: activateStateOption,
-        addScenario: addScenario,
-        addScenarios: addScenarios,
-        getScenario: getScenario,
-        getScenarios: getScenarios,
-        setActiveScenario: setActiveScenario,
-        getRecordedStates: getRecordedStates,
-        getRequestsLog: getRequestsLog,
-        loadSavedStates: loadSavedStates,
-        addSavedState: addSavedState,
-        //Private api for passing through unregistered urls to $htto
-        _requestSubmitted: requestSubmitted,
-        _logRequest: logRequest
-      };
-  return api;
+      _savedStates = [];
+
+  // Core API
+  // ----------------
+  return {
+    // Add a new state which you wish to mock - there a two types of states - one with url and one without.
+    addState: addState,
+    addStates: addStates,
+    getState: getState,
+    getStates: fetchStates,
+    deactivateState: deactivateState,
+    deactivateAllStates: deactivateAll,
+    activateStateOption: activateStateOption,
+    addScenario: addScenario,
+    addScenarios: addScenarios,
+    getScenario: getScenario,
+    getScenarios: getScenarios,
+    setActiveScenario: setActiveScenario,
+    getRecordedStates: getRecordedStates,
+    getRequestsLog: getRequestsLog,
+    loadSavedStates: loadSavedStates,
+    addSavedState: addSavedState,
+    //Private api for passing through unregistered urls to $http
+    _requestSubmitted: requestSubmitted,
+    _logRequest: logRequest
+  };
 
   function upsertOption(state, name, active) {
     var _states = leoStorage.getStates();
@@ -138,7 +143,7 @@ angular.module('leonardo').factory('leoConfiguration',
 
   function fetchStatesByUrl(url, method){
     return fetchStates().filter(function(state){
-      return state.url === url && state.verb.toLowerCase() === method.toLowerCase();
+      return state.url && new RegExp(state.url).test(url) && state.verb.toLowerCase() === method.toLowerCase();
     });
   }
 
@@ -174,7 +179,7 @@ angular.module('leonardo').factory('leoConfiguration',
     return fetchStates().filter(function(state){ return state.name === name;})[0].activeOption;
   }
 
-  function sync(){
+  function sync() {
     fetchStates().forEach(function (state) {
       var option, responseHandler;
       if (state.url) {
@@ -352,16 +357,9 @@ angular.module('leonardo').factory('leoConfiguration',
         status: status,
         timestamp: new Date()
       };
-      req.state = getStateByRequest(req);
+      req.state = fetchStatesByUrl(req.url, req.verb)[0];
       _requestsLog.push(req);
     }
-  }
-
-  function getStateByRequest(req) {
-    return fetchStates().filter(function(state) {
-      if (!state.url) return false;
-      return state.url === req.url && state.verb.toLowerCase() === req.verb.toLowerCase();
-    })[0];
   }
 
   function getRequestsLog() {
@@ -382,7 +380,7 @@ angular.module('leonardo').factory('leoConfiguration',
   function getRecordedStates() {
     var requestsArr = _requestsLog
           .map(function(req){
-            var state = getStateByRequest(req);
+            var state = fetchStatesByUrl(req.url, req.verb)[0];
             return {
               name: state ? state.name : req.verb + " " + req.url,
               verb: req.verb,
