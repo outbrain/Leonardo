@@ -1,5 +1,5 @@
 angular.module('leonardo', ['leonardo.templates'])
-    .run(['leoConfiguration', function(leoConfiguration) {
+    .run(['leoConfiguration', '$document', '$rootScope', '$compile', function(leoConfiguration, $document, $rootScope, $compile) {
       var server = sinon.fakeServer.create({
         autoRespond: true,
         autoRespondAfter: 10
@@ -31,6 +31,9 @@ angular.module('leonardo', ['leonardo.templates'])
         }
       });
       leoConfiguration.loadSavedStates();
+
+      var el = $compile( "<div leo-activator></div>" )($rootScope);
+      $document[0].body.appendChild(el[0]);
     }]);
 
 // Common.js package manager support (e.g. ComponentJS, WebPack)

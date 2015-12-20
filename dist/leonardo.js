@@ -2245,7 +2245,7 @@ if (typeof sinon === "undefined") {
 }());
 
 angular.module('leonardo', ['leonardo.templates'])
-    .run(['leoConfiguration', function(leoConfiguration) {
+    .run(['leoConfiguration', '$document', '$rootScope', '$compile', function(leoConfiguration, $document, $rootScope, $compile) {
       var server = sinon.fakeServer.create({
         autoRespond: true,
         autoRespondAfter: 10
@@ -2277,6 +2277,9 @@ angular.module('leonardo', ['leonardo.templates'])
         }
       });
       leoConfiguration.loadSavedStates();
+
+      var el = $compile( "<div leo-activator></div>" )($rootScope);
+      $document[0].body.appendChild(el[0]);
     }]);
 
 // Common.js package manager support (e.g. ComponentJS, WebPack)
@@ -2620,8 +2623,8 @@ angular.module('leonardo').directive('leoActivator', ['$compile', function activ
             '<ul>',
               '<li>LEONARDO</li>',
               '<li ng-class="{ \'leo-selected-tab\': leonardo.activeTab === \'scenarios\' }" ng-click="leonardo.selectTab(\'scenarios\')">Scenarios</li>',
-              '<li ng-class="{ \'leo-selected-tab\': leonardo.activeTab === \'recorder\' }"ng-click="leonardo.selectTab(\'recorder\')">Recorder</li>',
-              '<li ng-class="{ \'leo-selected-tab\': leonardo.activeTab === \'export\' }"ng-click="leonardo.selectTab(\'export\')">Exported Code</li>',
+              '<li ng-class="{ \'leo-selected-tab\': leonardo.activeTab === \'recorder\' }" ng-click="leonardo.selectTab(\'recorder\')">Recorder</li>',
+              '<li ng-class="{ \'leo-selected-tab\': leonardo.activeTab === \'export\' }" ng-click="leonardo.selectTab(\'export\')">Exported Code</li>',
             '</ul>',
           '</div>',
         '</div>',
