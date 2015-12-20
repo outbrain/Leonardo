@@ -114,6 +114,7 @@
             <select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="leoWindowBody.updateState(state)"></select>
           </div>
           <button ng-click="leoWindowBody.removeState(state)" title="Remove State">Remove</button>
+          <button ng-click="leoWindowBody.removeOption(state, state.activeOption)" title="Remove Option">Remove Option</button>
           <button ng-click="leoWindowBody.editState(state)">Edit</button>
         </li>
       </ul>

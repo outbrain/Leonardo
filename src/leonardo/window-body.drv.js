@@ -62,6 +62,25 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
     this.states.splice(index, 1);
   }
 
+  function removeOptionByName(stateName, optionName) {
+    var sIndex = 0;
+    var oIndex = 0;
+
+    this.states.forEach(function(state, i){
+      if (state.name === stateName){
+        sIndex = i;
+      }
+    });
+
+    this.states[sIndex].options.forEach(function(option, i){
+      if (option.name === optionName){
+        oIndex = i;
+      }
+    });
+    debugger;
+    this.states[sIndex].options.splice(oIndex, 1);
+  }
+
   this.detail = {
     option: 'success',
     delay: 0,
@@ -71,6 +90,12 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
   this.removeState = function(state){
     leoConfiguration.removeState(state);
     removeStateByName.call(this, state.name);
+  };
+
+  this.removeOption = function(state, option){
+    debugger;
+    leoConfiguration.removeOption(state, option);
+    removeOptionByName.call(this, state.name, option.name);
   };
 
   this.editState = function(state){
