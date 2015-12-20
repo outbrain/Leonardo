@@ -8,7 +8,7 @@ angular.module('leonardo').run(['$rootScope', 'leoConfiguration', function($root
     $rootScope.mission = mission ? mission.data : "";
   };
 
-  leoConfiguration.addState({
+  leoConfiguration.getActiveStateOption({
     name: 'Set Mission',
     options: [
       { name: 'turtles', data: "Protect April o'neil" },

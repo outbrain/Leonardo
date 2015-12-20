@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="../../dist/leonardo.min.css" />
 </head>
-<body ng-app="angular-il" leo-activator class="pull-top" ng-class="{loading: loading, error: error}">
+<body ng-app="angular-il" ng-class="{loading: loading, error: error}">
   <div ui-view></div>
   <div id="backdrop"></div>
   <div id="loader">
@@ -32,7 +32,6 @@
   <script src="app.js"></script>
 
   <!-- if dev -->
-  <script src="lib/angular-mocks.js"></script>
   <script src="../../dist/leonardo.js"></script>
   <script src="mock.js"></script>
 </body>

@@ -50,10 +50,10 @@ gulp.task("build:templates", false, function () {
 gulp.task('build:js', function(){
   return gulp.src(
       [
+        './src/leonardo/sinon.js',
         './src/leonardo/module.js',
         './src/leonardo/leonardo.prov.js',
         './src/leonardo/configuration.srv.js',
-        './src/leonardo/httpInterceptor.srv.js',
         './src/leonardo/storage.srv.js',
         './src/leonardo/activator.drv.js',
         './src/leonardo/window-body.drv.js',
@@ -69,7 +69,7 @@ gulp.task('copy:dist', function() {
     "./tmp/leonardo.js",
     "./tmp/leonardo.min.css"
   ])
-  .pipe(gulp.dest('./dist'));
+  .pipe(gulp.dest('./dist'))
 });
 
 gulp.task('build', function(cb) {
@@ -84,7 +84,7 @@ gulp.task('build', function(cb) {
 });
 function mockServerMiddleware(route) {
   return function (req, res, next) {
-    if (req.url === '/' || req.url.length > 10) {
+    if (req.url === '/' || req.url.length > 15) {
       return next();
     }
     res.statusCode = 404;
