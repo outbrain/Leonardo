@@ -26,6 +26,7 @@ angular.module('leonardo').factory('leoConfiguration',
     getRequestsLog: getRequestsLog,
     loadSavedStates: loadSavedStates,
     addSavedState: addSavedState,
+    removeState: removeState,
     //Private api for passing through unregistered urls to $http
     _requestSubmitted: requestSubmitted,
     _logRequest: logRequest
@@ -277,6 +278,16 @@ angular.module('leonardo').factory('leoConfiguration',
     _savedStates.push(state);
     leoStorage.setSavedStates(_savedStates);
     addState(state);
+  }
+
+  function removeState(state) {
+    if (angular.isArray(statesArr)) {
+      statesArr.forEach(function(stateObj) {
+        addState(stateObj);
+      });
+    } else {
+      console.warn('leonardo: addStates should get an array');
+    }
   }
 
   function getRecordedStates() {

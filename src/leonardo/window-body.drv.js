@@ -57,6 +57,14 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
     status: 200
   };
 
+  this.removeState = function(state){
+    leoConfiguration.removeState(state);
+  };
+
+  this.editState = function(state){
+    console.log(state);
+  };
+
   this.states = leoConfiguration.getStates();
 
   this.scenarios = leoConfiguration.getScenarios();
