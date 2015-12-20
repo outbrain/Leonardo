@@ -1,65 +1,63 @@
-leo-request {
-  .leo-request {
-    border-radius: 4px;
-    display: inline-block;
-    padding: 3px 10px;
-    float: right;
-    font-size: small;
-    margin: 0 2px;
-    color: white;
-    justify-content: flex-end;
+.leo-request {
+  border-radius: 4px;
+  display: inline-block;
+  padding: 3px 10px;
+  float: right;
+  font-size: small;
+  margin: 0 2px;
+  color: white;
+  justify-content: flex-end;
+  white-space: nowrap;
+
+  &-name {
+    flex-grow: 1;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 5px;
+    line-height: 25px;
+  }
 
-    &-name {
-      flex-grow: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      padding-right: 5px;
-      line-height: 25px;
+  &-verb {
+    margin-right: 10px;
+    width: 40px;
+    padding: 5px;
+    background: black;
+    font-weight: 600;
+    color: white;
+    border-radius: 4px;
+
+    &.post {
+      background: orange;
     }
 
-    &-verb {
-      margin-right: 10px;
-      width: 40px;
-      padding: 5px;
-      background: black;
-      font-weight: 600;
-      color: white;
-      border-radius: 4px;
-
-      &.post {
-        background: orange;
-      }
-
-      &.get {
-        background: green;
-      }
-
-      &.jsonp {
-        background: green;
-      }
-
-      &.delete {
-        background: red;
-      }
-
-      &.put {
-        background: blue;
-      }
-
+    &.get {
+      background: green;
     }
 
-    &-new {
-      background: @blue;
+    &.jsonp {
+      background: green;
     }
 
-    &-mocked {
-      background: @green;
+    &.delete {
+      background: red;
     }
 
-    &-existing {
-      background: @orange;
+    &.put {
+      background: blue;
     }
+
+  }
+
+  &-new {
+    background: @blue;
+  }
+
+  &-mocked {
+    background: @green;
+  }
+
+  &-existing {
+    background: @orange;
   }
 }
