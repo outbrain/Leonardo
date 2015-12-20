@@ -280,14 +280,35 @@ angular.module('leonardo').factory('leoConfiguration',
     addState(state);
   }
 
+  function removeStateByName(name) {
+    var index = 0;
+    states.forEach(function(state, i){
+      if (state.name === name){
+        index = i;
+      }
+    });
+
+    states.splice(index, 1);
+  }
+
+  function removeSavedStateByName(name) {
+    var index = 0;
+    _savedStates.forEach(function(state, i){
+      if (state.name === name){
+        index = i;
+      }
+    });
+
+    _savedStates.splice(index, 1);
+  }
+
   function removeState(state) {
-    if (angular.isArray(statesArr)) {
-      statesArr.forEach(function(stateObj) {
-        addState(stateObj);
-      });
-    } else {
-      console.warn('leonardo: addStates should get an array');
-    }
+
+    removeStateByName(state.name);
+    removeSavedStateByName(state.name);
+
+    leoStorage.setSavedStates(_savedStates);
+    sync();
   }
 
   function getRecordedStates() {
