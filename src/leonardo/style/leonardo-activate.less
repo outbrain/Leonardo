@@ -41,21 +41,25 @@
   > ul {
     flex: 3;
     list-style: none;
-    display: table;
+    padding-right: 100px;
   }
 
   li {
-    display: table-row;
-    border: 3px solid white;
-
-    > div {
-      display: table-cell;
-      vertical-align: middle;
-      padding: 3px 0;
+    display: flex;
+    div {
+      margin-left: 20px;
+    }
+    .leo-expand {
+      flex: 1;
     }
 
-    > div:nth-child(2) {
-      min-width: 400px;
+    .leo-verb {
+      width: 60px;
+    }
+
+    button {
+      padding: 5px;
+      margin-left: 10px;
     }
   }
 

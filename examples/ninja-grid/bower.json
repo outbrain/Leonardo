@@ -1,5 +1,5 @@
 {
-  "name": "angularIL",
+  "name": "ninja-grid",
   "homepage": "https://github.com/outbrain/Leonardo",
   "authors": [
     "Sagiv Frankel <sagivf@gmail.com>"
@@ -16,7 +16,6 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.4.8",
-    "angular-ui-router": "~0.2.15"
+    "leonardo": "git://github.com/outbrain/Leonardo#master"
   }
 }
