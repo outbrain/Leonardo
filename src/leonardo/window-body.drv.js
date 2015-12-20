@@ -51,6 +51,7 @@ angular.module('leonardo').directive('leoWindowBody', ['$http', 'leoConfiguratio
 
 LeoWindowBody.$inject = ['$scope', 'leoConfiguration', '$timeout'];
 function LeoWindowBody($scope, leoConfiguration, $timeout) {
+  this.editedState = null;
   this.detail = {
     option: 'success',
     delay: 0,
@@ -62,8 +63,15 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
   };
 
   this.editState = function(state){
-    console.log(state);
+    // open box with flex
+    this.editedState = angular.copy(state);
+    console.log(this.editedState);
   };
+
+  this.saveEditedState = function() {
+    leoConfiguration.addState(this.editedState);
+    this.editedState = null;
+  }
 
   this.states = leoConfiguration.getStates();
 
