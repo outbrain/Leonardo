@@ -16,6 +16,6 @@
     "tests"
   ],
   "dependencies": {
-    "leonardo": "git://github.com/outbrain/Leonardo#master"
+    "angular": "~1.4.8"
   }
 }
