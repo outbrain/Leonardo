@@ -108,7 +108,45 @@
           <button ng-click="leoWindowBody.editState(state)">Edit</button>
         </li>
       </ul>
-    </div>
+      <div class="edit-state" ng-show="!!leoWindowBody.editedState">
+
+        <!--<p> {{ leoWindowBody.editedState | json : spacing}}</p>-->
+        <div class="leonardo-recorder">
+          <div class="leo-list">
+            <div class="list-group">
+              <leo-request
+                      ng-repeat="request in leoWindowBody.requests"
+                      request="request"
+                      on-select="leoWindowBody.requestSelect(request)">
+              </leo-request>
+            </div>
+          </div>
+          <div class="leo-detail">
+            <div class="leo-detail-header">
+              <div ng-if="!leoWindowBody.detail.stateActive">
+                <input  class="leo-detail-state" ng-model="leoWindowBody.detail.state" placeholder="Enter state name"/>
+              </div>
+              <div ng-if="leoWindowBody.detail.stateActive" class="leo-detail-state">Add mocked response for "{{leoWindowBody.detail.state}}"</div>
+            </div>
+            <div class="leo-detail-option">
+              <div>Response name: <input ng-model="leoWindowBody.detail.option"/></div>
+              <div>Status code: <input ng-model="leoWindowBody.detail.status"/></div>
+              <div>Delay: <input ng-model="leoWindowBody.detail.delay"/></div>
+              <div class="leo-detail-option-json">Response JSON:
+                <div class="leo-error">
+                  {{leoWindowBody.detail.error}}
+                </div>
+                <textarea ng-model="leoWindowBody.detail.stringValue"></textarea>
+              </div>
+            </div>
+
+            <div class="leo-action-row">
+              <button ng-click="leoWindowBody.saveEditedState()">{{  'Save' }}</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
     <div ng-switch-when="test" class="leonardo-test">
       <div>
         <label for="url"></label>URL: <input id="url" type="text" ng-model="leoWindowBody.test.url"/>

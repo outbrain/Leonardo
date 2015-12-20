@@ -62,6 +62,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
     this.states.splice(index, 1);
   }
 
+  this.editedState = null;
   this.detail = {
     option: 'success',
     delay: 0,
@@ -74,8 +75,15 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
   };
 
   this.editState = function(state){
-    console.log(state);
+    // open box with flex
+    this.editedState = angular.copy(state);
+    console.log(this.editedState);
   };
+
+  this.saveEditedState = function() {
+    leoConfiguration.addState(this.editedState);
+    this.editedState = null;
+  }
 
   this.states = leoConfiguration.getStates();
 
