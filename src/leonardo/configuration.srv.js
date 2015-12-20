@@ -25,6 +25,7 @@ angular.module('leonardo').factory('leoConfiguration',
         loadSavedStates: loadSavedStates,
         addSavedState: addSavedState,
         fetchStatesByUrlAndMethod: fetchStatesByUrlAndMethod,
+        removeState: removeState,
         _logRequest: logRequest
       };
 
@@ -221,6 +222,16 @@ angular.module('leonardo').factory('leoConfiguration',
         leoStorage.setSavedStates(_savedStates);
         addState(state);
       }
+
+  function removeState(state) {
+    if (angular.isArray(statesArr)) {
+      statesArr.forEach(function(stateObj) {
+        addState(stateObj);
+      });
+    } else {
+      console.warn('leonardo: addStates should get an array');
+    }
+  }
 
       function getRecordedStates() {
         var requestsArr = _requestsLog
