@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+
+<html ng-app="flicker-example" ng-strict-di>
+<head>
+  <title>Leonardo Example</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+
+
+  <link rel="icon" type="image/x-icon" href="leonardo.png">
+  <link rel="stylesheet" media="all" href="bower_components/leonardo/dist/leonardo.min.css" />
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="shepherd-theme-arrows.css" />
+
+  <style>
+    * html .clearfix { height: 1%; }
+    html[xmlns] .clearfix { display: block; }
+    .clearfix:after { content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }
+
+    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+      display: none !important;
+    }
+
+    .shepherd-content footer { display: none; }
+    .shepherd-element.shepherd-theme-arrows .shepherd-content .shepherd-text {
+      padding: 20px 30px;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    p, h4 { margin: 4px 0; max-height: 44px; overflow: hidden }
+    h2 { text-align: center; font-size: 16px; line-height: 1;  }
+
+    .mission-label {
+      font-weight: bold;
+    }
+    .mission {
+      font-size: 18px;
+      line-height: 1;
+      color: #002451;
+    }
+
+    body {margin:0;font-family:'Open Sans', sans-serif}
+    body .main-view  h1 { text-align: center; font-size: 6em; color: white; font-family: 'Helvetica Neue', helvetica, arial, verdana, sans-serif; text-shadow: rgba(0, 0, 0, 0.247059) 0px 1px 1px;}
+    body .main-view > div { background: white; margin: auto auto; width: 698px; padding: 5px; border: 1px solid gray; min-height: 300px; }
+
+    .error { text-align: center; font-size: 24px; color: Red; vertical-align: middle; padding: 130px }
+
+    .deckgrid {margin-left: auto;margin-right: auto}
+    .deckgrid[deckgrid]::before {content: '5 .column.column-1-5';font-size: 0;visibility: hidden;}
+    .deckgrid .column {float: left;}
+    .deckgrid .column-1-5 {width: 20%;}
+    .deckgrid img{width:100%; cursor: default}
+    .deckgrid .photo-description {display: none;}
+
+    nav li {
+      display:inline-block;
+      padding:10px;
+    }
+
+    nav li a {
+      color: blue;
+      text-decoration: none;
+    }
+
+    nav ul {text-align:center;}
+
+    .load-container {text-align:center;margin:0 auto 20px auto;}
+
+    button {
+      display: inline-block;
+      text-align: center;
+      cursor: pointer;
+      background: #f08222;
+      color: white;
+      font-size: 2em;
+      border: 1px solid #f08222;
+      text-decoration: none;
+      padding: 0.5em 2em;
+      border-radius: 10px;
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      color: #f08222;
+      background: white;
+    }
+
+    button:focus {
+      outline: none;
+    }
+  </style>
+</head>
+<body leo-activator  ng-controller="flickerCtrl" class="pull-tops">
+  <nav>
+    <ul>
+      <li><a href="https://github.com/outbrain/Leonardo">Github</a></li>
+      <li><a href="docs/configuration.srv.html">Documentation</a></li>
+      <!--<li><a href="http://plnkr.co/edit/w8oaELXwQldv6AeZjnhD?p=preview">Plunker</a></li>-->
+      <li><a href="index.js">Example application source</a></li>
+      <li><a href="leonardo-mocking.js">Example mocking source</a></li>
+    </ul>
+  </nav>
+  
+
+  <div class="load-container">
+    <button ng-click="loadClicked()" class="load">Load<span ng-cloak="" ng-if="loading">ing...</span></button>
+  </div>
+  <h2 ng-cloak ng-show="mission">
+      <span class="mission-label">Your mission:</span> <span class="mission">"{{ mission }}!!!"</span>
+  </h2>
+  <div class="clearfix">
+    <div deckgrid class="deckgrid" source="photos">
+      <div class="photo">
+          <a href="">
+              <div class="photo-wrapper">
+                  <img src="" data-ng-src="{{card.imageUrl}}" class="animation-fade" data-imageloaded data-loadedclass="animation-faded">
+              </div>
+
+              <div class="photo-description">
+                  <h3>{{card.title}}</h3>
+                  <p>Nice photo, eh.</p>
+              </div>
+          </a>
+      </div>
+    </div>
+  </div>
+
+  <a href="https://github.com/outbrain/Leonardo">
+    <img style="position: absolute; top: 0; right: 0; border: 0; width: 149px; height: 149px;" src="http://aral.github.com/fork-me-on-github-retina-ribbons/right-green@2x.png" alt="Fork me on GitHub">
+  </a>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-mocks.js"></script>
+  <script src="angular-deckgrid.js"></script>
+  <script src="tether.min.js"></script>
+  <script src="shepherd.min.js"></script>
+  <script src="bower_components/leonardo/dist/leonardo.js"></script>
+  <script src="index.js"></script>
+  <script src="leonardo-mocking.js"></script>
+</body>
+</html>

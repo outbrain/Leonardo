@@ -1,0 +1,21 @@
+{
+  "name": "ninja-grid",
+  "homepage": "https://github.com/outbrain/Leonardo",
+  "authors": [
+    "Sagiv Frankel <sagivf@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "leonardo": "git://github.com/outbrain/Leonardo#master"
+  }
+}

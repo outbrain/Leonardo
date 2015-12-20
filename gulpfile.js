@@ -84,13 +84,25 @@ gulp.task('build', function(cb) {
     'clean:tmp',
     cb);
 });
+function mockServerMiddleware(route) {
+  return function (req, res, next) {
+    if (req.url === '/' || req.url.length > 10) {
+      return next();
+    }
+    res.statusCode = 404;
+    res.setHeader("Content-Type", "text/html");
+    return res.end();
+  };
+}
+
 
 gulp.task('serve', "Serve files after build and watch", ['build', 'watch'], function () {
   gulp.src('')
     .pipe(webserver({
       livereload: true,
       open: true,
-      fallback: 'index.html'
+      fallback: 'index.html',
+      middleware: mockServerMiddleware('/')
     }));
 });
 
