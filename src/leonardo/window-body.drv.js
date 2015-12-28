@@ -58,7 +58,6 @@ angular.module('leonardo').directive('leoJsonFormatter', function JsonFormatter(
       onSuccess: '&'
     },
     controller: function LeoJsonFormatterCtrl () {
-      console.log('json formaterr', this.jsonInitialData);
       this.stringValue = this.jsonInitialData ? JSON.stringify(this.jsonInitialData) : '{}';
 
       this.valueChanged = function () {
@@ -109,11 +108,9 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
   this.editState = function(state){
     // open box with flex
     this.editedState = angular.copy(state);
-    console.log(this.editedState);
   };
 
   this.onEditOptionSuccess = function (data) {
-    console.log('success', data);
     this.editedState.activeOption.data = data
     this.editedState.error = '';
   };
@@ -123,7 +120,6 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
   };
 
   this.saveEditedState = function() {
-    console.log('editedState', this.editedState);
     leoConfiguration.addState(this.editedState);
     this.editedState = null;
   }
@@ -149,10 +145,8 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
 
   this.updateState = function (state) {
     if (state.active) {
-      console.log('leonardo: activate state option:' + state.name + ': ' + state.activeOption.name);
       leoConfiguration.activateStateOption(state.name, state.activeOption.name);
     } else {
-      console.log('leonardo: deactivating state: ' + state.name);
       leoConfiguration.deactivateState(state.name);
     }
   };
@@ -166,7 +160,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
 
   this.requests = leoConfiguration.getRequestsLog();
 
-  $scope.$watch('leoWindowBody.detail.value', function (value, y) {
+  $scope.$watch('leoWindowBody.detail.value', function (value) {
     if (!value) {
       return;
     }
