@@ -49,6 +49,38 @@ angular.module('leonardo').directive('leoWindowBody', ['$http', 'leoConfiguratio
   };
 }]);
 
+angular.module('leonardo').directive('leoJsonFormatter', function JsonFormatter() {
+  return {
+    restrict: 'E',
+    scope: {
+      jsonInitialData: '=',
+      onError: '&',
+      onSuccess: '&'
+    },
+    controller: function LeoJsonFormatterCtrl () {
+      console.log('json formaterr', this.jsonInitialData);
+      this.stringValue = this.jsonInitialData ? JSON.stringify(this.jsonInitialData) : '{}';
+
+      this.valueChanged = function () {
+        if (!this.stringValue) {
+          return;
+        }
+        try {
+          var parsedValue = JSON.parse(this.stringValue);
+          //this.stringValue = value ? .stringify(value, null, 4) : '';
+          this.onSuccess({value: parsedValue});
+        }
+        catch (e) {
+          this.onError({msg: e.message});
+        }
+      };
+    },
+    bindToController: true,
+    controllerAs: 'leoJsonFormatterCtrl',
+    template: '<textarea ng-model="leoJsonFormatterCtrl.stringValue" ng-change="leoJsonFormatterCtrl.valueChanged()" />'
+  }
+});
+
 LeoWindowBody.$inject = ['$scope', 'leoConfiguration', '$timeout'];
 function LeoWindowBody($scope, leoConfiguration, $timeout) {
   function removeStateByName(name) {
@@ -80,7 +112,18 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
     console.log(this.editedState);
   };
 
+  this.onEditOptionSuccess = function (data) {
+    console.log('success', data);
+    this.editedState.activeOption.data = data
+    this.editedState.error = '';
+  };
+
+  this.onEditOptionJsonError = function (msg) {
+    this.editedState.error = msg;
+  };
+
   this.saveEditedState = function() {
+    console.log('editedState', this.editedState);
     leoConfiguration.addState(this.editedState);
     this.editedState = null;
   }
@@ -123,7 +166,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
 
   this.requests = leoConfiguration.getRequestsLog();
 
-  $scope.$watch('leoWindowBody.detail.value', function (value) {
+  $scope.$watch('leoWindowBody.detail.value', function (value, y) {
     if (!value) {
       return;
     }

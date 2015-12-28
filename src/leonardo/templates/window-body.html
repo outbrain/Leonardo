@@ -6,8 +6,7 @@
           <leo-request
             ng-repeat="request in leoWindowBody.requests"
             request="request"
-            on-select="leoWindowBody.requestSelect(request)">
-          </leo-request>
+            on-select="leoWindowBody.requestSelect(request)" />
         </div>
       </div>
       <div class="leo-detail">
@@ -108,7 +107,7 @@
           <button ng-click="leoWindowBody.editState(state)">Edit</button>
         </li>
       </ul>
-      <div class="edit-state" ng-show="!!leoWindowBody.editedState">
+      <div class="edit-state" ng-if="!!leoWindowBody.editedState">
 
         <!--<p> {{ leoWindowBody.editedState | json : spacing}}</p>-->
         <div class="leonardo-edit-option">
@@ -119,10 +118,11 @@
               <div>Status code: <input ng-model="leoWindowBody.editedState.activeOption.status"/></div>
               <div>Delay: <input ng-model="leoWindowBody.editedState.activeOption.delay"/></div>
               <div class="leo-detail-option-json">Response JSON:
-                <div class="leo-error">
-                  {{leoWindowBody.detail.error}}
-                </div>
-                <textarea ng-model="leoWindowBody.detail.stringValue"></textarea>
+                <div class="leo-error">{{leoWindowBody.editedState.error}}</div>
+                <leo-json-formatter
+                  json-initial-data="leoWindowBody.editedState.activeOption.data"
+                  on-error="leoWindowBody.onEditOptionJsonError(msg)"
+                  on-success="leoWindowBody.onEditOptionSuccess(value)" />
               </div>
             </div>
 
