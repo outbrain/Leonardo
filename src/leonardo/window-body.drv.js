@@ -97,6 +97,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
   };
 
   this.updateState = function (state) {
+    state.active = !state.active;
     if (state.active) {
       console.log('leonardo: activate state option:' + state.name + ': ' + state.activeOption.name);
       leoConfiguration.activateStateOption(state.name, state.activeOption.name);
@@ -104,7 +105,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
       console.log('leonardo: deactivating state: ' + state.name);
       leoConfiguration.deactivateState(state.name);
     }
-  };
+  }
 
 
   this.activateScenario = function (scenario) {
