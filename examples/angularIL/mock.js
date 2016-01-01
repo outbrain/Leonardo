@@ -31,7 +31,7 @@ angular.module('leonardo').run(['leoConfiguration', '$rootScope', function (leoC
         },
         {
           "name": "Failure",
-          "status": "401",
+          "status": 401,
           "data": {
             "msg": "no no!"
           },
