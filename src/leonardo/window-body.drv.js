@@ -58,7 +58,7 @@ angular.module('leonardo').directive('leoJsonFormatter', function JsonFormatter(
       onSuccess: '&'
     },
     controller: function LeoJsonFormatterCtrl () {
-      this.stringValue = this.jsonInitialData ? JSON.stringify(this.jsonInitialData) : '{}';
+      this.stringValue = this.jsonInitialData || '{}';
 
       this.valueChanged = function () {
         if (!this.stringValue) {
@@ -106,7 +106,6 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
   };
 
   this.editState = function(state){
-    // open box with flex
     this.editedState = angular.copy(state);
   };
 

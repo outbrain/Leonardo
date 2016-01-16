@@ -120,7 +120,7 @@
               <div class="leo-detail-option-json">Response JSON:
                 <div class="leo-error">{{leoWindowBody.editedState.error}}</div>
                 <leo-json-formatter
-                  json-initial-data="leoWindowBody.editedState.activeOption.data"
+                  json-initial-data="leoWindowBody.editedState.activeOption.data | json : spacing"
                   on-error="leoWindowBody.onEditOptionJsonError(msg)"
                   on-success="leoWindowBody.onEditOptionSuccess(value)" />
               </div>
