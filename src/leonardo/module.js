@@ -7,6 +7,9 @@ angular.module('leonardo', ['leonardo.templates'])
 
       sinon.FakeXMLHttpRequest.useFilters = true;
       sinon.FakeXMLHttpRequest.addFilter(function(method, url) {
+        if (url.indexOf('.html') > 0) {
+          return true;
+        }
         var state = leoConfiguration.fetchStatesByUrlAndMethod(url, method);
         return !(state && state.active);
       });

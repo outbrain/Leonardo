@@ -44,7 +44,6 @@ Angular Mocks module  (tested with v1.3)
 <body ng-app="app">
   //.....
   <script src="[bower_componenets|node_modules|other]/angular/angular.js"></script>
-  <script src="[bower_componenets|node_modules|other]/angular-mocks/angular-mocks.js"></script>
   //.....
   <script src="[bower_componenets|node_modules|other]/leonardo/dist/leonardo.js"></script>
 </body>
