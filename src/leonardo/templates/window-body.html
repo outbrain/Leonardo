@@ -64,8 +64,8 @@
         <li ng-repeat="state in leoWindowBody.states | filter:leoWindowBody.notHasUrl track by $index">
           <div>
             <div class="onoffswitch">
-              <input ng-model="state.active" ng-click="leoWindowBody.updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}">
-              <label class="onoffswitch-label" for="{{state.name}}">
+              <input ng-checked="state.active" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}">
+              <label class="onoffswitch-label" for="{{state.name}}" ng-click="leoWindowBody.toggleState(state);">
                 <span class="onoffswitch-inner"></span>
                 <span class="onoffswitch-switch"></span>
               </label>
