@@ -3184,7 +3184,7 @@ module.run(['$templateCache', function($templateCache) {
     '\n' +
     '        <div>}])</div>\n' +
     '\n' +
-    '      </code></div><div ng-switch-when="scenarios" class="leonardo-activate"><div class="leonardo-menu"><div>SCENARIOS</div><ul><li ng-class="{ \'selected\': scenario === leoWindowBody.activeScenario }" ng-repeat="scenario in leoWindowBody.scenarios" ng-click="leoWindowBody.activateScenario(scenario)">{{scenario}}</li></ul></div><ul><li><div class="states-filter-wrapper"><label for="filter" class="states-filter-label">Search for state</label> <input id="filter" class="states-filter" type="text" ng-model="leoWindowBody.filter"></div></li><li class="request-item" ng-click="leoWindowBody.editState(state)" ng-repeat="state in nonAjaxState = (leoWindowBody.states | filter:leoWindowBody.notHasUrl | filter:{name: leoWindowBody.filter}) track by $index"><div><div class="onoffswitch"><input ng-checked="state.active" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}"> <label class="onoffswitch-label" for="{{state.name}}" ng-click="leoWindowBody.toggleState(state);"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div class="leo-request-verb non-ajax">None-Ajax</div><div class="leo-expand"><h4>{{state.name}}</h4></div><div><leo-select state="state" disabled="!state.active" on-change="leoWindowBody.updateState(state)" on-delete="leoWindowBody.removeOption(state, option)"></leo-select></div><button ng-click="leoWindowBody.removeState(state)" title="Remove State">Remove</button></li><li class="request-item" ng-repeat="state in ajaxReuslts = (leoWindowBody.states | filter:leoWindowBody.hasUrl | filter:{name: leoWindowBody.filter}) track by $index" ng-click="leoWindowBody.editState(state)" ng-class="{ \'leo-highlight\': state.highlight }"><div><div class="onoffswitch"><input ng-checked="state.active" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}"> <label class="onoffswitch-label" for="{{state.name}}" ng-click="leoWindowBody.toggleState(state);"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div class="leo-request-verb {{state.verb.toLowerCase()}}">{{state.verb}}</div><div><h4>{{state.name}}</h4></div><div class="leo-expand"><span class="url">{{state.url}}</span></div><div><leo-select state="state" disabled="!state.active" on-change="leoWindowBody.updateState(state)" on-delete="leoWindowBody.removeOption(state, option)"></leo-select></div><button ng-click="leoWindowBody.removeState(state)" title="Remove State">Remove</button> <button ng-click="leoWindowBody.removeOption(state, state.activeOption)" title="Remove Option">Remove Option</button></li><li ng-show="!ajaxReuslts.length && !nonAjaxState.length">No Results Found</li></ul><div class="edit-state" ng-class="{visible:!!leoWindowBody.editedState}"><div class="leonardo-edit-option" ng-if="!!leoWindowBody.editedState"><div class="leo-detail"><div class="leo-detail-option"><span class="title">Edit option <b>{{leoWindowBody.editedState.activeOption.name}}</b> for state <b>{{leoWindowBody.editedState.name}}</b></span><div>Status code: <input ng-model="leoWindowBody.editedState.activeOption.status"></div><div>Delay: <input ng-model="leoWindowBody.editedState.activeOption.delay"></div><div class="leo-detail-option-json">Response JSON:<div class="leo-error">{{leoWindowBody.editedState.error}}</div><leo-json-formatter json-string="leoWindowBody.editedState.dataStringValue" on-error="leoWindowBody.onEditOptionJsonError(msg)" on-success="leoWindowBody.onEditOptionSuccess(value)"></leo-json-formatter></div></div><div class="leo-action-row"><button ng-click="leoWindowBody.saveEditedState()">{{ \'Save\' }}</button></div></div></div></div></div><div ng-switch-when="test" class="leonardo-test"><div><label for="url"></label>URL: <input id="url" type="text" ng-model="leoWindowBody.test.url"> <input type="button" ng-click="leoWindowBody.submit(test.url)" value="submit"></div><textarea>{{leoWindowBody.test.value | json}}</textarea></div></div></div>');
+    '      </code></div><div ng-switch-when="scenarios" class="leonardo-activate"><div class="leonardo-menu"><div>SCENARIOS</div><ul><li ng-class="{ \'selected\': scenario === leoWindowBody.activeScenario }" ng-repeat="scenario in leoWindowBody.scenarios" ng-click="leoWindowBody.activateScenario(scenario)">{{scenario}}</li></ul></div><ul><li><div class="states-filter-wrapper"><label for="filter" class="states-filter-label">Search for state</label> <input id="filter" class="states-filter" type="text" ng-model="leoWindowBody.filter"></div></li><li class="request-item" ng-click="leoWindowBody.editState(state)" ng-repeat="state in nonAjaxState = (leoWindowBody.states | filter:leoWindowBody.notHasUrl | filter:{name: leoWindowBody.filter}) track by $index"><div><div class="onoffswitch"><input ng-checked="state.active" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}"> <label class="onoffswitch-label" for="{{state.name}}" ng-click="leoWindowBody.toggleState(state);"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div class="leo-request-verb non-ajax">None-Ajax</div><div class="leo-expand"><h4>{{state.name}}</h4></div><div><leo-select state="state" disabled="!state.active" on-change="leoWindowBody.updateState(state)" on-delete="leoWindowBody.removeOption(state, option)"></leo-select></div><button ng-click="leoWindowBody.removeState(state)" title="Remove State">Remove</button></li><li class="request-item" ng-repeat="state in ajaxReuslts = (leoWindowBody.states | filter:leoWindowBody.hasUrl | filter:{name: leoWindowBody.filter}) track by $index" ng-click="leoWindowBody.editState(state)" ng-class="{ \'leo-highlight\': state.highlight }"><div><div class="onoffswitch"><input ng-checked="state.active" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}"> <label class="onoffswitch-label" for="{{state.name}}" ng-click="leoWindowBody.toggleState(state);"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div class="leo-request-verb {{state.verb.toLowerCase()}}">{{state.verb}}</div><div><h4>{{state.name}}</h4></div><div class="leo-expand"><span class="url">{{state.url}}</span></div><div><leo-select state="state" disabled="!state.active" on-change="leoWindowBody.updateState(state)" on-delete="leoWindowBody.removeOption(state, option)"></leo-select></div><button ng-click="leoWindowBody.removeState(state)" title="Remove State">Remove</button></li><li ng-show="!ajaxReuslts.length && !nonAjaxState.length">No Results Found</li></ul><div class="edit-state" ng-class="{visible:!!leoWindowBody.editedState}"><div class="leonardo-edit-option" ng-if="!!leoWindowBody.editedState"><div class="leo-detail"><div class="leo-detail-option"><span class="title">Edit option <b>{{leoWindowBody.editedState.activeOption.name}}</b> for state <b>{{leoWindowBody.editedState.name}}</b></span><div>Status code: <input ng-model="leoWindowBody.editedState.activeOption.status"></div><div>Delay: <input ng-model="leoWindowBody.editedState.activeOption.delay"></div><div class="leo-detail-option-json">Response JSON:<div class="leo-error">{{leoWindowBody.editedState.error}}</div><leo-json-formatter json-string="leoWindowBody.editedState.dataStringValue" on-error="leoWindowBody.onEditOptionJsonError(msg)" on-success="leoWindowBody.onEditOptionSuccess(value)"></leo-json-formatter></div></div><div class="leo-action-row"><button ng-click="leoWindowBody.saveEditedState()">{{ \'Save\' }}</button></div></div></div></div></div><div ng-switch-when="test" class="leonardo-test"><div><label for="url"></label>URL: <input id="url" type="text" ng-model="leoWindowBody.test.url"> <input type="button" ng-click="leoWindowBody.submit(test.url)" value="submit"></div><textarea>{{leoWindowBody.test.value | json}}</textarea></div></div></div>');
 }]);
 })();
 
@@ -3319,7 +3319,7 @@ module.run(['$templateCache', function($templateCache) {
 "  top: 0;\n" +
 "  left: 0;\n" +
 "  right: 0;\n" +
-"  border-bottom: 1px solid #cccccc;\n" +
+"  border-bottom: 1px solid #ccc;\n" +
 "  display: inline-block;\n" +
 "  min-height: 44px;\n" +
 "}\n" +
@@ -3545,7 +3545,7 @@ module.run(['$templateCache', function($templateCache) {
 "}\n" +
 ".leonardo-recorder .leo-list {\n" +
 "  flex: 3;\n" +
-"  border-right: 1px solid #cccccc;\n" +
+"  border-right: 1px solid #ccc;\n" +
 "}\n" +
 ".leonardo-recorder .leo-list ul {\n" +
 "  padding: 0;\n" +
@@ -3556,7 +3556,7 @@ module.run(['$templateCache', function($templateCache) {
 "}\n" +
 ".leonardo-recorder .leo-list leo-request .leo-list-item {\n" +
 "  display: flex;\n" +
-"  border-bottom: 1px solid #cccccc;\n" +
+"  border-bottom: 1px solid #ccc;\n" +
 "  text-decoration: none;\n" +
 "  color: #555;\n" +
 "  padding: 5px;\n" +
@@ -3575,7 +3575,7 @@ module.run(['$templateCache', function($templateCache) {
 "}\n" +
 ".leonardo-recorder .leo-detail .leo-detail-header {\n" +
 "  padding: 0 5px;\n" +
-"  border-bottom: 1px solid #cccccc;\n" +
+"  border-bottom: 1px solid #ccc;\n" +
 "}\n" +
 ".leonardo-recorder .leo-detail .leo-detail-header > div {\n" +
 "  margin-bottom: 10px;\n" +
@@ -3679,7 +3679,7 @@ module.run(['$templateCache', function($templateCache) {
 "  background: blue;\n" +
 "}\n" +
 ".leo-request-new {\n" +
-"  background: #3b6aca;\n" +
+"  background: #3B6ACA;\n" +
 "}\n" +
 ".leo-request-mocked {\n" +
 "  background: #219161;\n" +
