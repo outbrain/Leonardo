@@ -27,9 +27,6 @@ gulp.task("build:less", false, function () {
       .on('error', function (err) {
         console.log(err.message);
       })
-      .pipe(minifyCSS({
-        keepSpecialComments: 0
-      }))
       .pipe(css2js())
       .pipe(rename('leonardo.css.js'))
       .pipe(gulp.dest('./tmp'));
