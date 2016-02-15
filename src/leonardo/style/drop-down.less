@@ -1,0 +1,50 @@
+.leo-drop-down {
+  background: #219161;
+  color: #fff;
+  border: 0;
+  border-radius: 4px;
+  margin-left: 0;
+  padding: 4px;
+  position:relative;
+  cursor: default;
+  width: 200px;
+  &[disabled] {
+    background: rgba(33,145,97,0.5);
+  }
+  .leo-drop-down-selected {
+    padding-left: 5px;
+  }
+  .leo-drop-down-icon {
+    float: right;
+  }
+  .leo-drop-down-items {
+    z-index: 10;
+    margin-left: 0;
+    position: absolute;
+    left: 0;
+    border: 1px solid black;
+    .leo-drop-down-item {
+      display: block;
+      margin-left: 0;
+      padding: 2px;
+      min-width: 200px;
+      background: #fff;
+      color: #000;
+      .leo-delete {
+        display: inline-block;
+        cursor: pointer;
+        float: right;
+        width: 15px;
+      }
+      &:hover {
+        background: #003399;
+        color: #fff;
+      }
+      .leo-drop-down-item-name {
+        padding-left: 4px;
+        display: inline-block;
+        margin-left: 0;
+      }
+    }
+  }
+}

@@ -27,9 +27,6 @@ gulp.task("build:less", false, function () {
       .on('error', function (err) {
         console.log(err.message);
       })
-      .pipe(minifyCSS({
-        keepSpecialComments: 0
-      }))
       .pipe(css2js())
       .pipe(rename('leonardo.css.js'))
       .pipe(gulp.dest('./tmp'));
@@ -59,6 +56,7 @@ gulp.task('build:js', function(){
         './src/leonardo/storage.srv.js',
         './src/leonardo/activator.drv.js',
         './src/leonardo/window-body.drv.js',
+        './src/leonardo/select.drv.js',
         './src/leonardo/request.drv.js',
         './tmp/leonardo.templates.min.js',
         './tmp/leonardo.css.js'

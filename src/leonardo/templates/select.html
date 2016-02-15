@@ -1,0 +1,15 @@
+<div class="leo-drop-down leo-dropdown-entity-{{leoSelect.entityId}}" ng-disabled="leoSelect.disabled()">
+  <div ng-click="leoSelect.toggle()" class="leo-drop-down-selected leo-dropdown-entity-{{leoSelect.entityId}}">
+    {{leoSelect.state.activeOption.name}}
+    <span class="leo-drop-down-icon">+</span>
+  </div>
+
+  <div ng-show="leoSelect.open" class="leo-drop-down-items">
+    <span class="leo-drop-down-item"
+         ng-repeat="option in leoSelect.state.options"
+         ng-click="leoSelect.selectOption(option)">
+      <span class="leo-delete"  ng-click="leoSelect.removeOption(option)">x</span>
+      <span class="leo-drop-down-item-name">{{option.name}}</span>
+    </div>
+  </div>
+</div>
