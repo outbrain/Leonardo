@@ -53,36 +53,28 @@ angular.module('leonardo').directive('leoJsonFormatter', function JsonFormatter(
   return {
     restrict: 'E',
     scope: {
-      jsonInitialData: '=',
+      jsonString: '=',
       onError: '&',
       onSuccess: '&'
     },
-    controller: function LeoJsonFormatterCtrl ($scope) {
-      this.stringValue = this.jsonInitialData || '{}';
-
-      $scope.$watch(function () {
-        return this.jsonInitialData;
-      }.bind(this), function () {
-        console.log('change', this.jsonInitialData);
-        this.valueChanged();
-      }.bind(this));
+    controller: function ($scope) {
       this.valueChanged = function () {
-        if (!this.stringValue) {
-          return;
-        }
         try {
-          var parsedValue = JSON.parse(this.stringValue);
-          //this.stringValue = value ? .stringify(value, null, 4) : '';
-          this.onSuccess({value: parsedValue});
+          JSON.parse(this.jsonString);
+          this.onSuccess({value: this.jsonString});
         }
         catch (e) {
           this.onError({msg: e.message});
         }
       };
+
+      $scope.$watch('jsonString', function () {
+        this.valueChanged();
+      }.bind(this));
     },
     bindToController: true,
     controllerAs: 'leoJsonFormatterCtrl',
-    template: '<textarea ng-model="leoJsonFormatterCtrl.stringValue" ng-change="leoJsonFormatterCtrl.valueChanged()" />'
+    template: '<textarea ng-model="leoJsonFormatterCtrl.jsonString" ng-change="leoJsonFormatterCtrl.valueChanged()" />'
   }
 });
 
@@ -113,10 +105,11 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
 
   this.editState = function(state){
     this.editedState = angular.copy(state);
+    this.editedState.dataStringValue = JSON.stringify(this.editedState.activeOption.data);
   };
 
-  this.onEditOptionSuccess = function (data) {
-    this.editedState.activeOption.data = data
+  this.onEditOptionSuccess = function (str) {
+    this.editedState.activeOption.data = JSON.parse(str);
     this.editedState.error = '';
   };
 
