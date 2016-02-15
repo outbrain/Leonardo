@@ -154,7 +154,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
   };
 
   this.saveEditedState = function() {
-    leoConfiguration.addState(this.editedState);
+    leoConfiguration.addSavedState(this.editedState);
     this.editedState = null;
   }
 
