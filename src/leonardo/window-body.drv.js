@@ -97,7 +97,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
     });
 
     this.states.splice(index, 1);
-  }.bind(this);
+  }
 
 
   function removeOptionByName(stateName, optionName) {
