@@ -263,8 +263,8 @@ angular.module('leonardo').factory('leoConfiguration', ['leoStorage', '$rootScop
   }
 
   function removeStateOptionByName(stateName, optionName) {
-    var sIndex = 0;
-    var oIndex = 0;
+    var sIndex = null;
+    var oIndex = null;
 
     _states.forEach(function(state, i){
       if (state.name === stateName){
@@ -272,18 +272,22 @@ angular.module('leonardo').factory('leoConfiguration', ['leoStorage', '$rootScop
       }
     });
 
-    _states[sIndex].options.forEach(function(option, i){
-      if (option.name === optionName){
-        oIndex = i;
-      }
-    });
+    if (sIndex !== null) {
+      _states[sIndex].options.forEach(function (option, i) {
+        if (option.name === optionName) {
+          oIndex = i;
+        }
+      });
 
-    _states[sIndex].options.splice(oIndex, 1);
+      if (oIndex !== null) {
+        _states[sIndex].options.splice(oIndex, 1);
+      }
+    }
   }
 
   function removeSavedStateOptionByName(stateName, optionName) {
-    var sIndex = 0;
-    var oIndex = 0;
+    var sIndex = null;
+    var oIndex = null;
 
     _savedStates.forEach(function(state, i){
       if (state.name === stateName){
@@ -291,13 +295,17 @@ angular.module('leonardo').factory('leoConfiguration', ['leoStorage', '$rootScop
       }
     });
 
-    _savedStates[sIndex].options.forEach(function(option, i){
-      if (option.name === optionName){
-        oIndex = i;
-      }
-    });
+    if (sIndex !== null) {
+      _savedStates[sIndex].options.forEach(function (option, i) {
+        if (option.name === optionName) {
+          oIndex = i;
+        }
+      });
 
-    _savedStates[sIndex].options.splice(oIndex, 1);
+      if (oIndex !== null) {
+        _savedStates[sIndex].options.splice(oIndex, 1);
+      }
+    }
   }
 
   function removeOption(state, option) {
