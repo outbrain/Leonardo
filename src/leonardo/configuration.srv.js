@@ -1,294 +1,246 @@
-angular.module('leonardo').factory('leoConfiguration',
-    ['leoStorage', '$httpBackend', '$rootScope', function(leoStorage, $httpBackend, $rootScope) {
-  var states = [],
-      _scenarios = {},
-      responseHandlers = {},
-      _requestsLog = [],
-      _savedStates = [];
+angular.module('leonardo').factory('leoConfiguration', ['leoStorage', '$rootScope',
+  function (leoStorage, $rootScope) {
+    var _states = [],
+        _scenarios = {},
+        _requestsLog = [],
+        _savedStates = [];
 
-  // Core API
-  // ----------------
-  return {
-    // Add a new state which you wish to mock - there a two types of states - one with url and one without.
-    addState: addState,
-    addStates: addStates,
-    getState: getState,
-    getStates: fetchStates,
-    deactivateState: deactivateState,
-    deactivateAllStates: deactivateAll,
-    activateStateOption: activateStateOption,
-    addScenario: addScenario,
-    addScenarios: addScenarios,
-    getScenario: getScenario,
-    getScenarios: getScenarios,
-    setActiveScenario: setActiveScenario,
-    getRecordedStates: getRecordedStates,
-    getRequestsLog: getRequestsLog,
-    loadSavedStates: loadSavedStates,
-    addSavedState: addSavedState,
-    removeState: removeState,
-    //Private api for passing through unregistered urls to $http
-    _requestSubmitted: requestSubmitted,
-    _logRequest: logRequest
-  };
-
-  function upsertOption(state, name, active) {
-    var _states = leoStorage.getStates();
-    _states[state] = {
-      name: name || findStateOption(state).name,
-      active: active
+    // Core API
+    // ----------------
+    return {
+      addState: addState,
+      addStates: addStates,
+      getActiveStateOption: getActiveStateOption,
+      getStates: fetchStates,
+      deactivateState: deactivateState,
+      deactivateAllStates: deactivateAll,
+      activateStateOption: activateStateOption,
+      addScenario: addScenario,
+      addScenarios: addScenarios,
+      getScenario: getScenario,
+      getScenarios: getScenarios,
+      setActiveScenario: setActiveScenario,
+      getRecordedStates: getRecordedStates,
+      getRequestsLog: getRequestsLog,
+      loadSavedStates: loadSavedStates,
+      addSavedState: addSavedState,
+      fetchStatesByUrlAndMethod: fetchStatesByUrlAndMethod,
+      removeState: removeState,
+      removeOption: removeOption,
+      _logRequest: logRequest
     };
 
-    leoStorage.setStates(_states);
-
-    sync();
-  }
-
-  function fetchStatesByUrl(url, method){
-    return fetchStates().filter(function(state){
-      return state.url && new RegExp(state.url).test(url) && state.verb.toLowerCase() === method.toLowerCase();
-    });
-  }
-
-  function fetchStates(){
-    var activeStates = leoStorage.getStates();
-    var _states = states.map(function(state) {
-      return angular.copy(state);
-    });
-
-    _states.forEach(function(state) {
-      var option = activeStates[state.name];
-      state.active = !!option && option.active;
-      state.activeOption = !!option ?
-        state.options.filter(function (_option) {
-          return _option.name === option.name;
-        })[0] : state.options[0];
-    });
-
-    return _states;
-  }
-
-  function deactivateAll() {
-    var _states = leoStorage.getStates();
-    Object.keys(_states).forEach(function(stateKey) {
-      _states[stateKey].active = false;
-    });
-    leoStorage.setStates(_states);
-
-    sync();
-  }
-
-  function findStateOption(name){
-    return fetchStates().filter(function(state){ return state.name === name;})[0].activeOption;
-  }
-
-  function sync() {
-    fetchStates().forEach(function (state) {
-      var option, responseHandler;
-      if (state.url) {
-        option = findStateOption(state.name);
-        responseHandler = getResponseHandler(state);
-        if (state.active) {
-          responseHandler.respond(function () {
-            $httpBackend.setDelay(option.delay);
-            return [option.status, angular.isFunction(option.data) ? option.data() : option.data];
-          });
-        } else {
-          responseHandler.passThrough();
-        }
-      }
-    });
-  }
-
-  function getResponseHandler(state) {
-    var url = state.url;
-    var verb = state.verb === 'jsonp' ? state.verb : state.verb.toUpperCase();
-    var key = (url + '_' + verb).toUpperCase();
-
-    var escapedUrl = url.replace(/[?]/g, '\\?');
-    if (!responseHandlers[key]) {
-      if (state.verb === 'jsonp'){
-        responseHandlers[key] = $httpBackend.whenJSONP(new RegExp(escapedUrl));
-      }
-      else {
-        responseHandlers[key] = $httpBackend.when(verb || 'GET', new RegExp(escapedUrl));
-      }
-    }
-    return responseHandlers[key];
-  }
-
-  function getState(name){
-    var state = fetchStates().filter(function(state) { return state.name === name})[0];
-    return (state && state.active && findStateOption(name)) || null;
-  }
-
-  function addState(stateObj) {
-    stateObj.options.forEach(function (option) {
-      upsert({
-        state: stateObj.name,
-        url: stateObj.url,
-        verb: stateObj.verb,
-        name: option.name,
-        status: option.status,
-        data: option.data,
-        delay: option.delay
-      });
-    });
-
-    $rootScope.$broadcast('leonardo:stateChanged', stateObj);
-  }
-
-  function addStates(statesArr) {
-    if (angular.isArray(statesArr)) {
-      statesArr.forEach(function(stateObj) {
-        addState(stateObj);
-      });
-    } else {
-      console.warn('leonardo: addStates should get an array');
-    }
-  }
-
-  function upsert(stateObj) {
-    var verb = stateObj.verb || 'GET',
-        state = stateObj.state,
-        name = stateObj.name,
-        url = stateObj.url,
-        status = stateObj.status || 200,
-        data = angular.isDefined(stateObj.data) ? stateObj.data : {},
-        delay = stateObj.delay || 0;
-    var defaultState = {};
-
-    var defaultOption = {};
-
-    if (!state) {
-      console.log("leonardo: cannot upsert - state is mandatory");
-      return;
-    }
-
-    var stateItem = states.filter(function(_state) { return _state.name === state;})[0] || defaultState;
-
-    angular.extend(stateItem, {
-      name: state,
-      url: url || stateItem.url,
-      verb: verb,
-      options: stateItem.options || []
-    });
-
-
-    if (stateItem === defaultState) {
-      states.push(stateItem);
-    }
-
-    var option = stateItem.options.filter(function(_option) {return _option.name === name})[0] || defaultOption;
-
-    angular.extend(option, {
-      name: name,
-      status: status,
-      data: data,
-      delay: delay
-    });
-
-    if (option === defaultOption) {
-      stateItem.options.push(option);
-    }
-    sync();
-  }
-
-  function addScenario(scenario){
-    if (scenario && typeof scenario.name === 'string') {
-      _scenarios[scenario.name] = scenario;
-    } else {
-      throw 'addScenario method expects a scenario object with name property';
-    }
-  }
-
-  function addScenarios(scenarios){
-    angular.forEach(scenarios, addScenario);
-  }
-
-  function getScenarios(){
-    return Object.keys(_scenarios);
-  }
-
-  function getScenario(name){
-    if (!_scenarios[name]) {
-      return;
-    }
-    return _scenarios[name].states;
-  }
-
-  function setActiveScenario(name){
-    var scenario = getScenario(name);
-    if (!scenario) {
-      console.warn("leonardo: could not find scenario named " + name);
-      return;
-    }
-    deactivateAll();
-    scenario.forEach(function(state){
-      upsertOption(state.name, state.option, true);
-    });
-  }
-
-  function activateStateOption(state, optionName) {
-    upsertOption(state, optionName, true);
-  }
-
-  function deactivateState(state) {
-    upsertOption(state, null, false);
-  }
-
-  function requestSubmitted(requestConfig){
-    var url = requestConfig.url;
-    var method = requestConfig.method;
-
-    var state = fetchStatesByUrl(url, method)[0];
-    var handler = getResponseHandler(state || {
-        url: url,
-        verb: method
-      });
-    if (!state) {
-      handler.passThrough();
-    }
-  }
-
-  function logRequest(method, url, data, status) {
-    if (method && url && !(url.indexOf(".html") > 0)) {
-      var req = {
-        verb: method,
-        data: data,
-        url: url.trim(),
-        status: status,
-        timestamp: new Date()
+    function upsertOption(state, name, active) {
+      var statesStatus = leoStorage.getStates();
+      statesStatus[state] = {
+        name: name || findStateOption(state).name,
+        active: active
       };
-      req.state = fetchStatesByUrl(req.url, req.verb)[0];
-      _requestsLog.push(req);
+
+      leoStorage.setStates(statesStatus);
     }
-  }
 
-  function getRequestsLog() {
-    return _requestsLog;
-  }
+    function fetchStatesByUrlAndMethod(url, method) {
+      return fetchStates().filter(function (state) {
+        return state.url && new RegExp(state.url).test(url) && state.verb.toLowerCase() === method.toLowerCase();
+      })[0];
+    }
 
-  function loadSavedStates() {
-    _savedStates = leoStorage.getSavedStates();
-    addStates(_savedStates);
-  }
+    function fetchStates() {
+      var activeStates = leoStorage.getStates();
+      var statesCopy = _states.map(function (state) {
+        return angular.copy(state);
+      });
 
-  function addSavedState(state) {
-    _savedStates.push(state);
-    leoStorage.setSavedStates(_savedStates);
-    addState(state);
-  }
+      statesCopy.forEach(function (state) {
+        var option = activeStates[state.name];
+        state.active = !!option && option.active;
+        state.activeOption = !!option ?
+            state.options.filter(function (_option) {
+              return _option.name === option.name;
+            })[0] : state.options[0];
+      });
+
+      return statesCopy;
+    }
+
+    function deactivateAll() {
+      var statesStatus = leoStorage.getStates();
+      Object.keys(statesStatus).forEach(function (stateKey) {
+        statesStatus[stateKey].active = false;
+      });
+      leoStorage.setStates(statesStatus);
+    }
+
+    function findStateOption(name) {
+      return fetchStates().filter(function (state) {
+        return state.name === name;
+      })[0].activeOption;
+    }
+
+    function getActiveStateOption(name) {
+      var state = fetchStates().filter(function (state) {
+        return state.name === name
+      })[0];
+      return (state && state.active && findStateOption(name)) || null;
+    }
+
+    function addState(stateObj) {
+      stateObj.options.forEach(function (option) {
+        upsert({
+          state: stateObj.name,
+          url: stateObj.url,
+          verb: stateObj.verb,
+          name: option.name,
+          status: option.status,
+          data: option.data,
+          delay: option.delay
+        });
+      });
+
+      $rootScope.$broadcast('leonardo:stateChanged', stateObj);
+    }
+
+    function addStates(statesArr) {
+      if (angular.isArray(statesArr)) {
+        statesArr.forEach(function (stateObj) {
+          addState(stateObj);
+        });
+      } else {
+        console.warn('leonardo: addStates should get an array');
+      }
+    }
+
+    function upsert(stateObj) {
+      var verb = stateObj.verb || 'GET',
+          state = stateObj.state,
+          name = stateObj.name,
+          url = stateObj.url,
+          status = stateObj.status || 200,
+          data = angular.isDefined(stateObj.data) ? stateObj.data : {},
+          delay = stateObj.delay || 0;
+      var defaultState = {};
+
+      var defaultOption = {};
+
+      if (!state) {
+        console.log("leonardo: cannot upsert - state is mandatory");
+        return;
+      }
+
+      var stateItem = _states.filter(function (_state) {
+            return _state.name === state;
+          })[0] || defaultState;
+
+      angular.extend(stateItem, {
+        name: state,
+        url: url || stateItem.url,
+        verb: verb,
+        options: stateItem.options || []
+      });
+
+
+      if (stateItem === defaultState) {
+        _states.push(stateItem);
+      }
+
+      var option = stateItem.options.filter(function (_option) {
+            return _option.name === name
+          })[0] || defaultOption;
+
+      angular.extend(option, {
+        name: name,
+        status: status,
+        data: data,
+        delay: delay
+      });
+
+      if (option === defaultOption) {
+        stateItem.options.push(option);
+      }
+    }
+
+    function addScenario(scenario) {
+      if (scenario && typeof scenario.name === 'string') {
+        _scenarios[scenario.name] = scenario;
+      } else {
+        throw 'addScenario method expects a scenario object with name property';
+      }
+    }
+
+    function addScenarios(scenarios) {
+      angular.forEach(scenarios, addScenario);
+    }
+
+    function getScenarios() {
+      return Object.keys(_scenarios);
+    }
+
+    function getScenario(name) {
+      if (!_scenarios[name]) {
+        return;
+      }
+      return _scenarios[name].states;
+    }
+
+    function setActiveScenario(name) {
+      var scenario = getScenario(name);
+      if (!scenario) {
+        console.warn("leonardo: could not find scenario named " + name);
+        return;
+      }
+      deactivateAll();
+      scenario.forEach(function (state) {
+        upsertOption(state.name, state.option, true);
+      });
+    }
+
+    function activateStateOption(state, optionName) {
+      upsertOption(state, optionName, true);
+    }
+
+    function deactivateState(state) {
+      upsertOption(state, null, false);
+    }
+
+    function logRequest(method, url, data, status) {
+      if (method && url && !(url.indexOf(".html") > 0)) {
+        var req = {
+          verb: method,
+          data: data,
+          url: url.trim(),
+          status: status,
+          timestamp: new Date()
+        };
+        req.state = fetchStatesByUrlAndMethod(req.url, req.verb);
+        _requestsLog.push(req);
+      }
+    }
+
+    function getRequestsLog() {
+      return _requestsLog;
+    }
+
+    function loadSavedStates() {
+      _savedStates = leoStorage.getSavedStates();
+      addStates(_savedStates);
+    }
+
+    function addSavedState(state) {
+      _savedStates.push(state);
+      leoStorage.setSavedStates(_savedStates);
+      addState(state);
+    }
 
   function removeStateByName(name) {
     var index = 0;
-    states.forEach(function(state, i){
+    _states.forEach(function(state, i){
       if (state.name === name){
         index = i;
       }
     });
 
-    states.splice(index, 1);
+    _states.splice(index, 1);
   }
 
   function removeSavedStateByName(name) {
@@ -308,13 +260,59 @@ angular.module('leonardo').factory('leoConfiguration',
     removeSavedStateByName(state.name);
 
     leoStorage.setSavedStates(_savedStates);
-    sync();
+  }
+
+  function removeStateOptionByName(stateName, optionName) {
+    var sIndex = 0;
+    var oIndex = 0;
+
+    _states.forEach(function(state, i){
+      if (state.name === stateName){
+        sIndex = i;
+      }
+    });
+
+    _states[sIndex].options.forEach(function(option, i){
+      if (option.name === optionName){
+        oIndex = i;
+      }
+    });
+
+    _states[sIndex].options.splice(oIndex, 1);
+  }
+
+  function removeSavedStateOptionByName(stateName, optionName) {
+    var sIndex = 0;
+    var oIndex = 0;
+
+    _savedStates.forEach(function(state, i){
+      if (state.name === stateName){
+        sIndex = i;
+      }
+    });
+
+    _savedStates[sIndex].options.forEach(function(option, i){
+      if (option.name === optionName){
+        oIndex = i;
+      }
+    });
+
+    _savedStates[sIndex].options.splice(oIndex, 1);
+  }
+
+  function removeOption(state, option) {
+    removeStateOptionByName(state.name, option.name);
+    removeSavedStateOptionByName(state.name, option.name);
+
+    leoStorage.setSavedStates(_savedStates);
+
+    activateStateOption(_states[0].name, _states[0].options[0].name);
   }
 
   function getRecordedStates() {
-    var requestsArr = _requestsLog
-          .map(function(req){
-            var state = fetchStatesByUrl(req.url, req.verb)[0];
+      var requestsArr = _requestsLog
+          .map(function (req) {
+            var state = fetchStatesByUrlAndMethod(req.url, req.verb);
             return {
               name: state ? state.name : req.verb + " " + req.url,
               verb: req.verb,
@@ -326,7 +324,7 @@ angular.module('leonardo').factory('leoConfiguration',
               }]
             }
           });
-    console.log(angular.toJson(requestsArr, true));
-    return requestsArr;
-  }
-}]);
+      console.log(angular.toJson(requestsArr, true));
+      return requestsArr;
+    }
+  }]);

@@ -11,6 +11,12 @@ angular.module('leonardo').directive('leoWindowBody', ['$http', 'leoConfiguratio
       var leoActivator = controllers[0];
       var leoWindowBody = controllers[1];
 
+      leoWindowBody.hasActiveOption = function(){
+        return this.requests.filter(function (request) {
+          return !!request.active;
+        }).length;
+      };
+
       leoWindowBody.saveUnregisteredState = function () {
         var stateName = this.detail.state;
 
@@ -62,6 +68,25 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
     this.states.splice(index, 1);
   }.bind(this);
 
+  function removeOptionByName(stateName, optionName) {
+    var sIndex = 0;
+    var oIndex = 0;
+
+    this.states.forEach(function(state, i){
+      if (state.name === stateName){
+        sIndex = i;
+      }
+    });
+
+    this.states[sIndex].options.forEach(function(option, i){
+      if (option.name === optionName){
+        oIndex = i;
+      }
+    });
+
+    this.states[sIndex].options.splice(oIndex, 1);
+  }
+
   this.detail = {
     option: 'success',
     delay: 0,
@@ -71,6 +96,15 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
   this.removeState = function(state){
     leoConfiguration.removeState(state);
     removeStateByName.call(this, state.name);
+  };
+
+  this.removeOption = function(state, option){
+    if (state.options.length === 1) {
+      this.removeState(state);
+    }
+    leoConfiguration.removeOption(state, option);
+    removeOptionByName.call(this, state.name, option.name);
+    state.activeOption = state.options[0];
   };
 
   this.editState = function(state){
@@ -95,6 +129,11 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
     });
     leoConfiguration.deactivateAllStates();
   };
+
+  this.toggleState = function (state) {
+    state.active = !state.active;
+    this.updateState(state);
+  }.bind(this);
 
   this.updateState = function (state) {
     if (state.active) {
@@ -139,6 +178,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
   }.bind(this));
 
   this.requestSelect = function (request) {
+    var optionName;
     this.requests.forEach(function (request) {
       request.active = false;
     });
@@ -146,14 +186,14 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
     request.active = true;
 
     if (request.state && request.state.name) {
-      var optionName = request.state.name + ' option ' + request.state.options.length;
+      optionName = request.state.name + ' option ' + request.state.options.length;
     }
 
     angular.extend(this.detail, {
       state: (request.state && request.state.name) || '',
       option: optionName || '',
       delay: 0,
-      status: 200,
+      status: request.status || 200,
       stateActive: !!request.state,
       value: request.data || {}
     });
