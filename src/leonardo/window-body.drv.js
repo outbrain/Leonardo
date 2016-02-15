@@ -101,10 +101,11 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
   this.removeOption = function(state, option){
     if (state.options.length === 1) {
       this.removeState(state);
+    } else {
+      leoConfiguration.removeOption(state, option);
+      removeOptionByName.call(this, state.name, option.name);
+      state.activeOption = state.options[0];
     }
-    leoConfiguration.removeOption(state, option);
-    removeOptionByName.call(this, state.name, option.name);
-    state.activeOption = state.options[0];
   };
 
   this.editState = function(state){
