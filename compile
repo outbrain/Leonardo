@@ -1,4 +1,0 @@
-#!/bin/sh
-
-gulp
-docco src/leonardo/*.js --template=build/docs/resources/custom/docco.jst --output=./
