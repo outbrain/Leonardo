@@ -5,7 +5,7 @@
 
 [![Package Quality](http://npm.packagequality.com/badge/leonardojs.png)](http://packagequality.com/#?package=leonardojs)
 
-![Mocking and testing made simple and consistent. Developed by Outbrain.](example.png)
+![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/leonardo.png)
 
 ## Example
 
