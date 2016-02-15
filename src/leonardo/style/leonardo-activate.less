@@ -1,24 +1,12 @@
 .leonardo-activate {
-
-  h3 {
-    font-size: 1.5rem;
-    margin: 30px 0 15px 0;
-    text-decoration: underline;
-  }
-
-  .leo-non-ajax h3 {
-    margin: 10px 0 15px 0;
-  }
-
   display: flex;
   height: 100%;
 
   .leonardo-menu {
+    padding: 5px;
     flex: 0.5;
     border-right: 1px solid #cccccc;
-    > div {
-      padding: 10px 20px;
-    }
+
     ul {
       margin: 0;
       padding: 0;
@@ -27,7 +15,6 @@
     li {
       border-width: 0 0 1px 0;
       display: block;
-      padding: 5px 30px;
       cursor: pointer;
       font-size: 13px;
 
@@ -38,25 +25,23 @@
   }
 
   > ul {
+    margin: 0;
     flex: 3;
     list-style: none;
-    padding-right: 100px;
+    padding: 5px;
   }
 
   li {
     display: flex;
     align-items: center;
 
-    div {
-      margin-left: 20px;
-    }
     .leo-expand {
       flex: 1;
-    }
 
-    .leo-fixed-size {
-      width: 50px;
-      height: 30px;
+      .url {
+        margin-left: 10px;
+        font-size: 13px;
+      }
     }
 
     button {
@@ -68,6 +53,8 @@
   h4 {
     padding: 0;
     display: inline;
+    font-size: 14px;
+    font-weight: 600;
   }
 
   select {
