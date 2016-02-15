@@ -67,8 +67,6 @@
             <input id="filter" class="states-filter" type="text" ng-model="leoWindowBody.filter">
           </div>
         </li>
-        <li class="leo-non-ajax"><h3>Non Ajax States</h3></li>
-        <li ng-show="!nonAjaxState.length">No Results Found</li>
         <li ng-repeat="state in nonAjaxState = (leoWindowBody.states | filter:leoWindowBody.notHasUrl | filter:{name: leoWindowBody.filter}) track by $index">
           <div>
             <div class="onoffswitch">
@@ -79,7 +77,7 @@
               </label>
             </div>
           </div>
-          <div class="leo-fixed-size"></div>
+          <div class="leo-request-verb non-ajax">None-Ajax</div>
           <div class="leo-expand">
             <h4>{{state.name}}</h4>
           </div>
@@ -89,8 +87,6 @@
           <button ng-click="leoWindowBody.removeState(state)" title="Remove State">Remove</button>
           <button ng-click="leoWindowBody.editState(state)">Edit</button>
         </li>
-        <li><h3>Ajax States</h3></li>
-        <li ng-show="!ajaxReuslts.length">No Results Found</li>
         <li ng-repeat="state in ajaxReuslts = (leoWindowBody.states | filter:leoWindowBody.hasUrl | filter:{name: leoWindowBody.filter}) track by $index" ng-class="{ 'leo-highlight': state.highlight }">
           <div>
             <div class="onoffswitch">
@@ -101,14 +97,14 @@
               </label>
             </div>
           </div>
-          <div class="leo-fixed-size leo-request-verb {{state.verb.toLowerCase()}}">
+          <div class="leo-request-verb {{state.verb.toLowerCase()}}">
             {{state.verb}}
           </div>
           <div>
             <h4>{{state.name}}</h4>
           </div>
           <div class="leo-expand">
-            {{state.url}}
+            <span class="url">{{state.url}}</span>
           </div>
           <div>
             <select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="leoWindowBody.updateState(state)"></select>
@@ -116,6 +112,7 @@
           <button ng-click="leoWindowBody.removeState(state)" title="Remove State">Remove</button>
           <button ng-click="leoWindowBody.editState(state)">Edit</button>
         </li>
+        <li ng-show="!ajaxReuslts.length && !nonAjaxState.length">No Results Found</li>
       </ul>
     </div>
     <div ng-switch-when="test" class="leonardo-test">
