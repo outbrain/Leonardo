@@ -1,0 +1,31 @@
+.leo-detail-option {
+  display: flex;
+  font-size: 13px;
+  flex-direction: column;
+  div {
+    margin: 5px;
+    input {
+      width: 150px;
+    }
+    &.leo-detail-option-json {
+      flex-direction: column;
+      textarea {
+        height: 250px;
+        width: 100%;
+        margin-top: 10px;
+        font-size: 13px;
+        border: 1px solid #eee;
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+  }
+  input {
+    border-width: 0 0 1px 0;
+    outline: none;
+    font-size: 13px;
+    margin-left: 5px;
+    width: 200px;
+  }
+}

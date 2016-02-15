@@ -8,7 +8,8 @@ var gulp = require('gulp'),
   minifyCSS = require('gulp-minify-css'),
   minifyHtml = require("gulp-minify-html"),
   ngHtml2Js = require("gulp-ng-html2js"),
-  concat = require('gulp-concat');
+  concat = require('gulp-concat'),
+  css2js = require("gulp-css2js");
 
 require("gulp-help")(gulp);
 
@@ -26,10 +27,11 @@ gulp.task("build:less", false, function () {
       .on('error', function (err) {
         console.log(err.message);
       })
-      .pipe(rename('leonardo.min.css'))
       .pipe(minifyCSS({
         keepSpecialComments: 0
       }))
+      .pipe(css2js())
+      .pipe(rename('leonardo.css.js'))
       .pipe(gulp.dest('./tmp'));
 });
 
@@ -59,7 +61,8 @@ gulp.task('build:js', function(){
         './src/leonardo/window-body.drv.js',
         './src/leonardo/select.drv.js',
         './src/leonardo/request.drv.js',
-        './tmp/leonardo.templates.min.js'
+        './tmp/leonardo.templates.min.js',
+        './tmp/leonardo.css.js'
       ])
       .pipe(concat('leonardo.js'))
       .pipe(gulp.dest('./tmp'));
@@ -67,8 +70,7 @@ gulp.task('build:js', function(){
 
 gulp.task('copy:dist', function() {
   return gulp.src([
-    "./tmp/leonardo.js",
-    "./tmp/leonardo.min.css"
+    "./tmp/leonardo.js"
   ])
   .pipe(gulp.dest('./dist'))
 });

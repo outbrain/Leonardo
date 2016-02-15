@@ -55,9 +55,40 @@ angular.module('leonardo').directive('leoWindowBody', ['$http', 'leoConfiguratio
   };
 }]);
 
+angular.module('leonardo').directive('leoJsonFormatter', function JsonFormatter() {
+  return {
+    restrict: 'E',
+    scope: {
+      jsonString: '=',
+      onError: '&',
+      onSuccess: '&'
+    },
+    controller: function ($scope) {
+      this.valueChanged = function () {
+        try {
+          JSON.parse(this.jsonString);
+          this.onSuccess({value: this.jsonString});
+        }
+        catch (e) {
+          this.onError({msg: e.message});
+        }
+      };
+
+      $scope.$watch('jsonString', function () {
+        this.valueChanged();
+      }.bind(this));
+    },
+    bindToController: true,
+    controllerAs: 'leoJsonFormatterCtrl',
+    template: '<textarea ng-model="leoJsonFormatterCtrl.jsonString" ng-change="leoJsonFormatterCtrl.valueChanged()" />'
+  }
+});
+
 LeoWindowBody.$inject = ['$scope', 'leoConfiguration', '$timeout'];
 function LeoWindowBody($scope, leoConfiguration, $timeout) {
-  var removeStateByName = function(name) {
+  this.editedState = null;
+
+  function removeStateByName(name) {
     var index = 0;
     this.states.forEach(function(state, i){
       if (state.name === name){
@@ -67,6 +98,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
 
     this.states.splice(index, 1);
   }.bind(this);
+
 
   function removeOptionByName(stateName, optionName) {
     var sIndex = 0;
@@ -108,8 +140,23 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
   };
 
   this.editState = function(state){
-    console.log(state);
+    this.editedState = angular.copy(state);
+    this.editedState.dataStringValue = JSON.stringify(this.editedState.activeOption.data);
   };
+
+  this.onEditOptionSuccess = function (str) {
+    this.editedState.activeOption.data = JSON.parse(str);
+    this.editedState.error = '';
+  };
+
+  this.onEditOptionJsonError = function (msg) {
+    this.editedState.error = msg;
+  };
+
+  this.saveEditedState = function() {
+    leoConfiguration.addSavedState(this.editedState);
+    this.editedState = null;
+  }
 
   this.states = leoConfiguration.getStates();
 
@@ -137,10 +184,8 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
 
   this.updateState = function (state) {
     if (state.active) {
-      console.log('leonardo: activate state option:' + state.name + ': ' + state.activeOption.name);
       leoConfiguration.activateStateOption(state.name, state.activeOption.name);
     } else {
-      console.log('leonardo: deactivating state: ' + state.name);
       leoConfiguration.deactivateState(state.name);
     }
   };
