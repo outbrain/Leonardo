@@ -38,8 +38,8 @@ angular.module('leonardo').directive('leoActivator', ['$compile', function activ
   };
 }]);
 
-LeoActivator.$inject = ['$scope', '$document', '$element'];
-function LeoActivator($scope, $document, $element) {
+LeoActivator.$inject = ['$scope', '$document'];
+function LeoActivator($scope, $document) {
   this.isLeonardoVisible = true;
   this.activeTab = 'scenarios';
 
