@@ -88,8 +88,14 @@
       animation: leo-highlight-animation 1s linear 1;
     }
 
-    .request-item:nth-child(even) {
-      background: #F2F2F2;
+    .request-item {
+      &:hover {
+        background: #F2F2F2;
+      }
+      cursor: pointer;
+      &:nth-child(even) {
+        background: #F2F2F2;
+      }
     }
   }
 
