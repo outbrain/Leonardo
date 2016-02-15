@@ -6,7 +6,6 @@ angular.module('leonardo').directive('leoActivator', ['$compile', function activ
     bindToController: true,
     link: function(scope, elem) {
       var el = angular.element('<div ng-click="leonardo.activate()" class="leonardo-activator" ng-show="leonardo.isLeonardoVisible"></div>');
-
       var win = angular.element([
       '<div class="leonardo-window">',
         '<div class="leonardo-header">',
@@ -49,8 +48,18 @@ function LeoActivator($scope, $document) {
   };
 
   $document.on('keypress', function(e) {
-    if(e.shiftKey && e.ctrlKey && e.keyCode === 12) {
-      this.isLeonardoVisible = !this.isLeonardoVisible;
+
+    if (e.shiftKey && e.ctrlKey) {
+      switch (e.keyCode) {
+        case 12:
+          this.isLeonardoVisible = !this.isLeonardoVisible;
+          break;
+        case 11:
+          this.activate();
+          break;
+        default:
+          break;
+      }
       $scope.$apply();
     }
   }.bind(this));
