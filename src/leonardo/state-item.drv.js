@@ -4,6 +4,7 @@ angular.module('leonardo').directive('leoStateItem', function () {
     templateUrl: 'state-item.html',
     scope: {
       state: '=',
+      ajaxState: '=',
       onOptionChanged: '&',
       onRemoveState: '&',
       onRemoveOption: '&',

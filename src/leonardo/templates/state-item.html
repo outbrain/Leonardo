@@ -7,14 +7,18 @@
     </label>
   </div>
 </div>
-<div class="leo-request-verb {{leoStateItem.state.verb.toLowerCase()}}">
-  {{leoStateItem.state.verb}}
-</div>
-<div>
-  <h4>{{state.name}}</h4>
+<div ng-if="!leoStateItem.ajaxState" class="leo-request-verb non-ajax">None-Ajax</div>
+<div ng-if="leoStateItem.ajaxState">
+  <div class="leo-request-verb {{leoStateItem.state.verb.toLowerCase()}}">
+    {{leoStateItem.state.verb}}
+  </div>
+  <div>
+    <h4>{{state.name}}</h4>
+  </div>
 </div>
 <div class="leo-expand">
-  <span class="url">{{leoStateItem.state.url}}</span>
+  <span ng-if="leoStateItem.ajaxState" class="url">{{leoStateItem.state.url}}</span>
+  <h4 ng-if="!leoStateItem.ajaxState">{{state.name}}</h4>
 </div>
 <div>
   <!--<select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="leoWindowBody.updateState(state)"></select>-->
