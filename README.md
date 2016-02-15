@@ -5,11 +5,10 @@
 
 [![Package Quality](http://npm.packagequality.com/badge/leonardojs.png)](http://packagequality.com/#?package=leonardojs)
 
-![Mocking and testing made simple and consistent. Developed by Outbrain.](extension/images/example.png)
+![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/leonardo.png)
 
-## Examples
+## Example
 
-* [Simple Demo](http://outbrain.github.io/Leonardo/)
 * [Full Application Example](http://outbrain.github.io/Leonardo/examples/angularIL/)
 
 ## Install
@@ -17,7 +16,6 @@
 __Dependencies__
 
 * __[Angular](https://github.com/angular/bower-angular)__
-* __[Angular Mocks](https://github.com/angular/bower-angular-mocks)__
 
 Installing via `npm` or `bower` will bring in the above dependencies as well.
 
@@ -34,7 +32,6 @@ $ bower install leonardo
 #### Load Dependency scripts
 
 Angular (tested with v1.3)
-Angular Mocks module  (tested with v1.3)
 
 #### Load Leonardo script
 
@@ -73,16 +70,6 @@ Angular Mocks module  (tested with v1.3)
     var myApp = angular.module("app", ["leonardo"]);
     //.....    
    </script>
-</body>
-</html>
-```
-#### Add Attribute For UI Activation Via Icon
-
-```html
-<!DOCTYPE HTML>
-<html>
-<body ng-app="app" leo-activator>
-  //.....
 </body>
 </html>
 ```
