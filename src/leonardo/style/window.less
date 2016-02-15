@@ -1,12 +1,25 @@
 @-webkit-keyframes leo-highlight-animation {
-  0% {background: none;}
-  20% {background: #f08222;}
-  100% {background: none;}
+  0% {
+    background: none;
+  }
+  20% {
+    background: #f08222;
+  }
+  100% {
+    background: none;
+  }
 }
+
 @keyframes leo-highlight-animation {
-  0% {background: none;}
-  20% {background: #f08222;}
-  100% {background: none;}
+  0% {
+    background: none;
+  }
+  20% {
+    background: #f08222;
+  }
+  100% {
+    background: none;
+  }
 }
 
 .leonardo-header {
@@ -18,7 +31,7 @@
   border-bottom: 1px solid @lightGray;
   display: inline-block;
   min-height: 44px;
-  
+
   .menu {
     font-size: 1.5em;
     color: @darkGray;
@@ -73,6 +86,10 @@
     .leo-highlight {
       -webkit-animation: leo-highlight-animation 1s linear 1;
       animation: leo-highlight-animation 1s linear 1;
+    }
+
+    .request-item:nth-child(even) {
+      background: #F2F2F2;
     }
   }
 
@@ -153,5 +170,4 @@
   input [type="text"], textarea {
     border: 1px solid #dddddd;
   }
-
 }
