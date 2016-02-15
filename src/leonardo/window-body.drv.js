@@ -11,6 +11,12 @@ angular.module('leonardo').directive('leoWindowBody', ['$http', 'leoConfiguratio
       var leoActivator = controllers[0];
       var leoWindowBody = controllers[1];
 
+      leoWindowBody.hasActiveOption = function(){
+        return this.requests.filter(function (request) {
+          return !!request.active;
+        }).length;
+      };
+
       leoWindowBody.saveUnregisteredState = function () {
         var stateName = this.detail.state;
 
@@ -77,7 +83,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
         oIndex = i;
       }
     });
-    debugger;
+
     this.states[sIndex].options.splice(oIndex, 1);
   }
 
@@ -93,9 +99,12 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
   };
 
   this.removeOption = function(state, option){
-    debugger;
+    if (state.options.length === 1) {
+      this.removeState(state);
+    }
     leoConfiguration.removeOption(state, option);
     removeOptionByName.call(this, state.name, option.name);
+    state.activeOption = state.options[0];
   };
 
   this.editState = function(state){
@@ -127,7 +136,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
   }.bind(this);
 
   this.updateState = function (state) {
-    if (state.active) {
+      if (state.active) {
       console.log('leonardo: activate state option:' + state.name + ': ' + state.activeOption.name);
       leoConfiguration.activateStateOption(state.name, state.activeOption.name);
     } else {
@@ -154,6 +163,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
       this.detail.error = '';
     }
     catch (e) {
+      this.detail.error = e.message;
       this.detail.error = e.message;
     }
   }.bind(this));
