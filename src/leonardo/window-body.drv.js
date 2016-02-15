@@ -88,36 +88,40 @@ LeoWindowBody.$inject = ['$scope', 'leoConfiguration', '$timeout'];
 function LeoWindowBody($scope, leoConfiguration, $timeout) {
   this.editedState = null;
 
-  function removeStateByName(name) {
-    var index = 0;
-    this.states.forEach(function(state, i){
-      if (state.name === name){
-        index = i;
-      }
+  this.removeStateByName = function(name) {
+    this.states = this.states.filter(function(state) {
+      return state.name !== name;
     });
-
-    this.states.splice(index, 1);
-  }
+  };
 
 
-  function removeOptionByName(stateName, optionName) {
-    var sIndex = 0;
-    var oIndex = 0;
-
+  this.removeOptionByName = function(stateName, optionName) {
     this.states.forEach(function(state, i){
       if (state.name === stateName){
-        sIndex = i;
+        state.options = state.options.filter(function(option) {
+          return option.name !== optionName;
+        });
       }
     });
 
-    this.states[sIndex].options.forEach(function(option, i){
-      if (option.name === optionName){
-        oIndex = i;
-      }
-    });
 
-    this.states[sIndex].options.splice(oIndex, 1);
-  }
+    //var sIndex = 0;
+    //var oIndex = 0;
+    //
+    //this.states.forEach(function(state, i){
+    //  if (state.name === stateName){
+    //    sIndex = i;
+    //  }
+    //});
+    //
+    //this.states[sIndex].options.forEach(function(option, i){
+    //  if (option.name === optionName){
+    //    oIndex = i;
+    //  }
+    //});
+    //
+    //this.states[sIndex].options.splice(oIndex, 1);
+  };
 
   this.detail = {
     option: 'success',
@@ -127,7 +131,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
 
   this.removeState = function(state){
     leoConfiguration.removeState(state);
-    removeStateByName.call(this, state.name);
+    this.removeStateByName(state.name);
   };
 
   this.removeOption = function(state, option){
@@ -135,7 +139,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
       this.removeState(state);
     } else {
       leoConfiguration.removeOption(state, option);
-      removeOptionByName.call(this, state.name, option.name);
+      this.removeOptionByName(state.name, option.name);
       state.activeOption = state.options[0];
     }
   };
