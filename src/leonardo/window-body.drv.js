@@ -57,9 +57,15 @@ angular.module('leonardo').directive('leoJsonFormatter', function JsonFormatter(
       onError: '&',
       onSuccess: '&'
     },
-    controller: function LeoJsonFormatterCtrl () {
+    controller: function LeoJsonFormatterCtrl ($scope) {
       this.stringValue = this.jsonInitialData || '{}';
 
+      $scope.$watch(function () {
+        return this.jsonInitialData;
+      }.bind(this), function () {
+        console.log('change', this.jsonInitialData);
+        this.valueChanged();
+      }.bind(this));
       this.valueChanged = function () {
         if (!this.stringValue) {
           return;
