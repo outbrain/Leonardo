@@ -35,7 +35,7 @@ angular.module('leonardo', ['leonardo.templates'])
       });
       leoConfiguration.loadSavedStates();
 
-      var el = $compile( "<div leo-activator></div>" )($rootScope);
+      var el = $compile( '<div leo-activator></div>' )($rootScope);
       $document[0].body.appendChild(el[0]);
     }]);
 
