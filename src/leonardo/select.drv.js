@@ -10,44 +10,55 @@ angular.module('leonardo').directive('leoSelect', [function leoSelectDirective()
     },
     controller: LeoSelectController,
     bindToController: true,
-    controllerAs: 'leoSelect'
+    controllerAs: 'leoSelect',
+    link: function(scope, elm, attr, ctrl) {
+      ctrl.setScope(scope);
+    }
   }
 }]);
 
 LeoSelectController.count = 0;
-function LeoSelectController() {
+LeoSelectController.$inject = ['$document'];
+function LeoSelectController($document) {
+  var self = this;
   this.entityId = ++LeoSelectController.count;
   this.open = false;
+  this.scope = null;
+
+  this.setScope = function(scope) {
+    self.scope = scope;
+  };
 
   this.selectOption = function(option) {
-    this.state.activeOption = option;
-    this.open = false;
-    this.onChange({state: this.state});
-  }.bind(this);
+    self.state.activeOption = option;
+    self.open = false;
+    self.onChange({state: self.state});
+  };
 
   this.removeOption = function(option) {
-    this.onDelete({state: this.state, option: option});
-  }.bind(this);
+    self.onDelete({state: self.state, option: option});
+  };
 
   this.toggle = function() {
-    if (!this.disabled()) this.open = !this.open;
-    if (this.open) attachEvent();
-    }.bind(this);
+    if (!self.disabled()) self.open = !self.open;
+    if (self.open) attachEvent();
+  };
 
   var clickEvent = function(event) {
-    console.log(event);
-    //removeEvent();
-  }.bind(this);
+    var className = event.target.getAttribute('class');
+    if (!className || className.indexOf('leo-dropdown-entity-'+self.entityId) == -1) {
+      self.scope.$apply(function() {
+        self.open = false;
+      });
+      removeEvent();
+    }
+  };
 
   var attachEvent = function() {
-    document
-        .querySelector('body')
-        .addEventListener('click', clickEvent);
-  }.bind(this);
+    $document.bind('click', clickEvent);
+  };
 
   var removeEvent = function() {
-    document
-        .getElementById('body')
-        .removeEventListener('click', clickEvent);
+    $document.unbind('click', clickEvent);
   };
 }

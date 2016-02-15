@@ -1,5 +1,5 @@
-<div class="leo-drop-down" ng-disabled="leoSelect.disabled()" id="leo-select-{{leoSelect.entityId}}">
-  <div ng-click="leoSelect.toggle()" class="leo-drop-down-selected">
+<div class="leo-drop-down leo-dropdown-entity-{{leoSelect.entityId}}" ng-disabled="leoSelect.disabled()">
+  <div ng-click="leoSelect.toggle()" class="leo-drop-down-selected leo-dropdown-entity-{{leoSelect.entityId}}">
     {{leoSelect.state.activeOption.name}}
     <span class="leo-drop-down-icon">+</span>
   </div>
