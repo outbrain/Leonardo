@@ -51,7 +51,7 @@ angular.module('leonardo').directive('leoWindowBody', ['$http', 'leoConfiguratio
 
 LeoWindowBody.$inject = ['$scope', 'leoConfiguration', '$timeout'];
 function LeoWindowBody($scope, leoConfiguration, $timeout) {
-  function removeStateByName(name) {
+  var removeStateByName = function(name) {
     var index = 0;
     this.states.forEach(function(state, i){
       if (state.name === name){
@@ -60,7 +60,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
     });
 
     this.states.splice(index, 1);
-  }
+  }.bind(this);
 
   this.detail = {
     option: 'success',

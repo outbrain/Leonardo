@@ -102,13 +102,11 @@
             {{state.url}}
           </div>
           <div>
-            <select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="leoWindowBody.updateState(state)"></select>
-            <div class="leo-drop-down">
-              <div ng-click="state.open = !state.open">{{state.activeOption.name}}</div>
-              <div ng-show="state.open" class="leo-drop-down-items">
-                <div class="leo-drop-down-item" ng-model="state.activeOption" ng-repeat="option in state.options" ng-click="leoWindowBody.updateState(state)">{{option.name}}</div>
-              </div>
-            </div>
+            <!--<select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="leoWindowBody.updateState(state)"></select>-->
+            <leo-select state="state"
+                        disabled="!state.active"
+                        on-change="leoWindowBody.updateState(state)"
+                        on-delete="leoWindowBody.removeState(state)"></leo-select>
           </div>
           <button ng-click="leoWindowBody.removeState(state)" title="Remove State">Remove</button>
           <button ng-click="leoWindowBody.editState(state)">Edit</button>
