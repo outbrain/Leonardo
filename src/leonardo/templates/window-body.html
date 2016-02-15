@@ -6,8 +6,7 @@
           <leo-request
             ng-repeat="request in leoWindowBody.requests"
             request="request"
-            on-select="leoWindowBody.requestSelect(request)">
-          </leo-request>
+            on-select="leoWindowBody.requestSelect(request)" />
         </div>
       </div>
       <div class="leo-detail" ng-show="leoWindowBody.hasActiveOption()">
@@ -115,6 +114,31 @@
         </li>
         <li ng-show="!ajaxReuslts.length && !nonAjaxState.length">No Results Found</li>
       </ul>
+      <div class="edit-state" ng-class="{visible:!!leoWindowBody.editedState}">
+
+        <!--<p> {{ leoWindowBody.editedState | json : spacing}}</p>-->
+        <div class="leonardo-edit-option" ng-if="!!leoWindowBody.editedState">
+          <div class="leo-detail">
+            <div class="leo-detail-option">
+              <span class="title">Edit option <b>{{leoWindowBody.editedState.activeOption.name}}</b> for state <b>{{leoWindowBody.editedState.name}}</b></span>
+              <div>Status code: <input ng-model="leoWindowBody.editedState.activeOption.status"/></div>
+              <div>Delay: <input ng-model="leoWindowBody.editedState.activeOption.delay"/></div>
+              <div class="leo-detail-option-json">Response JSON:
+                <div class="leo-error">{{leoWindowBody.editedState.error}}</div>
+                <leo-json-formatter
+                  json-string="leoWindowBody.editedState.dataStringValue"
+                  on-error="leoWindowBody.onEditOptionJsonError(msg)"
+                  on-success="leoWindowBody.onEditOptionSuccess(value)" />
+              </div>
+            </div>
+
+            <div class="leo-action-row">
+              <button ng-click="leoWindowBody.saveEditedState()">{{  'Save' }}</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
     </div>
     <div ng-switch-when="test" class="leonardo-test">
       <div>
