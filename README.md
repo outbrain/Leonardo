@@ -33,7 +33,7 @@ $ bower install leonardo
 
 Angular (tested with v1.3)
 
-#### Load Leonardo script
+#### Add Leonardo script
 
 ```html
 <!DOCTYPE HTML>
@@ -44,18 +44,6 @@ Angular (tested with v1.3)
   //.....
   <script src="[bower_componenets|node_modules|other]/leonardo/dist/leonardo.js"></script>
 </body>
-</html>
-```
-
-#### Load Leonardo css
-
-```html
-<!DOCTYPE HTML>
-<html>
-<head>
-  //.....
-  <link rel="stylesheet" media="all" href="[bower_componenets|node_modules|other]/leonardo/dist/leonardo.min.css" />
-</head>
 </html>
 ```
 
