@@ -1,9 +1,10 @@
+
 angular.module('leonardo').run(['leoConfiguration', '$rootScope', function (leoConfiguration, $rootScope) {
 
   leoConfiguration.addStates([
     {
-      "name": "Auth",
-      "url": "/auth",
+      "name": "Authenticate",
+      "url": "/login",
       "verb": "GET",
       "options": [
         {
@@ -30,7 +31,7 @@ angular.module('leonardo').run(['leoConfiguration', '$rootScope', function (leoC
         },
         {
           "name": "Failure",
-          "status": "401",
+          "status": 401,
           "data": {
             "msg": "no no!"
           },
@@ -180,10 +181,10 @@ angular.module('leonardo').run(['leoConfiguration', '$rootScope', function (leoC
     ]
   });
 
-  var debug = leoConfiguration.getState('debug');
+  var debug = leoConfiguration.getActiveStateOption('debug');
   var isDebug = debug && debug.name === 'Enabled';
   $rootScope.$on('leonardo:setStates', function () {
-    var debug = leoConfiguration.getState('debug');
+    var debug = leoConfiguration.getActiveStateOption('debug');
     if (!isDebug && debug) {
       angular.reloadWithDebugInfo();
     }
@@ -201,19 +202,3 @@ angular.module('leonardo').run(['leoConfiguration', '$rootScope', function (leoC
 //    }
 //  });
 //}]);
-
-
-//[
-//  {"type":"turtles","name":"leonardo","image":"https://farm1.staticflickr.com/445/19918490918_562a05b2ae_b.jpg"},
-//  {"type":"turtles","name":"donatelo","image":"https://farm1.staticflickr.com/402/19896041068_3b3c6a45e9_b.jpg"},
-//  {"type":"enemies","name":"shredder","image":"https://farm1.staticflickr.com/312/20058148116_5be49c9aa2_b.jpg"},
-//  {"type":"enemies","name":"bebop","image":"https://farm1.staticflickr.com/296/19918567750_b21855337c_b.jpg"},
-//  {"type":"enemies","name":"rocksteady","image":"https://farm1.staticflickr.com/308/19919891449_8267e93e5c_b.jpg"},
-//  {"type":"turtles","name":"michelangelo","image":"https://farm1.staticflickr.com/521/20098615082_70dbbb6232_b.jpg"},
-//  {"type":"turtles","name":"refael","image":"https://farm1.staticflickr.com/430/19483942244_8a91a5bd32_b.jpg"},
-//  {"type":"turtles","name":"donatelo","image":"https://farm1.staticflickr.com/402/19896041068_3b3c6a45e9_b.jpg"},
-//  {"type":"turtles","name":"splinter","image":"https://farm1.staticflickr.com/519/19483953394_449e8942ff_b.jpg"},
-//  {"type":"enemies","name":"krang","image":"https://farm1.staticflickr.com/502/19909252418_eff51f40ba_b.jpg"},
-//  {"type":"enemies","name":"krang","image":"https://farm1.staticflickr.com/526/19918490318_126d63dcde_b.jpg"},
-//  {"type":"enemies","name":"rocksteady","image":"https://farm1.staticflickr.com/308/19919891449_8267e93e5c_b.jpg"}
-//]

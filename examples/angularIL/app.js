@@ -9,7 +9,7 @@ angular.module('angular-il', ['ui.router', 'leonardo'])
       var $state = $injector.get('$state');
       var $http = $injector.get('$http');
       var $rootScope = $injector.get('$rootScope');
-      $http.get('/auth').then(function(res){
+      $http.get('/login').then(function(res){
         $rootScope.user = res.data ? res.data.name : '';
         $state.go('characters');
       }).catch(function(){

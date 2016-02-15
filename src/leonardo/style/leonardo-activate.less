@@ -30,10 +30,9 @@
       padding: 5px 30px;
       cursor: pointer;
       font-size: 13px;
-      text-decoration: underline;
 
       &:hover {
-        font-weight: bold;
+        text-decoration: underline;
       }
     }
   }
@@ -41,21 +40,28 @@
   > ul {
     flex: 3;
     list-style: none;
-    display: table;
+    padding-right: 100px;
   }
 
   li {
-    display: table-row;
-    border: 3px solid white;
+    display: flex;
+    align-items: center;
 
-    > div {
-      display: table-cell;
-      vertical-align: middle;
-      padding: 3px 0;
+    div {
+      margin-left: 20px;
+    }
+    .leo-expand {
+      flex: 1;
     }
 
-    > div:nth-child(2) {
-      min-width: 400px;
+    .leo-fixed-size {
+      width: 50px;
+      height: 30px;
+    }
+
+    button {
+      padding: 5px;
+      margin-left: 10px;
     }
   }
 

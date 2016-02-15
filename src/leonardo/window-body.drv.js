@@ -51,10 +51,30 @@ angular.module('leonardo').directive('leoWindowBody', ['$http', 'leoConfiguratio
 
 LeoWindowBody.$inject = ['$scope', 'leoConfiguration', '$timeout'];
 function LeoWindowBody($scope, leoConfiguration, $timeout) {
+  function removeStateByName(name) {
+    var index = 0;
+    this.states.forEach(function(state, i){
+      if (state.name === name){
+        index = i;
+      }
+    });
+
+    this.states.splice(index, 1);
+  }
+
   this.detail = {
     option: 'success',
     delay: 0,
     status: 200
+  };
+
+  this.removeState = function(state){
+    leoConfiguration.removeState(state);
+    removeStateByName.call(this, state.name);
+  };
+
+  this.editState = function(state){
+    console.log(state);
   };
 
   this.states = leoConfiguration.getStates();
@@ -75,6 +95,11 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
     });
     leoConfiguration.deactivateAllStates();
   };
+
+  this.toggleState = function (state) {
+    state.active = !state.active;
+    this.updateState(state);
+  }.bind(this);
 
   this.updateState = function (state) {
     if (state.active) {
@@ -119,6 +144,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
   }.bind(this));
 
   this.requestSelect = function (request) {
+    var optionName;
     this.requests.forEach(function (request) {
       request.active = false;
     });
@@ -126,14 +152,14 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
     request.active = true;
 
     if (request.state && request.state.name) {
-      var optionName = request.state.name + ' option ' + request.state.options.length;
+      optionName = request.state.name + ' option ' + request.state.options.length;
     }
 
     angular.extend(this.detail, {
       state: (request.state && request.state.name) || '',
       option: optionName || '',
       delay: 0,
-      status: 200,
+      status: request.status || 200,
       stateActive: !!request.state,
       value: request.data || {}
     });
