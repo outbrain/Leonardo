@@ -27,6 +27,7 @@
     "del": "^1.2.0",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.5.2",
+    "gulp-css2js": "^1.0.2",
     "gulp-help": "^1.3.4",
     "gulp-less": "^3.0.1",
     "gulp-minify-css": "^0.4.6",
