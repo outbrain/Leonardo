@@ -136,7 +136,7 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
   }.bind(this);
 
   this.updateState = function (state) {
-      if (state.active) {
+    if (state.active) {
       console.log('leonardo: activate state option:' + state.name + ': ' + state.activeOption.name);
       leoConfiguration.activateStateOption(state.name, state.activeOption.name);
     } else {
@@ -163,7 +163,6 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
       this.detail.error = '';
     }
     catch (e) {
-      this.detail.error = e.message;
       this.detail.error = e.message;
     }
   }.bind(this));
