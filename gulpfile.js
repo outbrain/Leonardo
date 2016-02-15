@@ -58,6 +58,7 @@ gulp.task('build:js', function(){
         './src/leonardo/window-body.drv.js',
         './src/leonardo/select.drv.js',
         './src/leonardo/request.drv.js',
+        './src/leonardo/state-item.drv.js',
         './tmp/leonardo.templates.min.js',
         './tmp/leonardo.css.js'
       ])
