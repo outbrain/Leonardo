@@ -1,5 +1,5 @@
-<div class="leo-drop-down" ng-disabled="leoSelectdisabled()">
-  <div ng-click="leoSelect.open = !leoSelect.open">
+<div class="leo-drop-down" ng-disabled="leoSelect.disabled()">
+  <div ng-click="leoSelect.open = !leoSelect.open" class="leo-drop-down-selected">
     {{leoSelect.state.activeOption.name}}
     <span class="leo-drop-down-icon">+</span>
   </div>

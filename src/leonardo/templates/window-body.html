@@ -111,10 +111,9 @@
             <leo-select state="state"
                         disabled="!state.active"
                         on-change="leoWindowBody.updateState(state)"
-                        on-delete="leoWindowBody.removeState(state)"></leo-select>
+                        on-delete="leoWindowBody.removeOption(state, option)"></leo-select>
           </div>
           <button ng-click="leoWindowBody.removeState(state)" title="Remove State">Remove</button>
-          <button ng-click="leoWindowBody.removeOption(state, state.activeOption)" title="Remove Option">Remove Option</button>
           <button ng-click="leoWindowBody.editState(state)">Edit</button>
         </li>
         <li ng-show="!ajaxReuslts.length && !nonAjaxState.length">No Results Found</li>

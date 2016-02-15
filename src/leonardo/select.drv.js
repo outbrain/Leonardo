@@ -24,8 +24,7 @@ function LeoSelectController() {
   }.bind(this);
 
   this.removeOption = function(option) {
-    //this.state.activeOption = option;
-    this.onDelete({state: this.state});
+    this.onDelete({state: this.state, option: option});
   }.bind(this);
 
 }
