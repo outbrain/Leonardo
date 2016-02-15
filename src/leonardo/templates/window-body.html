@@ -72,9 +72,9 @@
         <li ng-repeat="state in nonAjaxState = (leoWindowBody.states | filter:leoWindowBody.notHasUrl | filter:{name: leoWindowBody.filter}) track by $index">
           <div>
             <div class="onoffswitch">
-              <input ng-model="state.active" ng-click="leoWindowBody.updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}">
-              <label class="onoffswitch-label" for="{{state.name}}">
-                <span class="onoffswitch-inner"></span>
+              <input ng-checked="state.active" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}">
+              <label class="onoffswitch-label" for="{{state.name}}" ng-click="leoWindowBody.toggleState(state);">
+              <span class="onoffswitch-inner"></span>
                 <span class="onoffswitch-switch"></span>
               </label>
             </div>
@@ -94,9 +94,9 @@
         <li ng-repeat="state in ajaxReuslts = (leoWindowBody.states | filter:leoWindowBody.hasUrl | filter:{name: leoWindowBody.filter}) track by $index" ng-class="{ 'leo-highlight': state.highlight }">
           <div>
             <div class="onoffswitch">
-              <input ng-model="state.active" ng-click="leoWindowBody.updateState(state)" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}">
-              <label class="onoffswitch-label" for="{{state.name}}">
-                <span class="onoffswitch-inner"></span>
+              <input ng-checked="state.active" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}">
+              <label class="onoffswitch-label" for="{{state.name}}" ng-click="leoWindowBody.toggleState(state);">
+              <span class="onoffswitch-inner"></span>
                 <span class="onoffswitch-switch"></span>
               </label>
             </div>
