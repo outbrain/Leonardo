@@ -223,6 +223,11 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
     }
   }.bind(this));
 
+  this.stateItemSelected = function (state) {
+    this.selectedState = state;
+    this.editState(state);
+  }
+
   this.requestSelect = function (request) {
     var optionName;
     this.requests.forEach(function (request) {
