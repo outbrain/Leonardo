@@ -26,6 +26,7 @@ angular.module('leonardo').factory('leoConfiguration', ['leoStorage', '$rootScop
       addSavedState: addSavedState,
       fetchStatesByUrlAndMethod: fetchStatesByUrlAndMethod,
       removeState: removeState,
+      removeOption: removeOption,
       _logRequest: logRequest
     };
 
@@ -233,13 +234,13 @@ angular.module('leonardo').factory('leoConfiguration', ['leoStorage', '$rootScop
 
   function removeStateByName(name) {
     var index = 0;
-    states.forEach(function(state, i){
+    _states.forEach(function(state, i){
       if (state.name === name){
         index = i;
       }
     });
 
-    states.splice(index, 1);
+    _states.splice(index, 1);
   }
 
   function removeSavedStateByName(name) {
@@ -259,10 +260,56 @@ angular.module('leonardo').factory('leoConfiguration', ['leoStorage', '$rootScop
     removeSavedStateByName(state.name);
 
     leoStorage.setSavedStates(_savedStates);
-    sync();
   }
 
-    function getRecordedStates() {
+  function removeStateOptionByName(stateName, optionName) {
+    var sIndex = 0;
+    var oIndex = 0;
+
+    _states.forEach(function(state, i){
+      if (state.name === stateName){
+        sIndex = i;
+      }
+    });
+
+    _states[sIndex].options.forEach(function(option, i){
+      if (option.name === optionName){
+        oIndex = i;
+      }
+    });
+
+    _states[sIndex].options.splice(oIndex, 1);
+  }
+
+  function removeSavedStateOptionByName(stateName, optionName) {
+    var sIndex = 0;
+    var oIndex = 0;
+
+    _savedStates.forEach(function(state, i){
+      if (state.name === stateName){
+        sIndex = i;
+      }
+    });
+
+    _savedStates[sIndex].options.forEach(function(option, i){
+      if (option.name === optionName){
+        oIndex = i;
+      }
+    });
+
+    _savedStates[sIndex].options.splice(oIndex, 1);
+  }
+
+  function removeOption(state, option) {
+    removeStateOptionByName(state.name, option.name);
+    removeSavedStateOptionByName(state.name, option.name);
+
+    leoStorage.setSavedStates(_savedStates);
+
+    activateStateOption(_states[0].name, _states[0].options[0].name);
+  }
+
+  function getRecordedStates() {
       var requestsArr = _requestsLog
           .map(function (req) {
             var state = fetchStatesByUrlAndMethod(req.url, req.verb);
