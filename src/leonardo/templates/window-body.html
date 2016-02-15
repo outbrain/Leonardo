@@ -81,7 +81,10 @@
             <h4>{{state.name}}</h4>
           </div>
           <div>
-            <select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="leoWindowBody.updateState(state)"></select>
+            <leo-select state="state"
+                        disabled="!state.active"
+                        on-change="leoWindowBody.updateState(state)"
+                        on-delete="leoWindowBody.removeOption(state, option)"></leo-select>
           </div>
           <button ng-click="leoWindowBody.removeState(state)" title="Remove State">Remove</button>
           <button ng-click="leoWindowBody.editState(state)">Edit</button>
@@ -106,10 +109,13 @@
             <span class="url">{{state.url}}</span>
           </div>
           <div>
-            <select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="leoWindowBody.updateState(state)"></select>
+            <!--<select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="leoWindowBody.updateState(state)"></select>-->
+            <leo-select state="state"
+                        disabled="!state.active"
+                        on-change="leoWindowBody.updateState(state)"
+                        on-delete="leoWindowBody.removeOption(state, option)"></leo-select>
           </div>
           <button ng-click="leoWindowBody.removeState(state)" title="Remove State">Remove</button>
-          <button ng-click="leoWindowBody.removeOption(state, state.activeOption)" title="Remove Option">Remove Option</button>
           <button ng-click="leoWindowBody.editState(state)">Edit</button>
         </li>
         <li ng-show="!ajaxReuslts.length && !nonAjaxState.length">No Results Found</li>
