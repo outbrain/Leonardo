@@ -73,7 +73,7 @@
           <div>
             <div class="onoffswitch">
               <input ng-checked="state.active" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}">
-              <label class="onoffswitch-label" for="{{state.name}}" ng-click="leoWindowBody.toggleState(state);">
+              <label class="onoffswitch-label" for="{{state.name}}" ng-click="leoWindowBody.toggleState($event, state);">
               <span class="onoffswitch-inner"></span>
                 <span class="onoffswitch-switch"></span>
               </label>
@@ -99,7 +99,7 @@
           <div>
             <div class="onoffswitch">
               <input ng-checked="state.active" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}">
-              <label class="onoffswitch-label" for="{{state.name}}" ng-click="leoWindowBody.toggleState(state);">
+              <label class="onoffswitch-label" for="{{state.name}}" ng-click="leoWindowBody.toggleState($event, state);">
               <span class="onoffswitch-inner"></span>
                 <span class="onoffswitch-switch"></span>
               </label>
