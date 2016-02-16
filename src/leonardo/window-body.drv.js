@@ -186,7 +186,9 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
     leoConfiguration.deactivateAllStates();
   };
 
-  this.toggleState = function (state) {
+  this.toggleState = function ($event, state) {
+    $event.preventDefault();
+    $event.stopPropagation();
     state.active = !state.active;
     this.updateState(state);
   }.bind(this);
