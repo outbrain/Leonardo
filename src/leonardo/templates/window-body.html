@@ -95,7 +95,6 @@
         <li ng-show="!ajaxReuslts.length && !nonAjaxState.length">No Results Found</li>
       </ul>
       <div class="edit-state" ng-class="{visible:!!leoWindowBody.editedState}">
-
         <!--<p> {{ leoWindowBody.editedState | json : spacing}}</p>-->
         <div class="leonardo-edit-option" ng-if="!!leoWindowBody.editedState">
           <div class="leo-detail">
@@ -113,9 +112,9 @@
             </div>
 
             <div class="leo-action-row">
-              <button ng-click="leoWindowBody.saveEditedState()">{{  'Save' }}</button>
+              <button ng-click="leoWindowBody.saveEditedState()">Save</button>
+              <button ng-click="leoWindowBody.closeEditedState()">Cancel</button>
             </div>
-
           </div>
         </div>
       </div>

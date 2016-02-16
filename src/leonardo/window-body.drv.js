@@ -160,6 +160,10 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
 
   this.saveEditedState = function() {
     leoConfiguration.addSavedState(this.editedState);
+    this.closeEditedState();
+  }
+
+  this.closeEditedState = function() {
     this.editedState = null;
   }
 
