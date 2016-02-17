@@ -75,6 +75,7 @@
             state="state"
             ajax-state="false"
             on-toggle-click="leoWindowBody.toggleState(state)"
+            on-option-changed="leoWindowBody.updateState(state, option)"
             on-remove-option="leoWindowBody.removeOption(state,option)"
             on-remove-state="leoWindowBody.removeState(state)"
             ng-click="leoWindowBody.stateItemSelected(state)"></leo-state-item>
@@ -88,6 +89,7 @@
             state="state"
             ajax-state="true"
             on-toggle-click="leoWindowBody.toggleState(state)"
+            on-option-changed="leoWindowBody.updateState(state, option)"
             on-remove-option="leoWindowBody.removeOption(state,option)"
             on-remove-state="leoWindowBody.removeState(state)"
             ng-click="leoWindowBody.stateItemSelected(state)"></leo-state-item>

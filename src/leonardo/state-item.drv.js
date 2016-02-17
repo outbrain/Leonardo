@@ -25,18 +25,24 @@ function LeoStateItem() {
     self.onToggleClick({
       state: self.state
     });
-  }
+  };
 
   this.removeState = function () {
     self.onRemoveState({
       state: this.state
     });
-  }
+  };
 
   this.removeOption = function (state, option) {
     self.onRemoveOption({
       state: state,
       option: option
+    });
+  };
+
+  this.updateState = function (state) {
+    self.onOptionChanged({
+      state: state
     });
   }
 }

@@ -29,7 +29,9 @@ function LeoSelectController($document) {
     self.scope = scope;
   };
 
-  this.selectOption = function(option) {
+  this.selectOption = function($event, option) {
+    $event.preventDefault();
+    $event.stopPropagation();
     self.state.activeOption = option;
     self.open = false;
     self.onChange({state: self.state});
@@ -39,7 +41,9 @@ function LeoSelectController($document) {
     self.onDelete({state: self.state, option: option});
   };
 
-  this.toggle = function() {
+  this.toggle = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
     if (!self.disabled()) self.open = !self.open;
     if (self.open) attachEvent();
   };

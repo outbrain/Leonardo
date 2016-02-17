@@ -1,9 +1,9 @@
 angular.module('leonardo').factory('leoConfiguration', ['leoStorage', '$rootScope',
   function (leoStorage, $rootScope) {
     var _states = [],
-        _scenarios = {},
-        _requestsLog = [],
-        _savedStates = [];
+      _scenarios = {},
+      _requestsLog = [],
+      _savedStates = [];
 
     // Core API
     // ----------------
@@ -24,6 +24,7 @@ angular.module('leonardo').factory('leoConfiguration', ['leoStorage', '$rootScop
       getRequestsLog: getRequestsLog,
       loadSavedStates: loadSavedStates,
       addSavedState: addSavedState,
+      addOrUpdateSavedState: addOrUpdateSavedState,
       fetchStatesByUrlAndMethod: fetchStatesByUrlAndMethod,
       removeState: removeState,
       removeOption: removeOption,
@@ -56,9 +57,9 @@ angular.module('leonardo').factory('leoConfiguration', ['leoStorage', '$rootScop
         var option = activeStates[state.name];
         state.active = !!option && option.active;
         state.activeOption = !!option ?
-            state.options.filter(function (_option) {
-              return _option.name === option.name;
-            })[0] : state.options[0];
+          state.options.filter(function (_option) {
+            return _option.name === option.name;
+          })[0] : state.options[0];
       });
 
       return statesCopy;
@@ -113,12 +114,12 @@ angular.module('leonardo').factory('leoConfiguration', ['leoStorage', '$rootScop
 
     function upsert(stateObj) {
       var verb = stateObj.verb || 'GET',
-          state = stateObj.state,
-          name = stateObj.name,
-          url = stateObj.url,
-          status = stateObj.status || 200,
-          data = angular.isDefined(stateObj.data) ? stateObj.data : {},
-          delay = stateObj.delay || 0;
+        state = stateObj.state,
+        name = stateObj.name,
+        url = stateObj.url,
+        status = stateObj.status || 200,
+        data = angular.isDefined(stateObj.data) ? stateObj.data : {},
+        delay = stateObj.delay || 0;
       var defaultState = {};
 
       var defaultOption = {};
@@ -129,8 +130,8 @@ angular.module('leonardo').factory('leoConfiguration', ['leoStorage', '$rootScop
       }
 
       var stateItem = _states.filter(function (_state) {
-            return _state.name === state;
-          })[0] || defaultState;
+          return _state.name === state;
+        })[0] || defaultState;
 
       angular.extend(stateItem, {
         name: state,
@@ -145,8 +146,8 @@ angular.module('leonardo').factory('leoConfiguration', ['leoStorage', '$rootScop
       }
 
       var option = stateItem.options.filter(function (_option) {
-            return _option.name === name
-          })[0] || defaultOption;
+          return _option.name === name
+        })[0] || defaultOption;
 
       angular.extend(option, {
         name: name,
@@ -232,106 +233,157 @@ angular.module('leonardo').factory('leoConfiguration', ['leoStorage', '$rootScop
       addState(state);
     }
 
-  function removeStateByName(name) {
-    var index = 0;
-    _states.forEach(function(state, i){
-      if (state.name === name){
-        index = i;
+    function addOrUpdateSavedState(state) {
+      var option = state.activeOption;
+
+      //update local storage state
+
+      var _savedState = _savedStates.filter(function(_state) {
+        return _state.name === state.name;
+      })[0];
+
+      if (_savedState) {
+        var _savedOption = _savedState.options.filter(function(_option) {
+          return _option.name === option.name;
+        })[0];
+
+        if (_savedOption) {
+          _savedOption.status = option.status;
+          _savedOption.delay = option.delay;
+          _savedOption.data = option.data;
+        }
+        else {
+          _savedState.options.push(option);
+        }
+
+        leoStorage.setSavedStates(_savedStates);
       }
-    });
 
-    _states.splice(index, 1);
-  }
 
-  function removeSavedStateByName(name) {
-    var index = 0;
-    _savedStates.forEach(function(state, i){
-      if (state.name === name){
-        index = i;
+      //update in memory state
+
+      var _state = _states.filter(function(__state) {
+        return __state.name === state.name;
+      })[0];
+
+      if (_state) {
+        var _option = _state.options.filter(function(__option) {
+          return __option.name === option.name;
+        })[0];
+
+        if (_option) {
+          _option.status = option.status;
+          _option.delay = option.delay;
+          _option.data = option.data;
+        }
+        else {
+          _states.options.push(option);
+        }
+
+        $rootScope.$broadcast('leonardo:stateChanged');
       }
-    });
+    }
 
-    _savedStates.splice(index, 1);
-  }
-
-  function removeState(state) {
-
-    removeStateByName(state.name);
-    removeSavedStateByName(state.name);
-
-    leoStorage.setSavedStates(_savedStates);
-  }
-
-  function removeStateOptionByName(stateName, optionName) {
-    var sIndex = null;
-    var oIndex = null;
-
-    _states.forEach(function(state, i){
-      if (state.name === stateName){
-        sIndex = i;
-      }
-    });
-
-    if (sIndex !== null) {
-      _states[sIndex].options.forEach(function (option, i) {
-        if (option.name === optionName) {
-          oIndex = i;
+    function removeStateByName(name) {
+      var index = 0;
+      _states.forEach(function (state, i) {
+        if (state.name === name) {
+          index = i;
         }
       });
 
-      if (oIndex !== null) {
-        _states[sIndex].options.splice(oIndex, 1);
-      }
+      _states.splice(index, 1);
     }
-  }
 
-  function removeSavedStateOptionByName(stateName, optionName) {
-    var sIndex = null;
-    var oIndex = null;
-
-    _savedStates.forEach(function(state, i){
-      if (state.name === stateName){
-        sIndex = i;
-      }
-    });
-
-    if (sIndex !== null) {
-      _savedStates[sIndex].options.forEach(function (option, i) {
-        if (option.name === optionName) {
-          oIndex = i;
+    function removeSavedStateByName(name) {
+      var index = 0;
+      _savedStates.forEach(function (state, i) {
+        if (state.name === name) {
+          index = i;
         }
       });
 
-      if (oIndex !== null) {
-        _savedStates[sIndex].options.splice(oIndex, 1);
+      _savedStates.splice(index, 1);
+    }
+
+    function removeState(state) {
+
+      removeStateByName(state.name);
+      removeSavedStateByName(state.name);
+
+      leoStorage.setSavedStates(_savedStates);
+    }
+
+    function removeStateOptionByName(stateName, optionName) {
+      var sIndex = null;
+      var oIndex = null;
+
+      _states.forEach(function (state, i) {
+        if (state.name === stateName) {
+          sIndex = i;
+        }
+      });
+
+      if (sIndex !== null) {
+        _states[sIndex].options.forEach(function (option, i) {
+          if (option.name === optionName) {
+            oIndex = i;
+          }
+        });
+
+        if (oIndex !== null) {
+          _states[sIndex].options.splice(oIndex, 1);
+        }
       }
     }
-  }
 
-  function removeOption(state, option) {
-    removeStateOptionByName(state.name, option.name);
-    removeSavedStateOptionByName(state.name, option.name);
+    function removeSavedStateOptionByName(stateName, optionName) {
+      var sIndex = null;
+      var oIndex = null;
 
-    leoStorage.setSavedStates(_savedStates);
+      _savedStates.forEach(function (state, i) {
+        if (state.name === stateName) {
+          sIndex = i;
+        }
+      });
 
-    activateStateOption(_states[0].name, _states[0].options[0].name);
-  }
+      if (sIndex !== null) {
+        _savedStates[sIndex].options.forEach(function (option, i) {
+          if (option.name === optionName) {
+            oIndex = i;
+          }
+        });
 
-  function getRecordedStates() {
+        if (oIndex !== null) {
+          _savedStates[sIndex].options.splice(oIndex, 1);
+        }
+      }
+    }
+
+    function removeOption(state, option) {
+      removeStateOptionByName(state.name, option.name);
+      removeSavedStateOptionByName(state.name, option.name);
+
+      leoStorage.setSavedStates(_savedStates);
+
+      activateStateOption(_states[0].name, _states[0].options[0].name);
+    }
+
+    function getRecordedStates() {
       var requestsArr = _requestsLog
-          .map(function (req) {
-            var state = fetchStatesByUrlAndMethod(req.url, req.verb);
-            return {
-              name: state ? state.name : req.verb + " " + req.url,
-              verb: req.verb,
-              url: req.url,
-              options: [{
-                name: req.status >= 200 && req.status < 300 ? 'Success' : 'Failure',
-                status: req.status,
-                data: req.data
-              }]
-            }
-          });
+        .map(function (req) {
+          var state = fetchStatesByUrlAndMethod(req.url, req.verb);
+          return {
+            name: state ? state.name : req.verb + " " + req.url,
+            verb: req.verb,
+            url: req.url,
+            options: [{
+              name: req.status >= 200 && req.status < 300 ? 'Success' : 'Failure',
+              status: req.status,
+              data: req.data
+            }]
+          }
+        });
       console.log(angular.toJson(requestsArr, true));
       return requestsArr;
     }

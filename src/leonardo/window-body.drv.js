@@ -159,13 +159,13 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
   };
 
   this.saveEditedState = function() {
-    leoConfiguration.addSavedState(this.editedState);
+    leoConfiguration.addOrUpdateSavedState(this.editedState);
     this.closeEditedState();
-  }
+  };
 
   this.closeEditedState = function() {
     this.editedState = null;
-  }
+  };
 
   this.states = leoConfiguration.getStates();
 
@@ -191,14 +191,19 @@ function LeoWindowBody($scope, leoConfiguration, $timeout) {
     this.updateState(state);
   }.bind(this);
 
+
   this.updateState = function (state) {
     if (state.active) {
       leoConfiguration.activateStateOption(state.name, state.activeOption.name);
     } else {
       leoConfiguration.deactivateState(state.name);
     }
-  };
 
+    if (this.selectedState === state) {
+      this.editState(state);
+    }
+
+  };
 
   this.activateScenario = function (scenario) {
     this.activeScenario = scenario;
