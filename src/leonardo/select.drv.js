@@ -37,7 +37,9 @@ function LeoSelectController($document) {
     self.onChange({state: self.state});
   };
 
-  this.removeOption = function(option) {
+  this.removeOption = function($event, option) {
+    $event.preventDefault();
+    $event.stopPropagation();
     self.onDelete({state: self.state, option: option});
   };
 

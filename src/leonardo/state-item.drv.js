@@ -27,7 +27,9 @@ function LeoStateItem() {
     });
   };
 
-  this.removeState = function () {
+  this.removeState = function ($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
     self.onRemoveState({
       state: this.state
     });
