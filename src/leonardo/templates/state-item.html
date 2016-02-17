@@ -1,7 +1,7 @@
 <div>
   <div class="onoffswitch">
     <input ng-checked="leoStateItem.state.active" class="onoffswitch-checkbox" id="{{leoStateItem.state.name}}" type="checkbox" name="{{leoStateItem.state.name}}" value="{{leoStateItem.state.name}}">
-    <label class="onoffswitch-label" for="{{leoStateItem.state.name}}" ng-click="leoStateItem.toggleClick(state)">
+    <label class="onoffswitch-label" for="{{leoStateItem.state.name}}" ng-click="leoStateItem.toggleClick($event)">
     <span class="onoffswitch-inner"></span>
       <span class="onoffswitch-switch"></span>
     </label>

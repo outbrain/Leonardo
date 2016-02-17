@@ -19,9 +19,11 @@ angular.module('leonardo').directive('leoStateItem', function () {
 function LeoStateItem() {
   var self = this;
 
-  this.toggleClick = function () {
+  this.toggleClick = function ($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
     self.onToggleClick({
-      state: this.state
+      state: self.state
     });
   }
 
