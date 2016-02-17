@@ -89,12 +89,16 @@
     }
 
     .request-item {
-      &:hover {
-        background: #F2F2F2;
-      }
       cursor: pointer;
       &:nth-child(even) {
         background: #F2F2F2;
+      }
+      &:hover {
+        background: rgba(47, 204, 255, 0.32);
+      }
+      &.selected {
+        background: #A6A6A6;
+        color: white;
       }
     }
   }

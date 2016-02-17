@@ -1,0 +1,30 @@
+<div>
+  <div class="onoffswitch">
+    <input ng-checked="leoStateItem.state.active" class="onoffswitch-checkbox" id="{{leoStateItem.state.name}}" type="checkbox" name="{{leoStateItem.state.name}}" value="{{leoStateItem.state.name}}">
+    <label class="onoffswitch-label" for="{{leoStateItem.state.name}}" ng-click="leoStateItem.toggleClick($event)">
+    <span class="onoffswitch-inner"></span>
+      <span class="onoffswitch-switch"></span>
+    </label>
+  </div>
+</div>
+<div ng-if="!leoStateItem.ajaxState" class="leo-request-verb non-ajax">None-Ajax</div>
+<div ng-if="leoStateItem.ajaxState">
+  <div class="leo-request-verb {{leoStateItem.state.verb.toLowerCase()}}">
+    {{leoStateItem.state.verb}}
+  </div>
+  <div>
+    <h4>{{state.name}}</h4>
+  </div>
+</div>
+<div class="leo-expand">
+  <span ng-if="leoStateItem.ajaxState" class="url">{{leoStateItem.state.url}}</span>
+  <h4 ng-if="!leoStateItem.ajaxState">{{state.name}}</h4>
+</div>
+<div>
+  <!--<select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="leoWindowBody.updateState(state)"></select>-->
+  <leo-select state="leoStateItem.state"
+              disabled="!leoStateItem.state.active"
+              on-change="leoStateItem.updateState()"
+              on-delete="leoStateItem.removeOption(state,option)"></leo-select>
+</div>
+<button ng-click="leoStateItem.removeState()" title="Remove State">Remove</button>
