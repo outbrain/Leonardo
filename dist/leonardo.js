@@ -3290,7 +3290,7 @@ try {
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('state-item.html',
-    '<div><div class="onoffswitch"><input ng-checked="leoStateItem.state.active" class="onoffswitch-checkbox" id="{{leoStateItem.state.name}}" type="checkbox" name="{{leoStateItem.state.name}}" value="{{leoStateItem.state.name}}"> <label class="onoffswitch-label" for="{{leoStateItem.state.name}}" ng-click="leoStateItem.toggleClick($event)"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div ng-if="!leoStateItem.ajaxState" class="leo-request-verb non-ajax">None-Ajax</div><div ng-if="leoStateItem.ajaxState"><div class="leo-request-verb {{leoStateItem.state.verb.toLowerCase()}}">{{leoStateItem.state.verb}}</div></div><div class="leo-expand"><h4>{{leoStateItem.state.name}}</h4><span ng-if="leoStateItem.ajaxState" class="url">{{leoStateItem.state.url}}</span></div><div><leo-select state="leoStateItem.state" disabled="!leoStateItem.state.active" on-change="leoStateItem.updateState(state)" on-delete="leoStateItem.removeOption(state,option)"></leo-select></div><button ng-click="leoStateItem.removeState($event)" title="Remove State">Remove</button>');
+    '<div><div class="onoffswitch"><input ng-checked="leoStateItem.state.active" class="onoffswitch-checkbox" id="{{leoStateItem.state.name}}" type="checkbox" name="{{leoStateItem.state.name}}" value="{{leoStateItem.state.name}}"> <label class="onoffswitch-label" for="{{leoStateItem.state.name}}" ng-click="leoStateItem.toggleClick($event)"><span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span></label></div></div><div ng-if="!leoStateItem.ajaxState" class="leo-request-verb non-ajax">Custom</div><div ng-if="leoStateItem.ajaxState"><div class="leo-request-verb {{leoStateItem.state.verb.toLowerCase()}}">{{leoStateItem.state.verb}}</div></div><div class="leo-expand"><h4>{{leoStateItem.state.name}}</h4><span ng-if="leoStateItem.ajaxState" class="url">{{leoStateItem.state.url}}</span></div><div><leo-select state="leoStateItem.state" disabled="!leoStateItem.state.active" on-change="leoStateItem.updateState(state)" on-delete="leoStateItem.removeOption(state,option)"></leo-select></div><button ng-click="leoStateItem.removeState($event)" title="Remove State">Remove</button>');
 }]);
 })();
 
@@ -3449,7 +3449,7 @@ module.run(['$templateCache', function($templateCache) {
 "  top: 0;\n" +
 "  left: 0;\n" +
 "  right: 0;\n" +
-"  border-bottom: 1px solid #ccc;\n" +
+"  border-bottom: 1px solid #cccccc;\n" +
 "  display: inline-block;\n" +
 "  min-height: 44px;\n" +
 "}\n" +
@@ -3523,13 +3523,18 @@ module.run(['$templateCache', function($templateCache) {
 "  margin-left: 0;\n" +
 "}\n" +
 ".leonardo-window .states-filter-wrapper .states-filter-label {\n" +
-"  display: block;\n" +
+"  display: inline;\n" +
 "}\n" +
 ".leonardo-window .states-filter-wrapper .states-filter {\n" +
 "  height: 28px;\n" +
 "  font-size: 16px;\n" +
 "  width: 200px;\n" +
 "  outline: none;\n" +
+"  margin-bottom: 8px;\n" +
+"}\n" +
+".leonardo-window .states-filter-wrapper #filter {\n" +
+"  border-width: 0 0 1px 0;\n" +
+"  border-color: #666;\n" +
 "}\n" +
 ".pull-top-closed .leonardo-window {\n" +
 "  z-index: -4;\n" +
@@ -3679,7 +3684,7 @@ module.run(['$templateCache', function($templateCache) {
 "}\n" +
 ".leonardo-recorder .leo-list {\n" +
 "  flex: 3;\n" +
-"  border-right: 1px solid #ccc;\n" +
+"  border-right: 1px solid #cccccc;\n" +
 "}\n" +
 ".leonardo-recorder .leo-list ul {\n" +
 "  padding: 0;\n" +
@@ -3690,7 +3695,7 @@ module.run(['$templateCache', function($templateCache) {
 "}\n" +
 ".leonardo-recorder .leo-list leo-request .leo-list-item {\n" +
 "  display: flex;\n" +
-"  border-bottom: 1px solid #ccc;\n" +
+"  border-bottom: 1px solid #cccccc;\n" +
 "  text-decoration: none;\n" +
 "  color: #555;\n" +
 "  padding: 5px;\n" +
@@ -3709,7 +3714,7 @@ module.run(['$templateCache', function($templateCache) {
 "}\n" +
 ".leonardo-recorder .leo-detail .leo-detail-header {\n" +
 "  padding: 0 5px;\n" +
-"  border-bottom: 1px solid #ccc;\n" +
+"  border-bottom: 1px solid #cccccc;\n" +
 "}\n" +
 ".leonardo-recorder .leo-detail .leo-detail-header > div {\n" +
 "  margin-bottom: 10px;\n" +
@@ -3773,7 +3778,7 @@ module.run(['$templateCache', function($templateCache) {
 "  display: inline-block;\n" +
 "  padding: 3px 10px;\n" +
 "  float: right;\n" +
-"  font-size: small;\n" +
+"  font-size: 12px;\n" +
 "  margin: 0 2px;\n" +
 "  color: white;\n" +
 "  justify-content: flex-end;\n" +
@@ -3792,10 +3797,10 @@ module.run(['$templateCache', function($templateCache) {
 "  background: #000;\n" +
 "  color: #fff;\n" +
 "  text-align: center;\n" +
-"  width: 80px;\n" +
+"  width: 60px;\n" +
 "  height: 25px;\n" +
 "  line-height: 25px;\n" +
-"  font-size: 14px;\n" +
+"  font-size: 12px;\n" +
 "}\n" +
 ".leo-request-verb.post {\n" +
 "  background: orange;\n" +
@@ -3813,7 +3818,7 @@ module.run(['$templateCache', function($templateCache) {
 "  background: blue;\n" +
 "}\n" +
 ".leo-request-new {\n" +
-"  background: #3B6ACA;\n" +
+"  background: #3b6aca;\n" +
 "}\n" +
 ".leo-request-mocked {\n" +
 "  background: #219161;\n" +
