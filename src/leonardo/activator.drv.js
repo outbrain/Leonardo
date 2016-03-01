@@ -68,6 +68,7 @@ function LeoActivator($scope, $document) {
     if (!document.body.classList.contains('pull-top')) {
       document.body.classList.add('pull-top');
       document.body.classList.remove('pull-top-closed');
+      document.getElementById('filter').focus();
     }
     else {
       document.body.classList.remove('pull-top');
