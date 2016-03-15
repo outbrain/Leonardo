@@ -3450,7 +3450,7 @@ module.run(['$templateCache', function($templateCache) {
 "  top: 0;\n" +
 "  left: 0;\n" +
 "  right: 0;\n" +
-"  border-bottom: 1px solid #ccc;\n" +
+"  border-bottom: 1px solid #cccccc;\n" +
 "  display: inline-block;\n" +
 "  min-height: 44px;\n" +
 "}\n" +
@@ -3685,7 +3685,7 @@ module.run(['$templateCache', function($templateCache) {
 "}\n" +
 ".leonardo-recorder .leo-list {\n" +
 "  flex: 3;\n" +
-"  border-right: 1px solid #ccc;\n" +
+"  border-right: 1px solid #cccccc;\n" +
 "}\n" +
 ".leonardo-recorder .leo-list ul {\n" +
 "  padding: 0;\n" +
@@ -3696,7 +3696,7 @@ module.run(['$templateCache', function($templateCache) {
 "}\n" +
 ".leonardo-recorder .leo-list leo-request .leo-list-item {\n" +
 "  display: flex;\n" +
-"  border-bottom: 1px solid #ccc;\n" +
+"  border-bottom: 1px solid #cccccc;\n" +
 "  text-decoration: none;\n" +
 "  color: #555;\n" +
 "  padding: 5px;\n" +
@@ -3715,7 +3715,7 @@ module.run(['$templateCache', function($templateCache) {
 "}\n" +
 ".leonardo-recorder .leo-detail .leo-detail-header {\n" +
 "  padding: 0 5px;\n" +
-"  border-bottom: 1px solid #ccc;\n" +
+"  border-bottom: 1px solid #cccccc;\n" +
 "}\n" +
 ".leonardo-recorder .leo-detail .leo-detail-header > div {\n" +
 "  margin-bottom: 10px;\n" +
@@ -3819,7 +3819,7 @@ module.run(['$templateCache', function($templateCache) {
 "  background: blue;\n" +
 "}\n" +
 ".leo-request-new {\n" +
-"  background: #3B6ACA;\n" +
+"  background: #3b6aca;\n" +
 "}\n" +
 ".leo-request-mocked {\n" +
 "  background: #219161;\n" +
