@@ -2283,7 +2283,7 @@ angular.module('leonardo', ['leonardo.templates'])
             activeOption = leoConfiguration.getActiveStateOption(state.name);
 
         if (!!activeOption) {
-          var responseData = angular.isFunction(activeOption.data) ? activeOption.data() : activeOption.data;
+          var responseData = angular.isFunction(activeOption.data) ? activeOption.data(request) : activeOption.data;
           request.respond(activeOption.status, { "Content-Type": "application/json" }, JSON.stringify(responseData));
           leoConfiguration._logRequest(request.method, request.url, responseData, activeOption.status);
         } else {
