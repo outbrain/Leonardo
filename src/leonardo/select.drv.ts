@@ -48,7 +48,9 @@ class LeoSelectController {
     this.onChange({state: this.state});
   };
 
-  removeOption (option) {
+  removeOption ($event, option) {
+    $event.preventDefault();
+    $event.stopPropagation();
     this.onDelete({state: this.state, option: option});
   };
 

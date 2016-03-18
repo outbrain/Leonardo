@@ -24,4 +24,4 @@
               on-change="leoStateItem.updateState(state)"
               on-delete="leoStateItem.removeOption(state,option)"></leo-select>
 </div>
-<button ng-click="leoStateItem.removeState()" title="Remove State">Remove</button>
+<button ng-click="leoStateItem.removeState($event)" title="Remove State">Remove</button>

@@ -31,7 +31,9 @@ class LeoStateItem {
     });
   };
 
-  removeState () {
+  removeState ($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
     this.onRemoveState({
       state: this.state
     });
