@@ -1,4 +1,6 @@
-angular.module('leonardo').directive('leoSelect', [function leoSelectDirective() {
+import IDirective = angular.IDirective;
+
+export function leoSelect():IDirective {
   return {
     restrict: 'E',
     templateUrl: 'select.html',
@@ -11,58 +13,67 @@ angular.module('leonardo').directive('leoSelect', [function leoSelectDirective()
     controller: LeoSelectController,
     bindToController: true,
     controllerAs: 'leoSelect',
-    link: function(scope, elm, attr, ctrl) {
+    link: function(scope, elm, attr, ctrl: LeoSelectController) {
       ctrl.setScope(scope);
     }
   }
-}]);
+}
 
-LeoSelectController.count = 0;
-LeoSelectController.$inject = ['$document'];
-function LeoSelectController($document) {
-  var self = this;
-  this.entityId = ++LeoSelectController.count;
-  this.open = false;
-  this.scope = null;
+class LeoSelectController {
+  $inject = ['$document'];
+  private entityId;
+  private static count = 0;
+  private open;
+  private scope;
+  private state;
+  onChange: Function;
+  onDelete: Function;
+  disabled: Function;
 
-  this.setScope = function(scope) {
-    self.scope = scope;
+  constructor(private $document) {
+    this.entityId = ++LeoSelectController.count;
+    this.open = false;
+    this.scope = null;
+  }
+
+  setScope (scope) {
+    this.scope = scope;
   };
 
-  this.selectOption = function($event, option) {
+  selectOption ($event, option) {
     $event.preventDefault();
     $event.stopPropagation();
-    self.state.activeOption = option;
-    self.open = false;
-    self.onChange({state: self.state});
+    this.state.activeOption = option;
+    this.open = false;
+    this.onChange({state: this.state});
   };
 
-  this.removeOption = function(option) {
-    self.onDelete({state: self.state, option: option});
+  removeOption (option) {
+    this.onDelete({state: this.state, option: option});
   };
 
-  this.toggle = function($event) {
+  toggle ($event) {
     $event.preventDefault();
     $event.stopPropagation();
-    if (!self.disabled()) self.open = !self.open;
-    if (self.open) attachEvent();
+    if (!this.disabled()) this.open = !this.open;
+    if (this.open) this.attachEvent();
   };
 
-  var clickEvent = function(event) {
+  clickEvent (event) {
     var className = event.target.getAttribute('class');
-    if (!className || className.indexOf('leo-dropdown-entity-'+self.entityId) == -1) {
-      self.scope.$apply(function() {
-        self.open = false;
+    if (!className || className.indexOf('leo-dropdown-entity-' + this.entityId) == -1) {
+      this.scope.$apply(() => {
+        this.open = false;
       });
-      removeEvent();
+      this.removeEvent();
     }
+  }
+
+  attachEvent () {
+    this.$document.bind('click', this.clickEvent);
   };
 
-  var attachEvent = function() {
-    $document.bind('click', clickEvent);
-  };
-
-  var removeEvent = function() {
-    $document.unbind('click', clickEvent);
+  removeEvent () {
+    this.$document.unbind('click', this.clickEvent);
   };
 }

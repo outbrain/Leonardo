@@ -1,40 +1,41 @@
-angular.module('leonardo').factory('leoStorage', ['$rootScope', '$window', '$leonardo', function storageService($rootScope, $window, $leonardo) {
-  var APP_PREFIX = $leonardo.getAppPrefix() + '_',
-      STATES_STORE_KEY = APP_PREFIX + 'leonardo-states',
-      SAVED_STATES_KEY = APP_PREFIX + 'leonardo-unregistered-states';
-  function _getItem(key) {
-    var item = $window.localStorage.getItem(key);
+export class Storage {
+  $inject = ['$rootScope', '$window', '$leonardo'];
+  private APP_PREFIX;
+  private STATES_STORE_KEY;
+  private SAVED_STATES_KEY;
+
+  constructor(private $rootScope, private $window, private $leonardo) {
+      this.APP_PREFIX = `${$leonardo.getAppPrefix()}_`;
+      this.STATES_STORE_KEY = `${this.APP_PREFIX}leonardo-states`;
+      this.SAVED_STATES_KEY = `${this.APP_PREFIX}leonardo-unregistered-states`;
+
+  }
+  _getItem (key) {
+    var item = this.$window.localStorage.getItem(key);
     if (!item) {
       return null;
     }
     return angular.fromJson(item);
   }
 
-  function _setItem(key, data) {
-    $window.localStorage.setItem(key, angular.toJson(data));
+  _setItem(key, data) {
+    this.$window.localStorage.setItem(key, angular.toJson(data));
   }
 
-  function getStates() {
-    return _getItem(STATES_STORE_KEY) || {};
+  getStates() {
+    return this._getItem(this.STATES_STORE_KEY) || {};
   }
 
-  function setStates(states) {
-    _setItem(STATES_STORE_KEY, states);
-    $rootScope.$emit('leonardo:setStates');
+  setStates(states) {
+    this._setItem(this.STATES_STORE_KEY, states);
+    this.$rootScope.$emit('leonardo:setStates');
   }
 
-  function getSavedStates() {
-    return _getItem(SAVED_STATES_KEY) || [];
+  getSavedStates() {
+    return this._getItem(this.SAVED_STATES_KEY) || [];
   }
 
-  function setSavedStates(states) {
-    _setItem(SAVED_STATES_KEY, states);
+  setSavedStates(states) {
+    this._setItem(this.SAVED_STATES_KEY, states);
   }
-
-  return {
-    setStates: setStates,
-    getStates: getStates,
-    getSavedStates: getSavedStates,
-    setSavedStates: setSavedStates
-  };
-}]);
+};

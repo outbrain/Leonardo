@@ -1,16 +1,17 @@
-angular.module('leonardo').provider('$leonardo', function LeonardoProvider() {
-    var pref = '';
+import IServiceProvider = angular.IServiceProvider;
 
-    this.setAppPrefix = function (prefix) {
-        pref = prefix;
+export class LeonardoProvider implements IServiceProvider {
+    prefix:string = '';
+
+    setAppPrefix (prefix:string) {
+        this.prefix = prefix;
     };
 
-    this.$get = [function leonardoProvider() {
-
+    $get:any[] = [function leonardoProvider() {
         return {
             getAppPrefix: function () {
-                return pref;
+                return this.prefix;
             }
         };
     }];
-});
+}
