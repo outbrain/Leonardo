@@ -59,7 +59,7 @@ gulp.task('build:js', function(){
       [
         './src/leonardo/sinon.js',
         './tmp/leonardo-ts.js',
-        './src/leonardo/alert.js',
+        './src/leonardo/separator.js',
         './tmp/leonardo.templates.min.js',
         './tmp/leonardo.css.js'
       ])

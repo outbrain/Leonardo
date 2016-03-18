@@ -4,8 +4,7 @@
     "module": "commonjs",
     "noImplicitAny": false,
     "removeComments": true,
-    "preserveConstEnums": true,
-    "sourceMap": true
+    "preserveConstEnums": true
   },
   "exclude": [
     "node_modules"
