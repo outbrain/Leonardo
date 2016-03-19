@@ -142,7 +142,8 @@ function typescript(sourceFolder, sourceFile, watch) {
         },
         tsify: {
           "target": "ES5",
-          "removeComments": true
+          "removeComments": true,
+          "noImplicitAny": false
         }
       }
     }

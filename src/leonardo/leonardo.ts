@@ -74,5 +74,3 @@ declare var exports;
 if (typeof module !== "undefined" && typeof exports !== "undefined" && module.exports === exports) {
   module.exports = 'leonardo';
 }
-
-console.log('loaded');
