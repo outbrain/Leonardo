@@ -292,7 +292,7 @@ export function leoConfiguration (leoStorage, $rootScope: IRootScopeService) {
         _state.options.push(option);
       }
 
-      $rootScope.$broadcast('leonardo:stateChanged');
+      $rootScope.$broadcast('leonardo:stateChanged', _state);
     }
   }
 
