@@ -1,5 +1,6 @@
 <div class="leo-drop-down leo-dropdown-entity-{{leoSelect.entityId}}" ng-disabled="leoSelect.disabled()">
-  <div ng-click="leoSelect.toggle($event)" class="leo-drop-down-selected leo-dropdown-entity-{{leoSelect.entityId}}">
+  <div ng-click="leoSelect.toggle($event)" class="leo-drop-down-selected leo-dropdown-entity-{{leoSelect.entityId}}"
+    title="{{leoSelect.state.activeOption.name}}">
     {{leoSelect.state.activeOption.name}}
     <span class="leo-drop-down-icon">+</span>
   </div>
@@ -8,8 +9,8 @@
     <span class="leo-drop-down-item"
          ng-repeat="option in leoSelect.state.options"
          ng-click="leoSelect.selectOption($event, option)">
-      <span class="leo-delete"  ng-click="leoSelect.removeOption($event, option)">x</span>
-      <span class="leo-drop-down-item-name">{{option.name}}</span>
+      <span class="leo-delete"  ng-click="leoSelect.removeOption($event, option)">×</span>
+      <span class="leo-drop-down-item-name" title="{{option.name}}">{{option.name}}</span>
     </div>
   </div>
 </div>
