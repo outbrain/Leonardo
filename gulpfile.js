@@ -123,13 +123,12 @@ gulp.task('watch', "Watch file changes and auto compile for development", ['buil
 //});
 
 gulp.task('build:scripts', 'transpile es whatever to es5', function () {
-  return typescript('./src/leonardo/', 'leonardo.ts', false);
+  return typescript('./src/leonardo/', 'leonardo.ts', true);
 });
 
 gulp.task("default", "Runs help task", ["help"], function() {});
 
 function typescript(sourceFolder, sourceFile, watch) {
-
   let taskConfig = {
     client: {
       outDir: path.join('tmp'),
@@ -148,16 +147,14 @@ function typescript(sourceFolder, sourceFile, watch) {
       }
     }
   };
+
   let opts = Object.assign({}, watchify.args, taskConfig.client.options.browserify);
   let b = browserify(opts);
-
-
   if (watch) {
     b = watchify(b);
   }
 
   b.plugin(tsify, taskConfig.client.options.tsify);
-
   b.on('update', bundle); // on any dep update, runs the bundler
   b.on('log', console.log); // output build logs to terminal
 
