@@ -1,4 +1,4 @@
-angular.module('leonardo').directive('leoStateItem', function () {
+export function leoStateItem () {
   return {
     restrict: 'E',
     templateUrl: 'state-item.html',
@@ -14,36 +14,40 @@ angular.module('leonardo').directive('leoStateItem', function () {
     bindToController: true,
     controller: LeoStateItem
   };
-});
+}
 
-function LeoStateItem() {
-  var self = this;
+class LeoStateItem {
+  private state;
+  public onToggleClick: Function;
+  public onRemoveState: Function;
+  public onRemoveOption: Function;
+  public onOptionChanged: Function;
 
-  this.toggleClick = function ($event) {
+  toggleClick ($event) {
     $event.preventDefault();
     $event.stopPropagation();
-    self.onToggleClick({
-      state: self.state
-    });
-  };
-
-  this.removeState = function ($event) {
-    $event.preventDefault();
-    $event.stopPropagation();
-    self.onRemoveState({
+    this.onToggleClick({
       state: this.state
     });
   };
 
-  this.removeOption = function (state, option) {
-    self.onRemoveOption({
+  removeState ($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    this.onRemoveState({
+      state: this.state
+    });
+  };
+
+  removeOption (state, option) {
+    this.onRemoveOption({
       state: state,
       option: option
     });
   };
 
-  this.updateState = function (state) {
-    self.onOptionChanged({
+  updateState (state) {
+    this.onOptionChanged({
       state: state
     });
   }
