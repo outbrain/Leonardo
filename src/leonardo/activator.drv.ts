@@ -50,7 +50,7 @@ leoActivator.$inject = ['$compile'];
 class LeoActivator {
   isLeonardoVisible = true;
   activeTab = 'scenarios';
-
+  static $inject = ['$scope', '$document'];
   constructor ($scope, $document) {
     $document.on('keypress', (e) => {
 

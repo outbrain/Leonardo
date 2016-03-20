@@ -20,7 +20,6 @@ export function leoSelect():IDirective {
 }
 
 class LeoSelectController {
-  $inject = ['$document'];
   private entityId;
   private static count = 0;
   private open;
@@ -29,6 +28,8 @@ class LeoSelectController {
   onChange: Function;
   onDelete: Function;
   disabled: Function;
+
+  static $inject = ['$document'];
 
   constructor(private $document) {
     this.entityId = ++LeoSelectController.count;

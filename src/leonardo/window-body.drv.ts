@@ -60,7 +60,6 @@ export function windowBodyDirective($http, leoConfiguration) {
 
 class LeoWindowBody {
   editedState:any;
-  $inject = ['$scope', 'leoConfiguration', '$timeout'];
   states: any[];
   private detail: {
     option: string;
@@ -77,6 +76,7 @@ class LeoWindowBody {
   private requests: any[];
   private exportStates;
 
+  static $inject = ['$scope', 'leoConfiguration', '$timeout'];
   constructor(private $scope, private leoConfiguration, private $timeout) {
     this.detail = {
       option: 'success',
