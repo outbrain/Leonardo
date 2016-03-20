@@ -34,6 +34,9 @@
     },
     "angularjs/legacy/angular-scenario-1.2.d.ts": {
       "commit": "ab2462147a313f69e7118625cfcce21c005fa4af"
+    },
+    "jasmine/jasmine.d.ts": {
+      "commit": "6766ed1d0faf02ede9e2edf2e66bbb2388c825ec"
     }
   }
 }
