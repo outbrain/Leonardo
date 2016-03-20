@@ -35,7 +35,8 @@
       </div>
     </div>
     <div ng-switch-when="export" class="leonardo-export" style="padding: 30px">
-      <button class="copyClipboardBtn" ngclipboard data-clipboard-target="#exportedCode"> Copy To Clipboard  </button>
+      <button class="exportButtons" ngclipboard data-clipboard-target="#exportedCode"> Copy To Clipboard  </button>
+      <button class="exportButtons" ng-click="leoWindowBody.downloadCode()"> Download Code </button>
       <code contenteditable ng-init="leoWindowBody.getStatesForExport()">
 
         <div id="exportedCode">
