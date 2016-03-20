@@ -11,7 +11,7 @@ import {windowBodyDirective} from './window-body.drv';
 
 declare var sinon;
 
-angular.module('leonardo', ['leonardo.templates'])
+angular.module('leonardo', ['leonardo.templates', 'ngclipboard'])
   .directive('leoActivator', leoActivator)
   .directive('leoRequest', leoRequest)
   .directive('leoSelect', leoSelect)

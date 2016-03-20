@@ -58,6 +58,7 @@ gulp.task('build:js', function(){
   return gulp.src(
       [
         './src/leonardo/sinon.js',
+        './src/leonardo/ngclipboard.js',
         './tmp/leonardo-ts.js',
         './src/leonardo/separator.js',
         './tmp/leonardo.templates.min.js',
