@@ -75,6 +75,7 @@ class LeoWindowBody {
   private activeScenario;
   private requests: any[];
   private exportStates;
+  private codeWrapper;
 
   static $inject = ['$scope', 'leoConfiguration', '$timeout'];
 
@@ -258,4 +259,18 @@ class LeoWindowBody {
   getStatesForExport() {
     this.exportStates = this.leoConfiguration.getStates();
   }
+
+  downloadCode(){
+    this.codeWrapper = document.getElementById("exportedCode");
+    let codeToStr;
+    if (this.codeWrapper.innerText){
+      codeToStr = this.codeWrapper.innerText;
+    }
+    else if (XMLSerializer){
+      codeToStr = new XMLSerializer().serializeToString(this.codeWrapper);
+    }
+    window.open('data:application/octet-stream;filename=Leonardo-States.txt,' + encodeURIComponent(codeToStr), 'Leonardo-States.txt');
+
+  }
+
 }
