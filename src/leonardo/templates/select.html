@@ -6,9 +6,10 @@
   </div>
 
   <div ng-show="leoSelect.open" class="leo-drop-down-items">
-    <span class="leo-drop-down-item"
+    <div class="leo-drop-down-item"
          ng-repeat="option in leoSelect.state.options"
          ng-click="leoSelect.selectOption($event, option)">
+      <span class="leo-local-storage" ng-if="option.from_local"></span>
       <span class="leo-delete"  ng-click="leoSelect.removeOption($event, option)">×</span>
       <span class="leo-drop-down-item-name" title="{{option.name}}">{{option.name}}</span>
     </div>
