@@ -17,7 +17,8 @@ var gulp = require('gulp'),
   browserify = require('browserify'),
   tsify = require('tsify'),
   watchify = require('watchify'),
-  css2js = require("gulp-css2js");
+  css2js = require("gulp-css2js"),
+  Server = require('karma').Server;
 
 require("gulp-help")(gulp);
 
@@ -109,6 +110,12 @@ gulp.task('serve', "Serve files after build and watch", ['build', 'watch'], func
 
 gulp.task('watch', "Watch file changes and auto compile for development", ['build'], function () {
   gulp.watch(["index.html", "./src/leonardo/**/*"], ['build']);
+});
+
+gulp.task('test', "run unit tests", [], function (done) {
+  return new Server({
+    configFile: __dirname + '/test/unit/karma.conf.js'
+  }, function() {done();}).start();
 });
 
 

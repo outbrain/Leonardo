@@ -2,7 +2,7 @@ import IRootScopeService = angular.IRootScopeService;
 
 leoConfiguration.$inject = ['leoStorage', '$rootScope'];
 
-export function leoConfiguration (leoStorage, $rootScope: IRootScopeService) {
+export function leoConfiguration (leoStorage, $rootScope: any) {
   var _states = [],
     _scenarios = {},
     _requestsLog = [],
