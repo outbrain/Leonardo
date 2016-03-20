@@ -20,11 +20,11 @@ var gulp = require('gulp'),
 
 require("gulp-help")(gulp);
 
-gulp.task('clean:tmp', function() {
+gulp.task('clean:tmp', false, function() {
   del(['tmp/**/*']);
 });
 
-gulp.task('clean:dist', function() {
+gulp.task('clean:dist', false, function() {
   del(['dist/**/*']);
 });
 
@@ -53,7 +53,7 @@ gulp.task("build:templates", false, function () {
       .pipe(gulp.dest('./tmp'));
 });
 
-gulp.task('build:js', function(){
+gulp.task('build:js', "bundle css, js and js-ts", function(){
   return gulp.src(
       [
         './src/leonardo/sinon.js',
@@ -66,14 +66,14 @@ gulp.task('build:js', function(){
       .pipe(gulp.dest('./tmp'));
 });
 
-gulp.task('copy:dist', function() {
+gulp.task('copy:dist', false, function() {
   return gulp.src([
     "./tmp/leonardo.js"
   ])
   .pipe(gulp.dest('./dist'))
 });
 
-gulp.task('build', function(cb) {
+gulp.task('build', "build all from scratch", function(cb) {
   runSequence(
     'clean:dist',
     'clean:tmp',
@@ -85,7 +85,18 @@ gulp.task('build', function(cb) {
     cb);
 });
 
-gulp.task('build:less:full', function(cb) {
+gulp.task('build:partial', "build without typescript", function(cb) {
+  runSequence(
+    'clean:dist',
+    'clean:tmp',
+    'build:less',
+    'build:templates',
+    'build:js',
+    'copy:dist',
+    cb);
+});
+
+gulp.task('build:less:full', "build less", function(cb) {
   runSequence(
     'build:less',
     'build:js',
@@ -93,16 +104,15 @@ gulp.task('build:less:full', function(cb) {
     cb);
 });
 
-gulp.task('build:ts:full', function(cb) {
+gulp.task('build:ts', "build typescript", function(cb) {
   runSequence(
-    'build:scripts',
     'build:js',
     'copy:dist',
     cb);
 });
 
 
-gulp.task('build:templates:full', function(cb) {
+gulp.task('build:templates:full', "build templates", function(cb) {
   runSequence(
     'build:templates',
     'build:js',
@@ -123,7 +133,7 @@ function mockServerMiddleware(route) {
 }
 
 
-gulp.task('serve', "Serve files after build and watch", ['build', 'watch'], function () {
+gulp.task('serve', "Serve files after build and watch", ['build:partial','watch'], function () {
   gulp.src('')
     .pipe(webserver({
       livereload: {
@@ -138,25 +148,19 @@ gulp.task('serve', "Serve files after build and watch", ['build', 'watch'], func
     }));
 });
 
-gulp.task('watch', "Watch file changes and auto compile for development", ['build'], function () {
+gulp.task('watch', "Watch file changes and auto compile for development", ['build:scripts:watch-incremental'], function () {
   gulp.watch(["./src/leonardo/**/*.less"], ['build:less:full']);
-  gulp.watch(["./src/leonardo/**/*.ts"], ['build:ts:full']);
+  gulp.watch(["./tmp/leonardo-ts.js"], ['build:ts']);
   gulp.watch(["./src/leonardo/**/*.html", "!index.html"], ['build:templates:full']);
   gulp.watch(["index.html"], ['build']);
 });
 
 
-//gulp.task('build:scripts', 'transpile es whatever to es5', function () {
-//  let tsProject = ts.createProject('tsconfig.json');
-//
-//  let tsResult = gulp.src('src/leonardo/leonardo.ts')
-//    .pipe(ts(tsProject));
-//
-//  return tsResult.js
-//    .pipe(gulp.dest('./dist'));
-//});
-
 gulp.task('build:scripts', 'transpile es whatever to es5', function () {
+  return typescript('./src/leonardo/', 'leonardo.ts', false);
+});
+
+gulp.task('build:scripts:watch-incremental', 'transpile es whatever to es5 with ts incremental build', function () {
   return typescript('./src/leonardo/', 'leonardo.ts', true);
 });
 
