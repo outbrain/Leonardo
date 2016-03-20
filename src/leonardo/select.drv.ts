@@ -1,6 +1,6 @@
 import IDirective = angular.IDirective;
 
-export function leoSelect():IDirective {
+export function leoSelect(): IDirective {
   return {
     restrict: 'E',
     templateUrl: 'select.html',
@@ -13,9 +13,6 @@ export function leoSelect():IDirective {
     controller: LeoSelectController,
     bindToController: true,
     controllerAs: 'leoSelect',
-    link: function(scope, elm, attr, ctrl: LeoSelectController) {
-      ctrl.setScope(scope);
-    }
   }
 }
 
@@ -29,19 +26,15 @@ class LeoSelectController {
   onDelete: Function;
   disabled: Function;
 
-  static $inject = ['$document'];
+  static $inject = ['$document', '$scope'];
 
-  constructor(private $document) {
+  constructor(private $document, private $scope) {
     this.entityId = ++LeoSelectController.count;
     this.open = false;
     this.scope = null;
   }
 
-  setScope (scope) {
-    this.scope = scope;
-  };
-
-  selectOption ($event, option) {
+  selectOption($event, option) {
     $event.preventDefault();
     $event.stopPropagation();
     this.state.activeOption = option;
@@ -49,36 +42,32 @@ class LeoSelectController {
     this.onChange({state: this.state});
   };
 
-  removeOption ($event, option) {
+  removeOption($event, option) {
     $event.preventDefault();
     $event.stopPropagation();
     this.onDelete({state: this.state, option: option});
   };
 
-  toggle ($event) {
-    $event.preventDefault();
-    $event.stopPropagation();
+  toggle($event) {
     if (!this.disabled()) this.open = !this.open;
     if (this.open) this.attachEvent();
   };
 
-  clickEvent (event) {
+  clickEvent(event) {
     var className = event.target.getAttribute('class');
     if (!className || className.indexOf('leo-dropdown-entity-' + this.entityId) == -1) {
-      if (this.scope) {
-        this.scope.$apply(() => {
-          this.open = false;
-        });
-      }
+      this.$scope.$apply(() => {
+        this.open = false;
+      });
       this.removeEvent();
     }
   }
 
-  attachEvent () {
-    this.$document.bind('click', this.clickEvent);
+  attachEvent() {
+    this.$document.bind('click', this.clickEvent.bind(this));
   };
 
-  removeEvent () {
+  removeEvent() {
     this.$document.unbind('click', this.clickEvent);
   };
 }

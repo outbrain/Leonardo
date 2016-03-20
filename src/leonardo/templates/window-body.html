@@ -78,7 +78,7 @@
             on-option-changed="leoWindowBody.updateState(state, option)"
             on-remove-option="leoWindowBody.removeOption(state,option)"
             on-remove-state="leoWindowBody.removeState(state)"
-            ng-click="leoWindowBody.stateItemSelected(state)"></leo-state-item>
+            on-edit-click="leoWindowBody.stateItemSelected(state$)"></leo-state-item>
         </li>
         <li
           class="request-item"
@@ -92,7 +92,7 @@
             on-option-changed="leoWindowBody.updateState(state, option)"
             on-remove-option="leoWindowBody.removeOption(state,option)"
             on-remove-state="leoWindowBody.removeState(state)"
-            ng-click="leoWindowBody.stateItemSelected(state)"></leo-state-item>
+            on-edit-click="leoWindowBody.stateItemSelected(state$)"></leo-state-item>
         </li>
         <li ng-show="!ajaxReuslts.length && !nonAjaxState.length">No Results Found</li>
       </ul>
