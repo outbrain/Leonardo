@@ -1,4 +1,6 @@
-angular.module('leonardo').directive('leoRequest', function () {
+import IDirective = angular.IDirective;
+
+export function leoRequest ():IDirective {
   return {
     restrict: 'E',
     templateUrl: 'request.html',
@@ -10,10 +12,12 @@ angular.module('leonardo').directive('leoRequest', function () {
     bindToController: true,
     controller: LeoRequest
   };
-});
+};
 
-function LeoRequest() {
-  this.select = function () {
+class LeoRequest {
+  onSelect:Function;
+
+  select() {
     this.onSelect();
   }
 }
