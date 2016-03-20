@@ -1,5 +1,5 @@
 export class Storage {
-  $inject = ['$rootScope', '$window', '$leonardo'];
+  static $inject = ['$rootScope', '$window', '$leonardo'];
   private APP_PREFIX;
   private STATES_STORE_KEY;
   private SAVED_STATES_KEY;

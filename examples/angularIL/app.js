@@ -2,7 +2,8 @@
 angular.module('angular-il', ['ui.router', 'leonardo'])
 //<!-- else -->
 //angular.module('angular-il', ['ui.router'])
-  .config(function ($compileProvider, $urlRouterProvider, $stateProvider, types, charactersList) {
+  .config(['$compileProvider','$urlRouterProvider','$stateProvider','types','charactersList',
+    function ($compileProvider, $urlRouterProvider, $stateProvider, types, charactersList) {
     $compileProvider.debugInfoEnabled(false);
 
     $urlRouterProvider.otherwise(function ($injector) {
@@ -21,7 +22,7 @@ angular.module('angular-il', ['ui.router', 'leonardo'])
       .state('login', {
         templateUrl: 'login.html',
         controllerAs: 'login',
-        controller: function ($rootScope, $http, $state) {
+        controller: ['$rootScope', '$http', '$state', function ($rootScope, $http, $state) {
           this.login = function () {
             $rootScope.loading = true;
             $http({
@@ -37,12 +38,12 @@ angular.module('angular-il', ['ui.router', 'leonardo'])
               $rootScope.loading = false;
             });
           }
-        }
+        }]
       })
       .state('characters', {
         templateUrl: 'characters.html',
         controllerAs: 'characters',
-        controller: function ($http, $rootScope, $scope, $state, characters) {
+        controller: ['$rootScope', '$http', '$state', '$scope', 'characters', function($rootScope, $http, $state, $scope, characters) {
           this.type = 'turtles';
           this.size = 'big';
           if (characters instanceof Array) {
@@ -83,26 +84,26 @@ angular.module('angular-il', ['ui.router', 'leonardo'])
             this.names = types[value];
             this.name = this.names[0];
           }.bind(this));
-        },
+        }],
         resolve: {
-          characters: function ($http) {
+          characters: ['$http', function ($http) {
             return $http.get('/characters').then(function(res){
               return res.data;
             }).catch(function (res) {
               return (res.data && res.data.msg) || res.status;
             });
-          }
+          }]
         }
       })
       .state('complete', {
         templateUrl: 'complete.html',
-        controller: function ($scope, $timeout) {
+        controller: ['$scope', '$timeout', function ($scope, $timeout) {
           $timeout(function () {
             $scope.done = true;
           }, 20);
-        }
+        }]
       });
-  })
+  }])
   .constant('types',   {
     turtles: ['leonardo', 'donatelo', 'michelangelo', 'refael', 'splinter'],
     enemies: ['shredder', 'krang', 'bebop', 'rocksteady']
