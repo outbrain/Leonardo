@@ -56,7 +56,7 @@ export function leoConfiguration (leoStorage, $rootScope: IRootScopeService) {
       return angular.copy(state);
     });
 
-    statesCopy.forEach(function (state) {
+    statesCopy.forEach(function (state:any) {
       var option = activeStates[state.name];
       state.active = !!option && option.active;
       state.activeOption = !!option ?
@@ -89,7 +89,7 @@ export function leoConfiguration (leoStorage, $rootScope: IRootScopeService) {
     return (state && state.active && findStateOption(name)) || null;
   }
 
-  function addState(stateObj) {
+  function addState(stateObj, overrideOption) {
     stateObj.options.forEach(function (option) {
       upsert({
         state: stateObj.name,
@@ -99,30 +99,30 @@ export function leoConfiguration (leoStorage, $rootScope: IRootScopeService) {
         status: option.status,
         data: option.data,
         delay: option.delay
-      });
+      }, overrideOption);
     });
 
     $rootScope.$broadcast('leonardo:stateChanged', stateObj);
   }
 
-  function addStates(statesArr) {
+  function addStates(statesArr, overrideOption = false) {
     if (angular.isArray(statesArr)) {
       statesArr.forEach(function (stateObj) {
-        addState(stateObj);
+        addState(stateObj, overrideOption);
       });
     } else {
       console.warn('leonardo: addStates should get an array');
     }
   }
 
-  function upsert(stateObj) {
-    var verb = stateObj.verb || 'GET',
-      state = stateObj.state,
-      name = stateObj.name,
-      url = stateObj.url,
-      status = stateObj.status || 200,
-      data = angular.isDefined(stateObj.data) ? stateObj.data : {},
-      delay = stateObj.delay || 0;
+  function upsert(configObj, overrideOption) {
+    var verb = configObj.verb || 'GET',
+      state = configObj.state,
+      name = configObj.name,
+      url = configObj.url,
+      status = configObj.status || 200,
+      data = angular.isDefined(configObj.data) ? configObj.data : {},
+      delay = configObj.delay || 0;
     var defaultState = {};
 
     var defaultOption = {};
@@ -150,17 +150,25 @@ export function leoConfiguration (leoStorage, $rootScope: IRootScopeService) {
 
     var option = stateItem.options.filter(function (_option) {
         return _option.name === name
-      })[0] || defaultOption;
+      })[0];
 
-    angular.extend(option, {
-      name: name,
-      status: status,
-      data: data,
-      delay: delay
-    });
+    if (overrideOption && option) {
+      angular.extend(option, {
+        name: name,
+        status: status,
+        data: data,
+        delay: delay
+      });
+    }
+    else if (!option) {
+      angular.extend(defaultOption, {
+        name: name,
+        status: status,
+        data: data,
+        delay: delay
+      });
 
-    if (option === defaultOption) {
-      stateItem.options.push(option);
+      stateItem.options.push(defaultOption);
     }
   }
 
@@ -236,20 +244,19 @@ export function leoConfiguration (leoStorage, $rootScope: IRootScopeService) {
 
   function loadSavedStates() {
     _savedStates = leoStorage.getSavedStates();
-    addStates(_savedStates);
+    addStates(_savedStates, true);
   }
 
   function addSavedState(state) {
     _savedStates.push(state);
     leoStorage.setSavedStates(_savedStates);
-    addState(state);
+    addState(state, true);
   }
 
   function addOrUpdateSavedState(state) {
     var option = state.activeOption;
 
     //update local storage state
-
     var _savedState = _savedStates.filter(function(_state) {
       return _state.name === state.name;
     })[0];
@@ -270,10 +277,11 @@ export function leoConfiguration (leoStorage, $rootScope: IRootScopeService) {
 
       leoStorage.setSavedStates(_savedStates);
     }
-
+    else {
+      addSavedState(state);
+    }
 
     //update in memory state
-
     var _state = _states.filter(function(__state) {
       return __state.name === state.name;
     })[0];
@@ -292,7 +300,7 @@ export function leoConfiguration (leoStorage, $rootScope: IRootScopeService) {
         _state.options.push(option);
       }
 
-      $rootScope.$broadcast('leonardo:stateChanged');
+      $rootScope.$broadcast('leonardo:stateChanged', _state);
     }
   }
 

@@ -1,6 +1,6 @@
-windowBodyDirective.$inject = ['$http', 'leoConfiguration', '$timeout'];
+windowBodyDirective.$inject = ['$http', 'leoConfiguration'];
 
-export function windowBodyDirective($http, leoConfiguration, $timeout) {
+export function windowBodyDirective($http, leoConfiguration) {
   return {
     restrict: 'E',
     templateUrl: 'window-body.html',
@@ -111,10 +111,10 @@ class LeoWindowBody {
       }
     });
 
-    $scope.$on('leonardo:stateChanged', (event, stateObj) => {
+    $scope.$on('leonardo:stateChanged', (event, stateObj) => {  
       this.states = leoConfiguration.getStates();
 
-      var state = this.states.filter(function (state) {
+      var state:any = this.states.filter(function (state) {
         return state.name === stateObj.name;
       })[0];
 
@@ -135,7 +135,7 @@ class LeoWindowBody {
 
 
   removeOptionByName (stateName, optionName) {
-    this.states.forEach(function(state, i){
+    this.states.forEach(function(state:any, i){
       if (state.name === stateName){
         state.options = state.options.filter(function(option) {
           return option.name !== optionName;
@@ -192,7 +192,7 @@ class LeoWindowBody {
   };
 
   deactivate () {
-    this.states.forEach(function (state) {
+    this.states.forEach(function (state:any) {
       state.active = false;
     });
     this.leoConfiguration.deactivateAllStates();
@@ -235,9 +235,9 @@ class LeoWindowBody {
     }
   }
 
-  requestSelect (request) {
+  requestSelect (request:any) {
     var optionName;
-    this.requests.forEach(function (request) {
+    this.requests.forEach(function (request:any) {
       request.active = false;
     });
 
