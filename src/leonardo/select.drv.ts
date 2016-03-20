@@ -65,9 +65,11 @@ class LeoSelectController {
   clickEvent (event) {
     var className = event.target.getAttribute('class');
     if (!className || className.indexOf('leo-dropdown-entity-' + this.entityId) == -1) {
-      this.scope.$apply(() => {
-        this.open = false;
-      });
+      if (this.scope) {
+        this.scope.$apply(() => {
+          this.open = false;
+        });
+      }
       this.removeEvent();
     }
   }
