@@ -7,7 +7,6 @@ var gulp = require('gulp'),
   runSequence = require('run-sequence'),
   less = require('gulp-less'),
   rename = require("gulp-rename"),
-  minifyCSS = require('gulp-minify-css'),
   minifyHtml = require("gulp-minify-html"),
   ngHtml2Js = require("gulp-ng-html2js"),
   concat = require('gulp-concat'),
@@ -21,11 +20,11 @@ var gulp = require('gulp'),
 
 require("gulp-help")(gulp);
 
-gulp.task('clean:tmp', function() {
+gulp.task('clean:tmp', false, function() {
   del(['tmp/**/*']);
 });
 
-gulp.task('clean:dist', function() {
+gulp.task('clean:dist', false, function() {
   del(['dist/**/*']);
 });
 
@@ -54,10 +53,11 @@ gulp.task("build:templates", false, function () {
       .pipe(gulp.dest('./tmp'));
 });
 
-gulp.task('build:js', function(){
+gulp.task('build:js', "bundle css, js and js-ts", function(){
   return gulp.src(
       [
         './src/leonardo/sinon.js',
+        './src/leonardo/ngclipboard.js',
         './tmp/leonardo-ts.js',
         './src/leonardo/separator.js',
         './tmp/leonardo.templates.min.js',
@@ -67,24 +67,61 @@ gulp.task('build:js', function(){
       .pipe(gulp.dest('./tmp'));
 });
 
-gulp.task('copy:dist', function() {
+gulp.task('copy:dist', false, function() {
   return gulp.src([
     "./tmp/leonardo.js"
   ])
   .pipe(gulp.dest('./dist'))
 });
 
-gulp.task('build', function(cb) {
+gulp.task('build', "build all from scratch", function(cb) {
   runSequence(
+    'clean:dist',
+    'clean:tmp',
     'build:less',
     'build:templates',
     'build:scripts',
     'build:js',
-    'clean:dist',
     'copy:dist',
-    'clean:tmp',
     cb);
 });
+
+gulp.task('build:partial', "build without typescript", function(cb) {
+  runSequence(
+    'clean:dist',
+    'clean:tmp',
+    'build:less',
+    'build:templates',
+    'build:js',
+    'copy:dist',
+    cb);
+});
+
+gulp.task('build:less:full', "build less", function(cb) {
+  runSequence(
+    'build:less',
+    'build:js',
+    'copy:dist',
+    cb);
+});
+
+gulp.task('build:ts', "build typescript", function(cb) {
+  runSequence(
+    'build:js',
+    'copy:dist',
+    cb);
+});
+
+
+gulp.task('build:templates:full', "build templates", function(cb) {
+  runSequence(
+    'build:templates',
+    'build:js',
+    'copy:dist',
+    cb);
+});
+
+
 function mockServerMiddleware(route) {
   return function (req, res, next) {
     if (req.url === '/' || req.url.length > 15) {
@@ -97,32 +134,34 @@ function mockServerMiddleware(route) {
 }
 
 
-gulp.task('serve', "Serve files after build and watch", ['build', 'watch'], function () {
+gulp.task('serve', "Serve files after build and watch", ['build:partial','watch'], function () {
   gulp.src('')
     .pipe(webserver({
-      livereload: true,
+      livereload: {
+        enable: true,
+        filter: function(fileName) {
+          return !!fileName.match(/dist/);
+        }
+      },
       open: true,
       fallback: 'index.html',
       middleware: mockServerMiddleware('/')
     }));
 });
 
-gulp.task('watch', "Watch file changes and auto compile for development", ['build'], function () {
-  gulp.watch(["index.html", "./src/leonardo/**/*"], ['build']);
+gulp.task('watch', "Watch file changes and auto compile for development", ['build:scripts:watch-incremental'], function () {
+  gulp.watch(["./src/leonardo/**/*.less"], ['build:less:full']);
+  gulp.watch(["./tmp/leonardo-ts.js"], ['build:ts']);
+  gulp.watch(["./src/leonardo/**/*.html", "!index.html"], ['build:templates:full']);
+  gulp.watch(["index.html"], ['build']);
 });
 
 
-//gulp.task('build:scripts', 'transpile es whatever to es5', function () {
-//  let tsProject = ts.createProject('tsconfig.json');
-//
-//  let tsResult = gulp.src('src/leonardo/leonardo.ts')
-//    .pipe(ts(tsProject));
-//
-//  return tsResult.js
-//    .pipe(gulp.dest('./dist'));
-//});
-
 gulp.task('build:scripts', 'transpile es whatever to es5', function () {
+  return typescript('./src/leonardo/', 'leonardo.ts', false);
+});
+
+gulp.task('build:scripts:watch-incremental', 'transpile es whatever to es5 with ts incremental build', function () {
   return typescript('./src/leonardo/', 'leonardo.ts', true);
 });
 

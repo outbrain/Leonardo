@@ -32,7 +32,13 @@ export class Storage {
   }
 
   getSavedStates() {
-    return this._getItem(this.SAVED_STATES_KEY) || [];
+    var states = this._getItem(this.SAVED_STATES_KEY) || [];
+    states.forEach(function(state){
+      state.options.forEach(option => {
+        option.from_local = true;
+      })
+    });
+    return states;
   }
 
   setSavedStates(states) {

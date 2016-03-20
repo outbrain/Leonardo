@@ -13,7 +13,7 @@
     {{leoStateItem.state.verb}}
   </div>
 </div>
-<div class="leo-expand">
+<div class="leo-expand" ng-click="leoStateItem.editClick(leoStateItem.state)">
   <h4>{{leoStateItem.state.name}}</h4>
   <span ng-if="leoStateItem.ajaxState" class="url">{{leoStateItem.state.url}}</span>
 </div>

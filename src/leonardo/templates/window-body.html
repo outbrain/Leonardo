@@ -35,14 +35,17 @@
       </div>
     </div>
     <div ng-switch-when="export" class="leonardo-export" style="padding: 30px">
+      <button class="exportButtons" ngclipboard data-clipboard-target="#exportedCode"> Copy To Clipboard  </button>
+      <button class="exportButtons" ng-click="leoWindowBody.downloadCode()"> Download Code </button>
       <code contenteditable ng-init="leoWindowBody.getStatesForExport()">
 
-        <div>angular.module('leonardo').run(['leoConfiguration', function(leoConfiguration) {</div>
-
-        <div ng-repeat="state in leoWindowBody.exportStates">
-          <div style="margin-left: 10px">leoConfiguration.addStates([</div>
-          <pre style="margin-left: 20px">{{state | json}}</pre>
-          <div style="margin-left: 10px">])</div>
+        <div id="exportedCode">
+          <div>angular.module('leonardo').run(['leoConfiguration', function(leoConfiguration) {</div>
+          <div ng-repeat="state in leoWindowBody.exportStates">
+            <div style="margin-left: 10px">leoConfiguration.addStates([</div>
+            <pre style="margin-left: 20px">{{state | json}}</pre>
+            <div style="margin-left: 10px">])</div>
+          </div>
         </div>
 
         <div>}])</div>
@@ -78,7 +81,7 @@
             on-option-changed="leoWindowBody.updateState(state, option)"
             on-remove-option="leoWindowBody.removeOption(state,option)"
             on-remove-state="leoWindowBody.removeState(state)"
-            ng-click="leoWindowBody.stateItemSelected(state)"></leo-state-item>
+            on-edit-click="leoWindowBody.stateItemSelected(state$)"></leo-state-item>
         </li>
         <li
           class="request-item"
@@ -92,7 +95,7 @@
             on-option-changed="leoWindowBody.updateState(state, option)"
             on-remove-option="leoWindowBody.removeOption(state,option)"
             on-remove-state="leoWindowBody.removeState(state)"
-            ng-click="leoWindowBody.stateItemSelected(state)"></leo-state-item>
+            on-edit-click="leoWindowBody.stateItemSelected(state$)"></leo-state-item>
         </li>
         <li ng-show="!ajaxReuslts.length && !nonAjaxState.length">No Results Found</li>
       </ul>

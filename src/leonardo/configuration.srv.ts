@@ -90,12 +90,14 @@ export function leoConfiguration (leoStorage, $rootScope: IRootScopeService) {
   }
 
   function addState(stateObj, overrideOption) {
+
     stateObj.options.forEach(function (option) {
       upsert({
         state: stateObj.name,
         url: stateObj.url,
         verb: stateObj.verb,
         name: option.name,
+        from_local: !!overrideOption,
         status: option.status,
         data: option.data,
         delay: option.delay
@@ -119,6 +121,7 @@ export function leoConfiguration (leoStorage, $rootScope: IRootScopeService) {
     var verb = configObj.verb || 'GET',
       state = configObj.state,
       name = configObj.name,
+      from_local = configObj.from_local,
       url = configObj.url,
       status = configObj.status || 200,
       data = angular.isDefined(configObj.data) ? configObj.data : {},
@@ -155,6 +158,7 @@ export function leoConfiguration (leoStorage, $rootScope: IRootScopeService) {
     if (overrideOption && option) {
       angular.extend(option, {
         name: name,
+        from_local: from_local,
         status: status,
         data: data,
         delay: delay
@@ -163,6 +167,7 @@ export function leoConfiguration (leoStorage, $rootScope: IRootScopeService) {
     else if (!option) {
       angular.extend(defaultOption, {
         name: name,
+        from_local: from_local,
         status: status,
         data: data,
         delay: delay
