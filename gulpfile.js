@@ -7,7 +7,6 @@ var gulp = require('gulp'),
   runSequence = require('run-sequence'),
   less = require('gulp-less'),
   rename = require("gulp-rename"),
-  minifyCSS = require('gulp-minify-css'),
   minifyHtml = require("gulp-minify-html"),
   ngHtml2Js = require("gulp-ng-html2js"),
   concat = require('gulp-concat'),
@@ -76,15 +75,42 @@ gulp.task('copy:dist', function() {
 
 gulp.task('build', function(cb) {
   runSequence(
+    'clean:dist',
+    'clean:tmp',
     'build:less',
     'build:templates',
     'build:scripts',
     'build:js',
-    'clean:dist',
     'copy:dist',
-    'clean:tmp',
     cb);
 });
+
+gulp.task('build:less:full', function(cb) {
+  runSequence(
+    'build:less',
+    'build:js',
+    'copy:dist',
+    cb);
+});
+
+gulp.task('build:ts:full', function(cb) {
+  runSequence(
+    'build:scripts',
+    'build:js',
+    'copy:dist',
+    cb);
+});
+
+
+gulp.task('build:templates:full', function(cb) {
+  runSequence(
+    'build:templates',
+    'build:js',
+    'copy:dist',
+    cb);
+});
+
+
 function mockServerMiddleware(route) {
   return function (req, res, next) {
     if (req.url === '/' || req.url.length > 15) {
@@ -100,7 +126,12 @@ function mockServerMiddleware(route) {
 gulp.task('serve', "Serve files after build and watch", ['build', 'watch'], function () {
   gulp.src('')
     .pipe(webserver({
-      livereload: true,
+      livereload: {
+        enable: true,
+        filter: function(fileName) {
+          return !!fileName.match(/dist/);
+        }
+      },
       open: true,
       fallback: 'index.html',
       middleware: mockServerMiddleware('/')
@@ -108,7 +139,10 @@ gulp.task('serve', "Serve files after build and watch", ['build', 'watch'], func
 });
 
 gulp.task('watch', "Watch file changes and auto compile for development", ['build'], function () {
-  gulp.watch(["index.html", "./src/leonardo/**/*"], ['build']);
+  gulp.watch(["./src/leonardo/**/*.less"], ['build:less:full']);
+  gulp.watch(["./src/leonardo/**/*.ts"], ['build:ts:full']);
+  gulp.watch(["./src/leonardo/**/*.html", "!index.html"], ['build:templates:full']);
+  gulp.watch(["index.html"], ['build']);
 });
 
 
