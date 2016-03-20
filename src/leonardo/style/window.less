@@ -1,12 +1,25 @@
 @-webkit-keyframes leo-highlight-animation {
-  0% {background: none;}
-  20% {background: #f08222;}
-  100% {background: none;}
+  0% {
+    background: none;
+  }
+  20% {
+    background: #f08222;
+  }
+  100% {
+    background: none;
+  }
 }
+
 @keyframes leo-highlight-animation {
-  0% {background: none;}
-  20% {background: #f08222;}
-  100% {background: none;}
+  0% {
+    background: none;
+  }
+  20% {
+    background: #f08222;
+  }
+  100% {
+    background: none;
+  }
 }
 
 .leonardo-header {
@@ -18,7 +31,7 @@
   border-bottom: 1px solid @lightGray;
   display: inline-block;
   min-height: 44px;
-  
+
   .menu {
     font-size: 1.5em;
     color: @darkGray;
@@ -74,13 +87,27 @@
       -webkit-animation: leo-highlight-animation 1s linear 1;
       animation: leo-highlight-animation 1s linear 1;
     }
+
+    .request-item {
+      cursor: pointer;
+      &:nth-child(even) {
+        background: #F2F2F2;
+      }
+      &:hover {
+        background: rgba(47, 204, 255, 0.32);
+      }
+      &.selected {
+        background: #A6A6A6;
+        color: white;
+      }
+    }
   }
 
   .states-filter-wrapper {
     margin-left: 0;
 
     .states-filter-label {
-      display: block;
+      display: inline;
     }
 
     .states-filter {
@@ -88,6 +115,12 @@
       font-size: 16px;
       width: 200px;
       outline: none;
+      margin-bottom: 8px;
+    }
+
+    #filter {
+      border-width: 0 0 1px 0;
+      border-color: #666;
     }
   }
 
@@ -123,7 +156,6 @@
       text-align: center;
       flex-grow: 1;
       margin: 10px;
-      border-radius: 4px;
       border: 1px solid grey;
       font-size: 24px;
       cursor: pointer;
@@ -141,21 +173,17 @@
   }
 
   select {
-    height: 35px;
-    margin-left: 25px;
+    height: 25px;
   }
 
   button, input[type="button"], select {
     background: #219161;
     color: white;
     border: 0;
-    border-radius: 4px;
-    font-size: 14px;
+    font-size: 13px;
   }
 
   input [type="text"], textarea {
     border: 1px solid #dddddd;
-    border-radius: 2px;
   }
-
 }

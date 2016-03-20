@@ -33,7 +33,7 @@ $ bower install leonardo
 
 Angular (tested with v1.3)
 
-#### Load Leonardo script
+#### Add Leonardo script
 
 ```html
 <!DOCTYPE HTML>
@@ -44,18 +44,6 @@ Angular (tested with v1.3)
   //.....
   <script src="[bower_componenets|node_modules|other]/leonardo/dist/leonardo.js"></script>
 </body>
-</html>
-```
-
-#### Load Leonardo css
-
-```html
-<!DOCTYPE HTML>
-<html>
-<head>
-  //.....
-  <link rel="stylesheet" media="all" href="[bower_componenets|node_modules|other]/leonardo/dist/leonardo.min.css" />
-</head>
 </html>
 ```
 
@@ -130,52 +118,31 @@ Deactivates a specific state, when calling the state url request will pass throu
 ## Hide/Show Leonardo icon
 You can hide Leonardo activator icon by clicking `ctrl` + `shift` + `l`.
 
-## Documentation
-http://outbrain.github.io/Leonardo/docs/configuration.srv.html
-
 
 ## Running and contributing
 
-#### Compile
+
+#### Install dev dependencies
 
 `cd` into the project folder
 
 ```bash
-npm run compile
+npm install
 ```
 
-This compiles the code as well as documentation.
-
-#### Auto Recompile
-
-To automatically recompile the files on each change run
+#### Build
 
 ```bash
-npm run compile:watch
+gulp build
 ```
 
-Note that this does not recompile the documentation.
-
-Note that this does not auto-refreshes the browser.
-
-#### Compile Documentation
-
-Running `npm run compile` compiles the documentation. But if you need to recompile it later also,
-(for example when running with `gulp watch`) run
-
-```bash
-npm run compile:docs
-```
-
-#### Running
-
-Run local server and navigate to `index.html`.
-
-or `cd` into the project folder
+#### Run (and watch)
 
 ```bash
 gulp serve
 ```
+
+This will run the demo app (and auto-refresh the browser)
 
 ## License
 Copyright &copy; 2015 MIT License

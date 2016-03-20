@@ -6,11 +6,10 @@
           <leo-request
             ng-repeat="request in leoWindowBody.requests"
             request="request"
-            on-select="leoWindowBody.requestSelect(request)">
-          </leo-request>
+            on-select="leoWindowBody.requestSelect(request)" />
         </div>
       </div>
-      <div class="leo-detail">
+      <div class="leo-detail" ng-show="leoWindowBody.hasActiveOption()">
         <div class="leo-detail-header">
           <div ng-if="!leoWindowBody.detail.stateActive">
             <span>Add new state: </span>
@@ -67,56 +66,60 @@
             <input id="filter" class="states-filter" type="text" ng-model="leoWindowBody.filter">
           </div>
         </li>
-        <li class="leo-non-ajax"><h3>Non Ajax States</h3></li>
-        <li ng-show="!nonAjaxState.length">No Results Found</li>
-        <li ng-repeat="state in nonAjaxState = (leoWindowBody.states | filter:leoWindowBody.notHasUrl | filter:{name: leoWindowBody.filter}) track by $index">
-          <div>
-            <div class="onoffswitch">
-              <input ng-checked="state.active" class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}">
-              <label class="onoffswitch-label" for="{{state.name}}" ng-click="leoWindowBody.toggleState(state);">
-                <span class="onoffswitch-inner"></span>
-                <span class="onoffswitch-switch"></span>
-              </label>
-            </div>
-          </div>
-          <div class="leo-fixed-size"></div>
-          <div class="leo-expand">
-            <h4>{{state.name}}</h4>
-          </div>
-          <div>
-            <select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="leoWindowBody.updateState(state)"></select>
-          </div>
-          <button ng-click="leoWindowBody.removeState(state)" title="Remove State">Remove</button>
-          <button ng-click="leoWindowBody.editState(state)">Edit</button>
+        <li
+          class="request-item"
+          ng-repeat="state in nonAjaxState = (leoWindowBody.states | filter:leoWindowBody.notHasUrl | filter:{name: leoWindowBody.filter}) track by $index"
+          ng-class="{ 'leo-highlight': state.highlight, selected:leoWindowBody.selectedState === state}">
+          <leo-state-item
+            ng-class="{}"
+            state="state"
+            ajax-state="false"
+            on-toggle-click="leoWindowBody.toggleState(state)"
+            on-option-changed="leoWindowBody.updateState(state, option)"
+            on-remove-option="leoWindowBody.removeOption(state,option)"
+            on-remove-state="leoWindowBody.removeState(state)"
+            ng-click="leoWindowBody.stateItemSelected(state)"></leo-state-item>
         </li>
-        <li><h3>Ajax States</h3></li>
-        <li ng-show="!ajaxReuslts.length">No Results Found</li>
-        <li ng-repeat="state in ajaxReuslts = (leoWindowBody.states | filter:leoWindowBody.hasUrl | filter:{name: leoWindowBody.filter}) track by $index" ng-class="{ 'leo-highlight': state.highlight }">
-          <div>
-            <div class="onoffswitch">
-              <input ng-checked="state.active"  class="onoffswitch-checkbox" id="{{state.name}}" type="checkbox" name="{{state.name}}" value="{{state.name}}">
-              <label class="onoffswitch-label" for="{{state.name}}" ng-click="leoWindowBody.toggleState(state);">
-                <span class="onoffswitch-inner"></span>
-                <span class="onoffswitch-switch"></span>
-              </label>
-            </div>
-          </div>
-          <div class="leo-fixed-size leo-request-verb {{state.verb.toLowerCase()}}">
-            {{state.verb}}
-          </div>
-          <div>
-            <h4>{{state.name}}</h4>
-          </div>
-          <div class="leo-expand">
-            {{state.url}}
-          </div>
-          <div>
-            <select ng-disabled="!state.active" ng-model="state.activeOption" ng-options="option.name for option in state.options" ng-change="leoWindowBody.updateState(state)"></select>
-          </div>
-          <button ng-click="leoWindowBody.removeState(state)" title="Remove State">Remove</button>
-          <button ng-click="leoWindowBody.editState(state)">Edit</button>
+        <li
+          class="request-item"
+          ng-repeat="state in ajaxReuslts = (leoWindowBody.states | filter:leoWindowBody.hasUrl | filter:{name: leoWindowBody.filter}) track by $index"
+          ng-class="{ 'leo-highlight': state.highlight, selected:leoWindowBody.selectedState === state}">
+          <leo-state-item
+            ng-class="{}"
+            state="state"
+            ajax-state="true"
+            on-toggle-click="leoWindowBody.toggleState(state)"
+            on-option-changed="leoWindowBody.updateState(state, option)"
+            on-remove-option="leoWindowBody.removeOption(state,option)"
+            on-remove-state="leoWindowBody.removeState(state)"
+            ng-click="leoWindowBody.stateItemSelected(state)"></leo-state-item>
         </li>
+        <li ng-show="!ajaxReuslts.length && !nonAjaxState.length">No Results Found</li>
       </ul>
+      <div class="edit-state" ng-class="{visible:!!leoWindowBody.editedState}">
+        <!--<p> {{ leoWindowBody.editedState | json : spacing}}</p>-->
+        <div class="leonardo-edit-option" ng-if="!!leoWindowBody.editedState">
+          <div class="leo-detail">
+            <div class="leo-detail-option">
+              <span class="title">Edit option <b>{{leoWindowBody.editedState.activeOption.name}}</b> for state <b>{{leoWindowBody.editedState.name}}</b></span>
+              <div>Status code: <input ng-model="leoWindowBody.editedState.activeOption.status"/></div>
+              <div>Delay: <input ng-model="leoWindowBody.editedState.activeOption.delay"/></div>
+              <div class="leo-detail-option-json">Response JSON:
+                <div class="leo-error">{{leoWindowBody.editedState.error}}</div>
+                <leo-json-formatter
+                  json-string="leoWindowBody.editedState.dataStringValue"
+                  on-error="leoWindowBody.onEditOptionJsonError(msg)"
+                  on-success="leoWindowBody.onEditOptionSuccess(value)" />
+              </div>
+            </div>
+
+            <div class="leo-action-row">
+              <button ng-click="leoWindowBody.saveEditedState()">Save</button>
+              <button ng-click="leoWindowBody.closeEditedState()">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div ng-switch-when="test" class="leonardo-test">
       <div>
