@@ -19,6 +19,7 @@ class JsonFormatterCtrl {
   private onSuccess: Function;
   private onError: Function;
 
+  static $inject = ['$scope'];
   constructor($scope) {
     $scope.$watch('jsonString', function () {
       this.valueChanged();
