@@ -90,6 +90,7 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
   }
 
   function addState(stateObj, overrideOption) {
+    console.log('enter add state');
 
     stateObj.options.forEach(function (option) {
       upsert({
