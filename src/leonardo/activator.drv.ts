@@ -12,7 +12,6 @@ export function leoActivator($compile: ICompileService):IDirective {
     controller: LeoActivator,
     bindToController: true,
     link: function(scope: IScope, elem: IAugmentedJQuery) {
-      console.log('enter link');
       var el = angular.element('<div ng-click="leonardo.activate()" class="leonardo-activator" ng-show="leonardo.isLeonardoVisible"></div>');
       var win = angular.element([
       '<div class="leonardo-window">',
