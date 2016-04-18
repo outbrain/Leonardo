@@ -13,7 +13,7 @@ export function windowBodyDirective($http, leoConfiguration) {
       var leoActivator = controllers[0];
       var leoWindowBody = controllers[1];
 
-      leoWindowBody.hasActiveOption = function(){
+      leoWindowBody.hasActiveOption = function () {
         return this.requests.filter(function (request) {
           return !!request.active;
         }).length;
@@ -59,7 +59,7 @@ export function windowBodyDirective($http, leoConfiguration) {
 
 
 class LeoWindowBody {
-  editedState:any;
+  editedState: any;
   states: any[];
   private detail: {
     option: string;
@@ -75,8 +75,10 @@ class LeoWindowBody {
   private activeScenario;
   private requests: any[];
   private exportStates;
+  private codeWrapper;
 
   static $inject = ['$scope', 'leoConfiguration', '$timeout'];
+
   constructor(private $scope, private leoConfiguration, private $timeout) {
     this.detail = {
       option: 'success',
@@ -111,10 +113,10 @@ class LeoWindowBody {
       }
     });
 
-    $scope.$on('leonardo:stateChanged', (event, stateObj) => {  
+    $scope.$on('leonardo:stateChanged', (event, stateObj) => {
       this.states = leoConfiguration.getStates();
 
-      var state:any = this.states.filter(function (state) {
+      var state: any = this.states.filter(function (state) {
         return state.name === stateObj.name;
       })[0];
 
@@ -127,17 +129,17 @@ class LeoWindowBody {
     });
   }
 
-  removeStateByName (name) {
-    this.states = this.states.filter(function(state) {
+  removeStateByName(name) {
+    this.states = this.states.filter(function (state) {
       return state.name !== name;
     });
   };
 
 
-  removeOptionByName (stateName, optionName) {
-    this.states.forEach(function(state:any, i){
-      if (state.name === stateName){
-        state.options = state.options.filter(function(option) {
+  removeOptionByName(stateName, optionName) {
+    this.states.forEach(function (state: any, i) {
+      if (state.name === stateName) {
+        state.options = state.options.filter(function (option) {
           return option.name !== optionName;
         });
       }
@@ -145,12 +147,12 @@ class LeoWindowBody {
   };
 
 
-  removeState (state){
+  removeState(state) {
     this.leoConfiguration.removeState(state);
     this.removeStateByName(state.name);
   };
 
-  removeOption (state, option){
+  removeOption(state, option) {
     if (state.options.length === 1) {
       this.removeState(state);
     } else {
@@ -160,51 +162,51 @@ class LeoWindowBody {
     }
   };
 
-  editState (state){
+  editState(state) {
     this.editedState = angular.copy(state);
     this.editedState.dataStringValue = JSON.stringify(this.editedState.activeOption.data);
   };
 
-  onEditOptionSuccess (str) {
+  onEditOptionSuccess(str) {
     this.editedState.activeOption.data = JSON.parse(str);
     this.editedState.error = '';
   };
 
-  onEditOptionJsonError (msg) {
+  onEditOptionJsonError(msg) {
     this.editedState.error = msg;
   };
 
-  saveEditedState () {
+  saveEditedState() {
     this.leoConfiguration.addOrUpdateSavedState(this.editedState);
     this.closeEditedState();
   };
 
-  closeEditedState () {
+  closeEditedState() {
     this.editedState = null;
   };
 
-  notHasUrl (option) {
+  notHasUrl(option) {
     return !option.url;
   };
 
-  hasUrl (option) {
+  hasUrl(option) {
     return !!option.url;
   };
 
-  deactivate () {
-    this.states.forEach(function (state:any) {
+  deactivate() {
+    this.states.forEach(function (state: any) {
       state.active = false;
     });
     this.leoConfiguration.deactivateAllStates();
   };
 
-  toggleState (state) {
+  toggleState(state) {
     state.active = !state.active;
     this.updateState(state);
   }
 
 
-  updateState (state) {
+  updateState(state) {
     if (state.active) {
       this.leoConfiguration.activateStateOption(state.name, state.activeOption.name);
     } else {
@@ -214,19 +216,15 @@ class LeoWindowBody {
     if (this.selectedState === state) {
       this.editState(state);
     }
-
   };
 
-  activateScenario (scenario) {
+  activateScenario(scenario) {
     this.activeScenario = scenario;
     this.leoConfiguration.setActiveScenario(scenario);
     this.states = this.leoConfiguration.getStates();
   }
 
-
-
-
-  stateItemSelected (state) {
+  stateItemSelected(state) {
     if (state === this.selectedState) {
       this.editedState = this.selectedState = null;
     } else {
@@ -235,9 +233,9 @@ class LeoWindowBody {
     }
   }
 
-  requestSelect (request:any) {
+  requestSelect(request: any) {
     var optionName;
-    this.requests.forEach(function (request:any) {
+    this.requests.forEach(function (request: any) {
       request.active = false;
     });
 
@@ -258,7 +256,21 @@ class LeoWindowBody {
     this.detail._unregisteredState = request;
   }
 
-  getStatesForExport () {
+  getStatesForExport() {
     this.exportStates = this.leoConfiguration.getStates();
   }
+
+  downloadCode(){
+    this.codeWrapper = document.getElementById("exportedCode");
+    let codeToStr;
+    if (this.codeWrapper.innerText){
+      codeToStr = this.codeWrapper.innerText;
+    }
+    else if (XMLSerializer){
+      codeToStr = new XMLSerializer().serializeToString(this.codeWrapper);
+    }
+    window.open('data:application/octet-stream;filename=Leonardo-States.txt,' + encodeURIComponent(codeToStr), 'Leonardo-States.txt');
+
+  }
+
 }

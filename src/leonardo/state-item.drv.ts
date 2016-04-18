@@ -8,7 +8,8 @@ export function leoStateItem () {
       onOptionChanged: '&',
       onRemoveState: '&',
       onRemoveOption: '&',
-      onToggleClick: '&'
+      onToggleClick: '&',
+      onEditClick: '&'
     },
     controllerAs: 'leoStateItem',
     bindToController: true,
@@ -22,6 +23,7 @@ class LeoStateItem {
   public onRemoveState: Function;
   public onRemoveOption: Function;
   public onOptionChanged: Function;
+  public onEditClick: Function;
 
   toggleClick ($event) {
     $event.preventDefault();
@@ -50,5 +52,9 @@ class LeoStateItem {
     this.onOptionChanged({
       state: state
     });
+  }
+
+  editClick(state$) {
+    this.onEditClick({state$: state$});
   }
 }
