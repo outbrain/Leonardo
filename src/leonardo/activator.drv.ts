@@ -12,9 +12,9 @@ export function leoActivator($compile: ICompileService):IDirective {
     controller: LeoActivator,
     bindToController: true,
     link: function(scope: IScope, elem: IAugmentedJQuery) {
-      var el = angular.element('<div ng-click="leonardo.activate()" class="leonardo-activator" ng-show="leonardo.isLeonardoVisible"></div>');
+      var el = angular.element('<div ng-click="leonardo.activate()" class="leonardo-activator" ng-if="leonardo.isLeonardoVisible"></div>');
       var win = angular.element([
-      '<div class="leonardo-window">',
+      '<div class="leonardo-window" ng-if="leonardo.isLeonardoWindowVisible">',
         '<div class="leonardo-header">',
           '<div class="menu">',
             '<ul>',
@@ -36,11 +36,6 @@ export function leoActivator($compile: ICompileService):IDirective {
       elem.append(el);
       elem.append(win);
 
-      win[0].addEventListener( 'webkitTransitionEnd', function() {
-        if (!document.body.classList.contains('pull-top')){
-          document.body.classList.add("pull-top-closed");
-        }
-      }, false );
     }
   };
 }
@@ -48,9 +43,10 @@ leoActivator.$inject = ['$compile'];
 
 class LeoActivator {
   isLeonardoVisible = true;
+  isLeonardoWindowVisible = false;
   activeTab = 'scenarios';
-  static $inject = ['$scope', '$document'];
-  constructor ($scope, $document) {
+  static $inject = ['$scope', '$document', '$timeout'];
+  constructor ($scope, private $document, private $timeout) {
     $document.on('keypress', (e) => {
 
       if (e.shiftKey && e.ctrlKey) {
@@ -74,13 +70,11 @@ class LeoActivator {
   }
 
   activate() {
-    if (!document.body.classList.contains('pull-top')) {
-      document.body.classList.add('pull-top');
-      document.body.classList.remove('pull-top-closed');
-      document.getElementById('filter').focus();
-    }
-    else {
-      document.body.classList.remove('pull-top');
+    this.isLeonardoWindowVisible = !this.isLeonardoWindowVisible;
+    if (this.isLeonardoWindowVisible) {
+      this.$timeout(() => {
+        this.$document[0].getElementById('filter').focus();
+      }, 0);
     }
   }
 }
