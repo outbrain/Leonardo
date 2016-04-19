@@ -3523,8 +3523,8 @@ module.run(['$templateCache', function($templateCache) {
 "  top: 0;\n" +
 "  right: 0;\n" +
 "  left: 0;\n" +
-"  bottom: 0;\n" +
-"  overflow: hidden;\n" +
+"  height: 100%;\n" +
+"  overflow: auto;\n" +
 "  background-color: white;\n" +
 "  z-index: 9999;\n" +
 "}\n" +
