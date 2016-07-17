@@ -193,4 +193,58 @@
   input [type="text"], textarea {
     border: 1px solid #dddddd;
   }
+
+  .save-scenario-btn {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .save-scenario-form {
+    position: absolute;
+    right: 5px;
+
+    > div {
+      position: relative;
+      padding: 10px;
+      background: white;
+      z-index: 1;
+      border: 1px solid black;
+      box-shadow: 4px 3px 5px 0 fade(black, 75);
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: -10px;
+        right: 10px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 5px 9px 5px;
+        border-color: transparent transparent black transparent;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: -9px;
+        right: 10px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 5px 10px 5px;
+        border-color: transparent transparent white transparent;
+      }
+
+      input {
+        height: 27px;
+        outline: none;
+      }
+
+      button {
+        outline: 0;
+        width: 60px;
+      }
+    }
+  }
 }

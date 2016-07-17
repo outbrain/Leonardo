@@ -58,15 +58,29 @@
           SCENARIOS
         </div>
         <ul>
-          <li ng-class="{ 'selected': scenario === leoWindowBody.activeScenario }" ng-repeat="scenario in leoWindowBody.scenarios" ng-click="leoWindowBody.activateScenario(scenario)">{{scenario}}</li>
+          <li ng-class="{ 'selected': scenario === leoWindowBody.activeScenario }"
+              ng-repeat="scenario in leoWindowBody.scenarios() track by $index"
+              ng-click="leoWindowBody.activateScenario(scenario)">{{scenario}}
+          </li>
         </ul>
       </div>
 
       <ul>
-        <li >
+        <li>
           <div class="states-filter-wrapper">
             <label for="filter" class="states-filter-label">Search for state</label>
             <input id="filter" class="states-filter" type="text" ng-model="leoWindowBody.filter">
+          </div>
+          <div class="save-scenario-btn">
+            <button ng-click="leoWindowBody.showAddState = !leoWindowBody.showAddState">+ Add Scenario</button>
+          </div>
+        </li>
+        <li class="save-scenario-form">
+          <div ng-if="leoWindowBody.showAddState">
+            <label>Scenario Name</label>
+            <input type="text" ng-model="leoWindowBody.newScenarioName" placeholder="Scenario Name" autofocus/>
+            <button ng-click="leoWindowBody.saveNewScenario()">Save</button>
+            <button ng-click="leoWindowBody.closeNewScenarioForm">Cancel</button>
           </div>
         </li>
         <li

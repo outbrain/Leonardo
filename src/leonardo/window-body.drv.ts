@@ -76,6 +76,8 @@ class LeoWindowBody {
   private requests: any[];
   private exportStates;
   private codeWrapper;
+  private showAddState: boolean = false;
+  private newScenarioName: string = '';
 
   static $inject = ['$scope', 'leoConfiguration', '$timeout'];
 
@@ -87,7 +89,7 @@ class LeoWindowBody {
     };
 
     this.states = this.leoConfiguration.getStates();
-    this.scenarios = this.leoConfiguration.getScenarios();
+    this.scenarios = this.leoConfiguration.getScenarios;
     this.requests = this.leoConfiguration.getRequestsLog();
 
     $scope.$watch('leoWindowBody.detail.value', (value) => {
@@ -135,7 +137,6 @@ class LeoWindowBody {
     });
   };
 
-
   removeOptionByName(stateName, optionName) {
     this.states.forEach(function (state: any, i) {
       if (state.name === stateName) {
@@ -145,7 +146,6 @@ class LeoWindowBody {
       }
     });
   };
-
 
   removeState(state) {
     this.leoConfiguration.removeState(state);
@@ -205,7 +205,6 @@ class LeoWindowBody {
     this.updateState(state);
   }
 
-
   updateState(state) {
     if (state.active) {
       this.leoConfiguration.activateStateOption(state.name, state.activeOption.name);
@@ -222,6 +221,30 @@ class LeoWindowBody {
     this.activeScenario = scenario;
     this.leoConfiguration.setActiveScenario(scenario);
     this.states = this.leoConfiguration.getStates();
+  }
+
+  saveNewScenario() {
+    const states = this.leoConfiguration.getStates()
+      .filter((state) => state.active)
+      .map((state: any) => {
+        return {
+          name: state.name,
+          option: state.activeOption.name
+        }
+      });
+    
+    this.leoConfiguration.addScenario({
+      name: this.newScenarioName,
+      states: states,
+      from_local: true
+    }, true);
+
+    this.closeNewScenarioForm();
+  }
+
+  closeNewScenarioForm() {
+    this.showAddState = false;
+    this.newScenarioName = '';
   }
 
   stateItemSelected(state) {
@@ -260,17 +283,16 @@ class LeoWindowBody {
     this.exportStates = this.leoConfiguration.getStates();
   }
 
-  downloadCode(){
+  downloadCode() {
     this.codeWrapper = document.getElementById("exportedCode");
     let codeToStr;
-    if (this.codeWrapper.innerText){
+    if (this.codeWrapper.innerText) {
       codeToStr = this.codeWrapper.innerText;
     }
-    else if (XMLSerializer){
+    else if (XMLSerializer) {
       codeToStr = new XMLSerializer().serializeToString(this.codeWrapper);
     }
     window.open('data:application/octet-stream;filename=Leonardo-States.txt,' + encodeURIComponent(codeToStr), 'Leonardo-States.txt');
-
   }
 
 }
