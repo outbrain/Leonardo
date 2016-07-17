@@ -6,6 +6,7 @@ import {leoRequest} from './request.drv';
 import {leoSelect} from './select.drv';
 import {leoStateItem} from './state-item.drv';
 import {Storage} from './storage.srv';
+import {apiExporter} from './api-exporter.srv';
 import {jsonFormatter} from './leo-json-formatter.drv';
 import {windowBodyDirective} from './window-body.drv';
 
@@ -19,6 +20,7 @@ angular.module('leonardo', ['leonardo.templates', 'ngclipboard'])
   .directive('leoJsonFormatter', jsonFormatter)
   .directive('leoWindowBody', windowBodyDirective)
   .service('leoStorage', Storage)
+  .service('leoApiExporter', apiExporter)
   .factory('leoConfiguration', leoConfiguration)
   .provider('$leonardo', LeonardoProvider)
   .run([
@@ -26,48 +28,53 @@ angular.module('leonardo', ['leonardo.templates', 'ngclipboard'])
     '$document',
     '$rootScope',
     '$compile',
-    '$timeout', function(leoConfiguration, $document, $rootScope, $compile, $timeout) {
-    var server = sinon.fakeServer.create({
-      autoRespond: true,
-      autoRespondAfter: 10
-    });
+    '$timeout',
+    'leoApiExporter',
+    function (leoConfiguration, $document, $rootScope, $compile, $timeout, leoApiExporter) {
+      var server = sinon.fakeServer.create({
+        autoRespond: true,
+        autoRespondAfter: 10
+      });
 
-    sinon.FakeXMLHttpRequest.useFilters = true;
-    sinon.FakeXMLHttpRequest.addFilter(function(method, url) {
-      if (url.indexOf('.html') > 0 && url.indexOf('template') >= 0) {
-        return true;
-      }
-      var state = leoConfiguration.fetchStatesByUrlAndMethod(url, method);
-      return !(state && state.active);
-    });
+      sinon.FakeXMLHttpRequest.useFilters = true;
+      sinon.FakeXMLHttpRequest.addFilter(function (method, url) {
+        if (url.indexOf('.html') > 0 && url.indexOf('template') >= 0) {
+          return true;
+        }
+        var state = leoConfiguration.fetchStatesByUrlAndMethod(url, method);
+        return !(state && state.active);
+      });
 
-    sinon.FakeXMLHttpRequest.onResponseEnd = function(xhr) {
-      var res = xhr.response;
-      try { res = JSON.parse(xhr.response); }
-      catch (e) {}
-      leoConfiguration._logRequest(xhr.method, xhr.url, res, xhr.status);
-    };
+      sinon.FakeXMLHttpRequest.onResponseEnd = function (xhr) {
+        var res = xhr.response;
+        try {
+          res = JSON.parse(xhr.response);
+        }
+        catch (e) {
+        }
+        leoConfiguration._logRequest(xhr.method, xhr.url, res, xhr.status);
+      };
 
-    server.respondWith(function(request) {
-      var state = leoConfiguration.fetchStatesByUrlAndMethod(request.url, request.method),
+      server.respondWith(function (request) {
+        var state = leoConfiguration.fetchStatesByUrlAndMethod(request.url, request.method),
           activeOption = leoConfiguration.getActiveStateOption(state.name);
 
-      if (!!activeOption) {
-        var responseData = angular.isFunction(activeOption.data) ? activeOption.data(request) : activeOption.data;
-        request.respond(activeOption.status, { "Content-Type": "application/json" }, JSON.stringify(responseData));
-        leoConfiguration._logRequest(request.method, request.url, responseData, activeOption.status);
-      } else {
-        console.warn('could not find a state for the following request', request);
-      }
-    });
-    leoConfiguration.loadSavedStates();
+        if (!!activeOption) {
+          var responseData = angular.isFunction(activeOption.data) ? activeOption.data(request) : activeOption.data;
+          request.respond(activeOption.status, {"Content-Type": "application/json"}, JSON.stringify(responseData));
+          leoConfiguration._logRequest(request.method, request.url, responseData, activeOption.status);
+        } else {
+          console.warn('could not find a state for the following request', request);
+        }
+      });
+      leoConfiguration.loadSavedStates();
 
-    var el = $compile('<div leo-activator></div>')($rootScope);
-    $timeout(function() {
-      var leonardoAppRoot = $document[0].querySelector('[leonardo-app]') || $document[0].body;
-      leonardoAppRoot.appendChild(el[0]);
-    });
-  }]);
+      var el = $compile('<div leo-activator></div>')($rootScope);
+      $timeout(function() {
+        var leonardoAppRoot = $document[0].querySelector('[leonardo-app]') || $document[0].body;
+        leonardoAppRoot.appendChild(el[0]);
+      });
+    }]);
 
 
 angular.element(document).ready(function() {
