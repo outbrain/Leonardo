@@ -3,14 +3,17 @@ export class Storage {
   private APP_PREFIX;
   private STATES_STORE_KEY;
   private SAVED_STATES_KEY;
+  private POSITION_KEY;
 
   constructor(private $rootScope, private $window, private $leonardo) {
-      this.APP_PREFIX = `${$leonardo.getAppPrefix()}_`;
-      this.STATES_STORE_KEY = `${this.APP_PREFIX}leonardo-states`;
-      this.SAVED_STATES_KEY = `${this.APP_PREFIX}leonardo-unregistered-states`;
+    this.APP_PREFIX = `${$leonardo.getAppPrefix()}_`;
+    this.STATES_STORE_KEY = `${this.APP_PREFIX}leonardo-states`;
+    this.SAVED_STATES_KEY = `${this.APP_PREFIX}leonardo-unregistered-states`;
+    this.POSITION_KEY = `${this.APP_PREFIX}leonardo-position`;
 
   }
-  _getItem (key) {
+
+  _getItem(key) {
     var item = this.$window.localStorage.getItem(key);
     if (!item) {
       return null;
@@ -33,7 +36,7 @@ export class Storage {
 
   getSavedStates() {
     var states = this._getItem(this.SAVED_STATES_KEY) || [];
-    states.forEach(function(state){
+    states.forEach(function (state) {
       state.options.forEach(option => {
         option.from_local = true;
       })
@@ -44,4 +47,15 @@ export class Storage {
   setSavedStates(states) {
     this._setItem(this.SAVED_STATES_KEY, states);
   }
-};
+
+  setSavedPosition(position) {
+    if(!position){
+      return;
+    }
+    this._setItem(this.POSITION_KEY, position);
+  }
+
+  getSavedPosition() {
+    return this._getItem(this.POSITION_KEY);
+  }
+}
