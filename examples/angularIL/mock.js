@@ -1,7 +1,7 @@
 
-angular.module('leonardo').run(['$rootScope', function ($rootScope) {
+angular.module('leonardo').run(['leoConfiguration', '$rootScope', function (leoConfiguration, $rootScope) {
 
-  Leonardo.addStates([
+  leoConfiguration.addStates([
     {
       "name": "Authenticate",
       "url": "/login",
@@ -16,7 +16,7 @@ angular.module('leonardo').run(['$rootScope', function ($rootScope) {
       ]
     }
   ]);
-  Leonardo.addStates([
+  leoConfiguration.addStates([
     {
       "name": "Login",
       "url": "/login",
@@ -49,7 +49,7 @@ angular.module('leonardo').run(['$rootScope', function ($rootScope) {
     }
   ]);
 
-  Leonardo.addStates([
+  leoConfiguration.addStates([
     {
       "name": "Fetch Character",
       "url": "/characters",
@@ -130,7 +130,7 @@ angular.module('leonardo').run(['$rootScope', function ($rootScope) {
       ]
     }
   ]);
-  Leonardo.addStates([
+  leoConfiguration.addStates([
     {
       "name": "Create Character",
       "url": "/character",
@@ -154,7 +154,7 @@ angular.module('leonardo').run(['$rootScope', function ($rootScope) {
     }
   ]);
 
-  Leonardo.addScenarios([
+  leoConfiguration.addScenarios([
     {
       name: 'Full flow logged In',
       states: [
@@ -174,17 +174,17 @@ angular.module('leonardo').run(['$rootScope', function ($rootScope) {
     }
   ]);
 
-  Leonardo.addState({
+  leoConfiguration.addState({
     name: 'debug',
     options: [
       {name: 'Enabled'}
     ]
   });
 
-  var debug = Leonardo.getActiveStateOption('debug');
+  var debug = leoConfiguration.getActiveStateOption('debug');
   var isDebug = debug && debug.name === 'Enabled';
-  Leonardo.onStateChange(function () {
-    var debug = Leonardo.getActiveStateOption('debug');
+  $rootScope.$on('leonardo:setStates', function () {
+    var debug = leoConfiguration.getActiveStateOption('debug');
     if (!isDebug && debug) {
       angular.reloadWithDebugInfo();
     }
@@ -192,11 +192,11 @@ angular.module('leonardo').run(['$rootScope', function ($rootScope) {
 }]);
 
 
-//angular.module('leonardo').run(['Leonardo', '$rootScope', function (Leonardo, $rootScope) {
-//  var debug = Leonardo.getState('debug');
+//angular.module('leonardo').run(['leoConfiguration', '$rootScope', function (leoConfiguration, $rootScope) {
+//  var debug = leoConfiguration.getState('debug');
 //  var isDebug = debug && debug.name === 'Enabled';
 //  $rootScope.$on('leonardo:setStates', function () {
-//    var debug = Leonardo.getState('debug');
+//    var debug = leoConfiguration.getState('debug');
 //    if (!isDebug && debug) {
 //      angular.reloadWithDebugInfo();
 //    }
