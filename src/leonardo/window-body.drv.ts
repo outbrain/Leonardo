@@ -257,7 +257,11 @@ class LeoWindowBody {
   }
 
   getStatesForExport() {
-    this.exportStates = this.leoConfiguration.getStates();
+    this.exportStates = this.leoConfiguration.getStates()
+      .map((state) => {
+        let {name, url, verb, options} = state;
+        return {name, url, verb, options};
+      });
   }
 
   downloadCode(){
