@@ -1938,7 +1938,7 @@ if (typeof sinon === "undefined") {
             server.respond();
           } else if (server.autoRespond && !server.responding) {
             var request = this;
-            leoConfiguration = leoConfiguration || angular.element(document.body).injector().get('leoConfiguration');
+            leoConfiguration = leoConfiguration || angular.element(document.querySelector('[leonardo-app]')).injector().get('leoConfiguration');
             var state = leoConfiguration.fetchStatesByUrlAndMethod(request.url, request.method);
             var delay;
             if(state && state.activeOption && state.activeOption.hasOwnProperty('delay')) {

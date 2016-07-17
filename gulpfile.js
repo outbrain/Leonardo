@@ -54,7 +54,14 @@ gulp.task("build:templates", false, function () {
       .pipe(gulp.dest('./tmp'));
 });
 
-gulp.task('build:js', "bundle css, js and js-ts", function(){
+gulp.task('build:js', "build angular and standalone js versions", function(cb){
+  runSequence(
+    'build:js:for:angular',
+    'build:js:standalone',
+    cb);
+});
+
+gulp.task('build:js:for:angular', "bundle css, js and js-ts", function(){
   return gulp.src(
       [
         './src/leonardo/sinon.js',
@@ -64,13 +71,24 @@ gulp.task('build:js', "bundle css, js and js-ts", function(){
         './tmp/leonardo.templates.min.js',
         './tmp/leonardo.css.js'
       ])
-      .pipe(concat('leonardo.js'))
-      .pipe(gulp.dest('./tmp'));
+      .pipe(concat('leonardo-for-angular.js'))
+      .pipe(gulp.dest('./tmp'))
+});
+
+gulp.task('build:js:standalone', "add angular to bundled js", function(){
+  return gulp.src(
+    [
+      './src/leonardo/angular.min.js',
+      './tmp/leonardo-for-angular.js'
+    ])
+    .pipe(concat('leonardo.js'))
+    .pipe(gulp.dest('./tmp'))
 });
 
 gulp.task('copy:dist', false, function() {
   return gulp.src([
-    "./tmp/leonardo.js"
+    "./tmp/leonardo.js",
+    "./tmp/leonardo-for-angular.js"
   ])
   .pipe(gulp.dest('./dist'))
 });

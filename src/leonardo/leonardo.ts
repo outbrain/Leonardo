@@ -64,9 +64,21 @@ angular.module('leonardo', ['leonardo.templates', 'ngclipboard'])
 
     var el = $compile('<div leo-activator></div>')($rootScope);
     $timeout(function() {
-      $document[0].body.appendChild(el[0]);
+      var leonardoAppRoot = $document[0].querySelector('[leonardo-app]') || $document[0].body;
+      leonardoAppRoot.appendChild(el[0]);
     });
   }]);
+
+
+angular.element(document).ready(function() {
+  var leonardoApp = document.querySelector('[leonardo-app]');
+  if (!leonardoApp) {
+    leonardoApp = document.createElement('div');
+    leonardoApp.setAttribute('leonardo-app','leonardo-app');
+    document.body.appendChild(leonardoApp);
+  }
+  angular.bootstrap(leonardoApp, ['leonardo']);
+});
 
 declare var module;
 declare var exports;
