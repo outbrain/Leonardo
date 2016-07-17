@@ -16,7 +16,7 @@ export function leoConfiguration(leoStorage, $rootScope: any) {
     getActiveStateOption: getActiveStateOption,
     getStates: fetchStates,
     deactivateState: deactivateState,
-    deactivateAllStates: deactivateAll,
+    toggleActivateAll: toggleActivateAll,
     activateStateOption: activateStateOption,
     addScenario: addScenario,
     addScenarios: addScenarios,
@@ -68,10 +68,10 @@ export function leoConfiguration(leoStorage, $rootScope: any) {
     return statesCopy;
   }
 
-  function deactivateAll() {
+  function toggleActivateAll(flag: boolean) {
     var statesStatus = leoStorage.getStates();
     Object.keys(statesStatus).forEach(function (stateKey) {
-      statesStatus[stateKey].active = false;
+      statesStatus[stateKey].active = flag;
     });
     leoStorage.setStates(statesStatus);
   }
@@ -220,7 +220,7 @@ export function leoConfiguration(leoStorage, $rootScope: any) {
       console.warn("leonardo: could not find scenario named " + name);
       return;
     }
-    deactivateAll();
+    toggleActivateAll(false);
     scenario.forEach(function (state) {
       upsertOption(state.name, state.option, true);
     });

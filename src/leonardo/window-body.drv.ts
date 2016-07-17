@@ -61,6 +61,8 @@ export function windowBodyDirective($http, leoConfiguration) {
 class LeoWindowBody {
   editedState: any;
   states: any[];
+  activateBtnText: string;
+  isAllActivated: boolean;
   private detail: {
     option: string;
     delay: number;
@@ -82,6 +84,8 @@ class LeoWindowBody {
   static $inject = ['$scope', 'leoConfiguration', '$timeout'];
 
   constructor(private $scope, private leoConfiguration, private $timeout) {
+    this.activateBtnText = 'Activate All';
+    this.isAllActivated = false;
     this.detail = {
       option: 'success',
       delay: 0,
@@ -136,6 +140,13 @@ class LeoWindowBody {
       return state.name !== name;
     });
   };
+
+  toggleActivate() {
+    this.isAllActivated = !this.isAllActivated;
+    this.leoConfiguration.toggleActivateAll(this.isAllActivated);
+    this.activateBtnText = this.isAllActivated ? 'Deactivate All' : 'Activate All';
+    this.states = this.leoConfiguration.getStates();
+  }
 
   removeOptionByName(stateName, optionName) {
     this.states.forEach(function (state: any, i) {
@@ -197,7 +208,7 @@ class LeoWindowBody {
     this.states.forEach(function (state: any) {
       state.active = false;
     });
-    this.leoConfiguration.deactivateAllStates();
+    this.leoConfiguration.toggleActivateAll(false);
   };
 
   toggleState(state) {
@@ -224,6 +235,9 @@ class LeoWindowBody {
   }
 
   saveNewScenario() {
+    if(this.newScenarioName.length < 1) {
+      return;
+    }
     const states = this.leoConfiguration.getStates()
       .filter((state) => state.active)
       .map((state: any) => {
@@ -232,7 +246,7 @@ class LeoWindowBody {
           option: state.activeOption.name
         }
       });
-    
+
     this.leoConfiguration.addScenario({
       name: this.newScenarioName,
       states: states,
@@ -280,11 +294,15 @@ class LeoWindowBody {
   }
 
   getStatesForExport() {
-    this.exportStates = this.leoConfiguration.getStates();
+    this.exportStates = this.leoConfiguration.getStates()
+      .map((state) => {
+        let {name, url, verb, options} = state;
+        return {name, url, verb, options};
+      });
   }
 
   downloadCode() {
-    this.codeWrapper = document.getElementById("exportedCode");
+    this.codeWrapper = document.getElementById('exportedCode');
     let codeToStr;
     if (this.codeWrapper.innerText) {
       codeToStr = this.codeWrapper.innerText;

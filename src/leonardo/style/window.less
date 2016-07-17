@@ -188,6 +188,7 @@
     color: white;
     border: 0;
     font-size: 13px;
+    cursor: pointer;
   }
 
   input [type="text"], textarea {
@@ -239,11 +240,19 @@
       input {
         height: 27px;
         outline: none;
+
+        &::-webkit-input-placeholder {
+          color: #CCCCCC;
+        }
       }
 
       button {
         outline: 0;
         width: 60px;
+
+        &[disabled] {
+          opacity: 0.7;
+        }
       }
     }
   }
