@@ -97,8 +97,8 @@ class LeoActivator {
       this.dragging = true;
       _elem.css('right', 'initial');
       _elem.css('bottom', 'initial');
-      _elem.css('top', e.clientY + 'px');
-      _elem.css('left', e.clientX + 'px');
+      _elem.css('top', e.clientY +'px');
+      _elem.css('left', e.clientX - 60 + 'px');
     }​
     function mouseUp(e) {
       doc.off('mousemove', move);
