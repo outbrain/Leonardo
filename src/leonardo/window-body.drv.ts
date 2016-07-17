@@ -61,6 +61,8 @@ export function windowBodyDirective($http, leoConfiguration) {
 class LeoWindowBody {
   editedState: any;
   states: any[];
+  activateBtnText: String;
+  isAllActivated: boolean;
   private detail: {
     option: string;
     delay: number;
@@ -80,6 +82,8 @@ class LeoWindowBody {
   static $inject = ['$scope', 'leoConfiguration', '$timeout'];
 
   constructor(private $scope, private leoConfiguration, private $timeout) {
+    this.activateBtnText = "Activate All";
+    this.isAllActivated = false;
     this.detail = {
       option: 'success',
       delay: 0,
@@ -134,6 +138,13 @@ class LeoWindowBody {
       return state.name !== name;
     });
   };
+
+  toggleActivate () {
+    this.isAllActivated = !this.isAllActivated;
+    this.leoConfiguration.toggleActivateAll(this.isAllActivated);
+    this.activateBtnText = this.isAllActivated ? "Deactivate All" : "Activate All";
+    this.states = this.leoConfiguration.getStates();
+  }
 
 
   removeOptionByName(stateName, optionName) {
@@ -197,7 +208,7 @@ class LeoWindowBody {
     this.states.forEach(function (state: any) {
       state.active = false;
     });
-    this.leoConfiguration.deactivateAllStates();
+    this.leoConfiguration.toggleActivateAll(false);
   };
 
   toggleState(state) {
