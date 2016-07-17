@@ -30,7 +30,7 @@ export class Storage {
   getStates() {
     return this._getItem(this.STATES_STORE_KEY) || {};
   }
-  
+
   getScenarios() {
     return this._getItem(this.SCENARIOS_STORE_KEY) || [];
   }
@@ -59,7 +59,7 @@ export class Storage {
   }
 
   setSavedPosition(position) {
-    if(!position){
+    if (!position) {
       return;
     }
     this._setItem(this.POSITION_KEY, position);

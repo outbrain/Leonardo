@@ -5,7 +5,7 @@ import IScope = angular.IScope;
 import IDocumentService = angular.IDocumentService;
 
 
-export function leoActivator($compile: ICompileService, leoStorage: Storage): IDirective {
+export function leoActivator($compile: ICompileService, leoStorage): IDirective {
 
   return {
     restrict: 'A',
@@ -14,7 +14,7 @@ export function leoActivator($compile: ICompileService, leoStorage: Storage): ID
     bindToController: true,
     link: function (scope: IScope, elem: IAugmentedJQuery) {
       const position = leoStorage.getSavedPosition(),
-      positionStr = position ? `style="top: ${position.top}px; left: ${position.left}px; right: initial; bottom: initial;"` : '',
+        positionStr = position ? `style="top: ${position.top}px; left: ${position.left}px; right: initial; bottom: initial;"` : '',
         el = angular.element(`<div ${positionStr}  ng-click="leonardo.activate()" class="leonardo-activator" ng-if="leonardo.isLeonardoVisible"><div ng-mousedown="leonardo.drag($event)" class="leonardo-draggable"></div></div>`),
         win = angular.element([
           '<div class="leonardo-window" ng-if="leonardo.isLeonardoWindowVisible">',
@@ -97,7 +97,7 @@ class LeoActivator {
       this.dragging = true;
       _elem.css('right', 'initial');
       _elem.css('bottom', 'initial');
-      _elem.css('top', e.clientY +'px');
+      _elem.css('top', e.clientY + 'px');
       _elem.css('left', e.clientX - 60 + 'px');
     }​
     function mouseUp(e) {

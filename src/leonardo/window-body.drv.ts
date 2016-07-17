@@ -235,7 +235,7 @@ class LeoWindowBody {
   }
 
   saveNewScenario() {
-    if(this.newScenarioName.length < 1) {
+    if (this.newScenarioName.length < 1) {
       return;
     }
     const states = this.leoConfiguration.getStates()

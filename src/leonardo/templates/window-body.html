@@ -6,16 +6,18 @@
           <leo-request
             ng-repeat="request in leoWindowBody.requests"
             request="request"
-            on-select="leoWindowBody.requestSelect(request)" />
+            on-select="leoWindowBody.requestSelect(request)"/>
         </div>
       </div>
       <div class="leo-detail" ng-show="leoWindowBody.hasActiveOption()">
         <div class="leo-detail-header">
           <div ng-if="!leoWindowBody.detail.stateActive">
             <span>Add new state: </span>
-            <input  class="leo-detail-state" ng-model="leoWindowBody.detail.state" placeholder="Enter state name"/>
+            <input class="leo-detail-state" ng-model="leoWindowBody.detail.state" placeholder="Enter state name"/>
           </div>
-          <div ng-if="leoWindowBody.detail.stateActive" class="leo-detail-state">Add mocked response for "{{leoWindowBody.detail.state}}"</div>
+          <div ng-if="leoWindowBody.detail.stateActive" class="leo-detail-state">Add mocked response for
+            "{{leoWindowBody.detail.state}}"
+          </div>
         </div>
         <div class="leo-detail-option">
           <div>Response name: <input ng-model="leoWindowBody.detail.option"/></div>
@@ -30,13 +32,15 @@
         </div>
 
         <div class="leo-action-row">
-          <button ng-click="leoWindowBody.saveUnregisteredState()">{{ leoWindowBody.detail.stateActive ? 'Add Option' : 'Add State' }}</button>
+          <button ng-click="leoWindowBody.saveUnregisteredState()">{{ leoWindowBody.detail.stateActive ? 'Add Option' :
+            'Add State' }}
+          </button>
         </div>
       </div>
     </div>
     <div ng-switch-when="export" class="leonardo-export" style="padding: 30px">
-      <button class="exportButtons" ngclipboard data-clipboard-target="#exportedCode"> Copy To Clipboard  </button>
-      <button class="exportButtons" ng-click="leoWindowBody.downloadCode()"> Download Code </button>
+      <button class="exportButtons" ngclipboard data-clipboard-target="#exportedCode"> Copy To Clipboard</button>
+      <button class="exportButtons" ng-click="leoWindowBody.downloadCode()"> Download Code</button>
       <code contenteditable ng-init="leoWindowBody.getStatesForExport()">
 
         <div id="exportedCode">
@@ -70,7 +74,7 @@
           <div class="states-filter-wrapper">
             <label for="filter" class="states-filter-label">Search for state</label>
             <input id="filter" class="states-filter" type="text" ng-model="leoWindowBody.filter">
-            <button ng-click="leoWindowBody.toggleActivate()"> {{leoWindowBody.activateBtnText}} </button>
+            <button ng-click="leoWindowBody.toggleActivate()"> {{leoWindowBody.activateBtnText}}</button>
           </div>
           <div class="save-scenario-btn">
             <button ng-click="leoWindowBody.showAddState = !leoWindowBody.showAddState">+ Add Scenario</button>
@@ -132,7 +136,7 @@
                 <leo-json-formatter
                   json-string="leoWindowBody.editedState.dataStringValue"
                   on-error="leoWindowBody.onEditOptionJsonError(msg)"
-                  on-success="leoWindowBody.onEditOptionSuccess(value)" />
+                  on-success="leoWindowBody.onEditOptionSuccess(value)"/>
               </div>
             </div>
 

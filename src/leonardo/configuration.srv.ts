@@ -206,7 +206,7 @@ export function leoConfiguration(leoStorage, $rootScope: any) {
     let states;
     if (_scenarios[name]) {
       states = _scenarios[name].states;
-    } else  {
+    } else {
       states = leoStorage.getScenarios()
         .filter((scenario) => scenario.name === name)[0].states;
     }
