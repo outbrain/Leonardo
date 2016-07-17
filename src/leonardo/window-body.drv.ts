@@ -61,7 +61,7 @@ export function windowBodyDirective($http, leoConfiguration) {
 class LeoWindowBody {
   editedState: any;
   states: any[];
-  activateBtnText: String;
+  activateBtnText: string;
   isAllActivated: boolean;
   private detail: {
     option: string;
@@ -82,7 +82,7 @@ class LeoWindowBody {
   static $inject = ['$scope', 'leoConfiguration', '$timeout'];
 
   constructor(private $scope, private leoConfiguration, private $timeout) {
-    this.activateBtnText = "Activate All";
+    this.activateBtnText = 'Activate All';
     this.isAllActivated = false;
     this.detail = {
       option: 'success',
@@ -139,10 +139,10 @@ class LeoWindowBody {
     });
   };
 
-  toggleActivate () {
+  toggleActivate() {
     this.isAllActivated = !this.isAllActivated;
     this.leoConfiguration.toggleActivateAll(this.isAllActivated);
-    this.activateBtnText = this.isAllActivated ? "Deactivate All" : "Activate All";
+    this.activateBtnText = this.isAllActivated ? 'Deactivate All' : 'Activate All';
     this.states = this.leoConfiguration.getStates();
   }
 
@@ -271,13 +271,13 @@ class LeoWindowBody {
     this.exportStates = this.leoConfiguration.getStates();
   }
 
-  downloadCode(){
-    this.codeWrapper = document.getElementById("exportedCode");
+  downloadCode() {
+    this.codeWrapper = document.getElementById('exportedCode');
     let codeToStr;
-    if (this.codeWrapper.innerText){
+    if (this.codeWrapper.innerText) {
       codeToStr = this.codeWrapper.innerText;
     }
-    else if (XMLSerializer){
+    else if (XMLSerializer) {
       codeToStr = new XMLSerializer().serializeToString(this.codeWrapper);
     }
     window.open('data:application/octet-stream;filename=Leonardo-States.txt,' + encodeURIComponent(codeToStr), 'Leonardo-States.txt');
