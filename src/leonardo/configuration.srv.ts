@@ -31,6 +31,7 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
     fetchStatesByUrlAndMethod: fetchStatesByUrlAndMethod,
     removeState: removeState,
     removeOption: removeOption,
+    onStateChange: onStateChange,
     _logRequest: logRequest
   };
 
@@ -411,5 +412,9 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
       });
     console.log(angular.toJson(requestsArr, true));
     return requestsArr;
+  }
+  
+  function onStateChange(fn: Function): Function {
+    return $rootScope.$on('leonardo:setStates', fn);
   }
 }
