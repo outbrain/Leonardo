@@ -1,7 +1,6 @@
 
-angular.module('leonardo').run(['leoConfiguration', function (leoConfiguration) {
-
-  leoConfiguration.addStates([
+Leonardo.ready(() => {
+  Leonardo.addStates([
     {
       "name": "Get Json",
       "url": "/get-json",
@@ -26,4 +25,5 @@ angular.module('leonardo').run(['leoConfiguration', function (leoConfiguration) 
       ]
     }
   ]);
-}]);
+});
+

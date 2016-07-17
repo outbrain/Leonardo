@@ -1,6 +1,5 @@
 
-angular.module('leonardo').run(['$rootScope', function ($rootScope) {
-
+Leonardo.ready(() => {
   Leonardo.addStates([
     {
       "name": "Authenticate",
@@ -188,17 +187,9 @@ angular.module('leonardo').run(['$rootScope', function ($rootScope) {
     if (!isDebug && debug) {
       angular.reloadWithDebugInfo();
     }
-  });
-}]);
-
-
-//angular.module('leonardo').run(['Leonardo', '$rootScope', function (Leonardo, $rootScope) {
-//  var debug = Leonardo.getState('debug');
-//  var isDebug = debug && debug.name === 'Enabled';
-//  $rootScope.$on('leonardo:setStates', function () {
 //    var debug = Leonardo.getState('debug');
 //    if (!isDebug && debug) {
 //      angular.reloadWithDebugInfo();
 //    }
-//  });
-//}]);
+  });
+});
