@@ -145,9 +145,9 @@ class LeoWindowBody {
 
   toggleActivate() {
     this.isAllActivated = !this.isAllActivated;
-    this.leoConfiguration.toggleActivateAll(this.isAllActivated);
+    Leonardo.toggleActivateAll(this.isAllActivated);
     this.activateBtnText = this.isAllActivated ? 'Deactivate All' : 'Activate All';
-    this.states = this.leoConfiguration.getStates();
+    this.states = Leonardo.getStates();
   }
 
   removeOptionByName(stateName, optionName) {
@@ -240,7 +240,7 @@ class LeoWindowBody {
     if (this.newScenarioName.length < 1) {
       return;
     }
-    const states = this.leoConfiguration.getStates()
+    const states = Leonardo.getStates()
       .filter((state) => state.active)
       .map((state: any) => {
         return {
@@ -249,7 +249,7 @@ class LeoWindowBody {
         }
       });
 
-    this.leoConfiguration.addScenario({
+    Leonardo.addScenario({
       name: this.newScenarioName,
       states: states,
       from_local: true

@@ -59,7 +59,7 @@
         </div>
         <ul>
           <li ng-class="{ 'selected': scenario === leoWindowBody.activeScenario }"
-              ng-repeat="scenario in leoWindowBody.scenarios() track by $index"
+              ng-repeat="scenario in leoWindowBody.scenarios track by $index"
               ng-click="leoWindowBody.activateScenario(scenario)">{{scenario}}
           </li>
         </ul>

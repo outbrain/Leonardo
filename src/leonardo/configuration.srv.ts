@@ -182,9 +182,9 @@ export function leoConfiguration () {
   function addScenario(scenario, fromLocal: boolean = false) {
     if (scenario && typeof scenario.name === 'string') {
       if (fromLocal) {
-        const scenarios = leoStorage.getScenarios();
+        const scenarios = Leonardo.storage.getScenarios();
         scenarios.push(scenario);
-        leoStorage.setScenarios(scenarios);
+        Leonardo.storage.setScenarios(scenarios);
       } else {
         _scenarios[scenario.name] = scenario;
       }
@@ -200,7 +200,7 @@ export function leoConfiguration () {
   }
 
   function getScenarios() {
-    const scenarios = leoStorage.getScenarios().map((scenario: any) => scenario.name);
+    const scenarios = Leonardo.storage.getScenarios().map((scenario: any) => scenario.name);
     return Object.keys(_scenarios).concat(scenarios);
   }
 
@@ -209,7 +209,7 @@ export function leoConfiguration () {
     if (_scenarios[name]) {
       states = _scenarios[name].states;
     } else {
-      states = leoStorage.getScenarios()
+      states = Leonardo.storage.getScenarios()
         .filter((scenario) => scenario.name === name)[0].states;
     }
 

@@ -5,7 +5,7 @@ import IScope = angular.IScope;
 import IDocumentService = angular.IDocumentService;
 
 
-export function leoActivator($compile: ICompileService, leoStorage): IDirective {
+export function leoActivator($compile: ICompileService): IDirective {
 
   return {
     restrict: 'A',
@@ -13,9 +13,9 @@ export function leoActivator($compile: ICompileService, leoStorage): IDirective 
     controller: LeoActivator,
     bindToController: true,
     link: function (scope: IScope, elem: IAugmentedJQuery) {
-      const position = leoStorage.getSavedPosition(),
+      const position = null, //Leonardo.storage.getSavedPosition(),
         positionStr = position ? `style="top: ${position.top}px; left: ${position.left}px; right: initial; bottom: initial;"` : '',
-        el = angular.element(`<div ${positionStr}  ng-click="leonardo.activate()" class="leonardo-activator" ng-if="leonardo.isLeonardoVisible"><div ng-mousedown="leonardo.drag($event)" class="leonardo-draggable"></div></div>`),
+        el = angular.element(`<div ${positionStr}  ng-click="leonardo.activate()" class="leonardo-activator" ng-if="leonardo.isLeonardoVisible"><!--<div ng-mousedown="leonardo.drag($event)" class="leonardo-draggable"></div><!--></div>`),
         win = angular.element([
           '<div class="leonardo-window" ng-if="leonardo.isLeonardoWindowVisible">',
           '<div class="leonardo-header">',
@@ -41,16 +41,16 @@ export function leoActivator($compile: ICompileService, leoStorage): IDirective 
     }
   };
 }
-leoActivator.$inject = ['$compile', 'leoStorage'];
+leoActivator.$inject = ['$compile'];
 
 class LeoActivator {
   isLeonardoVisible = true;
   isLeonardoWindowVisible = false;
   activeTab = 'scenarios';
   dragging: boolean = false;
-  static $inject = ['$scope', '$document', '$timeout', 'leoStorage'];
+  static $inject = ['$scope', '$document', '$timeout'];
 
-  constructor($scope, private $document, private $timeout, private leoStorage: Storage) {
+  constructor($scope, private $document, private $timeout) {
     $document.on('keypress', (e) => {
 
       if (e.shiftKey && e.ctrlKey) {
@@ -102,7 +102,7 @@ class LeoActivator {
     }​
     function mouseUp(e) {
       doc.off('mousemove', move);
-      this.leoStorage.setSavedPosition({left: e.clientX, top: e.clientY});
+      Leonardo.storage.setSavedPosition({left: e.clientX, top: e.clientY});
     }
   }
 }
