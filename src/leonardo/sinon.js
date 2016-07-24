@@ -1893,7 +1893,6 @@ if (typeof sinon === "undefined") {
   }
 
   function makeApi(sinon) {
-    var leoConfiguration = null;
     sinon.fakeServer = {
       create: function (config) {
         var server = sinon.create(this);
@@ -1938,8 +1937,7 @@ if (typeof sinon === "undefined") {
             server.respond();
           } else if (server.autoRespond && !server.responding) {
             var request = this;
-            leoConfiguration = leoConfiguration || angular.element(document.body).injector().get('leoConfiguration');
-            var state = leoConfiguration.fetchStatesByUrlAndMethod(request.url, request.method);
+            var state = Leonardo.fetchStatesByUrlAndMethod(request.url, request.method);
             var delay;
             if(state && state.activeOption && state.activeOption.hasOwnProperty('delay')) {
               delay = state.activeOption.delay;

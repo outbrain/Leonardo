@@ -1,12 +1,12 @@
 import IRootScopeService = angular.IRootScopeService;
 
-leoConfiguration.$inject = ['leoStorage', '$rootScope'];
-
-export function leoConfiguration (leoStorage, $rootScope: any) {
+export function leoConfiguration () {
   var _states = [],
     _scenarios = {},
     _requestsLog = [],
-    _savedStates = [];
+    _savedStates = [],
+    _statesChangedEvent = new Event('leonardo:setStates'),
+    _eventsElem = document.body;
 
   // Core API
   // ----------------
@@ -16,7 +16,7 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
     getActiveStateOption: getActiveStateOption,
     getStates: fetchStates,
     deactivateState: deactivateState,
-    deactivateAllStates: deactivateAll,
+    toggleActivateAll: toggleActivateAll,
     activateStateOption: activateStateOption,
     addScenario: addScenario,
     addScenarios: addScenarios,
@@ -31,17 +31,19 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
     fetchStatesByUrlAndMethod: fetchStatesByUrlAndMethod,
     removeState: removeState,
     removeOption: removeOption,
+    onStateChange: onSetStates,
+    statesChanged: statesChanged,
     _logRequest: logRequest
   };
 
   function upsertOption(state, name, active) {
-    var statesStatus = leoStorage.getStates();
+    var statesStatus = Leonardo.storage.getStates();
     statesStatus[state] = {
       name: name || findStateOption(state).name,
       active: active
     };
 
-    leoStorage.setStates(statesStatus);
+    Leonardo.storage.setStates(statesStatus);
   }
 
   function fetchStatesByUrlAndMethod(url, method) {
@@ -51,12 +53,12 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
   }
 
   function fetchStates() {
-    var activeStates = leoStorage.getStates();
+    var activeStates = Leonardo.storage.getStates();
     var statesCopy = _states.map(function (state) {
       return angular.copy(state);
     });
 
-    statesCopy.forEach(function (state:any) {
+    statesCopy.forEach(function (state: any) {
       var option = activeStates[state.name];
       state.active = !!option && option.active;
       state.activeOption = !!option ?
@@ -68,12 +70,12 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
     return statesCopy;
   }
 
-  function deactivateAll() {
-    var statesStatus = leoStorage.getStates();
+  function toggleActivateAll(flag: boolean) {
+    var statesStatus = Leonardo.storage.getStates();
     Object.keys(statesStatus).forEach(function (stateKey) {
-      statesStatus[stateKey].active = false;
+      statesStatus[stateKey].active = flag;
     });
-    leoStorage.setStates(statesStatus);
+    Leonardo.storage.setStates(statesStatus);
   }
 
   function findStateOption(name) {
@@ -104,7 +106,7 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
       }, overrideOption);
     });
 
-    $rootScope.$broadcast('leonardo:stateChanged', stateObj);
+    //$rootScope.$broadcast('leonardo:stateChanged', stateObj);
   }
 
   function addStates(statesArr, overrideOption = false) {
@@ -152,8 +154,8 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
     }
 
     var option = stateItem.options.filter(function (_option) {
-        return _option.name === name
-      })[0];
+      return _option.name === name
+    })[0];
 
     if (overrideOption && option) {
       angular.extend(option, {
@@ -177,27 +179,41 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
     }
   }
 
-  function addScenario(scenario) {
+  function addScenario(scenario, fromLocal: boolean = false) {
     if (scenario && typeof scenario.name === 'string') {
-      _scenarios[scenario.name] = scenario;
+      if (fromLocal) {
+        const scenarios = Leonardo.storage.getScenarios();
+        scenarios.push(scenario);
+        Leonardo.storage.setScenarios(scenarios);
+      } else {
+        _scenarios[scenario.name] = scenario;
+      }
     } else {
       throw 'addScenario method expects a scenario object with name property';
     }
   }
 
   function addScenarios(scenarios) {
-    angular.forEach(scenarios, addScenario);
+    scenarios.forEach((scenario) => {
+      addScenario(scenario);
+    });
   }
 
   function getScenarios() {
-    return Object.keys(_scenarios);
+    const scenarios = Leonardo.storage.getScenarios().map((scenario: any) => scenario.name);
+    return Object.keys(_scenarios).concat(scenarios);
   }
 
-  function getScenario(name) {
-    if (!_scenarios[name]) {
-      return;
+  function getScenario(name: string) {
+    let states;
+    if (_scenarios[name]) {
+      states = _scenarios[name].states;
+    } else {
+      states = Leonardo.storage.getScenarios()
+        .filter((scenario) => scenario.name === name)[0].states;
     }
-    return _scenarios[name].states;
+
+    return states;
   }
 
   function setActiveScenario(name) {
@@ -206,7 +222,7 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
       console.warn("leonardo: could not find scenario named " + name);
       return;
     }
-    deactivateAll();
+    toggleActivateAll(false);
     scenario.forEach(function (state) {
       upsertOption(state.name, state.option, true);
     });
@@ -248,13 +264,13 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
   }
 
   function loadSavedStates() {
-    _savedStates = leoStorage.getSavedStates();
+    _savedStates = Leonardo.storage.getSavedStates();
     addStates(_savedStates, true);
   }
 
   function addSavedState(state) {
     _savedStates.push(state);
-    leoStorage.setSavedStates(_savedStates);
+    Leonardo.storage.setSavedStates(_savedStates);
     addState(state, true);
   }
 
@@ -262,12 +278,12 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
     var option = state.activeOption;
 
     //update local storage state
-    var _savedState = _savedStates.filter(function(_state) {
+    var _savedState = _savedStates.filter(function (_state) {
       return _state.name === state.name;
     })[0];
 
     if (_savedState) {
-      var _savedOption = _savedState.options.filter(function(_option) {
+      var _savedOption = _savedState.options.filter(function (_option) {
         return _option.name === option.name;
       })[0];
 
@@ -280,19 +296,19 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
         _savedState.options.push(option);
       }
 
-      leoStorage.setSavedStates(_savedStates);
+      Leonardo.storage.setSavedStates(_savedStates);
     }
     else {
       addSavedState(state);
     }
 
     //update in memory state
-    var _state = _states.filter(function(__state) {
+    var _state = _states.filter(function (__state) {
       return __state.name === state.name;
     })[0];
 
     if (_state) {
-      var _option = _state.options.filter(function(__option) {
+      var _option = _state.options.filter(function (__option) {
         return __option.name === option.name;
       })[0];
 
@@ -305,7 +321,7 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
         _state.options.push(option);
       }
 
-      $rootScope.$broadcast('leonardo:stateChanged', _state);
+      //$rootScope.$broadcast('leonardo:stateChanged', _state);
     }
   }
 
@@ -336,7 +352,7 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
     removeStateByName(state.name);
     removeSavedStateByName(state.name);
 
-    leoStorage.setSavedStates(_savedStates);
+    Leonardo.storage.setSavedStates(_savedStates);
   }
 
   function removeStateOptionByName(stateName, optionName) {
@@ -389,7 +405,7 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
     removeStateOptionByName(state.name, option.name);
     removeSavedStateOptionByName(state.name, option.name);
 
-    leoStorage.setSavedStates(_savedStates);
+    Leonardo.storage.setSavedStates(_savedStates);
 
     activateStateOption(_states[0].name, _states[0].options[0].name);
   }
@@ -411,5 +427,13 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
       });
     console.log(angular.toJson(requestsArr, true));
     return requestsArr;
+  }
+
+  function onSetStates(fn) {
+    _eventsElem && _eventsElem.addEventListener('leonardo:setStates', fn , false);
+  }
+
+  function statesChanged() {
+    _eventsElem && _eventsElem.dispatchEvent(_statesChangedEvent);
   }
 }

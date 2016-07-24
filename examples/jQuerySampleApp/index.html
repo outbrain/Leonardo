@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Request JSON Test</title>
+</head>
+<body>
+<a href="#" id="get-data">Get JSON data</a>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<!-- if dev -->
+<script src="../../dist/leonardo.js"></script>
+<script src="mock.js"></script>
+<script>
+  $('#get-data').click(function () {
+    $.getJSON('/get-json', function (data) {
+      console.log(data);
+    }).fail(function(err) {
+      console.log( err );
+    });
+  });
+</script>
+</body>
+</html>
