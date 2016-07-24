@@ -2,13 +2,16 @@ apiExporter.$inject = ['leoConfiguration'];
 
 Leonardo = {
   ready: function(fn: Function) {
-    const intervalHandle = setInterval(() => {
-      if (Leonardo.addStates) {
-        fn.call(this);
-        clearInterval(intervalHandle);
-      }
-    }, 500);
-    return this;
+    if (Leonardo.addStates) {
+      fn.call(this);
+    } else {
+      const intervalHandle = setInterval(() => {
+        if (Leonardo.addStates) {
+          fn.call(this);
+          clearInterval(intervalHandle);
+        }
+      }, 10);
+    }
   }
 };
 export function apiExporter(leoConfiguration) {

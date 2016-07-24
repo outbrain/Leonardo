@@ -1,5 +1,4 @@
 
-Leonardo.ready(() => {
   Leonardo.addStates([
     {
       "name": "Authenticate",
@@ -192,4 +191,3 @@ Leonardo.ready(() => {
 //      angular.reloadWithDebugInfo();
 //    }
   });
-});

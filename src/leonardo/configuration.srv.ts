@@ -1,12 +1,12 @@
 import IRootScopeService = angular.IRootScopeService;
 
-leoConfiguration.$inject = ['leoStorage', '$rootScope'];
-
-export function leoConfiguration (leoStorage, $rootScope: any) {
+export function leoConfiguration () {
   var _states = [],
     _scenarios = {},
     _requestsLog = [],
-    _savedStates = [];
+    _savedStates = [],
+    _statesChangedEvent = new Event('leonardo:setStates'),
+    _eventsElem = document.body;
 
   // Core API
   // ----------------
@@ -31,18 +31,19 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
     fetchStatesByUrlAndMethod: fetchStatesByUrlAndMethod,
     removeState: removeState,
     removeOption: removeOption,
-    onStateChange: onStateChange,
+    onStateChange: onSetStates,
+    statesChanged: statesChanged,
     _logRequest: logRequest
   };
 
   function upsertOption(state, name, active) {
-    var statesStatus = leoStorage.getStates();
+    var statesStatus = Leonardo.storage.getStates();
     statesStatus[state] = {
       name: name || findStateOption(state).name,
       active: active
     };
 
-    leoStorage.setStates(statesStatus);
+    Leonardo.storage.setStates(statesStatus);
   }
 
   function fetchStatesByUrlAndMethod(url, method) {
@@ -52,7 +53,7 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
   }
 
   function fetchStates() {
-    var activeStates = leoStorage.getStates();
+    var activeStates = Leonardo.storage.getStates();
     var statesCopy = _states.map(function (state) {
       return angular.copy(state);
     });
@@ -70,11 +71,11 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
   }
 
   function deactivateAll() {
-    var statesStatus = leoStorage.getStates();
+    var statesStatus = Leonardo.storage.getStates();
     Object.keys(statesStatus).forEach(function (stateKey) {
       statesStatus[stateKey].active = false;
     });
-    leoStorage.setStates(statesStatus);
+    Leonardo.storage.setStates(statesStatus);
   }
 
   function findStateOption(name) {
@@ -105,7 +106,7 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
       }, overrideOption);
     });
 
-    $rootScope.$broadcast('leonardo:stateChanged', stateObj);
+    //$rootScope.$broadcast('leonardo:stateChanged', stateObj);
   }
 
   function addStates(statesArr, overrideOption = false) {
@@ -249,13 +250,13 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
   }
 
   function loadSavedStates() {
-    _savedStates = leoStorage.getSavedStates();
+    _savedStates = Leonardo.storage.getSavedStates();
     addStates(_savedStates, true);
   }
 
   function addSavedState(state) {
     _savedStates.push(state);
-    leoStorage.setSavedStates(_savedStates);
+    Leonardo.storage.setSavedStates(_savedStates);
     addState(state, true);
   }
 
@@ -281,7 +282,7 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
         _savedState.options.push(option);
       }
 
-      leoStorage.setSavedStates(_savedStates);
+      Leonardo.storage.setSavedStates(_savedStates);
     }
     else {
       addSavedState(state);
@@ -306,7 +307,7 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
         _state.options.push(option);
       }
 
-      $rootScope.$broadcast('leonardo:stateChanged', _state);
+      //$rootScope.$broadcast('leonardo:stateChanged', _state);
     }
   }
 
@@ -337,7 +338,7 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
     removeStateByName(state.name);
     removeSavedStateByName(state.name);
 
-    leoStorage.setSavedStates(_savedStates);
+    Leonardo.storage.setSavedStates(_savedStates);
   }
 
   function removeStateOptionByName(stateName, optionName) {
@@ -390,7 +391,7 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
     removeStateOptionByName(state.name, option.name);
     removeSavedStateOptionByName(state.name, option.name);
 
-    leoStorage.setSavedStates(_savedStates);
+    Leonardo.storage.setSavedStates(_savedStates);
 
     activateStateOption(_states[0].name, _states[0].options[0].name);
   }
@@ -414,7 +415,11 @@ export function leoConfiguration (leoStorage, $rootScope: any) {
     return requestsArr;
   }
   
-  function onStateChange(fn: Function): Function {
-    return $rootScope.$on('leonardo:setStates', fn);
+  function onSetStates(fn) {
+    _eventsElem && _eventsElem.addEventListener('leonardo:setStates', fn , false);
+  }
+
+  function statesChanged() {
+    _eventsElem && _eventsElem.dispatchEvent(_statesChangedEvent);
   }
 }

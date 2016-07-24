@@ -79,7 +79,8 @@ gulp.task('build:js:standalone', "add angular to bundled js", function(){
   return gulp.src(
     [
       './src/leonardo/angular.min.js',
-      './tmp/leonardo-for-angular.js'
+      './tmp/leonardo-for-angular.js',
+      './src/leonardo/bootstrap.js'
     ])
     .pipe(concat('leonardo.js'))
     .pipe(gulp.dest('./tmp'))

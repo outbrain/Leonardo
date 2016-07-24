@@ -1,16 +1,23 @@
 /// <reference path="../../typings/angularjs/angular.d.ts" />
+/// <reference path="leonardo.d.ts" />
+
 import {leoActivator} from './activator.drv';
 import {leoConfiguration} from './configuration.srv';
-import {LeonardoProvider} from './leonardo.prov';
 import {leoRequest} from './request.drv';
 import {leoSelect} from './select.drv';
 import {leoStateItem} from './state-item.drv';
 import {Storage} from './storage.srv';
-import {apiExporter} from './api-exporter.srv';
 import {jsonFormatter} from './leo-json-formatter.drv';
 import {windowBodyDirective} from './window-body.drv';
 
 declare var sinon;
+declare var window;
+declare var Object;
+
+window.Leonardo = window.Leonardo || {};
+const configuration = leoConfiguration();
+const storage = new Storage();
+Object.assign(window.Leonardo || {}, configuration, { storage });
 
 angular.module('leonardo', ['leonardo.templates', 'ngclipboard'])
   .directive('leoActivator', leoActivator)
@@ -19,29 +26,22 @@ angular.module('leonardo', ['leonardo.templates', 'ngclipboard'])
   .directive('leoStateItem', leoStateItem)
   .directive('leoJsonFormatter', jsonFormatter)
   .directive('leoWindowBody', windowBodyDirective)
-  .service('leoStorage', Storage)
-  .service('leoApiExporter', apiExporter)
-  .factory('leoConfiguration', leoConfiguration)
-  .provider('$leonardo', LeonardoProvider)
   .run([
-    'leoConfiguration',
     '$document',
     '$rootScope',
     '$compile',
     '$timeout',
-    'leoApiExporter',
-    function (leoConfiguration, $document, $rootScope, $compile, $timeout, leoApiExporter) {
+    function ($document, $rootScope, $compile, $timeout) {
       var server = sinon.fakeServer.create({
         autoRespond: true,
         autoRespondAfter: 10
       });
-
       sinon.FakeXMLHttpRequest.useFilters = true;
       sinon.FakeXMLHttpRequest.addFilter(function (method, url) {
         if (url.indexOf('.html') > 0 && url.indexOf('template') >= 0) {
           return true;
         }
-        var state = leoConfiguration.fetchStatesByUrlAndMethod(url, method);
+        var state = Leonardo.fetchStatesByUrlAndMethod(url, method);
         return !(state && state.active);
       });
 
@@ -52,22 +52,22 @@ angular.module('leonardo', ['leonardo.templates', 'ngclipboard'])
         }
         catch (e) {
         }
-        leoConfiguration._logRequest(xhr.method, xhr.url, res, xhr.status);
+        Leonardo._logRequest(xhr.method, xhr.url, res, xhr.status);
       };
 
       server.respondWith(function (request) {
-        var state = leoConfiguration.fetchStatesByUrlAndMethod(request.url, request.method),
-          activeOption = leoConfiguration.getActiveStateOption(state.name);
+        var state = Leonardo.fetchStatesByUrlAndMethod(request.url, request.method),
+          activeOption = Leonardo.getActiveStateOption(state.name);
 
         if (!!activeOption) {
           var responseData = angular.isFunction(activeOption.data) ? activeOption.data(request) : activeOption.data;
           request.respond(activeOption.status, {"Content-Type": "application/json"}, JSON.stringify(responseData));
-          leoConfiguration._logRequest(request.method, request.url, responseData, activeOption.status);
+          Leonardo._logRequest(request.method, request.url, responseData, activeOption.status);
         } else {
           console.warn('could not find a state for the following request', request);
         }
       });
-      leoConfiguration.loadSavedStates();
+      Leonardo.loadSavedStates();
 
       var el = $compile('<div leo-activator></div>')($rootScope);
       $timeout(function() {
@@ -76,7 +76,6 @@ angular.module('leonardo', ['leonardo.templates', 'ngclipboard'])
       });
     }]);
 
-
 angular.element(document).ready(function() {
   var leonardoApp = document.querySelector('[leonardo-app]');
   if (!leonardoApp) {
@@ -84,7 +83,9 @@ angular.element(document).ready(function() {
     leonardoApp.setAttribute('leonardo-app','leonardo-app');
     document.body.appendChild(leonardoApp);
   }
-  angular.bootstrap(leonardoApp, ['leonardo']);
+  if (Leonardo.needBootstrap) {
+    angular.bootstrap(leonardoApp, ['leonardo']);
+  }
 });
 
 declare var module;
