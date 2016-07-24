@@ -63,6 +63,8 @@ export function windowBodyDirective($http) {
 class LeoWindowBody {
   editedState: any;
   states: any[];
+  activateBtnText: string;
+  isAllActivated: boolean;
   private detail: {
     option: string;
     delay: number;
@@ -78,10 +80,14 @@ class LeoWindowBody {
   private requests: any[];
   private exportStates;
   private codeWrapper;
+  private showAddState: boolean = false;
+  private newScenarioName: string = '';
 
   static $inject = ['$scope', '$timeout'];
 
   constructor(private $scope, private $timeout) {
+    this.activateBtnText = 'Activate All';
+    this.isAllActivated = false;
     this.detail = {
       option: 'success',
       delay: 0,
@@ -137,6 +143,12 @@ class LeoWindowBody {
     });
   };
 
+  toggleActivate() {
+    this.isAllActivated = !this.isAllActivated;
+    this.leoConfiguration.toggleActivateAll(this.isAllActivated);
+    this.activateBtnText = this.isAllActivated ? 'Deactivate All' : 'Activate All';
+    this.states = this.leoConfiguration.getStates();
+  }
 
   removeOptionByName(stateName, optionName) {
     this.states.forEach(function (state: any, i) {
@@ -147,7 +159,6 @@ class LeoWindowBody {
       }
     });
   };
-
 
   removeState(state) {
     Leonardo.removeState(state);
@@ -199,14 +210,13 @@ class LeoWindowBody {
     this.states.forEach(function (state: any) {
       state.active = false;
     });
-    Leonardo.deactivateAllStates();
+    Leonardo.toggleActivateAll(false);
   };
 
   toggleState(state) {
     state.active = !state.active;
     this.updateState(state);
   }
-
 
   updateState(state) {
     if (state.active) {
@@ -224,6 +234,33 @@ class LeoWindowBody {
     this.activeScenario = scenario;
     Leonardo.setActiveScenario(scenario);
     this.states = Leonardo.getStates();
+  }
+
+  saveNewScenario() {
+    if (this.newScenarioName.length < 1) {
+      return;
+    }
+    const states = this.leoConfiguration.getStates()
+      .filter((state) => state.active)
+      .map((state: any) => {
+        return {
+          name: state.name,
+          option: state.activeOption.name
+        }
+      });
+
+    this.leoConfiguration.addScenario({
+      name: this.newScenarioName,
+      states: states,
+      from_local: true
+    }, true);
+
+    this.closeNewScenarioForm();
+  }
+
+  closeNewScenarioForm() {
+    this.showAddState = false;
+    this.newScenarioName = '';
   }
 
   stateItemSelected(state) {
@@ -259,20 +296,22 @@ class LeoWindowBody {
   }
 
   getStatesForExport() {
-    this.exportStates = Leonardo.getStates();
+    this.exportStates = Leonardo.getStates().map((state) => {
+      let {name, url, verb, options} = state;
+      return {name, url, verb, options};
+    });
   }
 
-  downloadCode(){
-    this.codeWrapper = document.getElementById("exportedCode");
+  downloadCode() {
+    this.codeWrapper = document.getElementById('exportedCode');
     let codeToStr;
-    if (this.codeWrapper.innerText){
+    if (this.codeWrapper.innerText) {
       codeToStr = this.codeWrapper.innerText;
     }
-    else if (XMLSerializer){
+    else if (XMLSerializer) {
       codeToStr = new XMLSerializer().serializeToString(this.codeWrapper);
     }
     window.open('data:application/octet-stream;filename=Leonardo-States.txt,' + encodeURIComponent(codeToStr), 'Leonardo-States.txt');
-
   }
 
 }
