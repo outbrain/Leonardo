@@ -11,13 +11,9 @@
 
 * [Full Application Example](http://outbrain.github.io/Leonardo/examples/angularIL/)
 
-## Install
+# Getting Started
 
-__Dependencies__
-
-* __[Angular](https://github.com/angular/bower-angular)__
-
-Installing via `npm` or `bower` will bring in the above dependencies as well.
+### 1. Install
 
 __npm__
 ```sh
@@ -29,25 +25,19 @@ __bower__
 $ bower install leonardo
 ```
 
-#### Load Dependency scripts
-
-Angular (tested with v1.3)
-
-#### Add Leonardo script
+### 2. Add Leonardo script
 
 ```html
 <!DOCTYPE HTML>
 <html>
-<body ng-app="app">
-  //.....
-  <script src="[bower_componenets|node_modules|other]/angular/angular.js"></script>
+<body>
   //.....
   <script src="[bower_componenets|node_modules|other]/leonardo/dist/leonardo.js"></script>
 </body>
 </html>
 ```
 
-#### Add Angular module dependency
+** If your app is running angularjs 1.x you will also need to add the Leonardo module as a dependency
 
 ```html
 <!DOCTYPE HTML>
@@ -62,15 +52,19 @@ Angular (tested with v1.3)
 </html>
 ```
 
+### 3. Run your app
+You should now see Leonardo's icon on the bottom left corner. 
+Start mocking your ajax calls by using the UI or the API
+
 ## API
 #### Add States
 ```javascript
  //.....
-    myApp.run(["leoConfiguration", function(leoConfiguration){
-      leoConfiguration.addStates([
+    Leonardo.addStates([
         {
           name: 'Get Data',
           url: '/api/user/43435',
+          verb: 'GET',
           options: [
             {name: 'success', status: 200, data: { name: "Master Splinter" }},
             {name: 'error 500', status: 500},
@@ -87,20 +81,19 @@ Angular (tested with v1.3)
             {name: 'error 400', status: 400}
           ]
         }
-      ]);
-    }]);
+  ]);
 ```
 
 #### Activate State Option
 Activates state option, mocked response will be returned when calling the state url
 ```javascript
 //.....
-    leoConfiguration.activateStateOption('Update Data', 'success');
+    Leonardo.activateStateOption('Update Data', 'success');
     $http.put('/api/user/43435', { name: "Master Splinter" }).success(function(data, status) {
         console.log(status); // 200 
     });
     
-    leoConfiguration.activateStateOption('Update Data', 'error 500');
+    Leonardo.activateStateOption('Update Data', 'error 500');
     $http.put('/api/user/43435', { name: "Master Splinter" }).error(function(data, status) {
         console.log(status); // 500 
     });
@@ -111,12 +104,15 @@ Activates state option, mocked response will be returned when calling the state 
 Deactivates a specific state, when calling the state url request will pass through to the server
 ```javascript
 //.....
-    leoConfiguration.deactivateState('Update Data');
+    Leonardo.deactivateState('Update Data');
 //.....
 ```
 
 ## Hide/Show Leonardo icon
 You can hide Leonardo activator icon by clicking `ctrl` + `shift` + `l`.
+
+
+
 
 
 ## Running and contributing
