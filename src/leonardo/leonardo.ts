@@ -9,7 +9,9 @@ import {leoStateItem} from './state-item.drv';
 import {Storage} from './storage.srv';
 import {jsonFormatter} from './leo-json-formatter.drv';
 import {windowBodyDirective} from './window-body.drv';
+import {polifylls} from './polyfills';
 
+polifylls();
 declare var sinon;
 declare var window;
 declare var Object;
@@ -36,6 +38,8 @@ angular.module('leonardo', ['leonardo.templates', 'ngclipboard'])
         autoRespond: true,
         autoRespondAfter: 10
       });
+
+
       sinon.FakeXMLHttpRequest.useFilters = true;
       sinon.FakeXMLHttpRequest.addFilter(function (method, url) {
         if (url.indexOf('.html') > 0 && url.indexOf('template') >= 0) {

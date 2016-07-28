@@ -5,7 +5,7 @@ export function leoConfiguration () {
     _scenarios = {},
     _requestsLog = [],
     _savedStates = [],
-    _statesChangedEvent = new Event('leonardo:setStates'),
+    _statesChangedEvent = new CustomEvent('leonardo:setStates'),
     _eventsElem = document.body;
 
   // Core API
