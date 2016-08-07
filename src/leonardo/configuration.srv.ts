@@ -1,4 +1,4 @@
-import IRootScopeService = angular.IRootScopeService;
+/// <reference path="leonardo.d.ts" />
 
 export function leoConfiguration () {
   var _states = [],
@@ -7,7 +7,7 @@ export function leoConfiguration () {
     _savedStates = [],
     _statesChangedEvent = new CustomEvent('leonardo:setStates'),
     _eventsElem = document.body;
-
+  
   // Core API
   // ----------------
   return {
@@ -55,7 +55,7 @@ export function leoConfiguration () {
   function fetchStates() {
     var activeStates = Leonardo.storage.getStates();
     var statesCopy = _states.map(function (state) {
-      return angular.copy(state);
+      return Object.assign({}, state);
     });
 
     statesCopy.forEach(function (state: any) {
@@ -110,7 +110,7 @@ export function leoConfiguration () {
   }
 
   function addStates(statesArr, overrideOption = false) {
-    if (angular.isArray(statesArr)) {
+    if (Array.isArray(statesArr)) {
       statesArr.forEach(function (stateObj) {
         addState(stateObj, overrideOption);
       });
@@ -126,7 +126,7 @@ export function leoConfiguration () {
       from_local = configObj.from_local,
       url = configObj.url,
       status = configObj.status || 200,
-      data = angular.isDefined(configObj.data) ? configObj.data : {},
+      data = (typeof configObj.data !== 'undefined') ? configObj.data : {},
       delay = configObj.delay || 0;
     var defaultState = {};
 
@@ -141,7 +141,7 @@ export function leoConfiguration () {
         return _state.name === state;
       })[0] || defaultState;
 
-    angular.extend(stateItem, {
+    Object.assign(stateItem, {
       name: state,
       url: url || stateItem.url,
       verb: verb,
@@ -158,7 +158,7 @@ export function leoConfiguration () {
     })[0];
 
     if (overrideOption && option) {
-      angular.extend(option, {
+      Object.assign(option, {
         name: name,
         from_local: from_local,
         status: status,
@@ -167,7 +167,7 @@ export function leoConfiguration () {
       });
     }
     else if (!option) {
-      angular.extend(defaultOption, {
+      Object.assign(defaultOption, {
         name: name,
         from_local: from_local,
         status: status,
@@ -425,7 +425,6 @@ export function leoConfiguration () {
           }]
         }
       });
-    console.log(angular.toJson(requestsArr, true));
     return requestsArr;
   }
 
