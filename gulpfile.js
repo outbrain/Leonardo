@@ -57,6 +57,7 @@ gulp.task("build:templates", false, function () {
 gulp.task('build:js', "bundle all js assets", function(){
   return gulp.src(
     [
+      './bower_components/jquery/dist/jquery.min.js',
       './src/leonardo/angular.wrapped.min.js',
       './src/leonardo/sinon.js',
       './src/leonardo/ngclipboard.js',
