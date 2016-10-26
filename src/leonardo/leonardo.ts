@@ -65,7 +65,7 @@ server.respondWith(function (request) {
 Leonardo.loadSavedStates();
 
 (($: any) => {
-  $(document.body).launcher();
+  $(document.body).leonardoLauncher();
 })(jQuery);
 
 //angular.module('leonardo', ['leonardo.templates', 'ngclipboard'])

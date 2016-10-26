@@ -1,5 +1,5 @@
 /// <reference path="leonardo.d.ts" />
-
+declare var Object: any;
 export function leoConfiguration () {
   var _states = [],
     _scenarios = {},
