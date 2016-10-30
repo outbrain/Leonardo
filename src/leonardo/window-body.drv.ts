@@ -145,9 +145,8 @@ class LeoWindowBody {
 
   toggleActivate() {
     this.isAllActivated = !this.isAllActivated;
-    Leonardo.toggleActivateAll(this.isAllActivated);
+    this.states = Leonardo.toggleActivateAll(this.isAllActivated);
     this.activateBtnText = this.isAllActivated ? 'Deactivate All' : 'Activate All';
-    this.states = Leonardo.getStates();
   }
 
   removeOptionByName(stateName, optionName) {
