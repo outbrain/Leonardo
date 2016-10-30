@@ -9,7 +9,7 @@ export default class Launcher {
 
   get() {
     const launcher = Utils.getElementFromHtml(`<div style="bottom: 10px; right: 10px" class="leonardo-launcher"></div>`);
-    launcher.addEventListener('click', this.onClick.bind(this));
+    launcher.addEventListener('click', this.onClick);
     return launcher;
   }
 
