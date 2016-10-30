@@ -38,6 +38,7 @@ export function windowBodyDirective($http) {
           ]
         });
 
+        leoWindowBody.refreshStates();
         leoActivator.selectTab('scenarios');
       };
 
@@ -135,6 +136,10 @@ class LeoWindowBody {
         }, 3000);
       }
     });
+  }
+
+  refreshStates() {
+    this.states = Leonardo.getStates();
   }
 
   removeStateByName(name) {
