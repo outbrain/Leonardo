@@ -22,6 +22,8 @@ export function leoConfiguration () {
     addScenarios: addScenarios,
     getScenario: getScenario,
     getScenarios: getScenarios,
+    removeScenario: removeScenario,
+    getScenariosTypes: getScenariosTypes,
     setActiveScenario: setActiveScenario,
     getRecordedStates: getRecordedStates,
     getRequestsLog: getRequestsLog,
@@ -76,6 +78,7 @@ export function leoConfiguration () {
       statesStatus[stateKey].active = flag;
     });
     Leonardo.storage.setStates(statesStatus);
+    return statesStatus;
   }
 
   function findStateOption(name) {
@@ -199,9 +202,23 @@ export function leoConfiguration () {
     });
   }
 
+  function getScenariosTypes() {
+    const scenarios = Leonardo.storage.getScenarios().map((scenario: any) => {
+      return { name: scenario.name, type: 'localStorage' };
+    });
+
+    return Object.keys(_scenarios).map((name: string) => {
+      return { name, type: 'config' };
+    }).concat(scenarios);
+  }
+
+  function removeScenario(name) {
+    const scenarios = Leonardo.storage.getScenarios().filter((scenario: any) => scenario.name !== name);
+    Leonardo.storage.setScenarios(scenarios);
+  }
+
   function getScenarios() {
-    const scenarios = Leonardo.storage.getScenarios().map((scenario: any) => scenario.name);
-    return Object.keys(_scenarios).concat(scenarios);
+    return getScenariosTypes().map((scenario: any) => scenario.name);
   }
 
   function getScenario(name: string) {
@@ -217,15 +234,30 @@ export function leoConfiguration () {
   }
 
   function setActiveScenario(name) {
+    let statesStatus = Leonardo.storage.getStates();
+
     var scenario = getScenario(name);
     if (!scenario) {
       console.warn("leonardo: could not find scenario named " + name);
-      return;
+      return statesStatus;
     }
-    toggleActivateAll(false);
+    statesStatus = toggleActivateAll(false);
     scenario.forEach(function (state) {
-      upsertOption(state.name, state.option, true);
+      statesStatus.map((stateStatus) => {
+        if (stateStatus.name === state.name) {
+          stateStatus.active = true;
+        }
+        return stateStatus;
+      });
     });
+
+    Leonardo.storage.setStates(statesStatus);
+    return statesStatus;
+  }
+
+  function updateOptionByName(name, active) {
+
+
   }
 
   function activateStateOption(state, optionName) {
