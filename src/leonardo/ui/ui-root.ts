@@ -2,11 +2,13 @@
 import Launcher from './launcher/launcher';
 import MainView from './main-view/main-view';
 import Utils from './ui-utils';
+import UIStateVeiwService from './ui-state/ui-state.srv';
 
 export default class UIRoot {
   leonardoApp: Node;
   launcher: Launcher;
   mainView: MainView;
+
   constructor() {
     this.init();
   }
@@ -18,5 +20,7 @@ export default class UIRoot {
     this.leonardoApp.appendChild(this.launcher.get());
     this.leonardoApp.appendChild(this.mainView.get());
     document.body.appendChild(this.leonardoApp);
+    this.mainView.kickStart();
   }
+
 }
