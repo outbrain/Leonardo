@@ -38,6 +38,7 @@ export function windowBodyDirective($http) {
           ]
         });
 
+        leoWindowBody.refreshStates();
         leoActivator.selectTab('scenarios');
       };
 
@@ -95,7 +96,7 @@ class LeoWindowBody {
     };
 
     this.states = Leonardo.getStates();
-    this.scenarios = Leonardo.getScenarios();
+    this.scenarios = Leonardo.getScenariosTypes();
     this.requests = Leonardo.getRequestsLog();
 
     $scope.$watch('leoWindowBody.detail.value', (value) => {
@@ -137,6 +138,10 @@ class LeoWindowBody {
     });
   }
 
+  refreshStates() {
+    this.states = Leonardo.getStates();
+  }
+
   removeStateByName(name) {
     this.states = this.states.filter(function (state) {
       return state.name !== name;
@@ -145,9 +150,8 @@ class LeoWindowBody {
 
   toggleActivate() {
     this.isAllActivated = !this.isAllActivated;
-    Leonardo.toggleActivateAll(this.isAllActivated);
+    this.states = Leonardo.toggleActivateAll(this.isAllActivated);
     this.activateBtnText = this.isAllActivated ? 'Deactivate All' : 'Activate All';
-    this.states = Leonardo.getStates();
   }
 
   removeOptionByName(stateName, optionName) {
@@ -228,11 +232,16 @@ class LeoWindowBody {
     if (this.selectedState === state) {
       this.editState(state);
     }
-  };
+  }
 
   activateScenario(scenario) {
     this.activeScenario = scenario;
-    Leonardo.setActiveScenario(scenario);
+    this.states = Leonardo.setActiveScenario(scenario);
+  }
+
+  removeScenario(name) {
+    Leonardo.removeScenario(name);
+    this.scenarios = Leonardo.getScenariosTypes();
     this.states = Leonardo.getStates();
   }
 
@@ -240,7 +249,8 @@ class LeoWindowBody {
     if (this.newScenarioName.length < 1) {
       return;
     }
-    const states = Leonardo.getStates()
+
+    const states = this.states
       .filter((state) => state.active)
       .map((state: any) => {
         return {
@@ -254,6 +264,8 @@ class LeoWindowBody {
       states: states,
       from_local: true
     }, true);
+
+    this.scenarios = Leonardo.getScenariosTypes();
 
     this.closeNewScenarioForm();
   }
