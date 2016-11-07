@@ -57,14 +57,10 @@
         <div>
           SCENARIOS
         </div>
-        <ul class="leonardo-scenario-list">
-          <li class="leonardo-scenario-item"
-              ng-class="{ 'selected': scenario === leoWindowBody.activeScenario }"
-              ng-repeat="scenario in leoWindowBody.scenarios track by $index">
-            <span ng-click="leoWindowBody.activateScenario(scenario.name)">{{scenario.name}}</span>
-            <span ng-if="scenario.type == 'localStorage'"
-                  ng-click="leoWindowBody.removeScenario(scenario.name)"
-                  class="leonardo-delete-btn">x</span>
+        <ul>
+          <li ng-class="{ 'selected': scenario === leoWindowBody.activeScenario }"
+              ng-repeat="scenario in leoWindowBody.scenarios track by $index"
+              ng-click="leoWindowBody.activateScenario(scenario)">{{scenario}}
           </li>
         </ul>
       </div>

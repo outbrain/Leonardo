@@ -96,7 +96,7 @@ class LeoWindowBody {
     };
 
     this.states = Leonardo.getStates();
-    this.scenarios = Leonardo.getScenariosTypes();
+    this.scenarios = Leonardo.getScenarios();
     this.requests = Leonardo.getRequestsLog();
 
     $scope.$watch('leoWindowBody.detail.value', (value) => {
@@ -232,16 +232,11 @@ class LeoWindowBody {
     if (this.selectedState === state) {
       this.editState(state);
     }
-  }
+  };
 
   activateScenario(scenario) {
     this.activeScenario = scenario;
-    this.states = Leonardo.setActiveScenario(scenario);
-  }
-
-  removeScenario(name) {
-    Leonardo.removeScenario(name);
-    this.scenarios = Leonardo.getScenariosTypes();
+    Leonardo.setActiveScenario(scenario);
     this.states = Leonardo.getStates();
   }
 
@@ -249,8 +244,7 @@ class LeoWindowBody {
     if (this.newScenarioName.length < 1) {
       return;
     }
-
-    const states = this.states
+    const states = Leonardo.getStates()
       .filter((state) => state.active)
       .map((state: any) => {
         return {
@@ -264,8 +258,6 @@ class LeoWindowBody {
       states: states,
       from_local: true
     }, true);
-
-    this.scenarios = Leonardo.getScenariosTypes();
 
     this.closeNewScenarioForm();
   }
