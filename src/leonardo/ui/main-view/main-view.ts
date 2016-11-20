@@ -39,7 +39,6 @@ export default class MainView {
     }
   }
 
-
   kickStart() {
     this.viewNode = document.querySelector(`.${this.className}`);
     this.viewNode.appendChild(this.headerView.get());
