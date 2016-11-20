@@ -1,13 +1,29 @@
 .leonardo-scenarios-list {
   width: 200px;
-  padding-left: 10px;
+  padding-left: 15px;
   padding-top: 10px;
   border-right: 1px solid #ccc;
-
+  > div {
+    font-weight: 500;
+  }
   ul {
-    padding-left: 10px;
+    margin: 0;
+    padding-top: 5px;
+    padding-left: 5px;
+    font-size: 0.9rem;
     li {
       list-style: none;
+      cursor: pointer;
+      max-width: calc(~"100% - 10px");
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 2px;
+      &:hover {
+        text-decoration: underline;
+      }
+      &.leonardo-selected-scenario {
+      }
     }
   }
 }

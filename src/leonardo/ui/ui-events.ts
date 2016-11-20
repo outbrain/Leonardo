@@ -3,6 +3,7 @@
 export default {
   TOGGLE_LAUNCHER: 'leonardo:toggle:launcher',
   CHANGE_VIEW: 'leonardo:change:view',
+  SCENARIO_CLICKED: 'leonardo:scenario:clicked',
 
   on: (eventName: string, fn: EventListenerOrEventListenerObject) => {
     document.body.addEventListener(eventName, fn);

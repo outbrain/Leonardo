@@ -14,6 +14,7 @@ export default class StateItem {
     return this.viewNode;
   }
 
+
   render() {
     this.viewNode.innerHTML = this.state.name;
   }
