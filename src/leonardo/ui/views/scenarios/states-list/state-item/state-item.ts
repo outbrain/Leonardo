@@ -24,8 +24,20 @@ export default class StateItem {
         <span class="leonardo-state-verb leonardo-state-verb-${this.state.verb.toLowerCase()}">${this.state.verb}</span>
         <span class="leonardo-state-name">${this.state.name}</span>
         <span class="leonardo-state-options">options</span>
-        <button title="Remove State" class="leonardo-state-remove">Remove</button>`;
+        <button title="Remove State" class="leonardo-button leonardo-state-remove">Remove</button>`;
     document.querySelector(`#leonardo-toggle-btn-${this.randomID}`).addEventListener('click', this.toggleState.bind(this))
+  }
+
+  getName() {
+    return this.state.name;
+  }
+
+  toggleVisible(show: boolean) {
+    if (show) {
+      this.viewNode.classList.remove('leonardo-state-item-hidden');
+    } else {
+      this.viewNode.classList.add('leonardo-state-item-hidden');
+    }
   }
 
   private isChecked(): string {

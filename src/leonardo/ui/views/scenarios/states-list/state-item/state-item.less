@@ -1,5 +1,6 @@
 .leonardo-state-item {
   display: flex;
+  margin-bottom: 3px;
   .leonardo-state-verb {
     margin-right: 10px;
     background: #000;
@@ -30,17 +31,12 @@
   }
   .leonardo-state-name{
     flex: 1;
+    font-size: 0.9rem;
   }
   .leonardo-state-remove{
-    background: #219161;
-    color: white;
-    border: 0;
-    font-size: 13px;
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 2px;
-    margin-left: 5px;
   }
 
-
+  &.leonardo-state-item-hidden {
+    display: none;
+  }
 }
