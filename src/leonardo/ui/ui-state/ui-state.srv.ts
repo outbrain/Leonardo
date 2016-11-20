@@ -1,10 +1,28 @@
 /// <reference path="../../leonardo.d.ts" />
 
 import {UIViewState} from './ui-state.model';
+import Events from '../ui-events';
 export default class UIStateViewService {
-  private curViewState: UIViewState;
 
-  constructor(private viewStateList: Array<UIViewState>, private initViewName: string) {
+  private static _instance: UIStateViewService = new UIStateViewService();
+  private curViewState: UIViewState;
+  private viewStateList: Array<UIViewState>;
+
+  static getInstance(): UIStateViewService {
+    return UIStateViewService._instance;
+  }
+
+  constructor() {
+    if (UIStateViewService._instance) {
+      throw new Error('UIStateViewService should be singleton');
+    }
+    UIStateViewService._instance = this;
+  }
+
+
+
+  init(viewStateList: Array<UIViewState>, initViewName: string) {
+    this.viewStateList = viewStateList;
     this.curViewState = this.getViewStateByName(initViewName);
   }
 
@@ -14,6 +32,7 @@ export default class UIStateViewService {
 
   setCurViewState(stateName: string){
     this.curViewState = this.getViewStateByName(stateName);
+    Events.dispatch(Events.CHANGE_VIEW, this.curViewState);
   }
 
   getViewStates(){

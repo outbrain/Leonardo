@@ -43,6 +43,7 @@ export default class HeaderView {
   selectTab(tabLabel: string){
     document.querySelector(`.${HeaderView.SELECTED_CLASS_NAME}`).classList.remove(`leonardo-header-tabItem-selected`);
     document.querySelector(`[data-headertab="leonardo-header-${tabLabel}"]`).classList.add(HeaderView.SELECTED_CLASS_NAME);
+    UIStateViewService.getInstance().setCurViewState(tabLabel);
   }
 
   //$(document).on('keypress', (e) => {

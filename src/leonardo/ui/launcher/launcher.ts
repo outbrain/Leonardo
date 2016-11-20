@@ -14,7 +14,7 @@ export default class Launcher {
   }
 
   onClick() {
-    Events.dispatch(Events.TOGGLE_VIEW);
+    Events.dispatch(Events.TOGGLE_LAUNCHER);
   }
 
   //$(document).on('keypress', (e) => {

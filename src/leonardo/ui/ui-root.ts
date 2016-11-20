@@ -20,7 +20,6 @@ export default class UIRoot {
     this.leonardoApp.appendChild(this.launcher.get());
     this.leonardoApp.appendChild(this.mainView.get());
     document.body.appendChild(this.leonardoApp);
-    this.mainView.kickStart();
   }
 
 }

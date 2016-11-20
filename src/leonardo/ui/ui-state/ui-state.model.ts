@@ -4,5 +4,6 @@
 
 
 export interface UIViewState {
-  name: string  
+  name: string,
+  component?: any
 }

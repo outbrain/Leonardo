@@ -6,17 +6,20 @@ import {HeaderTabItem} from '../header/header.model';
 import {UIStateList} from '../ui-state/ui-state.data';
 import UIStateViewService from '../ui-state/ui-state.srv';
 import {UIViewState} from '../ui-state/ui-state.model';
+import ViewsContainer from '../views-container/views-container';
 
 export default class MainView {
   className = 'leonardo-main-view';
   hiddenClassName = `${this.className}-hidden`;
-  uiStateService: UIStateViewService;
   headerView: HeaderView;
-    
+  viewsContainer: ViewsContainer;
+  viewNode: Node;
+
   constructor() {
-    Events.on(Events.TOGGLE_VIEW, this.toggleView.bind(this));
-    this.uiStateService = new UIStateViewService(UIStateList, UIStateList[0].name);
+    Events.on(Events.TOGGLE_LAUNCHER, this.toggleView.bind(this));
+    UIStateViewService.getInstance().init(UIStateList, UIStateList[0].name);
     this.headerView = new HeaderView(this.getTabList());
+    this.viewsContainer = new ViewsContainer();
   }
 
   get() {
@@ -28,20 +31,24 @@ export default class MainView {
     if (!el) return;
     if (el.classList.contains(this.hiddenClassName)) {
       el.classList.remove(this.hiddenClassName);
+      if (!el.childNodes.length) {
+        this.kickStart();
+      }
     } else {
       el.classList.add(this.hiddenClassName);
     }
   }
 
-  getViewNode(): Node{
-    return document.querySelector(`.${this.className}`);
-  }
-  
-  kickStart(){
-    this.getViewNode().appendChild(this.headerView.get());
+
+  kickStart() {
+    this.viewNode = document.querySelector(`.${this.className}`);
+    this.viewNode.appendChild(this.headerView.get());
+    this.viewNode.appendChild(this.viewsContainer.get());
+    this.viewsContainer.render(UIStateViewService.getInstance().getCurViewState());
+
   }
 
   private getTabList(): Array<HeaderTabItem>{
-    return this.uiStateService.getViewStates().map((view: UIViewState) => {return {label: view.name}});
+    return UIStateViewService.getInstance().getViewStates().map((view: UIViewState) => {return {label: view.name}});
   }
 }
