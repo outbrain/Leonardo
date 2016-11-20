@@ -1,7 +1,7 @@
 /// <reference path="../../leonardo.d.ts" />
 
 import {UIViewState} from './ui-state.model';
-export default class UIStateVeiwService {
+export default class UIStateViewService {
   private curViewState: UIViewState;
 
   constructor(private viewStateList: Array<UIViewState>, private initViewName: string) {
@@ -12,7 +12,7 @@ export default class UIStateVeiwService {
     return this.curViewState;
   }
 
-  serCurViewState(stateName: string){
+  setCurViewState(stateName: string){
     this.curViewState = this.getViewStateByName(stateName);
   }
 

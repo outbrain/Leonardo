@@ -15,6 +15,7 @@ export default class MainView {
     
   constructor() {
     Events.on(Events.TOGGLE_VIEW, this.toggleView.bind(this));
+    this.uiStateService = new UIStateViewService(UIStateList, UIStateList[0].name);
     this.headerView = new HeaderView(this.getTabList());
   }
 
