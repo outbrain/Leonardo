@@ -88,7 +88,6 @@ class LeoWindowBody {
 
   constructor(private $scope, private $timeout) {
     this.activateBtnText = 'Activate All';
-    this.isAllActivated = false;
     this.detail = {
       option: 'success',
       delay: 0,
@@ -98,6 +97,9 @@ class LeoWindowBody {
     this.states = Leonardo.getStates();
     this.scenarios = Leonardo.getScenariosTypes();
     this.requests = Leonardo.getRequestsLog();
+
+    this.isAllActivated = this.states.every(s => s.active);
+    this.activateBtnText = this.isAllActivated ? 'Deactivate All' : 'Activate All';
 
     $scope.$watch('leoWindowBody.detail.value', (value) => {
       if (!value) {
