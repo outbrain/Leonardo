@@ -1,0 +1,89 @@
+.leonardo-toggle {
+  display: none;
+
+  // add default box-sizing for this scope
+  &,
+  &:after,
+  &:before,
+  & *,
+  & *:after,
+  & *:before,
+  & + .leonardo-toggle-btn {
+    box-sizing: border-box;
+    &::selection {
+      background: none;
+    }
+  }
+
+  + .leonardo-toggle-btn {
+    outline: 0;
+    display: block;
+    width: 3em;
+    height: 1.5em;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    &:after,
+    &:before {
+      position: relative;
+      display: block;
+      content: "";
+      width: 50%;
+      height: 100%;
+    }
+
+    &:after {
+      left: 0;
+    }
+
+    &:before {
+      display: none;
+    }
+  }
+
+  &:checked + .leonardo-toggle-btn:after {
+    left: 50%;
+  }
+}
+
+
+.leonardo-toggle-ios {
+  + .leonardo-toggle-btn {
+    background: #fbfbfb;
+    border-radius: 2em;
+    padding: 2px;
+    transition: all .4s ease;
+    border: 1px solid #e8eae9;
+    &:after {
+      border-radius: 2em;
+      background: #fbfbfb;
+      transition: left .3s cubic-bezier(
+              0.175, 0.885, 0.320, 1.275
+      ),
+      padding .3s ease, margin .3s ease;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, .1),
+      0 4px 0 rgba(0, 0, 0, .08);
+    }
+
+    &:hover:after {
+      will-change: padding;
+    }
+
+    &:active {
+      box-shadow: inset 0 0 0 2em #e8eae9;
+      &:after {
+        padding-right: .8em;
+      }
+    }
+  }
+
+  &:checked + .leonardo-toggle-btn {
+    background: #86d993;
+    &:active {
+      box-shadow: none;
+      &:after {
+        margin-left: -.8em;
+      }
+    }
+  }
+}
