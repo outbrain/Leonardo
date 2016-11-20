@@ -1,6 +1,7 @@
 /// <reference path="../../../../leonardo.d.ts" />
 import Utils from '../../../ui-utils';
 import Events from '../../../ui-events';
+import StateItem from './state-item/state-item';
 
 export default class StatesList {
 
@@ -18,9 +19,10 @@ export default class StatesList {
   render() {
     const viewNode = this.getViewNode();
     Leonardo.getStates().map((state) => {
-      return Utils.getElementFromHtml(`<div>${state.name}</div>`);
+      return new StateItem(state);
     }).forEach((stateElm) => {
-      viewNode.appendChild(stateElm);
+      viewNode.appendChild(stateElm.get());
+      stateElm.render();
     });
   }
 

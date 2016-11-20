@@ -2,10 +2,10 @@
 
 export default class Utils {
   constructor() {}
-  static getElementFromHtml(html: string) {
+  static getElementFromHtml(html: string) : HTMLElement {
     const div = document.createElement('div');
     div.innerHTML = html;
-    return div.firstChild;
+    return <HTMLElement>div.firstChild;
   }
 
 }
