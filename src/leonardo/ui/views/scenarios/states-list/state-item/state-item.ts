@@ -31,6 +31,18 @@ export default class StateItem {
     this.viewNode.querySelector(`.leonardo-toggle-btn`).addEventListener('click', this.toggleState.bind(this))
   }
 
+  getName() {
+    return this.state.name;
+  }
+
+  toggleVisible(show: boolean) {
+    if (show) {
+      this.viewNode.classList.remove('leonardo-state-item-hidden');
+    } else {
+      this.viewNode.classList.add('leonardo-state-item-hidden');
+    }
+  }
+
   private isChecked(): string {
     return this.state.active ? 'checked' : '';
   }

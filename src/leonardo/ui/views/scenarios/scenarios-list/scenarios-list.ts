@@ -4,28 +4,37 @@ import Events from '../../../ui-events';
 
 export default class ScenariosList {
 
+  viewNode: any;
+  static SELECTED_CLASS = 'leonardo-selected-scenario';
+
   constructor() {
+    this.viewNode = Utils.getElementFromHtml(`<div id="leonardo-scenarios-list" class="leonardo-scenarios-list"></div>`);
   }
 
   get() {
-    return Utils.getElementFromHtml(`<div id="leonardo-scenarios-list" class="leonardo-scenarios-list"><div>Scenarios</div></div>`);
-  }
-
-  getViewNode() {
-    return document.getElementById('leonardo-scenarios-list');
+    return this.viewNode;
   }
 
   render() {
-    const viewNode = this.getViewNode();
+    this.viewNode.innerHTML = '';
+    this.viewNode.appendChild(Utils.getElementFromHtml(`<div>Scenarios</div>`));
     const ul = Utils.getElementFromHtml(`<ul></ul>`);
-    Leonardo.getScenarios().map((scenario) => {
-      return Utils.getElementFromHtml(`<li>${scenario}</li>`);
-    }).forEach((scenarioElm) => {
-      ul.appendChild(scenarioElm);
+    Leonardo.getScenarios()
+      .map(this.getScenarioElement.bind(this))
+      .forEach((scenarioElm) => {
+        ul.appendChild(scenarioElm);
+      });
+    this.viewNode.appendChild(ul);
 
-    });
-    viewNode.appendChild(ul);
   }
 
-
+  getScenarioElement(scenario) {
+    const el = Utils.getElementFromHtml(`<li>${scenario}</li>`);
+    el.addEventListener('click', () => {
+      Events.dispatch(Events.SCENARIO_CLICKED, { name: scenario });
+      this.viewNode.querySelectorAll('li').forEach(li => li.classList.remove(ScenariosList.SELECTED_CLASS));
+      el.classList.add(ScenariosList.SELECTED_CLASS);
+    });
+    return el;
+  }
 }
