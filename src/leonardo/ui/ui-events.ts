@@ -6,6 +6,8 @@ export default {
   SCENARIO_CLICKED: 'leonardo:scenario:clicked',
   FILTER_STATES: 'leonardo:filter:states',
   CLOSE_DROPDOWNS: 'leonardo:close:dropdowns',
+  TOGGLE_STATES: 'leonardo:toggle:states',
+  TOGGLE_SCENARIOS: 'leonardo:toggle:scenario',
 
   on: (eventName: string, fn: EventListenerOrEventListenerObject) => {
     document.body.addEventListener(eventName, fn);

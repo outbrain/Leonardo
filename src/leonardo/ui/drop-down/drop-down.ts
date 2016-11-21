@@ -54,10 +54,13 @@ export default class DropDown {
     if (event && event.target) {
       event.stopPropagation();
     }
-    if(event.target['classList'].contains('leonardo-dropdown-item-text')){
+    if(event.target['classList'].contains('leonardo-dropdown-item') ){
+      this.setActiveItem(event.target['querySelector']('.leonardo-dropdown-item-text').innerHTML);
+    }
+    else if(event.target['classList'].contains('leonardo-dropdown-item-text')){
       this.setActiveItem(event.target['innerHTML']);
     }
-    if(event.target['classList'].contains('leonardo-dropdown-item-x')){
+    else if(event.target['classList'].contains('leonardo-dropdown-item-x')){
       this.removeItem(<HTMLElement>event.target['parentNode']);
     }
     if (this.optionsState) {
@@ -82,7 +85,7 @@ export default class DropDown {
     this.viewNode.querySelector(`.leonardo-dropdown-options`)['style'].display = 'none';
   }
 
-  private setActiveItem(itemName: string){
+  setActiveItem(itemName: string){
     if(this.activeItem.name === itemName){
       return;
     }

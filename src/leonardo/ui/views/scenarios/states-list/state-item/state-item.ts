@@ -8,11 +8,15 @@ export default class StateItem {
   viewNode: HTMLElement;
   randomID: string;
   dropDown: DropDown;
-  constructor(private state) {
+  toggleBinded: EventListener = this.toggleState.bind(this);
+  removeBinded: EventListener = this.removeState.bind(this);
+
+  constructor(private state, private onRemove: Function) {
     this.viewNode = Utils.getElementFromHtml(`<div class="leonardo-state-item"></div>`);
     this.randomID = Utils.guidGenerator();
     this.dropDown = new DropDown(this.state.options, this.state.activeOption, !this.state.active, this.changeActiveOption.bind(this));
-    console.log(state);
+    Events.on(Events.TOGGLE_STATES, this.toggleAllstate.bind(this));
+    Events.on(`${Events.TOGGLE_STATES}:${this.state.name}`, this.setStateState.bind(this));
   }
 
   get() {
@@ -20,6 +24,10 @@ export default class StateItem {
   }
 
   render() {
+    if (this.viewNode.innerHTML) {
+      this.viewNode.querySelector(`.leonardo-toggle-btn`).removeEventListener('click', this.toggleBinded, false);
+      this.viewNode.querySelector(`.leonardo-state-remove`).removeEventListener('click', this.removeBinded, false);
+    }
     this.viewNode.innerHTML = `
         <input ${this.isChecked()} id="leonardo-state-toggle-${this.randomID}" class="leonardo-toggle leonardo-toggle-ios" type="checkbox"/>
         <label class="leonardo-toggle-btn" for="leonardo-state-toggle-${this.randomID }"></label>
@@ -28,11 +36,16 @@ export default class StateItem {
     this.viewNode.appendChild(this.dropDown.get());
     this.dropDown.render();
     this.viewNode.appendChild(Utils.getElementFromHtml(`<button title="Remove State" class="leonardo-state-remove">Remove</button>`));
-    this.viewNode.querySelector(`.leonardo-toggle-btn`).addEventListener('click', this.toggleState.bind(this))
+    this.viewNode.querySelector(`.leonardo-toggle-btn`).addEventListener('click', this.toggleBinded, false);
+    this.viewNode.querySelector(`.leonardo-state-remove`).addEventListener('click', this.removeBinded, false);
   }
 
   getName() {
     return this.state.name;
+  }
+
+  getState() {
+    return this.state;
   }
 
   toggleVisible(show: boolean) {
@@ -43,25 +56,61 @@ export default class StateItem {
     }
   }
 
+  setState(state: Boolean, setView: boolean = true) {
+    this.state.active = state;
+    if (state) {
+      Leonardo.activateStateOption(this.state.name, this.state.activeOption.name);
+      this.dropDown.enableDropDown();
+      if (setView) {
+        this.viewNode.querySelector('.leonardo-toggle')['checked'] = true;
+      }
+    }
+    else {
+      Leonardo.deactivateState(this.state.name);
+      this.dropDown.disableDropDown();
+      if (setView) {
+        this.viewNode.querySelector('.leonardo-toggle')['checked'] = false;
+      }
+    }
+  }
+
   private isChecked(): string {
     return this.state.active ? 'checked' : '';
   }
 
-  private toggleState(event){
-    this.state.active = !this.state.active;
-    if(this.state.active){
-      Leonardo.activateStateOption(this.state.name, this.state.activeOption.name);
-      this.dropDown.enableDropDown();
-    }
-    else{
-      Leonardo.deactivateState(this.state.name);
-      this.dropDown.disableDropDown();
-    }
+  private toggleState(event: Event) {
+    this.setState(!this.state.active, false);
+  }
+
+  private toggleAllstate(event: CustomEvent) {
+    this.setState(event.detail);
+  }
+
+  private setStateState(event: CustomEvent) {
+    this.setState(true);
+    this.state.options.some((option) => {
+      if (option.name === event.detail) {
+        this.dropDown.setActiveItem(event.detail);
+        this.changeActiveOption(option);
+        return true;
+      }
+    })
   }
 
   private changeActiveOption(option) {
     this.state.activeOption = option;
     Leonardo.activateStateOption(this.state.name, this.state.activeOption.name)
+  }
+
+  private removeState() {
+    this.onDestroy();
+    this.onRemove(this.state.name, this.viewNode);
+    Leonardo.removeState(this.state);
+  }
+
+  onDestroy() {
+    this.viewNode.querySelector(`.leonardo-toggle-btn`).removeEventListener('click', this.toggleBinded, false);
+    this.viewNode.querySelector(`.leonardo-state-remove`).removeEventListener('click', this.removeBinded, false);
   }
 
 }

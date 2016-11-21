@@ -3,10 +3,12 @@ import Utils from '../../../ui-utils';
 import Events from '../../../ui-events';
 import StateItem from './state-item/state-item';
 import StatesBar from './states-bar/states-bar';
+import StateDetail from './state-detail/states-detail';
 
 export default class StatesList {
   viewNode: any;
   statesBar = new StatesBar();
+  stateDetail = new StateDetail(this.onStateDetailSave.bind(this), this.clearSelected.bind(this));
   statesElements: StateItem[] = [];
 
   constructor() {
@@ -21,15 +23,18 @@ export default class StatesList {
   render() {
     this.viewNode.innerHTML = '';
     this.viewNode.appendChild(this.statesBar.get());
+    this.viewNode.appendChild(this.stateDetail.get());
     this.statesElements.length = 0;
     Leonardo.getStates()
-      .map((state) => new StateItem(state))
+      .map((state) => new StateItem(state, this.removeStateByName.bind(this)))
       .forEach((stateElm) => {
         this.statesElements.push(stateElm);
         this.viewNode.appendChild(stateElm.get());
+        stateElm.viewNode.addEventListener('click', this.toggleDetail.bind(this, stateElm));
         stateElm.render();
       });
     this.statesBar.render();
+
   }
 
   onFilterStates(data) {
@@ -40,5 +45,33 @@ export default class StatesList {
         stateElm.toggleVisible(false);
       }
     });
+  }
+
+  removeStateByName(stateName: string, stateView: HTMLElement) {
+    this.statesElements = this.statesElements.filter((state) => {
+      return state.getName() === stateName;
+    });
+    this.viewNode.removeChild(stateView);
+  }
+
+  private toggleDetail(stateElm: StateItem, event: Event) {
+    event.stopPropagation();
+    const open: boolean = stateElm.viewNode.classList.contains('leonardo-state-item-detailed');
+    this.clearSelected();
+    if(!open){
+      stateElm.viewNode.classList.add('leonardo-state-item-detailed');
+    }
+
+    this.stateDetail.toggle(stateElm.getState());
+  }
+
+  private clearSelected(){
+    this.statesElements.forEach((curState) => {
+      curState.viewNode.classList.remove('leonardo-state-item-detailed');
+    });
+  }
+
+  private onStateDetailSave(){
+    this.clearSelected();
   }
 }

@@ -5,10 +5,12 @@ import Events from '../../../ui-events';
 export default class ScenariosList {
 
   viewNode: any;
+  setScenarioBinded: EventListener = this.setScenario.bind(this);
   static SELECTED_CLASS = 'leonardo-selected-scenario';
 
   constructor() {
     this.viewNode = Utils.getElementFromHtml(`<div id="leonardo-scenarios-list" class="leonardo-scenarios-list"></div>`);
+    this.viewNode.addEventListener('click', this.setScenarioBinded, false);
   }
 
   get() {
@@ -36,5 +38,18 @@ export default class ScenariosList {
       el.classList.add(ScenariosList.SELECTED_CLASS);
     });
     return el;
+  }
+
+  private setScenario(event: MouseEvent) {
+    const scenarioName: string = event.target['innerHTML'];
+    const states: Array<any> = Leonardo.getScenario(scenarioName);
+    Events.dispatch(Events.TOGGLE_STATES, false);
+    states.forEach((state)=>{
+      Events.dispatch(`${Events.TOGGLE_STATES}:${state.name}`, state.option);
+    });
+  }
+
+  onDestroy(){
+    this.viewNode.removeEventListener('click', this.setScenarioBinded, false);
   }
 }
