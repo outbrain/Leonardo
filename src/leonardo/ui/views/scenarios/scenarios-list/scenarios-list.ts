@@ -11,6 +11,7 @@ export default class ScenariosList {
   constructor() {
     this.viewNode = Utils.getElementFromHtml(`<div id="leonardo-scenarios-list" class="leonardo-scenarios-list"></div>`);
     this.viewNode.addEventListener('click', this.setScenarioBinded, false);
+    Events.on(Events.ADD_SCENARIO, this.addScenario.bind(this));
   }
 
   get() {
@@ -51,5 +52,9 @@ export default class ScenariosList {
 
   onDestroy(){
     this.viewNode.removeEventListener('click', this.setScenarioBinded, false);
+  }
+
+  private addScenario(event: CustomEvent) {
+    this.render();
   }
 }

@@ -29,7 +29,7 @@ export default class StateDetail {
         <div>Status code: <input class="leonardo-states-detail-status" value="${this.curState.activeOption.status}"/></div>
         <div>Delay: <input class="leonardo-states-detail-delay" value="${this.curState.activeOption.delay}"/></div>
         <div>Response JSON:
-          <textarea class="leonardo-states-detail-json">${JSON.stringify(this.curState.activeOption.data)}</textarea>
+          <textarea class="leonardo-states-detail-json">${JSON.stringify(this.curState.activeOption.data, null, 4)}</textarea>
         </div>
         <button class="leonardo-button leonardo-states-detail-save">Save</button>
         <button class="leonardo-button leonardo-states-detail-cancel" >Cancel</button>`;
@@ -73,7 +73,13 @@ export default class StateDetail {
 
     this.curState.activeOption.status = statusVal;
     this.curState.activeOption.delay = delayVal;
-    this.curState.activeOption.data = JSON.parse(jsonVal);
+    try{
+      this.curState.activeOption.data = JSON.parse(jsonVal);
+    }
+    catch(e) {
+      this.curState.activeOption.data = jsonVal;
+    }
+
     Leonardo.addOrUpdateSavedState(this.curState);
     this.close();
     this.onSaveCB();

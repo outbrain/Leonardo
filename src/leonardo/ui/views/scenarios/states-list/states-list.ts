@@ -13,7 +13,8 @@ export default class StatesList {
 
   constructor() {
     this.viewNode = Utils.getElementFromHtml(`<div id="leonardo-states-list" class="leonardo-states-list"></div>`);
-    Events.on(Events.FILTER_STATES, this.onFilterStates.bind(this))
+    Events.on(Events.FILTER_STATES, this.onFilterStates.bind(this));
+    Events.on(Events.ADD_SCENARIO, this.addScenario.bind(this));
   }
 
   get() {
@@ -73,5 +74,22 @@ export default class StatesList {
 
   private onStateDetailSave(){
     this.clearSelected();
+  }
+
+  private addScenario(event: CustomEvent) {
+    const states: Array<any> = this.statesElements.map((stateElem: StateItem) => {
+      return stateElem.getState();
+    }).filter((state) => state.active)
+      .map((state: any) => {
+        return {
+          name: state.name,
+          option: state.activeOption.name
+        }
+      });
+    Leonardo.addScenario({
+      name: event.detail,
+      states: states,
+      from_local: true
+    }, true);
   }
 }

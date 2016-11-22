@@ -102,7 +102,10 @@ export default class StateItem {
     Leonardo.activateStateOption(this.state.name, this.state.activeOption.name)
   }
 
-  private removeState() {
+  private removeState(event: Event) {
+    if(event){
+      event.stopPropagation();
+    }
     this.onDestroy();
     this.onRemove(this.state.name, this.viewNode);
     Leonardo.removeState(this.state);
