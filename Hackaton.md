@@ -2,6 +2,7 @@
 ## Fullstack 1st Hackathon - Leonardo
 ![FULLSTACK DEVELOPERS ISRAEL](https://a248.e.akamai.net/secure.meetupstatic.com/photos/event/1/3/4/e/global_448264942.jpeg)
 
+[Wednesday, December 7, 2016](https://www.meetup.com/full-stack-developer-il/events/230141038/)
 ```
 Campus TLV
 98 Yigal Alon st.
