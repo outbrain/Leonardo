@@ -22,6 +22,7 @@ Tel-Aviv (map)
 - Option to save deep link urls in extension - simple new feature.
 - Attach a url to a scenario - new feature.
 - Activate a scenario from a small pop up extension window.
+- Generally Improve the UI/UX.
 - Perhaps open it in a new window so no need to inject into the page - low priority.
  
 
