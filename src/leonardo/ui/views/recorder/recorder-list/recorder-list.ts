@@ -24,7 +24,6 @@ export default class RecorderList {
     this.getStateItems().forEach((item) => {list.appendChild(item)});
     this.viewNode.appendChild(list);
     this.viewNode.appendChild(this.stateDetail.get());
-    this.stateDetail.render();
   }
 
   private getStateItems(): Array<any> {
@@ -40,6 +39,7 @@ export default class RecorderList {
   }
 
   toggleDetails(state){
+    state.activeOption = state.options[0];
     this.stateDetail.open(state);
   }
 
