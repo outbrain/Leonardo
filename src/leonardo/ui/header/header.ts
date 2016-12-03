@@ -12,7 +12,6 @@ export default class HeaderView {
 
   
   constructor(private tabList: Array<HeaderTabItem>) {
-
   }
 
   get() {
@@ -25,7 +24,7 @@ export default class HeaderView {
       </span>
     </div>`;
     const launcher = Utils.getElementFromHtml(template);
-    launcher.addEventListener('click', this.onClickBinded);
+    launcher.querySelector('ul').addEventListener('click', this.onClickBinded);
     return launcher;
   }
 
