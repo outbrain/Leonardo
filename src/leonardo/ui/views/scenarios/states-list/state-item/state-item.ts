@@ -14,7 +14,7 @@ export default class StateItem {
   constructor(private state, private onRemove: Function) {
     this.viewNode = Utils.getElementFromHtml(`<div class="leonardo-state-item"></div>`);
     this.randomID = Utils.guidGenerator();
-    this.dropDown = new DropDown(this.state.options, this.state.activeOption, !this.state.active, this.changeActiveOption.bind(this));
+    this.dropDown = new DropDown(this.state.options, this.state.activeOption || this.state.options[0], !this.state.active, this.changeActiveOption.bind(this));
     Events.on(Events.TOGGLE_STATES, this.toggleAllstate.bind(this));
     Events.on(`${Events.TOGGLE_STATES}:${this.state.name}`, this.setStateState.bind(this));
   }
