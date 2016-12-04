@@ -83,7 +83,7 @@ export default class DropDown {
     if (!dropDown || (event && event.detail === this.viewNode)) {
       return;
     }
-    this.viewNode.querySelector(`.leonardo-dropdown-options`)['style'].display = 'none';
+    dropDown['style'].display = 'none';
   }
 
   setActiveItem(itemName: string){
