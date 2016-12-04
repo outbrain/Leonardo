@@ -7,8 +7,6 @@ var gulp = require('gulp'),
   runSequence = require('run-sequence'),
   less = require('gulp-less'),
   rename = require("gulp-rename"),
-  minifyHtml = require("gulp-minify-html"),
-  ngHtml2Js = require("gulp-ng-html2js"),
   concat = require('gulp-concat'),
   ts = require('gulp-typescript'),
   source = require('vinyl-source-stream'),
@@ -40,29 +38,12 @@ gulp.task("build:less", false, function () {
       .pipe(gulp.dest('./tmp'));
 });
 
-gulp.task("build:templates", false, function () {
-  return gulp.src("./src/leonardo/templates/*.html")
-      .pipe(minifyHtml({
-        empty: true,
-        spare: true,
-        quotes: true
-      }))
-      .pipe(ngHtml2Js({
-        moduleName: 'leonardo.templates'
-      }))
-      .pipe(concat('leonardo.templates.min.js'))
-      .pipe(gulp.dest('./tmp'));
-});
-
 gulp.task('build:js', "bundle all js assets", function(){
   return gulp.src(
     [
-      './src/leonardo/angular.wrapped.min.js',
       './src/leonardo/sinon.js',
-      './src/leonardo/ngclipboard.js',
       './tmp/leonardo-ts.js',
       './src/leonardo/separator.js',
-      './tmp/leonardo.templates.min.js',
       './tmp/leonardo.css.js'
     ])
     .pipe(concat('leonardo.js'))
@@ -81,7 +62,6 @@ gulp.task('build', "build all from scratch", function(cb) {
     'clean:dist',
     'clean:tmp',
     'build:less',
-    'build:templates',
     'build:scripts',
     'build:js',
     'copy:dist',
@@ -93,7 +73,6 @@ gulp.task('build:partial', "build without typescript", function(cb) {
     'clean:dist',
     'clean:tmp',
     'build:less',
-    'build:templates',
     'build:js',
     'copy:dist',
     cb);
@@ -115,15 +94,6 @@ gulp.task('build:ts', "build typescript", function(cb) {
 });
 
 
-gulp.task('build:templates:full', "build templates", function(cb) {
-  runSequence(
-    'build:templates',
-    'build:js',
-    'copy:dist',
-    cb);
-});
-
-
 function mockServerMiddleware(route) {
   return function (req, res, next) {
     if (req.url === '/' || req.url.length > 15) {
@@ -136,7 +106,7 @@ function mockServerMiddleware(route) {
 }
 
 
-gulp.task('serve', "Serve files after build and watch", ['build:partial','watch'], function () {
+gulp.task('serve', "Serve files after build and watch", ['build','watch'], function () {
   gulp.src('')
     .pipe(webserver({
       livereload: {
@@ -154,7 +124,6 @@ gulp.task('serve', "Serve files after build and watch", ['build:partial','watch'
 gulp.task('watch', "Watch file changes and auto compile for development", ['build:scripts:watch-incremental'], function () {
   gulp.watch(["./src/leonardo/**/*.less"], ['build:less:full']);
   gulp.watch(["./tmp/leonardo-ts.js"], ['build:ts']);
-  gulp.watch(["./src/leonardo/**/*.html", "!index.html"], ['build:templates:full']);
   gulp.watch(["index.html"], ['build']);
 });
 
