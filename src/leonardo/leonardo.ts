@@ -7,8 +7,8 @@ import {polifylls} from './polyfills';
 import {Sinon} from './sinon.srv';
 import UIRoot from './ui/ui-root';
 
-declare var window;
-declare var Object;
+declare const window;
+declare const Object;
 
 polifylls();
 
@@ -20,7 +20,7 @@ Object.assign(window.Leonardo || {}, configuration, { storage });
 Leonardo.loadSavedStates();
 
 // Init Sinon
-const sinonService = new Sinon();
+new Sinon();
 
 //Init UI
-const uiRoot = new UIRoot();
+new UIRoot();

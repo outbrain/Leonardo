@@ -1,4 +1,4 @@
-/// <reference path="leonardo.d.ts" />
+/// <reference path="../leonardo/leonardo.d.ts" />
 
 windowBodyDirective.$inject = ['$http'];
 
