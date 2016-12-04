@@ -79,7 +79,8 @@ export default class DropDown {
   }
 
   closeDropDown(event?: CustomEvent) {
-    if (event && event.detail === this.viewNode) {
+    const dropDown = this.viewNode.querySelector(`.leonardo-dropdown-options`);
+    if (!dropDown || (event && event.detail === this.viewNode)) {
       return;
     }
     this.viewNode.querySelector(`.leonardo-dropdown-options`)['style'].display = 'none';
