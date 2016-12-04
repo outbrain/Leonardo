@@ -72,11 +72,11 @@ export function leoConfiguration () {
 
   function toggleActivateAll(flag: boolean) {
     let statesStatus = fetchStates();
-    Object.keys(statesStatus).forEach(function (stateKey) {
-      statesStatus[stateKey].active = flag;
-    });
-    const statuses = statesStatus.reduce((obj, s) =>
-      (obj[s.name] = { name: s.activeOption.name, active: s.active}, obj)
+    const statuses = statesStatus.reduce((obj, s) => {
+        var optionName = s.activeOption ? s.activeOption.name : s.options[0].name;
+        obj[s.name] = {name: optionName, active: flag};
+        return obj;
+      }
     , {});
     Leonardo.storage.setStates(statuses);
     return statesStatus;
