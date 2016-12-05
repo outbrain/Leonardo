@@ -1,4 +1,3 @@
-/// <reference path="../leonardo.d.ts" />
 import Launcher from './launcher/launcher';
 import MainView from './main-view/main-view';
 import Utils from './ui-utils';

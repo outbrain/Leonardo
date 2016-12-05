@@ -37,21 +37,6 @@ $ bower install leonardo
 </html>
 ```
 
-** If your app is running angularjs 1.x you will also need to add the Leonardo module as a dependency
-
-```html
-<!DOCTYPE HTML>
-<html>
-<body ng-app="app">
-  //.....
-   <script>
-    var myApp = angular.module("app", ["leonardo"]);
-    //.....    
-   </script>
-</body>
-</html>
-```
-
 ### 3. Run your app
 You should now see Leonardo's icon on the bottom left corner. 
 Start mocking your ajax calls by using the UI or the API

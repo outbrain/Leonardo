@@ -1,4 +1,4 @@
-/// <reference path="leonardo.d.ts" />
+import Utils from './utils';
 
 declare var sinon;
 
@@ -39,7 +39,7 @@ export class Sinon {
         activeOption = Leonardo.getActiveStateOption(state.name);
 
       if (!!activeOption) {
-        var responseData = angular.isFunction(activeOption.data) ? activeOption.data(request) : activeOption.data;
+        var responseData = Utils.isFunction(activeOption.data) ? activeOption.data(request) : activeOption.data;
         request.respond(activeOption.status, {"Content-Type": "application/json"}, JSON.stringify(responseData));
         Leonardo._logRequest(request.method, request.url, responseData, activeOption.status);
       } else {
