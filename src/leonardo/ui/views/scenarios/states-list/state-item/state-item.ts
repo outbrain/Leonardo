@@ -32,7 +32,8 @@ export default class StateItem {
         <input ${this.isChecked()} id="leonardo-state-toggle-${this.randomID}" class="leonardo-toggle leonardo-toggle-ios" type="checkbox"/>
         <label class="leonardo-toggle-btn" for="leonardo-state-toggle-${this.randomID }"></label>
         <span class="leonardo-state-verb leonardo-state-verb-${this.state.verb.toLowerCase()}">${this.state.verb}</span>
-        <span class="leonardo-state-name">${this.state.name}</span>`;
+        <span class="leonardo-state-name">${this.state.name}</span>
+        <span class="leonardo-state-url">${this.state.url || ''}</span>`;
     this.viewNode.appendChild(this.dropDown.get());
     this.dropDown.render();
     this.viewNode.appendChild(Utils.getElementFromHtml(`<button title="Remove State" class="leonardo-state-remove">Remove</button>`));
@@ -103,7 +104,7 @@ export default class StateItem {
   }
 
   private removeState(event: Event) {
-    if(event){
+    if (event) {
       event.stopPropagation();
     }
     this.onDestroy();
