@@ -1,6 +1,6 @@
 {
   "name": "leonardojs",
-  "version": "3.1.3",
+  "version": "3.1.5",
   "description": "Leonardo ========",
   "main": "dist/leonardo.js",
   "scripts": {
