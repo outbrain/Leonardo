@@ -6,10 +6,11 @@ import ScenariosList from './scenarios-list/scenarios-list';
 
 export default class Scenarios {
 
-  stateList: StatesList = new StatesList();
-  scenariosList: ScenariosList = new ScenariosList();
+  stateList: StatesList;
+  scenariosList: ScenariosList;
   constructor() {
-
+    this.stateList = new StatesList();
+    this.scenariosList = new ScenariosList();
   }
 
   get() {

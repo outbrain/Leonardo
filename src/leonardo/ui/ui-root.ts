@@ -8,12 +8,14 @@ export default class UIRoot {
   leonardoApp: Node;
   launcher: Launcher;
   mainView: MainView;
+  initBinded: EventListener = this.init.bind(this);
 
   constructor() {
-    this.init();
+    document.addEventListener('DOMContentLoaded', this.initBinded, false);
   }
 
   init() {
+    document.removeEventListener('DOMContentLoaded', this.initBinded, false);
     this.leonardoApp = Utils.getElementFromHtml(`<div leonardo-app></div>`);
     this.launcher = new Launcher();
     this.mainView = new MainView();
