@@ -1,5 +1,5 @@
 //<!-- if dev -->
-angular.module('angular-il', ['ui.router', 'leonardo'])
+angular.module('angular-il', ['ui.router'])
 //<!-- else -->
 //angular.module('angular-il', ['ui.router'])
   .config(['$compileProvider','$urlRouterProvider','$stateProvider','types','charactersList',

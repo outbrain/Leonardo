@@ -22,6 +22,10 @@
   }
 }
 
+[leonardo-app] {
+  font-family: 'Open Sans';
+}
+
 .exportButtons {
   float: right;
   margin-right: 30px;
@@ -78,16 +82,12 @@
 .leonardo-window {
   position: absolute;
   top: 0;
-  height: 0;
   right: 0;
   left: 0;
-  overflow: hidden;
+  height: 100%;
+  overflow: auto;
   background-color: white;
-  z-index: 9999;
-  -webkit-transition: height 1s ease 0s;
-  -moz-transition: height 1s ease 0s;
-  -o-transition: height 1s ease 0s;
-  transition: height 1s ease 0s;
+  z-index: 999999;
 
   .leonardo-window-body {
     padding-top: 48px;
@@ -192,9 +192,72 @@
     color: white;
     border: 0;
     font-size: 13px;
+    cursor: pointer;
   }
 
   input [type="text"], textarea {
     border: 1px solid #dddddd;
+  }
+
+  .save-scenario-btn {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .save-scenario-form {
+    position: absolute;
+    right: 5px;
+
+    > div {
+      position: relative;
+      padding: 10px;
+      background: white;
+      z-index: 1;
+      border: 1px solid black;
+      box-shadow: 4px 3px 5px 0 fade(black, 75);
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: -10px;
+        right: 10px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 5px 9px 5px;
+        border-color: transparent transparent black transparent;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: -9px;
+        right: 10px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 5px 10px 5px;
+        border-color: transparent transparent white transparent;
+      }
+
+      input {
+        height: 27px;
+        outline: none;
+
+        &::-webkit-input-placeholder {
+          color: #CCCCCC;
+        }
+      }
+
+      button {
+        outline: 0;
+        width: 60px;
+
+        &[disabled] {
+          opacity: 0.7;
+        }
+      }
+    }
   }
 }

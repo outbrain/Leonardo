@@ -1,0 +1,59 @@
+.leonardo-state-item {
+  display: flex;
+  margin-bottom: 3px;
+  .leonardo-state-verb {
+    margin-right: 10px;
+    background: #000;
+    color: #fff;
+    text-align: center;
+    width: 60px;
+    height: 25px;
+    line-height: 25px;
+    font-size: 12px;
+  }
+  .leonardo-toggle-btn{
+    margin-right: 15px;
+    align-self: center;
+  }
+  .leonardo-state-verb-get {
+    background: green;
+  }
+  .leonardo-state-verb-custom {
+    background: black;
+  }
+  .leonardo-state-verb-post {
+    background: orange;
+  }
+  .leonardo-state-verb-put {
+    background: blue;
+  }
+  .leonardo-state-verb-delete {
+    background: brown;
+  }
+  .leonardo-state-name{
+    //flex: 1;
+    font-size: 0.9rem;
+    align-self: center;
+  }
+  .leonardo-state-url{
+    flex: 1;
+    font-size: 0.7rem;
+    align-self: center;
+    margin-left: 10px;
+    color: grey;
+  }
+  .leonardo-state-remove{
+    background: #219161;
+    color: white;
+    border: 0;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 2px;
+    margin-left: 5px;
+  }
+
+  &.leonardo-state-item-hidden {
+    display: none;
+  }
+}
