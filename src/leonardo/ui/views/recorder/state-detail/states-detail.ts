@@ -36,11 +36,10 @@ export default class RecorderStateDetail {
     }
     else {
       html = `
-        <div class="leonardo-states-detail-header"> 
-            Add new state:
+        <h1 class="leonardo-states-detail-header">Add new state</h1>
         <div>Response name: <input class="leonardo-states-detail-name" /></div>
         <div>Status code: <input class="leonardo-states-detail-status"/></div>
-        <div>Delay: <input class="leonardo-states-detail-delay" value="${this.curState.activeOption.delay}"/></div>`;
+        <div>Delay: <input class="leonardo-states-detail-delay"/></div>`;
     }
 
     html += `<div>Response JSON:
