@@ -1,6 +1,4 @@
-/// <reference path="../leonardo.d.ts" />
-
-export default class Utils {
+export default class UiUtils {
   constructor() {}
   static getElementFromHtml(html: string) : HTMLElement {
     const div = document.createElement('div');

@@ -1,6 +1,3 @@
-/// <reference path="../../typings/angularjs/angular.d.ts" />
-/// <reference path="leonardo.d.ts" />
-
 import {leoConfiguration} from './configuration.srv';
 import {Storage} from './storage.srv';
 import {polifylls} from './polyfills';

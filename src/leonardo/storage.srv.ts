@@ -1,4 +1,4 @@
-/// <reference path="leonardo.d.ts" />
+import Utils from './utils';
 
 declare const window: any;
 
@@ -21,11 +21,11 @@ export class Storage {
     if (!item) {
       return null;
     }
-    return angular.fromJson(item);
+    return Utils.fromJson(item);
   }
 
   _setItem(key, data) {
-    window.localStorage.setItem(key, angular.toJson(data));
+    window.localStorage.setItem(key, Utils.toJson(data));
   }
 
   getStates() {
