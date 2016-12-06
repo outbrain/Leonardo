@@ -11,6 +11,10 @@
 
 * [Full Application Example](http://outbrain.github.io/Leonardo/examples/angularIL/)
 
+
+## Video (currently only in hebrew)
+* [AngularJS Israel](https://www.youtube.com/watch?v=zPBmMiJZ5O8)
+ 
 # Getting Started
 
 ### 1. Install
@@ -38,10 +42,18 @@ $ bower install leonardo
 ```
 
 ### 3. Run your app
-You should now see Leonardo's icon on the bottom left corner. 
-Start mocking your ajax calls by using the UI or the API
+You should now see Leonardo's icon on the bottom right corner.<br/>
 
-## API
+### 4. Start mocking you http calls via the recorder tab ([currently broken](https://github.com/outbrain/Leonardo/issues/132))
+![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/leonardo.png)
+
+### 5. Turn you mocking on and off as you wish
+![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/images/recorder.png)
+
+### 6. Change your responses as you wish
+![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/scenario.png)
+
+## You can also automate mocking using a simple javascript API
 #### Add States
 ```javascript
  //.....
