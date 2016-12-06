@@ -10,6 +10,7 @@ export default class StatesBar {
   addScenarioBinded: EventListener = this.onAddScenario.bind(this);
   activeAllState: boolean = false;
   addScenario: AddScenario = new AddScenario();
+  curSearchData: string = '';
   constructor() {
     this.viewNode = Utils.getElementFromHtml(`<div class="leonardo-states-bar"></div>`);
   }
@@ -25,7 +26,7 @@ export default class StatesBar {
       this.viewNode.querySelector('.leonardo-add-scenario-btn').removeEventListener('click', this.addScenarioBinded, false);
     }
     this.viewNode.innerHTML = `
-        <input class="leonardo-search-state" name="leonardo-search-state" type="text" placeholder="Search..." />
+        <input value="${this.curSearchData}" class="leonardo-search-state" name="leonardo-search-state" type="text" placeholder="Search..." />
         <div>
           <span class="leonardo-button leonardo-activate-all">Activate All</span>
           <span class="leonardo-button leonardo-add-scenario-btn">Add Scenario</span>
@@ -35,10 +36,12 @@ export default class StatesBar {
     this.viewNode.querySelector('.leonardo-search-state').addEventListener('keyup', this.searchBinded, false);
     this.viewNode.querySelector('.leonardo-activate-all').addEventListener('click', this.activateAllBinded, false);
     this.viewNode.querySelector('.leonardo-add-scenario-btn').addEventListener('click', this.addScenarioBinded, false);
+    this.searchStates({target: {value: this.curSearchData}});
   }
 
   searchStates(evt) {
-    Events.dispatch(Events.FILTER_STATES, { val: evt.target.value });
+    this.curSearchData = evt.target.value;
+    Events.dispatch(Events.FILTER_STATES, { val: this.curSearchData});
   }
 
   toggleActivateAll() {

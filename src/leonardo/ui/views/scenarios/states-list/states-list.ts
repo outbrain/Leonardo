@@ -35,10 +35,9 @@ export default class StatesList {
         stateElm.render();
       });
     this.statesBar.render();
-
   }
 
-  onFilterStates(data) {
+  onFilterStates(data: CustomEvent) {
     this.statesElements.forEach((stateElm: StateItem) => {
       if (stateElm.getName().toLowerCase().indexOf(data.detail.val.toLowerCase()) >= 0) {
         stateElm.toggleVisible(true);
