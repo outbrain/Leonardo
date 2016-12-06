@@ -1,6 +1,4 @@
-/// <reference path="../../../../../leonardo.d.ts" />
 import Utils from '../../../../ui-utils';
-import Events from '../../../../ui-events';
 
 export default class StateDetail {
   viewNode: any;
