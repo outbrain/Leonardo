@@ -9,11 +9,11 @@
 
 ## Example
 
-* [Full Application Example](http://outbrain.github.io/Leonardo/examples/angularIL/)
+[Full Application Example](http://outbrain.github.io/Leonardo/examples/angularIL/)
 
 
 ## Video (currently only in hebrew)
-* [![AngularJS Israel](http://img.youtube.com/vi/zPBmMiJZ5O8/0.jpg)](http://www.youtube.com/watch?v=zPBmMiJZ5O8)
+[![AngularJS Israel](http://img.youtube.com/vi/zPBmMiJZ5O8/0.jpg)](http://www.youtube.com/watch?v=zPBmMiJZ5O8)
  
 # Getting Started
 
