@@ -42,7 +42,7 @@ $ bower install leonardo
 ```
 
 ### 3. Run your app
-You should now see Leonardo's icon on the bottom right corner.<br/>
+You should now see Leonardo's icon on the bottom right corner. Click It.
 
 ### 4. Start mocking your http calls via the recorder tab ([currently broken](https://github.com/outbrain/Leonardo/issues/132))
 ![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/images/recorder.png)
