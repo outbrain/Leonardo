@@ -47,7 +47,7 @@ You should now see Leonardo's icon on the bottom right corner. Click It.
 ### 4. Start mocking your http calls via the recorder tab ([currently broken](https://github.com/outbrain/Leonardo/issues/132))
 ![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/images/recorder.png)
 
-### 5. Turn you mocking on and off as you wish
+### 5. Turn your mocking on and off as you wish
 ![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/images/scenario.png)
 
 ### 6. Change your responses as you wish
