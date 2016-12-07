@@ -16,6 +16,7 @@ export default class MainView {
   viewNode: Node;
 
   constructor() {
+    Events.on('keydown', this.onKeyPress.bind(this));
     Events.on(Events.TOGGLE_LAUNCHER, this.toggleView.bind(this));
     UIStateViewService.getInstance().init(UIStateList(), UIStateList()[0].name);
     this.headerView = new HeaderView(this.getTabList());
@@ -35,7 +36,7 @@ export default class MainView {
         this.kickStart();
       }
     } else {
-      el.classList.add(this.hiddenClassName);
+      this.closeLeo();
     }
   }
 
@@ -49,5 +50,16 @@ export default class MainView {
 
   private getTabList(): Array<HeaderTabItem>{
     return UIStateViewService.getInstance().getViewStates().map((view: UIViewState) => {return {label: view.name}});
+  }
+
+  private closeLeo(){
+    const el = document.querySelector(`.${this.className}`);
+    el.classList.add(this.hiddenClassName);
+  }
+
+  private onKeyPress(event: MouseEvent){
+    if(event.which == 27){
+      this.closeLeo();
+    }
   }
 }
