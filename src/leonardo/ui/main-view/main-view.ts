@@ -14,17 +14,24 @@ export default class MainView {
   headerView: HeaderView;
   viewsContainer: ViewsContainer;
   viewNode: Node;
+  bodyView: Node;
+  menuView: HTMLElement;
 
   constructor() {
     Events.on('keydown', this.onKeyPress.bind(this));
+    this.bodyView = Utils.getElementFromHtml(`<div class="leonardo-main-view-body"></div>`);
+    this.menuView = Utils.getElementFromHtml(`<div class="leonardo-main-view-menu"></div>`);
+
     Events.on(Events.TOGGLE_LAUNCHER, this.toggleView.bind(this));
-    UIStateViewService.getInstance().init(UIStateList(), UIStateList()[0].name);
+    UIStateViewService.getInstance().init(UIStateList(this.menuView), UIStateList(this.menuView)[0].name);
     this.headerView = new HeaderView(this.getTabList());
     this.viewsContainer = new ViewsContainer();
+
   }
 
   get() {
-    return Utils.getElementFromHtml(`<div class="${this.className} ${this.hiddenClassName}"></div>`);
+    this.viewNode = Utils.getElementFromHtml(`<div class="${this.className} ${this.hiddenClassName}"></div>`);
+    return this.viewNode;
   }
 
   toggleView() {
@@ -41,11 +48,12 @@ export default class MainView {
   }
 
   kickStart() {
-    this.viewNode = document.querySelector(`.${this.className}`);
-    this.viewNode.appendChild(this.headerView.get());
-    this.viewNode.appendChild(this.viewsContainer.get());
-    this.viewsContainer.render(UIStateViewService.getInstance().getCurViewState());
+    this.viewNode.appendChild(this.bodyView);
+    this.viewNode.appendChild(this.menuView);
 
+    this.bodyView.appendChild(this.headerView.get());
+    this.bodyView.appendChild(this.viewsContainer.get());
+    this.viewsContainer.render(UIStateViewService.getInstance().getCurViewState());
   }
 
   private getTabList(): Array<HeaderTabItem>{

@@ -5,6 +5,8 @@ import {UIViewState} from '../ui-state/ui-state.model';
 
 export default class ViewsContainer {
 
+  currentViewState: UIViewState;
+
   constructor() {
     Events.on(Events.CHANGE_VIEW, this.onViewChanged.bind(this));
   }
@@ -18,12 +20,14 @@ export default class ViewsContainer {
   }
 
   render(viewState: UIViewState) {
+    this.currentViewState = viewState;
     this.getViewNode().innerHTML = '';
     this.getViewNode().appendChild(viewState.component.get());
     viewState.component.render();
   }
 
   onViewChanged(event: CustomEvent) {
+    this.currentViewState.component.destroy();
     this.render(event.detail);
   }
 

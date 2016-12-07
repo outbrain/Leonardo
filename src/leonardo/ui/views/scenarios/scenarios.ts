@@ -28,4 +28,8 @@ export default class Scenarios {
     this.stateList.render();
     this.scenariosList.render();
   }
+
+  destroy() {
+
+  }
 }
