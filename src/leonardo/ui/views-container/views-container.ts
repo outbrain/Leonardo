@@ -12,7 +12,9 @@ export default class ViewsContainer {
   }
 
   get() {
-    return Utils.getElementFromHtml(`<div id="leonardo-views-container" class="leonardo-views-container">view container</div>`);
+    return Utils.getElementFromHtml(`
+      <div id="leonardo-views-container" class="leonardo-views-container">view container</div>
+    `);
   }
 
   getViewNode() {
@@ -30,5 +32,4 @@ export default class ViewsContainer {
     this.currentViewState.component.destroy();
     this.render(event.detail);
   }
-
 }

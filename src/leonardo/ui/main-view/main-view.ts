@@ -26,10 +26,9 @@ export default class MainView {
     UIStateViewService.getInstance().init(UIStateList(this.menuView), UIStateList(this.menuView)[0].name);
     this.headerView = new HeaderView(this.getTabList());
     this.viewsContainer = new ViewsContainer();
-
   }
 
-  get() {
+  get(): Node {
     this.viewNode = Utils.getElementFromHtml(`<div class="${this.className} ${this.hiddenClassName}"></div>`);
     return this.viewNode;
   }
@@ -56,17 +55,19 @@ export default class MainView {
     this.viewsContainer.render(UIStateViewService.getInstance().getCurViewState());
   }
 
-  private getTabList(): Array<HeaderTabItem>{
-    return UIStateViewService.getInstance().getViewStates().map((view: UIViewState) => {return {label: view.name}});
+  private getTabList(): Array<HeaderTabItem> {
+    return UIStateViewService.getInstance().getViewStates().map((view: UIViewState) => {
+      return {label: view.name}
+    });
   }
 
-  private closeLeo(){
+  private closeLeo() {
     const el = document.querySelector(`.${this.className}`);
     el.classList.add(this.hiddenClassName);
   }
 
-  private onKeyPress(event: MouseEvent){
-    if(event.which == 27){
+  private onKeyPress(event: MouseEvent) {
+    if (event.which == 27) {
       this.closeLeo();
     }
   }
