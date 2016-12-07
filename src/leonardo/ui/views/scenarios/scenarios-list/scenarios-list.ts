@@ -34,7 +34,7 @@ export default class ScenariosList {
   getScenarioElement(scenario) {
     const el = Utils.getElementFromHtml(`<li>${scenario}</li>`);
     el.addEventListener('click', () => {
-      Events.dispatch(Events.SCENARIO_CLICKED, { name: scenario });
+      Events.dispatch(Events.SCENARIO_CLICKED, {name: scenario});
       this.viewNode.querySelectorAll('li').forEach(li => li.classList.remove(ScenariosList.SELECTED_CLASS));
       el.classList.add(ScenariosList.SELECTED_CLASS);
     });
@@ -42,15 +42,19 @@ export default class ScenariosList {
   }
 
   private setScenario(event: MouseEvent) {
+    if (event.target['tagName'] !== 'LI') {
+      return;
+    }
+
     const scenarioName: string = event.target['innerHTML'];
     const states: Array<any> = Leonardo.getScenario(scenarioName);
     Events.dispatch(Events.TOGGLE_STATES, false);
-    states.forEach((state)=>{
+    states.forEach((state)=> {
       Events.dispatch(`${Events.TOGGLE_STATES}:${state.name}`, state.option);
     });
   }
 
-  onDestroy(){
+  onDestroy() {
     this.viewNode.removeEventListener('click', this.setScenarioBinded, false);
   }
 
