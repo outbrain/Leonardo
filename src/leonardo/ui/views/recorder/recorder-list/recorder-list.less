@@ -1,6 +1,9 @@
 .leonardo-recorder-list {
   height: 100%;
   overflow: auto;
+  position: relative;
+  top: 0;
+  bottom: 0;
   .leonardo-recorder-list-container {
     text-decoration: none;
     padding: 0;
@@ -37,6 +40,9 @@
         color: white;
         justify-content: flex-end;
         white-space: nowrap;
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       .leonardo-recorder-list-name-new {
         background: blue;
