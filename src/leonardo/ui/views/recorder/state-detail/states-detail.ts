@@ -3,14 +3,12 @@ import Utils from '../../../ui-utils';
 export default class RecorderStateDetail {
   viewNode: any;
   openState: boolean = false;
-  jsonError: boolean = false;
   curState;
   onCancelBinded: EventListener = this.onCancel.bind(this);
   onSaveBinded: EventListener = this.onSave.bind(this);
 
   constructor() {
-    this.viewNode = Utils.getElementFromHtml(`<divRecorderStateDetail id="leonardo-state-detail" class="leonardo-state-detail"></divRecorderStateDetail>`);
-    this.viewNode = Utils.getElementFromHtml(`<div id="leonardo-state-detail" class="leonardo-state-detail"></div>`);
+    this.viewNode = Utils.getElementFromHtml(`<div id="leonardo-state-detail" class="leonardo-state-detail-recorder"></div>`);
   }
 
   get() {
@@ -30,7 +28,7 @@ export default class RecorderStateDetail {
       html = `<div class="leonardo-states-detail-header">Add mocked response for <strong>${this.curState.name}</strong></div>`;
     }
     else {
-      html = `<h1 class="leonardo-states-detail-header"/></>Add new state</h1>
+      html = `<h1 class="leonardo-states-detail-header"/>Add new state</h1>
               <div>State name: <input class="leonardo-states-detail-state-name"/></div>`;
     }
 
@@ -47,11 +45,10 @@ export default class RecorderStateDetail {
   }
 
   open(state) {
-    // TODO how can we tell if this is a new -
     this.curState = state;
     this.render();
     this.openState = true;
-    this.viewNode.style.right = '0px';
+    this.viewNode.style.display = '';
   }
 
   close(state?) {
@@ -60,7 +57,7 @@ export default class RecorderStateDetail {
       return;
     }
     this.openState = false;
-    this.viewNode.style.right = '-300px';
+    this.viewNode.style.display = 'none';
   }
 
   toggle(state) {

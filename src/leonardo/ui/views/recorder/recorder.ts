@@ -6,9 +6,10 @@ import RecorderList from './recorder-list/recorder-list';
 export default class Recorder {
 
   viewNode: HTMLElement;
-  recorderList: RecorderList = new RecorderList();
+  recorderList: RecorderList;
 
-  constructor() {
+  constructor(private menuView: HTMLElement) {
+    this.recorderList = new RecorderList(menuView);
   }
 
   get() {
@@ -20,4 +21,7 @@ export default class Recorder {
     this.recorderList.render();
   }
 
+  destroy() {
+    this.menuView.innerHTML = '';
+  }
 }

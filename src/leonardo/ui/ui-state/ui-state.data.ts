@@ -7,7 +7,7 @@ import Export from '../views/export/export';
 
 let uiList: Array<UIViewState>;
 
-export function UIStateList(): Array<UIViewState> {
+export function UIStateList(menuView: HTMLElement): Array<UIViewState> {
   if(uiList){
     return uiList;
   }
@@ -18,7 +18,7 @@ export function UIStateList(): Array<UIViewState> {
     },
     {
       name: 'recorder',
-      component: new Recorder()
+      component: new Recorder(menuView)
 
     },
     {
