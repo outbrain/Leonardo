@@ -32,7 +32,8 @@ export default class RecorderStateDetail {
               <div>State name: <input class="leonardo-states-detail-state-name"/></div>`;
     }
 
-    html += `<div>Option name: <input class="leonardo-states-detail-option-name" value="${this.curState.options[0].name}"/></div>
+    html +=   `<div>URL: <input class="leonardo-states-detail-option-url" value="${this.curState.url}"/></div>
+              <div>Option name: <input class="leonardo-states-detail-option-name" value="${this.curState.options[0].name}"/></div>
               <div>Status code: <input class="leonardo-states-detail-status" value="${this.curState.options[0].status}"/></div>
               <div>Delay: <input class="leonardo-states-detail-delay" value="0"/></div>
               <div>Response: <textarea class="leonardo-states-detail-json">${this.getResString(this.curState.options[0].data)}</textarea></div>
@@ -84,10 +85,12 @@ export default class RecorderStateDetail {
   }
 
   private onSave() {
+    const urlVal: string = this.viewNode.querySelector(".leonardo-states-detail-option-url").value;
     const statusVal: string = this.viewNode.querySelector(".leonardo-states-detail-status").value;
     const delayVal: string = this.viewNode.querySelector(".leonardo-states-detail-delay").value;
     const jsonVal: string = this.viewNode.querySelector(".leonardo-states-detail-json").value;
     const optionNameVal: string = this.viewNode.querySelector(".leonardo-states-detail-option-name").value;
+    this.curState.url = urlVal;
     this.curState.activeOption.status = statusVal;
     this.curState.activeOption.delay = delayVal;
     this.curState.activeOption.name = optionNameVal;

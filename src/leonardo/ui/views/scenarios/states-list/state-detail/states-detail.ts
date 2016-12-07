@@ -48,7 +48,7 @@ export default class StateDetail {
       return;
     }
     this.openState = false;
-    this.viewNode.style.right = '-300px';
+    this.viewNode.style.right = '-400px';
   }
 
   toggle(state) {
