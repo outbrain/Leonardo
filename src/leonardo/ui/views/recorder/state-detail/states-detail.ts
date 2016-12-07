@@ -29,7 +29,7 @@ export default class RecorderStateDetail {
     }
     else {
       html = `<h1 class="leonardo-states-detail-header"/>Add new state</h1>
-              <div>State name: <input class="leonardo-states-detail-state-name"/></div>`;
+              <div>State name: <input class="leonardo-states-detail-state-name" value="${this.curState.name}"/></div>`;
     }
 
     html +=   `<div>URL: <input class="leonardo-states-detail-option-url" value="${this.curState.url}"/></div>
@@ -95,7 +95,7 @@ export default class RecorderStateDetail {
     this.curState.activeOption.delay = delayVal;
     this.curState.activeOption.name = optionNameVal;
     if(!this.curState.recorded){
-      this.curState.name = this.viewNode.querySelector('.leonardo-states-detail-state-name').value || this.curState.name;
+      this.curState.name = this.viewNode.querySelector('.leonardo-states-detail-state-name').value;
     }
     try {
       this.curState.activeOption.data = JSON.parse(jsonVal);
