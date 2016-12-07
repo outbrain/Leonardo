@@ -27,7 +27,7 @@ export default class StateDetail {
         <div>Status code: <input class="leonardo-states-detail-status" value="${this.curState.activeOption.status}"/></div>
         <div>Delay: <input class="leonardo-states-detail-delay" value="${this.curState.activeOption.delay}"/></div>
         <div>Response JSON:
-          <textarea class="leonardo-states-detail-json">${JSON.stringify(this.curState.activeOption.data, null, 4)}</textarea>
+          <textarea class="leonardo-states-detail-json">${this.getResString(this.curState.activeOption.data)}</textarea>
         </div>
         <button class="leonardo-button leonardo-states-detail-save">Save</button>
         <button class="leonardo-button leonardo-states-detail-cancel" >Cancel</button>`;
@@ -57,6 +57,17 @@ export default class StateDetail {
       return;
     }
     this.open(state);
+  }
+
+  private getResString(resopnse: string): string {
+    let resStr: string;
+    try {
+      resStr = JSON.stringify(resopnse, null, 4);
+    }
+    catch(e){
+      resStr = typeof resopnse === 'string' ? resopnse : resopnse.toString();
+    }
+    return resStr;
   }
 
   private onCancel() {
