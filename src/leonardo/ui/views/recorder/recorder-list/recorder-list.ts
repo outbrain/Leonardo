@@ -7,7 +7,7 @@ export default class RecorderList {
   viewNode: HTMLElement;
   stateDetail: RecorderStateDetail = new RecorderStateDetail();
 
-  constructor() {
+  constructor(private menuView: Node) {
     Events.on(Events.TOGGLE_LAUNCHER, this.render.bind(this))
   }
 
@@ -22,7 +22,7 @@ export default class RecorderList {
     const list = Utils.getElementFromHtml(`<ul class="leonardo-recorder-list-container"></ul>`);
     this.getStateItems().forEach((item) => {list.appendChild(item)});
     this.viewNode.appendChild(list);
-    this.viewNode.appendChild(this.stateDetail.get());
+    this.menuView.appendChild(this.stateDetail.get());
   }
 
   private getStateItems(): Array<any> {
@@ -42,5 +42,6 @@ export default class RecorderList {
     state.activeOption = state.options[0];
     this.stateDetail.open(state);
   }
+
 
 }

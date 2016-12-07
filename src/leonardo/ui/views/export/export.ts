@@ -22,6 +22,11 @@ export default class Export {
   }
 
   render() {
+
+  }
+
+  destroy() {
+
   }
 
 }
