@@ -10,12 +10,13 @@ export default {
   TOGGLE_SCENARIOS: 'leonardo:toggle:scenario',
   ADD_SCENARIO: 'leonardo:add:scenario',
   TOGGLE_STATE: 'leonardo:toggle:states',
+  TOGGLE_ICON: 'leonardo:toggle:icon',
 
   on: (eventName: string, fn: EventListenerOrEventListenerObject) => {
     document.body.addEventListener(eventName, fn);
   },
   dispatch: (eventName: string, details?: any) => {
-    const event = new CustomEvent(eventName, { detail: details });
+    const event = new CustomEvent(eventName, {detail: details});
     document.body.dispatchEvent(event);
   }
 }

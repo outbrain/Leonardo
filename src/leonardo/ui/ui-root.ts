@@ -1,7 +1,7 @@
 import Launcher from './launcher/launcher';
 import MainView from './main-view/main-view';
 import Utils from './ui-utils';
-import UIStateVeiwService from './ui-state/ui-state.srv';
+import Events from './ui-events';
 
 export default class UIRoot {
   leonardoApp: Node;
@@ -29,11 +29,11 @@ export default class UIRoot {
     this.mainView = new MainView();
     this.leonardoApp.appendChild(this.mainView.get());
     this.leonardoApp.appendChild(this.launcher.get());
-    document.body.addEventListener('leonardo:toggle:states', this.toggleAllStates.bind(this));
+    document.body.addEventListener(Events.TOGGLE_STATES, this.toggleAllStates.bind(this));
     document.body.appendChild(this.leonardoApp);
   }
 
-  private toggleAllStates(event: CustomEvent){
+  private toggleAllStates(event: CustomEvent) {
     Leonardo.toggleActivateAll(event.detail);
   }
 }

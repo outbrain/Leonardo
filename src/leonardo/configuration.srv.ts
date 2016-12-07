@@ -1,6 +1,6 @@
 /// <reference path="leonardo.d.ts" />
 declare var Object: any;
-export function leoConfiguration () {
+export function leoConfiguration() {
   var _states = [],
     _scenarios = {},
     _requestsLog = [],
@@ -8,7 +8,7 @@ export function leoConfiguration () {
     _statesChangedEvent = new CustomEvent('leonardo:setStates'),
     _eventsElem = document.body,
     _jsonpCallbacks = {};
-  
+
   // Core API
   // ----------------
   return {
@@ -37,7 +37,7 @@ export function leoConfiguration () {
     _logRequest: logRequest,
     _jsonpCallbacks: _jsonpCallbacks
 
-};
+  };
 
   function upsertOption(state, name, active) {
     var statesStatus = Leonardo.storage.getStates();
@@ -78,24 +78,24 @@ export function leoConfiguration () {
       return;
     }
     const targets = [document.body, document.head].filter(target => !!target);
-    const config = { attributes: false, childList: true, characterData: false, subtree: false };
+    const config = {attributes: false, childList: true, characterData: false, subtree: false};
 
     Leonardo._jsonpMutationObservers = targets.map((target) => {
-      return new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation: any) {
+      return new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation: any) {
           if (mutation.addedNodes &&
             mutation.addedNodes[0] &&
             mutation.addedNodes[0].tagName &&
             mutation.addedNodes[0].tagName.toLowerCase() === 'script') {
             const scriptNode = mutation.addedNodes[0];
-            const state = fetchStatesByUrlAndMethod(scriptNode.src, "JSONP");
+            const state = fetchStatesByUrlAndMethod(scriptNode.src, 'JSONP');
             if (state && state.active) {
               const callbackName = getCallbackName(state);
               const funcName = state.name + callbackName;
               if (!_jsonpCallbacks[funcName]) {
                 activeJsonpState(state, callbackName);
               }
-              setTimeout(_jsonpCallbacks[funcName].bind(null, state.activeOption.data), state.activeOption  .delay || 0);
+              setTimeout(_jsonpCallbacks[funcName].bind(null, state.activeOption.data), state.activeOption.delay || 0);
             }
           }
         });
@@ -104,7 +104,8 @@ export function leoConfiguration () {
     targets.forEach((target, index) => Leonardo._jsonpMutationObservers[index].observe(target, config));
   }
 
-  function dummyJsonpCallback() {}
+  function dummyJsonpCallback() {
+  }
 
   function deactivateJsonpState(state, callbackName) {
     const funcName = state.name + callbackName;
@@ -127,7 +128,7 @@ export function leoConfiguration () {
   function fetchStatesByUrlAndMethod(url, method) {
     return fetchStates().filter((state) => {
       return state.url &&
-      (new RegExp(state.url).test(url) || state.url === url) &&
+        (new RegExp(state.url).test(url) || state.url === url) &&
         state.verb.toLowerCase() === method.toLowerCase();
 
     })[0];
@@ -164,7 +165,7 @@ export function leoConfiguration () {
         obj[s.name] = {name: optionName, active: flag};
         return obj;
       }
-    , {});
+      , {});
     Leonardo.storage.setStates(statuses);
     return statesStatus;
   }
@@ -522,7 +523,7 @@ export function leoConfiguration () {
   }
 
   function onSetStates(fn) {
-    _eventsElem && _eventsElem.addEventListener('leonardo:setStates', fn , false);
+    _eventsElem && _eventsElem.addEventListener('leonardo:setStates', fn, false);
   }
 
   function statesChanged() {

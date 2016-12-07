@@ -9,12 +9,11 @@ export default class DropDown {
   toggleBinded: EventListener = this.toggleDropDown.bind(this);
   closeDropDownBinded: EventListener = this.closeDropDown.bind(this);
 
-  constructor(
-      private items,
-      private activeItem,
-      private isDisabled: boolean,
-      private onSelectItem: Function,
-      private onRemoveItem: Function) {
+  constructor(private items,
+              private activeItem,
+              private isDisabled: boolean,
+              private onSelectItem: Function,
+              private onRemoveItem: Function) {
     this.randomID = Utils.guidGenerator();
     this.viewNode = Utils.getElementFromHtml(`<div id="leonardo-dropdown-${this.randomID}" class="leonardo-dropdown"></div>`);
     document.body.addEventListener('click', this.closeDropDownBinded, false);
@@ -55,13 +54,13 @@ export default class DropDown {
     if (event && event.target) {
       event.stopPropagation();
     }
-    if(event.target['classList'].contains('leonardo-dropdown-item') ){
+    if (event.target['classList'].contains('leonardo-dropdown-item')) {
       this.setActiveItem(event.target['querySelector']('.leonardo-dropdown-item-text').innerHTML);
     }
-    else if(event.target['classList'].contains('leonardo-dropdown-item-text')){
+    else if (event.target['classList'].contains('leonardo-dropdown-item-text')) {
       this.setActiveItem(event.target['innerHTML']);
     }
-    else if(event.target['classList'].contains('leonardo-dropdown-item-x')){
+    else if (event.target['classList'].contains('leonardo-dropdown-item-x')) {
       this.removeItem(<HTMLElement>event.target['parentNode']);
     }
     if (this.optionsState) {
@@ -78,8 +77,8 @@ export default class DropDown {
     const elem: HTMLElement = <HTMLElement>this.viewNode.querySelector(`.leonardo-dropdown-options`);
     elem.style.display = 'block';
     const elemRec: ClientRect = elem.getBoundingClientRect();
-    const isOverflowed: boolean =  elemRec.top + elemRec.height > window.innerHeight;
-    if(isOverflowed){
+    const isOverflowed: boolean = elemRec.top + elemRec.height > window.innerHeight;
+    if (isOverflowed) {
       elem.style.top = -elemRec.height + 'px';
     }
     Events.dispatch(Events.CLOSE_DROPDOWNS, this.viewNode);
@@ -93,8 +92,8 @@ export default class DropDown {
     dropDown.style.display = 'none';
   }
 
-  setActiveItem(itemName: string){
-    if(this.activeItem.name === itemName){
+  setActiveItem(itemName: string) {
+    if (this.activeItem.name === itemName) {
       return;
     }
     this.activeItem = this.getItemByName(itemName);
@@ -105,7 +104,7 @@ export default class DropDown {
   private getItemByName(itemName: string) {
     let retItem = this.activeItem;
     this.items.some((curItem) => {
-      if(curItem.name === itemName){
+      if (curItem.name === itemName) {
         retItem = curItem;
         return true;
       }
@@ -122,14 +121,14 @@ export default class DropDown {
   private isDisabledToken() {
     return this.isDisabled ? 'disabled' : '';
   }
-  
+
   private removeItem(item: HTMLElement) {
-    if(this.items.length <= 1){
+    if (this.items.length <= 1) {
       return;
     }
     let removedItem;
     this.items = this.items.filter((curItem) => {
-      if(curItem.name === item.querySelector('.leonardo-dropdown-item-text')['innerHTML']){
+      if (curItem.name === item.querySelector('.leonardo-dropdown-item-text')['innerHTML']) {
         removedItem = curItem;
       }
     });
@@ -138,7 +137,7 @@ export default class DropDown {
 
   }
 
-  private onDestroy(){
+  private onDestroy() {
     document.body.removeEventListener('click', this.closeDropDownBinded, false);
     this.viewNode.removeEventListener('click', this.toggleBinded, false);
   }

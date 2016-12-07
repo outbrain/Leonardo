@@ -1,7 +1,7 @@
 .leonardo-dropdown {
   position: relative;
   font-size: 13px;
-    .leonardo-dropdown-selected {
+  .leonardo-dropdown-selected {
     padding: 0 10px;
     height: 26px;
     line-height: 26px;
@@ -64,35 +64,35 @@
           height: 100%;
         }
         .leonardo-dropdown-item-x {
-            position: absolute;
-            right: 5px;
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            overflow: hidden;
-            &:hover {
-              &::before, &::after {
-                background: darkgray;
-              }
-            }
-
+          position: absolute;
+          right: 5px;
+          display: inline-block;
+          width: 12px;
+          height: 12px;
+          overflow: hidden;
+          &:hover {
             &::before, &::after {
-              content: '';
-              position: absolute;
-              height: 1px;
-              width: 100%;
-              top: 50%;
-              left: 0;
-              //margin-top: 1px;
-              background: #000;
-              border-radius: 5px;
+              background: darkgray;
             }
-            &::before {
+          }
+
+          &::before, &::after {
+            content: '';
+            position: absolute;
+            height: 1px;
+            width: 100%;
+            top: 50%;
+            left: 0;
+            //margin-top: 1px;
+            background: #000;
+            border-radius: 5px;
+          }
+          &::before {
             transform: rotate(45deg);
-            }
-            &::after {
+          }
+          &::after {
             transform: rotate(-45deg);
-            }
+          }
         }
       }
     }

@@ -15,9 +15,9 @@ export function polifylls() {
   })();
 
   // Object.assign
-  (function() {
+  (function () {
     if (typeof (<any>Object).assign != 'function') {
-      (<any>Object).assign = function(target) {
+      (<any>Object).assign = function (target) {
         'use strict';
         if (target == null) {
           throw new TypeError('Cannot convert undefined or null to object');

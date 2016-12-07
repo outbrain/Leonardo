@@ -2,15 +2,21 @@ export default class Utils {
   constructor() {
   }
 
-  static isUndefined(value) {return typeof value === 'undefined';}
+  static isUndefined(value) {
+    return typeof value === 'undefined';
+  }
 
-  static isNumber(value) {return typeof value === 'number';}
+  static isNumber(value) {
+    return typeof value === 'number';
+  }
 
   static isFunction(value) {
     return typeof value === 'function';
   }
 
-  static isString(value) {return typeof value === 'string';}
+  static isString(value) {
+    return typeof value === 'string';
+  }
 
   static fromJson(json) {
     return this.isString(json)
