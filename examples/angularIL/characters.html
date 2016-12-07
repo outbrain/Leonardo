@@ -24,6 +24,7 @@
         </select>
       </div>
       <button type="submit" id="btn-create">Create</button>
+      <button ng-click="characters.fireJsonp()">Fire JSONP</button>
     </form>
     <button type="submit" id="complete-button" ng-show="characters.list.length" ng-click="characters.complete()">Complete</button>
   </div>

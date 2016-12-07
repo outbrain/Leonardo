@@ -420,6 +420,29 @@
       ]
     }
   ]);
+  Leonardo.addStates([
+    {
+      "name": "jsonp test",
+      "url": "http://ip.jsontest.com/?callback=callback",
+      "verb": "JSONP",
+      "options": [
+        {
+          "name": "success",
+          "data": {
+            x: 1
+          },
+          "delay": 1000
+        },
+        {
+          "name": "success 2",
+          "data": {
+            x: 2
+          },
+          "delay": 5000
+        }
+      ]
+    }
+  ]);
 
 
   Leonardo.addStates([
