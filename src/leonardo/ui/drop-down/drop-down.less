@@ -1,7 +1,7 @@
 .leonardo-dropdown {
   position: relative;
   font-size: 13px;
-  .leonardo-dropdown-selected {
+    .leonardo-dropdown-selected {
     padding: 0 10px;
     height: 26px;
     line-height: 26px;
@@ -19,18 +19,21 @@
     &[disabled] {
       background: rgba(33, 145, 97, 0.5);
       cursor: default;
-      .leonardo-dropdown-selected-arrow {
-        transform: rotate(90deg)!important;
-      }
     }
     &:hover {
+      color: lightblue;
       .leonardo-dropdown-selected-arrow {
-          transform: scale(1.2) rotate(90deg);
-        }
+        border-top: 7px solid lightblue;
       }
+    }
     .leonardo-dropdown-selected-arrow {
-      float: right;
-      transform: rotate(90deg)
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 7px solid aliceblue;
     }
   }
   .leonardo-dropdown-options {
@@ -49,23 +52,47 @@
       list-style: none;
       margin: 0;
       padding: 0;
-      .leonardo-dropdown-item{
+      .leonardo-dropdown-item {
         padding: 10px 5px;
-        &:hover{
+        &:hover {
           background: lightblue;
           cursor: pointer;
         }
-        .leonardo-dropdown-item-text{
+        .leonardo-dropdown-item-text {
           display: inline-block;
           width: 100%;
           height: 100%;
         }
-        .leonardo-dropdown-item-x{
-          position: absolute;
-          right: 5px;
-          &:hover{
-            transform: scale(1.2);
-          }
+        .leonardo-dropdown-item-x {
+            position: absolute;
+            right: 5px;
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            overflow: hidden;
+            &:hover {
+              &::before, &::after {
+                background: darkgray;
+              }
+            }
+
+            &::before, &::after {
+              content: '';
+              position: absolute;
+              height: 1px;
+              width: 100%;
+              top: 50%;
+              left: 0;
+              //margin-top: 1px;
+              background: #000;
+              border-radius: 5px;
+            }
+            &::before {
+            transform: rotate(45deg);
+            }
+            &::after {
+            transform: rotate(-45deg);
+            }
         }
       }
     }

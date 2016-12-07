@@ -29,7 +29,7 @@ export default class DropDown {
     this.viewNode.innerHTML = `
           <div class="leonardo-dropdown-selected" ${this.isDisabledToken()}>
             <span class="leonardo-dropdown-selected-text">${this.activeItem.name}</span>
-            <span class="leonardo-dropdown-selected-arrow">></span>
+            <span class="leonardo-dropdown-selected-arrow"></span>
           </div>
           <div class="leonardo-dropdown-options">
             <ul class="leonardo-dropdown-list">${this.getItems().join('')}</ul>
@@ -74,16 +74,22 @@ export default class DropDown {
   }
 
   openDropDown() {
-    this.viewNode.querySelector(`.leonardo-dropdown-options`)['style'].display = 'block';
+    const elem: HTMLElement = <HTMLElement>this.viewNode.querySelector(`.leonardo-dropdown-options`);
+    elem.style.display = 'block';
+    const elemRec: ClientRect = elem.getBoundingClientRect();
+    const isOverflowed: boolean =  elemRec.top + elemRec.height > window.innerHeight;
+    if(isOverflowed){
+      elem.style.top = -elemRec.height + 'px';
+    }
     Events.dispatch(Events.CLOSE_DROPDOWNS, this.viewNode);
   }
 
   closeDropDown(event?: CustomEvent) {
-    const dropDown = this.viewNode.querySelector(`.leonardo-dropdown-options`);
+    const dropDown: HTMLElement = <HTMLElement>this.viewNode.querySelector(`.leonardo-dropdown-options`);
     if (!dropDown || (event && event.detail === this.viewNode)) {
       return;
     }
-    dropDown['style'].display = 'none';
+    dropDown.style.display = 'none';
   }
 
   setActiveItem(itemName: string){
@@ -108,7 +114,7 @@ export default class DropDown {
 
   private getItems() {
     return this.items.map((item: {name: string}) => {
-      return `<li class="leonardo-dropdown-item"><span class="leonardo-dropdown-item-text">${item.name}</span><span class="leonardo-dropdown-item-x">X</span></li>`
+      return `<li class="leonardo-dropdown-item"><span class="leonardo-dropdown-item-text">${item.name}</span><span class="leonardo-dropdown-item-x"></span></li>`
     })
   }
 

@@ -1,12 +1,11 @@
-/// <reference path="../../../../leonardo.d.ts" />
 import Utils from '../../../ui-utils';
 import Events from '../../../ui-events';
-import StateDetail from '../../scenarios/states-list/state-detail/states-detail';
+import RecorderStateDetail from "../state-detail/states-detail";
 
 export default class RecorderList {
 
   viewNode: HTMLElement;
-  stateDetail: StateDetail = new StateDetail(this.onSave.bind(this), this.onCancel.bind(this));
+  stateDetail: RecorderStateDetail = new RecorderStateDetail(this.onSave.bind(this), this.onCancel.bind(this));
 
   constructor() {
     Events.on(Events.TOGGLE_LAUNCHER, this.render.bind(this))

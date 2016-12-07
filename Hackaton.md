@@ -19,10 +19,9 @@ Tel-Aviv (map)
 #### Goals:
 - Create an extension that will inject the leonardo script into any site.
 - Turn Leonardo on and off via the extension instead of an added image.
-- Option to save deep link urls in extension - simple new feature.
-- Attach a url to a scenario - new feature.
 - Activate a scenario from a small pop up extension window.
 - Generally Improve the UI/UX.
-- Perhaps open it in a new window so no need to inject into the page - low priority.
+- Attach a url to a scenario - new feature.
+
  
 
