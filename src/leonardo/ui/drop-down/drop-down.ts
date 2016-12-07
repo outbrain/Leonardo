@@ -129,7 +129,7 @@ export default class DropDown {
     }
     let removedItem;
     this.items = this.items.filter((curItem) => {
-      if(curItem.name === item.querySelector('.leonardo-dropdown-item-text').innerHTML){
+      if(curItem.name === item.querySelector('.leonardo-dropdown-item-text')['innerHTML']){
         removedItem = curItem;
       }
     });
