@@ -27,8 +27,8 @@ export default class UIRoot {
     this.leonardoApp = Utils.getElementFromHtml(`<div leonardo-app></div>`);
     this.launcher = new Launcher();
     this.mainView = new MainView();
-    this.leonardoApp.appendChild(this.launcher.get());
     this.leonardoApp.appendChild(this.mainView.get());
+    this.leonardoApp.appendChild(this.launcher.get());
     document.body.addEventListener('leonardo:toggle:states', this.toggleAllStates.bind(this));
     document.body.appendChild(this.leonardoApp);
   }
