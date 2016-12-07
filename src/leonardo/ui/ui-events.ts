@@ -9,6 +9,7 @@ export default {
   TOGGLE_STATES: 'leonardo:toggle:states',
   TOGGLE_SCENARIOS: 'leonardo:toggle:scenario',
   ADD_SCENARIO: 'leonardo:add:scenario',
+  TOGGLE_STATE: 'leonardo:toggle:states',
 
   on: (eventName: string, fn: EventListenerOrEventListenerObject) => {
     document.body.addEventListener(eventName, fn);

@@ -15,6 +15,7 @@ export default class StatesList {
     this.viewNode = Utils.getElementFromHtml(`<div id="leonardo-states-list" class="leonardo-states-list"></div>`);
     Events.on(Events.FILTER_STATES, this.onFilterStates.bind(this));
     Events.on(Events.ADD_SCENARIO, this.addScenario.bind(this));
+    Events.on(Events.TOGGLE_STATE, this.toggleAllStates.bind(this));
   }
 
   get() {
@@ -90,5 +91,9 @@ export default class StatesList {
       states: states,
       from_local: true
     }, true);
+  }
+
+  private toggleAllStates(event: CustomEvent){
+    Leonardo.toggleActivateAll(event.detail);
   }
 }

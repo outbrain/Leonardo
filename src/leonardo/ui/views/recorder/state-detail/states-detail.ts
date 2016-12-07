@@ -30,10 +30,11 @@ export default class RecorderStateDetail {
       html = `<div class="leonardo-states-detail-header">Add mocked response for <strong>${this.curState.name}</strong></div>`;
     }
     else {
-      html = `<h1 class="leonardo-states-detail-header"/></>Add new state</h1>`;
+      html = `<h1 class="leonardo-states-detail-header"/></>Add new state</h1>
+              <div>State name: <input class="leonardo-states-detail-state-name"/></div>`;
     }
 
-    html += `<div>Option name: <input class="leonardo-states-detail-option-name"/></div>
+    html += `<div>Option name: <input class="leonardo-states-detail-option-name" value="${this.curState.options[0].name}"/></div>
               <div>Status code: <input class="leonardo-states-detail-status" value="${this.curState.options[0].status}"/></div>
               <div>Delay: <input class="leonardo-states-detail-delay" value="0"/></div>
               <div>Response: <textarea class="leonardo-states-detail-json">${this.getResString(this.curState.options[0].data)}</textarea></div>
@@ -93,6 +94,9 @@ export default class RecorderStateDetail {
     this.curState.activeOption.status = statusVal;
     this.curState.activeOption.delay = delayVal;
     this.curState.activeOption.name = optionNameVal;
+    if(!this.curState.recorded){
+      this.curState.name = this.viewNode.querySelector('.leonardo-states-detail-state-name').value || this.curState.name;
+    }
     try {
       this.curState.activeOption.data = JSON.parse(jsonVal);
     }
