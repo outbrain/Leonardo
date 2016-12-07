@@ -5,7 +5,7 @@ import RecorderStateDetail from "../state-detail/states-detail";
 export default class RecorderList {
 
   viewNode: HTMLElement;
-  stateDetail: RecorderStateDetail = new RecorderStateDetail(this.onSave.bind(this), this.onCancel.bind(this));
+  stateDetail: RecorderStateDetail = new RecorderStateDetail();
 
   constructor() {
     Events.on(Events.TOGGLE_LAUNCHER, this.render.bind(this))
@@ -30,8 +30,9 @@ export default class RecorderList {
       const item = Utils.getElementFromHtml(`<li class="leonardo-recorder-list-item">`);
       item.innerHTML =
           `<span class="leonardo-recorder-list-verb leonardo-recorder-list-verb-${state.verb.toLowerCase()}">${state.verb}</span>
-           <span class="leonardo-recorder-list-url">${state.url}</span>
-           <span class="leonardo-recorder-list-name">${state.name}</span>`;
+           <span class="leonardo-recorder-list-url">${state.url}</span>`;
+      item.innerHTML += state.recorded ? `<span class="leonardo-recorder-list-name">${state.name}</span>` :
+        `<span class="leonardo-recorder-list-name leonardo-recorder-list-name-new">New</span>`
       item.addEventListener('click', this.toggleDetails.bind(this, state));
       return item;
     })
@@ -42,11 +43,4 @@ export default class RecorderList {
     this.stateDetail.open(state);
   }
 
-  private onSave() {
-
-  }
-
-  private onCancel() {
-
-  }
 }
