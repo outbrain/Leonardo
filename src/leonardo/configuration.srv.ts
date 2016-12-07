@@ -422,6 +422,7 @@ export function leoConfiguration () {
           name: state ? state.name : req.verb + " " + req.url,
           verb: req.verb,
           url: req.url,
+          recorded: !!req.state,
           options: [{
             name: req.status >= 200 && req.status < 300 ? 'Success' : 'Failure',
             status: req.status,
