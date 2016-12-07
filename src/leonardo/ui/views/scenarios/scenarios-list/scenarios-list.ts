@@ -4,7 +4,7 @@ import Events from '../../../ui-events';
 
 export default class ScenariosList {
 
-  viewNode: any;
+  viewNode: HTMLElement;
   setScenarioBinded: EventListener = this.setScenario.bind(this);
   static SELECTED_CLASS = 'leonardo-selected-scenario';
 
