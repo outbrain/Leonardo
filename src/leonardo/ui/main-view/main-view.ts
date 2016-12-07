@@ -18,6 +18,7 @@ export default class MainView {
   menuView: HTMLElement;
 
   constructor() {
+    Events.on('keydown', this.onKeyPress.bind(this));
     this.bodyView = Utils.getElementFromHtml(`<div class="leonardo-main-view-body"></div>`);
     this.menuView = Utils.getElementFromHtml(`<div class="leonardo-main-view-menu"></div>`);
 
@@ -42,7 +43,7 @@ export default class MainView {
         this.kickStart();
       }
     } else {
-      el.classList.add(this.hiddenClassName);
+      this.closeLeo();
     }
   }
 
@@ -57,5 +58,16 @@ export default class MainView {
 
   private getTabList(): Array<HeaderTabItem>{
     return UIStateViewService.getInstance().getViewStates().map((view: UIViewState) => {return {label: view.name}});
+  }
+
+  private closeLeo(){
+    const el = document.querySelector(`.${this.className}`);
+    el.classList.add(this.hiddenClassName);
+  }
+
+  private onKeyPress(event: MouseEvent){
+    if(event.which == 27){
+      this.closeLeo();
+    }
   }
 }

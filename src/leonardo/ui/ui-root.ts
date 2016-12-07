@@ -29,7 +29,11 @@ export default class UIRoot {
     this.mainView = new MainView();
     this.leonardoApp.appendChild(this.launcher.get());
     this.leonardoApp.appendChild(this.mainView.get());
+    document.body.addEventListener('leonardo:toggle:states', this.toggleAllStates.bind(this));
     document.body.appendChild(this.leonardoApp);
   }
 
+  private toggleAllStates(event: CustomEvent){
+    Leonardo.toggleActivateAll(event.detail);
+  }
 }
