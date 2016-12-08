@@ -14,7 +14,6 @@ export class Sinon {
       autoRespondAfter: 10
     });
 
-
     sinon.FakeXMLHttpRequest.useFilters = true;
     sinon.FakeXMLHttpRequest.addFilter(function (method, url) {
       if (url.indexOf('.html') > 0 && url.indexOf('template') >= 0) {
@@ -40,7 +39,7 @@ export class Sinon {
 
       if (!!activeOption) {
         var responseData = Utils.isFunction(activeOption.data) ? activeOption.data(request) : activeOption.data;
-        request.respond(activeOption.status, {"Content-Type": "application/json"}, JSON.stringify(responseData));
+        request.respond(activeOption.status, {'Content-Type': 'application/json'}, JSON.stringify(responseData));
         Leonardo._logRequest(request.method, request.url, responseData, activeOption.status);
       } else {
         console.warn('could not find a state for the following request', request);
