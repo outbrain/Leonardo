@@ -35,7 +35,8 @@ export default class ScenariosList {
     const el = Utils.getElementFromHtml(`<li>${scenario}</li>`);
     el.addEventListener('click', () => {
       Events.dispatch(Events.SCENARIO_CLICKED, {name: scenario});
-      this.viewNode.querySelectorAll('li').forEach(li => li.classList.remove(ScenariosList.SELECTED_CLASS));
+      Array.prototype.slice.call(this.viewNode.querySelectorAll('li'), 0)
+        .forEach(li => li.classList.remove(ScenariosList.SELECTED_CLASS));
       el.classList.add(ScenariosList.SELECTED_CLASS);
     });
     return el;
