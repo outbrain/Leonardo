@@ -4,7 +4,7 @@ export default class UiUtils {
 
   static getElementFromHtml(html: string): HTMLElement {
     const div = document.createElement('div');
-    div.innerHTML = html;
+    div.innerHTML = html.trim();
     return <HTMLElement>div.firstChild;
   }
 
