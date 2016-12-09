@@ -27,7 +27,7 @@ export default class RecorderList extends DOMElement {
       const item = Utils.getElementFromHtml(`<li class="leonardo-recorder-list-item">`);
       item.innerHTML =
           `<span class="leonardo-recorder-list-verb leonardo-recorder-list-verb-${state.verb.toLowerCase()}">${state.verb}</span>
-           <span class="leonardo-recorder-list-url">kjlj;lkj;lkjlkjlkj;lhjhkgkjhgjhgjkhkjhgkjhgkjhgkjhgkjhgkjhgkjhgkjhgkjhgkhkjhgkjhglhjhkgkjhgjhgjkhkjhgkjhgkjhgkjhgkjhgkjhgkjhgkjhgkjhgkhkjhgkjhglhjhkgkjhgjhgjkhkjhgkjhgkjhgkjhgkjhgkjhgkjhgkjhgkjhgkhkjhgkjhg</span>`;
+           <span class="leonardo-recorder-list-url">${state.url.substr(0,110)}</span>`;
       item.innerHTML += state.recorded ? `<span class="leonardo-recorder-list-name">${state.name}</span>` :
         `<span class="leonardo-recorder-list-name leonardo-recorder-list-name-new">New</span>`
       this.onItem(item, 'click', this.toggleDetails.bind(this, state));
