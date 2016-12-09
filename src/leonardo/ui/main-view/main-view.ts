@@ -14,17 +14,21 @@ export default class MainView extends DOMElement{
   hiddenClassName = `${this.className}-hidden`;
   headerView: HeaderView;
   viewsContainer: ViewsContainer;
-  bodyView: Node;
+  bodyView: HTMLElement;
   menuView: HTMLElement;
+  menuState: boolean = false;
 
   constructor() {
     super(`<div class="leonardo-main-view leonardo-main-view-hidden"></div>`);
     this.eventSubs.push(Events.on('keydown', this.onKeyPress.bind(this)));
     this.eventSubs.push(Events.on(Events.TOGGLE_LAUNCHER, this.toggleView.bind(this)));
-
+    this.eventSubs.push(Events.on(Events.ATTACH_MENU_ITEM, this.attachMenu.bind(this)));
+    this.eventSubs.push(Events.on(Events.OPEN_MENU, this.openMenu.bind(this)));
+    this.eventSubs.push(Events.on(Events.CLOSE_MENU, this.closeMenu.bind(this)));
+    this.eventSubs.push(Events.on(Events.CHANGE_VIEW, this.closeMenu.bind(this)));
     this.bodyView = Utils.getElementFromHtml(`<div class="leonardo-main-view-body"></div>`);
     this.menuView = Utils.getElementFromHtml(`<div class="leonardo-main-view-menu"></div>`);
-    UIStateViewService.getInstance().init(UIStateList(this.menuView), UIStateList(this.menuView)[0].name);
+    UIStateViewService.getInstance().init(UIStateList(), UIStateList()[0].name);
     this.headerView = new HeaderView(this.getTabList());
     this.viewsContainer = new ViewsContainer();
   }
@@ -43,6 +47,8 @@ export default class MainView extends DOMElement{
   }
 
   render() {
+    super.render();
+    this.menuState = false;
     this.viewNode.appendChild(this.bodyView);
     this.viewNode.appendChild(this.menuView);
     this.bodyView.appendChild(this.headerView.get());
@@ -50,6 +56,30 @@ export default class MainView extends DOMElement{
     this.headerView.render();
     this.viewsContainer.setView(UIStateViewService.getInstance().getCurViewState());
     this.viewsContainer.render();
+  }
+
+  private attachMenu(event: CustomEvent){
+    this.menuView.innerHTML = '';
+    this.closeMenu(null);
+    this.menuView.appendChild(event.detail);
+  }
+
+  private openMenu(event: CustomEvent){
+    if(this.menuState){
+      return;
+    }
+    this.menuState = true;
+    this.menuView.style.transform = 'translateX(0)';
+    this.bodyView.style.width = (this.bodyView.getBoundingClientRect().width - this.menuView.getBoundingClientRect().width) + 'px'
+  }
+
+  private closeMenu(event: CustomEvent){
+    if(!this.menuState){
+      return;
+    }
+    this.menuState = false;
+    this.menuView.style.transform = 'translateX(100%)';
+    this.bodyView.style.width = (this.bodyView.getBoundingClientRect().width + this.menuView.getBoundingClientRect().width) + 'px'
   }
 
   private getTabList(): Array<HeaderTabItem> {

@@ -12,7 +12,7 @@ export default class UIRoot {
     switch (document.readyState) {
       default:
       case 'loading':
-        Events.onItemOnce(<HTMLElement>document, 'DOMContentLoaded', this.init.bind(this));
+        Events.onItemOnce(document, 'DOMContentLoaded', this.init.bind(this));
         break;
       case 'interactive':
       case 'complete':

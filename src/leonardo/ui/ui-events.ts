@@ -14,6 +14,9 @@ export default {
   ADD_SCENARIO: 'leonardo:add:scenario',
   TOGGLE_STATE: 'leonardo:toggle:states',
   TOGGLE_ICON: 'leonardo:toggle:icon',
+  ATTACH_MENU_ITEM: 'leonardo:attach:menu',
+  OPEN_MENU: 'leonardo:menu:open',
+  CLOSE_MENU: 'leonardo:menu:close',
 
   //We want to maintain scope here
   on: function(eventName: string, fn: EventListenerOrEventListenerObject) {
@@ -29,10 +32,10 @@ export default {
   onItemOnce: (node: any, type: string, callback: Function) => {
     node.addEventListener(type, function (e) {
       e.target.removeEventListener(e.type, <EventListener>arguments.callee);
-      return callback(arguments);
+      return callback.apply(callback, arguments);
     });
   },
-  onItem: (node: HTMLElement, type: string, callback: EventListener) => {
+  onItem: (node: any, type: string, callback: EventListener) => {
     node.addEventListener(type, callback, false);
     return {
       off: () => {return node.removeEventListener(type, callback, false)}

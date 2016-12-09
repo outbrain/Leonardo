@@ -107,7 +107,7 @@ export default class DropDown extends DOMElement{
 
   private getItems() {
     return this.items.map((item: {name: string}) => {
-      return `<li class="leonardo-dropdown-item"><span class="leonardo-dropdown-item-text">${item.name}</span><span class="leonardo-dropdown-item-x"></span></li>`
+      return `<li class="leonardo-dropdown-item"><span class="leonardo-dropdown-item-text">${item.name}</span><span class="leonardo-x-btn leonardo-dropdown-item-x"></span></li>`
     })
   }
 

@@ -1,25 +1,58 @@
+@import '../../../../../style/variables.less';
 .leonardo-state-detail {
-  position: fixed;
-  transition: right 200ms ease-out;
-  top: 0;
-  bottom: 0;
-  right: -400px;
-  width: 400px;
+  height: 100%;
   border: 1px solid #ccc;
   border-top: none;
   background: white;
   z-index: 100;
-  font-size: 13px;
-  padding: 5px;
-  div{
+  border-top: 2px solid #ccc;
+  padding: 10px;
+  color: @black;
+  width: 400px;
+  .leonardo-states-detail-container {
+    margin-top: 0;
+  }
+  .leonardo-states-detail-top {
+    font-size: 19px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;;
+
+  }
+  .leonardo-states-detail-input {
+    margin-top: 30px;
+    margin-right: 10px;
+    font-size: 14px;
+    display: inline-block;
+
+    input {
+      display: inline-block;
+      width: 150px;
+      color: #78788c;
+      padding: 10px;
+      box-sizing: border-box;
+      background: none;
+      outline: none;
+      resize: none;
+      border: 0;
+      transition: all .3s;
+      border-bottom: 1px solid #bebed2;
+      font-size: 14px;
+    }
+    input:focus {
+      border-bottom: 1px solid #78788c;
+    }
+  }
+  div {
     margin-top: 10px;
   }
   textarea {
     display: block;
-    width: 100%;
     height: 200px;
+    width: 100%;
+    border: 1px solid #bebed2;
   }
-  button{
+  button {
     margin-top: 10px;
   }
+
 }

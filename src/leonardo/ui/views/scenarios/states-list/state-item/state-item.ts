@@ -29,7 +29,7 @@ export default class StateItem extends DOMElement {
         <span class="leonardo-state-url">${this.state.url || ''}</span>`;
     this.viewNode.appendChild(this.dropDown.get());
     this.dropDown.render();
-    this.viewNode.appendChild(Utils.getElementFromHtml(`<button title="Remove State" class="leonardo-state-remove">Remove</button>`));
+    this.viewNode.appendChild(Utils.getElementFromHtml(`<div title="Remove State" class="leonardo-x-btn leonardo-state-remove"></div>`));
     this.onItem(this.viewNode.querySelector(`.leonardo-toggle-btn`), 'click', this.toggleState.bind(this));
     Events.onItemOnce(this.viewNode.querySelector(`.leonardo-state-remove`), 'click', this.removeState.bind(this));
   }

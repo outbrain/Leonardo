@@ -23,7 +23,7 @@ export default class StatesList extends DOMElement {
     super.render();
     this.clearEventSubs();
     this.viewNode.appendChild(this.statesBar.get());
-    this.viewNode.appendChild(this.stateDetail.get());
+    Events.dispatch(Events.ATTACH_MENU_ITEM, this.stateDetail.get());
     this.statesElements.length = 0;
     Leonardo.getStates()
       .map((state) => new StateItem(state, this.removeStateByName.bind(this)))
