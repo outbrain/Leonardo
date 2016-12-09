@@ -6,14 +6,13 @@ import Events from './ui-events';
 export default class UIRoot {
   leonardoApp: Node;
   launcher: Launcher;
-  mainView: MainView;
-  initBinded: EventListener = this.init.bind(this);
+  mainView: MainView;  
 
   constructor() {
     switch (document.readyState) {
       default:
       case 'loading':
-        document.addEventListener('DOMContentLoaded', this.initBinded, false);
+        Events.onItemOnce(<HTMLElement>document, 'DOMContentLoaded', this.init.bind(this));
         break;
       case 'interactive':
       case 'complete':
@@ -23,13 +22,13 @@ export default class UIRoot {
   }
 
   init() {
-    document.removeEventListener('DOMContentLoaded', this.initBinded, false);
+
     this.leonardoApp = Utils.getElementFromHtml(`<div leonardo-app></div>`);
     this.launcher = new Launcher();
     this.mainView = new MainView();
     this.leonardoApp.appendChild(this.mainView.get());
     this.leonardoApp.appendChild(this.launcher.get());
-    document.body.addEventListener(Events.TOGGLE_STATES, this.toggleAllStates.bind(this));
+    Events.on(Events.TOGGLE_STATES, this.toggleAllStates.bind(this));
     document.body.appendChild(this.leonardoApp);
   }
 

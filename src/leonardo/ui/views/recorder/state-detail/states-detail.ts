@@ -1,26 +1,16 @@
 import Utils from '../../../ui-utils';
-
-export default class RecorderStateDetail {
-  viewNode: any;
+import Events from '../../../ui-events';
+import DOMElement from '../../../DOMElement';
+export default class RecorderStateDetail extends DOMElement {
   openState: boolean = false;
   curState;
-  onCancelBinded: EventListener = this.onCancel.bind(this);
-  onSaveBinded: EventListener = this.onSave.bind(this);
 
   constructor() {
-    this.viewNode = Utils.getElementFromHtml(`<div id="leonardo-state-detail" class="leonardo-state-detail-recorder"></div>`);
-  }
-
-  get() {
-    return this.viewNode;
-  }
+    super(`<div id="leonardo-state-detail" class="leonardo-state-detail-recorder"></div>`);
+      }
 
   render() {
-    if (this.viewNode.innerHTML) {
-      this.viewNode.querySelector('.leonardo-states-detail-cancel').removeEventListener('click', this.onCancelBinded, false);
-      this.viewNode.querySelector('.leonardo-states-detail-save').removeEventListener('click', this.onSaveBinded, false);
-    }
-
+    super.render();
     let html;
 
     //TODO congratulate ourselves on being awesome!!
@@ -41,8 +31,8 @@ export default class RecorderStateDetail {
               <button class="leonardo-button leonardo-states-detail-cancel" >Cancel</button>`;
 
     this.viewNode.innerHTML = html;
-    this.viewNode.querySelector('.leonardo-states-detail-cancel').addEventListener('click', this.onCancelBinded, false);
-    this.viewNode.querySelector('.leonardo-states-detail-save').addEventListener('click', this.onSaveBinded, false);
+    Events.onItemOnce(this.viewNode.querySelector('.leonardo-states-detail-cancel'),'click', this.onCancel.bind(this));
+    Events.onItemOnce(this.viewNode.querySelector('.leonardo-states-detail-save'), 'click', this.onSave.bind(this));
   }
 
   open(state) {
@@ -80,7 +70,7 @@ export default class RecorderStateDetail {
     return resStr;
   }
 
-  private onCancel() {
+  private onCancel(event: Event) {
     this.close();
   }
 

@@ -2,26 +2,25 @@
 import Utils from '../../ui-utils';
 import Events from '../../ui-events';
 import RecorderList from './recorder-list/recorder-list';
+import DOMElement from '../../DOMElement';
 
-export default class Recorder {
+export default class Recorder extends DOMElement {
 
-  viewNode: HTMLElement;
   recorderList: RecorderList;
 
   constructor(private menuView: HTMLElement) {
+    super(`<div id="leonardo-recorder" class="leonardo-recorder"</div>`);
     this.recorderList = new RecorderList(menuView);
   }
 
-  get() {
-    return this.viewNode = Utils.getElementFromHtml(`<div id="leonardo-recorder" class="leonardo-recorder"</div>`);
-  }
-
   render() {
+    super.render();
     this.viewNode.appendChild(this.recorderList.get());
     this.recorderList.render();
   }
 
+  // Override base so we dont clear viewNode
   destroy() {
-    this.menuView.innerHTML = '';
+
   }
 }

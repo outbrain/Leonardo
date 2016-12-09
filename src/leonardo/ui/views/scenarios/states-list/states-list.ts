@@ -4,25 +4,24 @@ import Events from '../../../ui-events';
 import StateItem from './state-item/state-item';
 import StatesBar from './states-bar/states-bar';
 import StateDetail from './state-detail/states-detail';
+import DOMElement from '../../../DOMElement';
+import {EventSub} from '../../../ui-events';
 
-export default class StatesList {
-  viewNode: any;
+export default class StatesList extends DOMElement {
   statesBar = new StatesBar();
   stateDetail = new StateDetail(this.onStateDetailSave.bind(this), this.clearSelected.bind(this));
   statesElements: StateItem[] = [];
+  bodyEventSubs: Array<EventSub> = [];
 
   constructor() {
-    this.viewNode = Utils.getElementFromHtml(`<div id="leonardo-states-list" class="leonardo-states-list"></div>`);
-    Events.on(Events.FILTER_STATES, this.onFilterStates.bind(this));
-    Events.on(Events.ADD_SCENARIO, this.addScenario.bind(this));    
-  }
-
-  get() {
-    return this.viewNode;
+    super(`<div id="leonardo-states-list" class="leonardo-states-list"></div>`);
+    this.bodyEventSubs.push(Events.on(Events.FILTER_STATES, this.onFilterStates.bind(this)));
+    this.bodyEventSubs.push(Events.on(Events.ADD_SCENARIO, this.addScenario.bind(this)));
   }
 
   render() {
-    this.viewNode.innerHTML = '';
+    super.render();
+    this.clearEventSubs();
     this.viewNode.appendChild(this.statesBar.get());
     this.viewNode.appendChild(this.stateDetail.get());
     this.statesElements.length = 0;
@@ -31,7 +30,7 @@ export default class StatesList {
       .forEach((stateElm) => {
         this.statesElements.push(stateElm);
         this.viewNode.appendChild(stateElm.get());
-        stateElm.viewNode.addEventListener('click', this.toggleDetail.bind(this, stateElm));
+        this.onItem(stateElm.get(), 'click', this.toggleDetail.bind(this, stateElm));
         stateElm.render();
       });
     this.statesBar.render();
@@ -56,10 +55,10 @@ export default class StatesList {
 
   private toggleDetail(stateElm: StateItem, event: Event) {
     event.stopPropagation();
-    const open: boolean = stateElm.viewNode.classList.contains('leonardo-state-item-detailed');
+    const open: boolean = stateElm.get().classList.contains('leonardo-state-item-detailed');
     this.clearSelected();
     if(!open){
-      stateElm.viewNode.classList.add('leonardo-state-item-detailed');
+      stateElm.get().classList.add('leonardo-state-item-detailed');
     }
 
     this.stateDetail.toggle(stateElm.getState());
@@ -67,7 +66,7 @@ export default class StatesList {
 
   private clearSelected(){
     this.statesElements.forEach((curState) => {
-      curState.viewNode.classList.remove('leonardo-state-item-detailed');
+      curState.get().classList.remove('leonardo-state-item-detailed');
     });
   }
 
@@ -90,6 +89,10 @@ export default class StatesList {
       states: states,
       from_local: true
     }, true);
+  }
+  
+  destroy(){
+    this.clearSetEventSubs(this.bodyEventSubs);
   }
 
 }

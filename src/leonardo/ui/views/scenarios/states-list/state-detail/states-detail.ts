@@ -1,24 +1,17 @@
 import Utils from '../../../../ui-utils';
+import Events from '../../../../ui-events';
+import DOMElement from '../../../../DOMElement';
+export default class StateDetail extends DOMElement {
 
-export default class StateDetail {
-  viewNode: any;
   openState: boolean = false;
   curState;
-  onCancelBinded: EventListener = this.onCancel.bind(this);
-  onSaveBinded: EventListener = this.onSave.bind(this);
-  constructor(private onSaveCB, private onCancelCB) {
-    this.viewNode = Utils.getElementFromHtml(`<div id="leonardo-state-detail" class="leonardo-state-detail"></div>`);
-  }
 
-  get() {
-    return this.viewNode;
+  constructor(private onSaveCB, private onCancelCB) {
+    super(`<div id="leonardo-state-detail" class="leonardo-state-detail"></div>`);
   }
 
   render() {
-    if(this.viewNode.innerHTML){
-      this.viewNode.querySelector('.leonardo-states-detail-cancel').removeEventListener('click', this.onCancelBinded, false);
-      this.viewNode.querySelector('.leonardo-states-detail-save').removeEventListener('click', this.onSaveBinded, false);
-    }
+    super.render();
     this.viewNode.innerHTML = `
       <div class="leonardo-states-detail-header"> 
         Edit option <strong>${this.curState.activeOption.name}</strong>
@@ -31,8 +24,8 @@ export default class StateDetail {
         </div>
         <button class="leonardo-button leonardo-states-detail-save">Save</button>
         <button class="leonardo-button leonardo-states-detail-cancel" >Cancel</button>`;
-        this.viewNode.querySelector('.leonardo-states-detail-cancel').addEventListener('click', this.onCancelBinded, false);
-        this.viewNode.querySelector('.leonardo-states-detail-save').addEventListener('click', this.onSaveBinded, false);
+        Events.onItemOnce(this.viewNode.querySelector('.leonardo-states-detail-cancel'),'click', this.onCancel.bind(this));
+        Events.onItemOnce(this.viewNode.querySelector('.leonardo-states-detail-save'), 'click', this.onSave.bind(this));
   }
 
   open(state) {
