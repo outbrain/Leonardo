@@ -8,9 +8,9 @@ export default class Recorder extends DOMElement {
 
   recorderList: RecorderList;
 
-  constructor(private menuView: HTMLElement) {
+  constructor() {
     super(`<div id="leonardo-recorder" class="leonardo-recorder"</div>`);
-    this.recorderList = new RecorderList(menuView);
+    this.recorderList = new RecorderList();
   }
 
   render() {

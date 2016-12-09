@@ -9,7 +9,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
 
-    background: #219161;
+    background: @green;
     color: #fff;
     border: 0;
     margin-left: 0;
@@ -17,8 +17,9 @@
     width: 200px;
     cursor: pointer;
     &[disabled] {
-      background: rgba(33, 145, 97, 0.5);
+
       cursor: default;
+      opacity: 0.6;
     }
     &:hover {
       color: lightblue;
@@ -42,7 +43,7 @@
     z-index: 10;
     margin-left: 0;
     left: 0;
-    border: 1px solid black;
+    border: 1px inset black;
     width: 200px;
     max-height: 300px;
     overflow-y: auto;
@@ -53,7 +54,7 @@
       margin: 0;
       padding: 0;
       .leonardo-dropdown-item {
-        padding: 10px 5px;
+        padding: 7px 5px;
         &:hover {
           background: lightblue;
           cursor: pointer;

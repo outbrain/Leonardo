@@ -15,17 +15,17 @@ export default class RecorderStateDetail extends DOMElement {
 
     //TODO congratulate ourselves on being awesome!!
     if (this.curState.recorded) {
-      html = `<div class="leonardo-states-detail-header">Add mocked response for <strong>${this.curState.name}</strong></div>`;
+      html = `<div class="leonardo-states-detail-top">Add mocked response for <strong>${this.curState.name}</strong></div>`;
     }
     else {
-      html = `<h1 class="leonardo-states-detail-header"/>Add new state</h1>
-              <div>State name: <input class="leonardo-states-detail-state-name" value="${this.curState.name}"/></div>`;
+      html = `<h1 class="leonardo-states-detail-top"/>Add new state</h1>
+              <div class="leonardo-states-detail-input">State name: <input class="leonardo-states-detail-state-name" value="${this.curState.name}"/></div>`;
     }
 
-    html +=   `<div>URL: <input class="leonardo-states-detail-option-url" value="${this.curState.url}"/></div>
-              <div>Option name: <input class="leonardo-states-detail-option-name" value="${this.curState.options[0].name}"/></div>
-              <div>Status code: <input class="leonardo-states-detail-status" value="${this.curState.options[0].status}"/></div>
-              <div>Delay: <input class="leonardo-states-detail-delay" value="0"/></div>
+    html +=   `<div class="leonardo-states-detail-input"><div>URL: </div><input class="leonardo-states-detail-option-url" value="${this.curState.url}"/></div>
+              <div class="leonardo-states-detail-input"><div>Option name: </div><input class="leonardo-states-detail-option-name" value="${this.curState.options[0].name}"/></div>
+              <div class="leonardo-states-detail-input"><div>Status code: </div><input class="leonardo-states-detail-status" value="${this.curState.options[0].status}"/></div>
+              <div class="leonardo-states-detail-input"><div>Delay: </div><input class="leonardo-states-detail-delay" value="0"/></div>
               <div>Response: <textarea class="leonardo-states-detail-json">${this.getResString(this.curState.options[0].data)}</textarea></div>
               <button class="leonardo-button leonardo-states-detail-save">Save</button>
               <button class="leonardo-button leonardo-states-detail-cancel" >Cancel</button>`;
@@ -39,7 +39,7 @@ export default class RecorderStateDetail extends DOMElement {
     this.curState = state;
     this.render();
     this.openState = true;
-    this.viewNode.style.display = '';
+    Events.dispatch(Events.OPEN_MENU);
   }
 
   close(state?) {
@@ -48,7 +48,7 @@ export default class RecorderStateDetail extends DOMElement {
       return;
     }
     this.openState = false;
-    this.viewNode.style.display = 'none';
+    Events.dispatch(Events.CLOSE_MENU);
   }
 
   toggle(state) {

@@ -15,8 +15,18 @@
 }
 
 .leonardo-main-view-body {
-  flex: 1;
+  transition: width 200ms ease-in;
+  max-width: 100%;
+  width: 100%;
 }
 
 .leonardo-main-view-menu {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  transition: transform 200ms ease-in;
+  will-change: transition;
+  transform: translateX(100%);
+  padding-top: 47px;
 }

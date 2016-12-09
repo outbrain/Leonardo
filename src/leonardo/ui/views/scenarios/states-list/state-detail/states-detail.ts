@@ -13,13 +13,15 @@ export default class StateDetail extends DOMElement {
   render() {
     super.render();
     this.viewNode.innerHTML = `
-      <div class="leonardo-states-detail-header"> 
-        Edit option <strong>${this.curState.activeOption.name}</strong>
+      <div class="leonardo-states-detail-container"> 
+        <div class="leonardo-states-detail-top">Edit option <strong>${this.curState.activeOption.name}</strong>
         for <strong>${this.curState.name}</strong>
         </div>
-        <div>Status code: <input class="leonardo-states-detail-status" value="${this.curState.activeOption.status}"/></div>
-        <div>Delay: <input class="leonardo-states-detail-delay" value="${this.curState.activeOption.delay}"/></div>
-        <div>Response JSON:
+        <div class="leonardo-states-detail-input"><div>Status code: </div><input class="leonardo-states-detail-status" value="${this.curState.activeOption.status}"/></div>
+        <div class="leonardo-states-detail-input"><div>Delay: </div><input class="leonardo-states-detail-delay" value="${this.curState.activeOption.delay}"/></div>
+        <div>
+          <p>Response JSON:</p>
+          
           <textarea class="leonardo-states-detail-json">${this.getResString(this.curState.activeOption.data)}</textarea>
         </div>
         <button class="leonardo-button leonardo-states-detail-save">Save</button>
@@ -32,7 +34,7 @@ export default class StateDetail extends DOMElement {
     this.curState = state;
     this.render();
     this.openState = true;
-    this.viewNode.style.right = '0px';
+    Events.dispatch(Events.OPEN_MENU);
   }
 
   close(state?) {
@@ -40,8 +42,9 @@ export default class StateDetail extends DOMElement {
       this.open(state);
       return;
     }
+
     this.openState = false;
-    this.viewNode.style.right = '-400px';
+    Events.dispatch(Events.CLOSE_MENU);
   }
 
   toggle(state) {
