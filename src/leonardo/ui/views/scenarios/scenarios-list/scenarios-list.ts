@@ -1,25 +1,20 @@
 /// <reference path="../../../../leonardo.d.ts" />
 import Utils from '../../../ui-utils';
 import Events from '../../../ui-events';
+import DOMElement from '../../../DOMElement';
 
-export default class ScenariosList {
+export default class ScenariosList extends DOMElement {
 
-  viewNode: HTMLElement;
-  setScenarioBinded: EventListener = this.setScenario.bind(this);
   static SELECTED_CLASS = 'leonardo-selected-scenario';
 
   constructor() {
-    this.viewNode = Utils.getElementFromHtml(`<div id="leonardo-scenarios-list" class="leonardo-scenarios-list"></div>`);
-    this.viewNode.addEventListener('click', this.setScenarioBinded, false);
-    Events.on(Events.ADD_SCENARIO, this.addScenario.bind(this));
-  }
-
-  get() {
-    return this.viewNode;
+    super(`<div id="leonardo-scenarios-list" class="leonardo-scenarios-list"></div>`);
+    this.bodyEventsSubs.push(Events.on(Events.ADD_SCENARIO, this.addScenario.bind(this)));
   }
 
   render() {
-    this.viewNode.innerHTML = '';
+    super.render();
+    this.clearEventSubs();
     this.viewNode.appendChild(Utils.getElementFromHtml(`<div>Scenarios</div>`));
     const ul = Utils.getElementFromHtml(`<ul></ul>`);
     Leonardo.getScenarios()
@@ -33,30 +28,20 @@ export default class ScenariosList {
 
   getScenarioElement(scenario) {
     const el = Utils.getElementFromHtml(`<li>${scenario}</li>`);
-    el.addEventListener('click', () => {
-      Events.dispatch(Events.SCENARIO_CLICKED, {name: scenario});
-      Array.prototype.slice.call(this.viewNode.querySelectorAll('li'), 0)
-        .forEach(li => li.classList.remove(ScenariosList.SELECTED_CLASS));
-      el.classList.add(ScenariosList.SELECTED_CLASS);
-    });
+    this.onItem(el, 'click', this.setScenario.bind(this, scenario, el));
     return el;
   }
 
-  private setScenario(event: MouseEvent) {
-    if (event.target['tagName'] !== 'LI') {
-      return;
-    }
-
-    const scenarioName: string = event.target['innerHTML'];
-    const states: Array<any> = Leonardo.getScenario(scenarioName);
+  private setScenario(scenario: string, el: HTMLElement) {
+    const states: Array<any> = Leonardo.getScenario(scenario);
     Events.dispatch(Events.TOGGLE_STATES, false);
     states.forEach((state)=> {
       Events.dispatch(`${Events.TOGGLE_STATES}:${state.name}`, state.option);
     });
-  }
+    Array.prototype.slice.call(this.viewNode.querySelectorAll('li'), 0)
+      .forEach(li => li.classList.remove(ScenariosList.SELECTED_CLASS));
+    el.classList.add(ScenariosList.SELECTED_CLASS);
 
-  onDestroy() {
-    this.viewNode.removeEventListener('click', this.setScenarioBinded, false);
   }
 
   private addScenario(event: CustomEvent) {

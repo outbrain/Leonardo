@@ -1,19 +1,15 @@
 /// <reference path="../../leonardo.d.ts" />
 import Utils from '../ui-utils';
 import Events from '../ui-events';
+import DOMElement from '../DOMElement';
 
-export default class Launcher {
-  launcher: HTMLElement;
+export default class Launcher extends DOMElement {
 
   constructor() {
-    Events.on('keydown', this.bodyKeypress.bind(this));
-    Events.on(Events.TOGGLE_ICON, this.toggleLauncher.bind(this))
-  }
-
-  get(): HTMLElement {
-    this.launcher = Utils.getElementFromHtml(`<div class="leonardo-launcher"></div>`);
-    this.launcher.addEventListener('click', this.onClick);
-    return this.launcher;
+    super(`<div class="leonardo-launcher"></div>`);
+    this.eventSubs.push(Events.on('keydown', this.bodyKeypress.bind(this)));
+    this.eventSubs.push(Events.on(Events.TOGGLE_ICON, this.toggleLauncher.bind(this)));
+    this.onItem(this.viewNode, 'click', this.onClick.bind(this));
   }
 
   onClick() {
@@ -27,6 +23,6 @@ export default class Launcher {
   }
 
   toggleLauncher() {
-    this.launcher.style.display = this.launcher.style.display === 'none' ? 'block' : 'none';
+    this.viewNode.style.display = this.viewNode.style.display === 'none' ? 'block' : 'none';
   }
 }

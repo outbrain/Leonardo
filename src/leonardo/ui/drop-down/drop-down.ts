@@ -1,31 +1,23 @@
-import Utils from '../ui-utils';
 import Events from '../ui-events';
+import DOMElement from '../DOMElement';
 
-export default class DropDown {
+export default class DropDown extends DOMElement{
 
-  viewNode: HTMLElement;
-  randomID: string;
   optionsState: boolean = false;
-  toggleBinded: EventListener = this.toggleDropDown.bind(this);
-  closeDropDownBinded: EventListener = this.closeDropDown.bind(this);
 
   constructor(private items,
               private activeItem,
               private isDisabled: boolean,
               private onSelectItem: Function,
               private onRemoveItem: Function) {
-    this.randomID = Utils.guidGenerator();
-    this.viewNode = Utils.getElementFromHtml(`<div id="leonardo-dropdown-${this.randomID}" class="leonardo-dropdown"></div>`);
-    document.body.addEventListener('click', this.closeDropDownBinded, false);
-    Events.on(Events.CLOSE_DROPDOWNS, this.closeDropDownBinded);
-  }
-
-  get() {
-    return this.viewNode;
+    super(`<div class="leonardo-dropdown"></div>`);
+    this.bodyEventsSubs.push(Events.on('click', this.closeDropDown.bind(this)));
+    this.bodyEventsSubs.push(Events.on(Events.CLOSE_DROPDOWNS, this.closeDropDown.bind(this)));
   }
 
   render() {
-    this.viewNode.removeEventListener('click', this.toggleBinded, false);
+    super.render();
+    this.clearEventSubs();
     this.viewNode.innerHTML = `
           <div class="leonardo-dropdown-selected" ${this.isDisabledToken()}>
             <span class="leonardo-dropdown-selected-text">${this.activeItem.name}</span>
@@ -34,7 +26,8 @@ export default class DropDown {
           <div class="leonardo-dropdown-options">
             <ul class="leonardo-dropdown-list">${this.getItems().join('')}</ul>
           </div>`;
-    this.viewNode.addEventListener('click', this.toggleBinded, false);
+    this.onItem(this.viewNode, 'click', this.toggleDropDown.bind(this));
+
   }
 
   disableDropDown() {
@@ -135,10 +128,5 @@ export default class DropDown {
     this.viewNode.querySelector('.leonardo-dropdown-list').removeChild(item);
     this.onRemoveItem(removedItem);
 
-  }
-
-  private onDestroy() {
-    document.body.removeEventListener('click', this.closeDropDownBinded, false);
-    this.viewNode.removeEventListener('click', this.toggleBinded, false);
   }
 }
