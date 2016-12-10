@@ -1,3 +1,4 @@
+@import '../../../../style/variables.less';
 .leonardo-recorder-list {
   height: 100%;
   overflow: auto;
@@ -31,7 +32,7 @@
         color: #555;
       }
       .leonardo-recorder-list-name {
-        background: #f08222;
+        background: @maroon;
         display: inline-block;
         padding: 5px 10px;
         font-size: 12px;
@@ -41,7 +42,7 @@
         align-self: flex-end;
         white-space: nowrap;
         text-align: center;
-        flex-grow: 1;
+        width: 150px;
         overflow: hidden;
         text-overflow: ellipsis;
       }
@@ -59,19 +60,19 @@
         font-size: 12px;
       }
       .leonardo-recorder-list-verb-get {
-        background: #3D9970;
+        background: @green;
       }
       .leonardo-recorder-list-verb-custom {
-        background: #111111;
+        background: @black;
       }
       .leonardo-recorder-list-verb-post {
-        background: #FF851B;
+        background: @orange;
       }
       .leonardo-recorder-list-verb-put {
-        background: #0074D9;
+        background: @blue;
       }
       .leonardo-recorder-list-verb-delete {
-        background: #001f3f;
+        background: @navy;
       }
     }
     .leonardo-recorder-list-item:nth-child(even) {
