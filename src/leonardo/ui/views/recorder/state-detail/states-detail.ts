@@ -26,9 +26,12 @@ export default class RecorderStateDetail extends DOMElement {
               <div class="leonardo-states-detail-input"><div>Option name: </div><input class="leonardo-states-detail-option-name" value="${this.curState.options[0].name}"/></div>
               <div class="leonardo-states-detail-input"><div>Status code: </div><input class="leonardo-states-detail-status" value="${this.curState.options[0].status}"/></div>
               <div class="leonardo-states-detail-input"><div>Delay: </div><input class="leonardo-states-detail-delay" value="0"/></div>
-              <div>Response: <textarea class="leonardo-states-detail-json">${this.getResString(this.curState.options[0].data)}</textarea></div>
-              <button class="leonardo-button leonardo-states-detail-save">Save</button>
-              <button class="leonardo-button leonardo-states-detail-cancel" >Cancel</button>`;
+              <br/>
+              <p>Response:</p> <textarea class="leonardo-states-detail-json">${this.getResString(this.curState.options[0].data)}</textarea></p>
+              <div class="leonardo-states-detail-buttons">
+                <button class="leonardo-button leonardo-states-detail-save">Save</button>
+                <button class="leonardo-button leonardo-states-detail-cancel" >Cancel</button>
+              </div>`;
 
     this.viewNode.innerHTML = html;
     Events.onItemOnce(this.viewNode.querySelector('.leonardo-states-detail-cancel'),'click', this.onCancel.bind(this));

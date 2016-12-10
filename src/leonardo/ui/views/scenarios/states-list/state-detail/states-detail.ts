@@ -20,12 +20,15 @@ export default class StateDetail extends DOMElement {
         <div class="leonardo-states-detail-input"><div>Status code: </div><input class="leonardo-states-detail-status" value="${this.curState.activeOption.status}"/></div>
         <div class="leonardo-states-detail-input"><div>Delay: </div><input class="leonardo-states-detail-delay" value="${this.curState.activeOption.delay}"/></div>
         <div>
-          <p>Response JSON:</p>
-          
+          <br/> 
+          <p>Response:</p>          
           <textarea class="leonardo-states-detail-json">${this.getResString(this.curState.activeOption.data)}</textarea>
         </div>
-        <button class="leonardo-button leonardo-states-detail-save">Save</button>
-        <button class="leonardo-button leonardo-states-detail-cancel" >Cancel</button>`;
+        <div class="leonardo-states-detail-buttons">
+          <button class="leonardo-button leonardo-states-detail-save">Save</button>
+          <button class="leonardo-button leonardo-states-detail-cancel" >Cancel</button>
+        </div>`;
+
         Events.onItemOnce(this.viewNode.querySelector('.leonardo-states-detail-cancel'),'click', this.onCancel.bind(this));
         Events.onItemOnce(this.viewNode.querySelector('.leonardo-states-detail-save'), 'click', this.onSave.bind(this));
   }
