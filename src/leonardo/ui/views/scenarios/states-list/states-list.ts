@@ -48,7 +48,7 @@ export default class StatesList extends DOMElement {
 
   removeStateByName(stateName: string, stateView: HTMLElement) {
     this.statesElements = this.statesElements.filter((state) => {
-      return state.getName() === stateName;
+      return state.getName() !== stateName;
     });
     this.viewNode.removeChild(stateView);
   }

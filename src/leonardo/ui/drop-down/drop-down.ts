@@ -73,6 +73,8 @@ export default class DropDown extends DOMElement{
     const isOverflowed: boolean = elemRec.top + elemRec.height > window.innerHeight;
     if (isOverflowed) {
       elem.style.top = -elemRec.height + 'px';
+      elem.style.borderTop = '1px solid #212121';
+      elem.style.borderBottom = 'none';
     }
     Events.dispatch(Events.CLOSE_DROPDOWNS, this.viewNode);
   }

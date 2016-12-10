@@ -1,3 +1,4 @@
+@import '../../style/variables.less';
 .leonardo-dropdown {
   position: relative;
   font-size: 13px;
@@ -43,7 +44,8 @@
     z-index: 10;
     margin-left: 0;
     left: 0;
-    border: 1px inset black;
+    border: 1px solid @black;
+    border-top: none;
     width: 200px;
     max-height: 300px;
     overflow-y: auto;
