@@ -19,6 +19,7 @@
   max-width: 100%;
   width: 100%;
   height: ~"calc(100% - 47px)";
+  will-change: width;
 
 }
 
@@ -28,7 +29,7 @@
   top: 0;
   bottom: 0;
   transition: transform 200ms ease-in;
-  will-change: transition;
+  will-change: transform;
   transform: translateX(100%);
   padding-top: 47px;
 }
