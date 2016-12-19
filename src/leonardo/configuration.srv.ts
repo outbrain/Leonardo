@@ -88,9 +88,6 @@ export function leoConfiguration () {
             mutation.addedNodes[0].tagName &&
             mutation.addedNodes[0].tagName.toLowerCase() === 'script') {
             const scriptNode = mutation.addedNodes[0];
-            if (scriptNode.src && scriptNode.src.indexOf('callback') > 0) {
-              logRequest('JSONP', scriptNode.src, {}, 200);
-            }
             const state = fetchStatesByUrlAndMethod(scriptNode.src, "JSONP");
             if (state && state.active) {
               const callbackName = getCallbackName(state);
