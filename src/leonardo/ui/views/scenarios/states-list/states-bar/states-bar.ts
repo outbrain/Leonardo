@@ -2,29 +2,20 @@
 import Utils from '../../../../ui-utils';
 import Events from '../../../../ui-events';
 import AddScenario from './state-add-scenario/state-add-scenario';
+import DOMElement from '../../../../DOMElement';
 
-export default class StatesBar {
-  viewNode: any;
-  searchBinded: EventListener = this.searchStates.bind(this);
-  activateAllBinded: EventListener = this.toggleActivateAll.bind(this);
-  addScenarioBinded: EventListener = this.onAddScenario.bind(this);
+export default class StatesBar extends DOMElement{
   activeAllState: boolean = false;
   addScenario: AddScenario = new AddScenario();
   curSearchData: string = '';
-  constructor() {
-    this.viewNode = Utils.getElementFromHtml(`<div class="leonardo-states-bar"></div>`);
-  }
 
-  get() {
-    return this.viewNode;
+  constructor() {
+    super(`<div class="leonardo-states-bar"></div>`);
   }
 
   render() {
-    if(this.viewNode.innerHTML){
-      this.viewNode.querySelector('.leonardo-search-state').removeEventListener('keyup', this.searchBinded, false);
-      this.viewNode.querySelector('.leonardo-activate-all').removeEventListener('click', this.activateAllBinded, false);
-      this.viewNode.querySelector('.leonardo-add-scenario-btn').removeEventListener('click', this.addScenarioBinded, false);
-    }
+    super.render();
+    this.clearEventSubs();
     this.viewNode.innerHTML = `
         <input value="${this.curSearchData}" class="leonardo-search-state" name="leonardo-search-state" type="text" placeholder="Search..." />
         <div>
@@ -33,30 +24,26 @@ export default class StatesBar {
         </div>`;
     this.viewNode.appendChild(this.addScenario.get());
     this.addScenario.render();
-    this.viewNode.querySelector('.leonardo-search-state').addEventListener('keyup', this.searchBinded, false);
-    this.viewNode.querySelector('.leonardo-activate-all').addEventListener('click', this.activateAllBinded, false);
-    this.viewNode.querySelector('.leonardo-add-scenario-btn').addEventListener('click', this.addScenarioBinded, false);
+    this.onItem(<HTMLElement>this.viewNode.querySelector('.leonardo-search-state'), 'keyup', this.searchStates.bind(this));
+    this.onItem(<HTMLElement>this.viewNode.querySelector('.leonardo-activate-all'), 'click', this.toggleActivateAll.bind(this));
+    this.onItem(<HTMLElement>this.viewNode.querySelector('.leonardo-add-scenario-btn'), 'click', this.onAddScenario.bind(this));
     this.searchStates({target: {value: this.curSearchData}});
   }
 
   searchStates(evt) {
     this.curSearchData = evt.target.value;
-    Events.dispatch(Events.FILTER_STATES, { val: this.curSearchData});
+    Events.dispatch(Events.FILTER_STATES, {val: this.curSearchData});
   }
 
   toggleActivateAll() {
     this.activeAllState = !this.activeAllState;
     Leonardo.toggleActivateAll(this.activeAllState);
     Events.dispatch(Events.TOGGLE_STATES, this.activeAllState);
-    this.viewNode.querySelector('.leonardo-activate-all').innerHTML = this.activeAllState ? 'Deactivate all' : 'Activate all';
+    this.viewNode.querySelector('.leonardo-activate-all')['innerHTML'] = this.activeAllState ? 'Deactivate all' : 'Activate all';
   }
 
-  onAddScenario(){
+  onAddScenario() {
     this.addScenario.open();
-  }
-
-  onDestroy(){
-    this.viewNode.querySelector('.leonardo-search-state').removeEventListener('keyup', this.searchBinded, false);
   }
 
 }

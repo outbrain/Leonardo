@@ -1,7 +1,8 @@
+@import '../../style/variables.less';
 .leonardo-dropdown {
   position: relative;
   font-size: 13px;
-    .leonardo-dropdown-selected {
+  .leonardo-dropdown-selected {
     padding: 0 10px;
     height: 26px;
     line-height: 26px;
@@ -9,7 +10,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
 
-    background: #219161;
+    background: @green;
     color: #fff;
     border: 0;
     margin-left: 0;
@@ -17,8 +18,9 @@
     width: 200px;
     cursor: pointer;
     &[disabled] {
-      background: rgba(33, 145, 97, 0.5);
+
       cursor: default;
+      opacity: 0.6;
     }
     &:hover {
       color: lightblue;
@@ -42,7 +44,8 @@
     z-index: 10;
     margin-left: 0;
     left: 0;
-    border: 1px solid black;
+    border: 1px solid @black;
+    border-top: none;
     width: 200px;
     max-height: 300px;
     overflow-y: auto;
@@ -53,7 +56,7 @@
       margin: 0;
       padding: 0;
       .leonardo-dropdown-item {
-        padding: 10px 5px;
+        padding: 7px 5px;
         &:hover {
           background: lightblue;
           cursor: pointer;
@@ -64,35 +67,35 @@
           height: 100%;
         }
         .leonardo-dropdown-item-x {
-            position: absolute;
-            right: 5px;
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            overflow: hidden;
-            &:hover {
-              &::before, &::after {
-                background: darkgray;
-              }
-            }
-
+          position: absolute;
+          right: 5px;
+          display: inline-block;
+          width: 12px;
+          height: 12px;
+          overflow: hidden;
+          &:hover {
             &::before, &::after {
-              content: '';
-              position: absolute;
-              height: 1px;
-              width: 100%;
-              top: 50%;
-              left: 0;
-              //margin-top: 1px;
-              background: #000;
-              border-radius: 5px;
+              background: darkgray;
             }
-            &::before {
+          }
+
+          &::before, &::after {
+            content: '';
+            position: absolute;
+            height: 1px;
+            width: 100%;
+            top: 50%;
+            left: 0;
+            //margin-top: 1px;
+            background: #000;
+            border-radius: 5px;
+          }
+          &::before {
             transform: rotate(45deg);
-            }
-            &::after {
+          }
+          &::after {
             transform: rotate(-45deg);
-            }
+          }
         }
       }
     }

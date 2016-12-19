@@ -16,7 +16,8 @@ export class Storage {
     this.SCENARIOS_STORE_KEY = `${this.APP_PREFIX}leonardo-scenarios`;
     this.POSITION_KEY = `${this.APP_PREFIX}leonardo-position`;
   }
-  _getItem (key) {
+
+  _getItem(key) {
     var item = window.localStorage.getItem(key);
     if (!item) {
       return null;
