@@ -16,6 +16,7 @@ export default class MainView extends DOMElement{
   viewsContainer: ViewsContainer;
   bodyView: HTMLElement;
   menuView: HTMLElement;
+  dialogView: HTMLElement;
   menuState: boolean = false;
 
   constructor() {
@@ -25,9 +26,12 @@ export default class MainView extends DOMElement{
     this.eventSubs.push(Events.on(Events.ATTACH_MENU_ITEM, this.attachMenu.bind(this)));
     this.eventSubs.push(Events.on(Events.OPEN_MENU, this.openMenu.bind(this)));
     this.eventSubs.push(Events.on(Events.CLOSE_MENU, this.closeMenu.bind(this)));
+    this.eventSubs.push(Events.on(Events.OPEN_DIALOG, this.openDialog.bind(this)));
+    this.eventSubs.push(Events.on(Events.CLOSE_DIALOG, this.closeDialog.bind(this)));
     this.eventSubs.push(Events.on(Events.CHANGE_VIEW, this.closeMenu.bind(this)));
     this.bodyView = Utils.getElementFromHtml(`<div class="leonardo-main-view-body"></div>`);
     this.menuView = Utils.getElementFromHtml(`<div class="leonardo-main-view-menu"></div>`);
+    this.dialogView = Utils.getElementFromHtml(`<div class="leonardo-main-view-dialog"></div>`);
     UIStateViewService.getInstance().init(UIStateList(), UIStateList()[0].name);
     this.headerView = new HeaderView(this.getTabList());
     this.viewsContainer = new ViewsContainer();
@@ -51,6 +55,7 @@ export default class MainView extends DOMElement{
     this.menuState = false;
     this.viewNode.appendChild(this.bodyView);
     this.viewNode.appendChild(this.menuView);
+    this.viewNode.appendChild(this.dialogView);
     this.bodyView.appendChild(this.headerView.get());
     this.bodyView.appendChild(this.viewsContainer.get());
     this.headerView.render();
@@ -69,7 +74,8 @@ export default class MainView extends DOMElement{
       return;
     }
     this.menuState = true;
-    this.menuView.style.transform = 'translateX(0)';
+    this.menuView.classList.remove('leonardo-main-view-menu-in');
+    this.menuView.classList.add('leonardo-main-view-menu-out');
     this.bodyView.style.width = (this.bodyView.getBoundingClientRect().width - this.menuView.getBoundingClientRect().width) + 'px'
   }
 
@@ -78,8 +84,23 @@ export default class MainView extends DOMElement{
       return;
     }
     this.menuState = false;
-    this.menuView.style.transform = 'translateX(100%)';
-    this.bodyView.style.width = (this.bodyView.getBoundingClientRect().width + this.menuView.getBoundingClientRect().width) + 'px'
+    this.menuView.classList.remove('leonardo-main-view-menu-out');
+    this.menuView.classList.add('leonardo-main-view-menu-in');
+    this.bodyView.style.width = '100vw';
+  }
+
+  private openDialog(event: CustomEvent){
+    this.dialogView.innerHTML = '';
+    this.dialogView.appendChild(event.detail);
+    this.dialogView.style.display ='block';
+    this.bodyView.classList.add('leonardo-main-overlay');
+
+  }
+
+  private closeDialog(event: CustomEvent){
+    this.bodyView.classList.remove('leonardo-main-overlay');
+    this.dialogView.innerHTML = '';
+    this.dialogView.style.display ='none';
   }
 
   private getTabList(): Array<HeaderTabItem> {

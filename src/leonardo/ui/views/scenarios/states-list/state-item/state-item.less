@@ -1,4 +1,5 @@
 @import '../../../../../style/variables.less';
+
 .leonardo-state-item {
   display: flex;
   margin-bottom: 3px;
@@ -8,11 +9,12 @@
     color: #fff;
     text-align: center;
     width: 60px;
+    min-width: 60px;
     height: 25px;
     line-height: 25px;
     font-size: 12px;
   }
-  .leonardo-toggle-btn{
+  .leonardo-toggle-btn {
     margin-right: 15px;
     align-self: center;
   }
@@ -31,18 +33,28 @@
   .leonardo-state-verb-delete {
     background: @navy;
   }
-  .leonardo-state-name{
-    font-size: 0.9rem;
+  .leonardo-state-data-container {
     align-self: center;
-  }
-  .leonardo-state-url{
     flex: 1;
-    font-size: 0.7rem;
-    align-self: center;
-    margin-left: 10px;
-    color: grey;
+    overflow: hidden;
+    white-space: nowrap;
+    .leonardo-state-name {
+      font-size: 0.9rem;
+      white-space: nowrap;
+      max-width: 50%;
+      text-overflow: ellipsis;
+    }
+    .leonardo-state-url {
+      font-size: 0.7rem;
+      align-self: center;
+      margin-left: 10px;
+      color: grey;
+      white-space: nowrap;
+      max-width: 50%;
+      text-overflow: ellipsis;
+    }
   }
-  .leonardo-state-remove{
+  .leonardo-state-remove {
     margin: 0 5px;
     align-self: center;
     border: 1px inset @gray;

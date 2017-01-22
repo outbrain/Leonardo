@@ -7,7 +7,7 @@ import {EventSub} from '../../../ui-events';
 export default class RecorderList extends DOMElement {
 
   stateDetail: RecorderStateDetail = new RecorderStateDetail();
-
+  stateDetailsState: boolean = false;
   constructor() {
     super(`<div id="leonardo-recorder-list" class="leonardo-recorder-list"></div>`);
 
@@ -35,9 +35,12 @@ export default class RecorderList extends DOMElement {
     })
   }
 
-  toggleDetails(state){
-    state.activeOption = state.options[0];
-    this.stateDetail.open(state);
+  toggleDetails(state, event){
+    this.stateDetailsState = !this.stateDetailsState;
+    const selectedClass: string = 'leonardo-recorder-item-selected';
+    this.stateDetailsState ? event.currentTarget.classList.add(selectedClass) : event.currentTarget.classList.remove(selectedClass);
+    this.stateDetailsState && (state.activeOption = state.options[0]);
+    this.stateDetail.toggle(state);
   }
 
 }

@@ -17,6 +17,8 @@ export default {
   ATTACH_MENU_ITEM: 'leonardo:attach:menu',
   OPEN_MENU: 'leonardo:menu:open',
   CLOSE_MENU: 'leonardo:menu:close',
+  OPEN_DIALOG: 'leonardo:dialog:open',
+  CLOSE_DIALOG: 'leonardo:dialog:close',
 
   //We want to maintain scope here
   on: function(eventName: string, fn: EventListenerOrEventListenerObject) {

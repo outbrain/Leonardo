@@ -41,6 +41,7 @@ gulp.task("build:less", false, function () {
 gulp.task('build:js', "bundle all js assets", function(){
   return gulp.src(
     [
+      './src/leonardo/ace.js',
       './src/leonardo/sinon.js',
       './tmp/leonardo-ts.js',
       './src/leonardo/separator.js',
@@ -88,8 +89,6 @@ gulp.task('build:less:full', "build less", function(cb) {
 
 gulp.task('build:ts', "build typescript", function(cb) {
   runSequence(
-    'clean:dist',
-    'clean:tmp',
     'build:js',
     'copy:dist',
     cb);
