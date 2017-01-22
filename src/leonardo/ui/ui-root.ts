@@ -1,19 +1,18 @@
 import Launcher from './launcher/launcher';
 import MainView from './main-view/main-view';
 import Utils from './ui-utils';
-import UIStateVeiwService from './ui-state/ui-state.srv';
+import Events from './ui-events';
 
 export default class UIRoot {
   leonardoApp: Node;
   launcher: Launcher;
-  mainView: MainView;
-  initBinded: EventListener = this.init.bind(this);
+  mainView: MainView;  
 
   constructor() {
     switch (document.readyState) {
       default:
       case 'loading':
-        document.addEventListener('DOMContentLoaded', this.initBinded, false);
+        Events.onItemOnce(document, 'DOMContentLoaded', this.init.bind(this));
         break;
       case 'interactive':
       case 'complete':
@@ -23,17 +22,17 @@ export default class UIRoot {
   }
 
   init() {
-    document.removeEventListener('DOMContentLoaded', this.initBinded, false);
+
     this.leonardoApp = Utils.getElementFromHtml(`<div leonardo-app></div>`);
     this.launcher = new Launcher();
     this.mainView = new MainView();
-    this.leonardoApp.appendChild(this.launcher.get());
     this.leonardoApp.appendChild(this.mainView.get());
-    document.body.addEventListener('leonardo:toggle:states', this.toggleAllStates.bind(this));
+    this.leonardoApp.appendChild(this.launcher.get());
+    Events.on(Events.TOGGLE_STATES, this.toggleAllStates.bind(this));
     document.body.appendChild(this.leonardoApp);
   }
 
-  private toggleAllStates(event: CustomEvent){
+  private toggleAllStates(event: CustomEvent) {
     Leonardo.toggleActivateAll(event.detail);
   }
 }

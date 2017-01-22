@@ -1,3 +1,4 @@
+@import '../../../../../style/variables.less';
 .leonardo-state-item {
   display: flex;
   margin-bottom: 3px;
@@ -16,22 +17,21 @@
     align-self: center;
   }
   .leonardo-state-verb-get {
-    background: green;
+    background: @green;
   }
   .leonardo-state-verb-custom {
-    background: black;
+    background: @black;
   }
   .leonardo-state-verb-post {
-    background: orange;
+    background: @orange;
   }
   .leonardo-state-verb-put {
-    background: blue;
+    background: @blue;
   }
   .leonardo-state-verb-delete {
-    background: brown;
+    background: @navy;
   }
   .leonardo-state-name{
-    //flex: 1;
     font-size: 0.9rem;
     align-self: center;
   }
@@ -43,14 +43,14 @@
     color: grey;
   }
   .leonardo-state-remove{
-    background: #219161;
-    color: white;
-    border: 0;
-    font-size: 13px;
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 2px;
-    margin-left: 5px;
+    margin: 0 5px;
+    align-self: center;
+    border: 1px inset @gray;
+    padding: 10px;
+    border-radius: 5px;
+    &:active {
+      border: 1px solid @gray;
+    }
   }
 
   &.leonardo-state-item-hidden {

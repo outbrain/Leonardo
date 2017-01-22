@@ -13,11 +13,11 @@ polifylls();
 window.Leonardo = window.Leonardo || {};
 const configuration = leoConfiguration();
 const storage = new Storage();
-Object.assign(window.Leonardo || {}, configuration, { storage });
+Object.assign(window.Leonardo || {}, configuration, {storage});
 Leonardo.loadSavedStates();
 
 // Init Sinon
-new Sinon();  
+new Sinon();
 
 //Init UI
 new UIRoot();

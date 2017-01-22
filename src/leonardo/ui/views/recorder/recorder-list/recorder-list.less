@@ -1,11 +1,16 @@
+@import '../../../../style/variables.less';
 .leonardo-recorder-list {
   height: 100%;
   overflow: auto;
+  position: relative;
+  top: 0;
+  bottom: 0;
   .leonardo-recorder-list-container {
     text-decoration: none;
     padding: 0;
     margin: 0;
     overflow: auto;
+    height: 100%;
     .leonardo-recorder-list-item {
       display: flex;
       border-bottom: 1px solid #ccc;
@@ -18,7 +23,7 @@
         background: #ddd !important;
       }
       .leonardo-recorder-list-url {
-        flex-grow: 1;
+        flex-grow: 10;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -28,15 +33,19 @@
         color: #555;
       }
       .leonardo-recorder-list-name {
-        background: #f08222;
+        background: @maroon;
         display: inline-block;
         padding: 5px 10px;
-        float: right;
         font-size: 12px;
         margin: 0 2px;
         color: white;
         justify-content: flex-end;
+        align-self: flex-end;
         white-space: nowrap;
+        text-align: center;
+        width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       .leonardo-recorder-list-name-new {
         background: blue;
@@ -52,21 +61,20 @@
         font-size: 12px;
       }
       .leonardo-recorder-list-verb-get {
-        background: green;
+        background: @green;
       }
       .leonardo-recorder-list-verb-custom {
-        background: black;
+        background: @black;
       }
       .leonardo-recorder-list-verb-post {
-        background: orange;
+        background: @orange;
       }
       .leonardo-recorder-list-verb-put {
-        background: blue;
+        background: @blue;
       }
       .leonardo-recorder-list-verb-delete {
-        background: brown;
+        background: @navy;
       }
-
     }
     .leonardo-recorder-list-item:nth-child(even) {
       background: #F2F2F2;

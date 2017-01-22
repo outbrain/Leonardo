@@ -1,4 +1,9 @@
 //<!-- if dev -->
+
+function callback(data) {
+  console.log('jsonp callback fired', data);
+}
+
 angular.module('angular-il', ['ui.router'])
 //<!-- else -->
 //angular.module('angular-il', ['ui.router'])
@@ -54,7 +59,12 @@ angular.module('angular-il', ['ui.router'])
             this.error = characters;
           }
 
+          this.fireJsonp = function() {
+            $http.jsonp('http://ip.jsontest.com/?callback=callback');
+          };
+
           this.create = function () {
+
             $rootScope.loading = true;
             $http({
               url: '/character',
