@@ -2,32 +2,25 @@
 import Utils from '../../../../ui-utils';
 import Events from '../../../../ui-events';
 import DropDown from '../../../../drop-down/drop-down';
+import DOMElement from '../../../../DOMElement';
+import {EventSub} from '../../../../ui-events';
 
-export default class StateItem {
+export default class StateItem extends DOMElement {
 
-  viewNode: HTMLElement;
   randomID: string;
   dropDown: DropDown;
-  toggleBinded: EventListener = this.toggleState.bind(this);
-  removeBinded: EventListener = this.removeState.bind(this);
 
   constructor(private state, private onRemove: Function) {
-    this.viewNode = Utils.getElementFromHtml(`<div class="leonardo-state-item"></div>`);
+    super(`<div class="leonardo-state-item"></div>`);
+
     this.randomID = Utils.guidGenerator();
     this.dropDown = new DropDown(this.state.options, this.state.activeOption || this.state.options[0], !this.state.active, this.changeActiveOption.bind(this), this.removeOption.bind(this));
-    Events.on(Events.TOGGLE_STATES, this.toggleAllstate.bind(this));
-    Events.on(`${Events.TOGGLE_STATES}:${this.state.name}`, this.setStateState.bind(this));
-  }
-
-  get() {
-    return this.viewNode;
+    this.bodyEventsSubs.push(Events.on(Events.TOGGLE_STATES, this.toggleAllstate.bind(this)));
+    this.bodyEventsSubs.push(Events.on(`${Events.TOGGLE_STATES}:${this.state.name}`, this.setStateState.bind(this)));
   }
 
   render() {
-    if (this.viewNode.innerHTML) {
-      this.viewNode.querySelector(`.leonardo-toggle-btn`).removeEventListener('click', this.toggleBinded, false);
-      this.viewNode.querySelector(`.leonardo-state-remove`).removeEventListener('click', this.removeBinded, false);
-    }
+    super.render();
     this.viewNode.innerHTML = `
         <input ${this.isChecked()} id="leonardo-state-toggle-${this.randomID}" class="leonardo-toggle leonardo-toggle-ios" type="checkbox"/>
         <label class="leonardo-toggle-btn" for="leonardo-state-toggle-${this.randomID }"></label>
@@ -36,9 +29,9 @@ export default class StateItem {
         <span class="leonardo-state-url">${this.state.url || ''}</span>`;
     this.viewNode.appendChild(this.dropDown.get());
     this.dropDown.render();
-    this.viewNode.appendChild(Utils.getElementFromHtml(`<button title="Remove State" class="leonardo-state-remove">Remove</button>`));
-    this.viewNode.querySelector(`.leonardo-toggle-btn`).addEventListener('click', this.toggleBinded, false);
-    this.viewNode.querySelector(`.leonardo-state-remove`).addEventListener('click', this.removeBinded, false);
+    this.viewNode.appendChild(Utils.getElementFromHtml(`<div title="Remove State" class="leonardo-x-btn leonardo-state-remove"></div>`));
+    this.onItem(this.viewNode.querySelector(`.leonardo-toggle-btn`), 'click', this.toggleState.bind(this));
+    Events.onItemOnce(this.viewNode.querySelector(`.leonardo-state-remove`), 'click', this.removeState.bind(this));
   }
 
   getName() {
@@ -107,18 +100,13 @@ export default class StateItem {
     if (event) {
       event.stopPropagation();
     }
-    this.onDestroy();
     this.onRemove(this.state.name, this.viewNode);
     Leonardo.removeState(this.state);
+    this.destroy();
   }
 
   private removeOption(item) {
     Leonardo.removeOption(this.state, item);
-  }
-
-  onDestroy() {
-    this.viewNode.querySelector(`.leonardo-toggle-btn`).removeEventListener('click', this.toggleBinded, false);
-    this.viewNode.querySelector(`.leonardo-state-remove`).removeEventListener('click', this.removeBinded, false);
   }
 
 }

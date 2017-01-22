@@ -159,7 +159,7 @@ var sinon = (function () {
 
         if (!isFunction(wrappedMethod)) {
           error = new TypeError("Attempted to wrap " + (typeof wrappedMethod) + " property " +
-              property + " as function");
+            property + " as function");
         } else if (wrappedMethod.restore && wrappedMethod.restore.sinon) {
           error = new TypeError("Attempted to wrap " + property + " which is already wrapped");
         } else if (wrappedMethod.calledBefore) {
@@ -187,7 +187,7 @@ var sinon = (function () {
 
         if (!wrappedMethodDesc) {
           error = new TypeError("Attempted to wrap " + (typeof wrappedMethod) + " property " +
-              property + " as function");
+            property + " as function");
         } else if (wrappedMethodDesc.restore && wrappedMethodDesc.restore.sinon) {
           error = new TypeError("Attempted to wrap " + property + " which is already wrapped");
         }
@@ -230,7 +230,8 @@ var sinon = (function () {
           // In some cases `delete` may throw an error
           try {
             delete object[property];
-          } catch (e) {} // eslint-disable-line no-empty
+          } catch (e) {
+          } // eslint-disable-line no-empty
           // For native code functions `delete` fails without throwing an error
           // on Chrome < 43, PhantomJS, etc.
         } else if (hasES5Support) {
@@ -254,7 +255,8 @@ var sinon = (function () {
     };
 
     sinon.create = function create(proto) {
-      var F = function () {};
+      var F = function () {
+      };
       F.prototype = proto;
       return new F();
     };
@@ -282,7 +284,7 @@ var sinon = (function () {
 
       if (a instanceof RegExp && b instanceof RegExp) {
         return (a.source === b.source) && (a.global === b.global) &&
-            (a.ignoreCase === b.ignoreCase) && (a.multiline === b.multiline);
+          (a.ignoreCase === b.ignoreCase) && (a.multiline === b.multiline);
       }
 
       var aString = Object.prototype.toString.call(a);
@@ -343,7 +345,7 @@ var sinon = (function () {
     sinon.functionToString = function toString() {
       if (this.getCall && this.callCount) {
         var thisValue,
-            prop;
+          prop;
         var i = this.callCount;
 
         while (i--) {
@@ -410,9 +412,9 @@ var sinon = (function () {
 
     sinon.timesInWords = function timesInWords(count) {
       return count === 1 && "once" ||
-          count === 2 && "twice" ||
-          count === 3 && "thrice" ||
-          (count || 0) + " times";
+        count === 2 && "twice" ||
+        count === 3 && "thrice" ||
+        (count || 0) + " times";
     };
 
     sinon.calledInOrder = function (spies) {
@@ -480,7 +482,7 @@ var sinon = (function () {
     makeApi(sinonGlobal);
   }
 }(
-    typeof sinon === "object" && sinon // eslint-disable-line no-undef
+  typeof sinon === "object" && sinon // eslint-disable-line no-undef
 ));
 
 /**
@@ -591,7 +593,7 @@ var sinon = (function () {
     makeApi(sinonGlobal);
   }
 }(
-    typeof sinon === "object" && sinon // eslint-disable-line no-undef
+  typeof sinon === "object" && sinon // eslint-disable-line no-undef
 ));
 
 /**
@@ -627,7 +629,8 @@ if (typeof sinon === "undefined") {
         this.target = target;
       },
 
-      stopPropagation: function () {},
+      stopPropagation: function () {
+      },
 
       preventDefault: function () {
         this.defaultPrevented = true;
@@ -725,7 +728,8 @@ if (typeof sinon === "undefined") {
 
   function makeApi(sinon) {
 
-    function log() {}
+    function log() {
+    }
 
     function logError(label, err) {
       var msg = label + " threw exception: ";
@@ -786,7 +790,7 @@ if (typeof sinon === "undefined") {
     makeApi(sinonGlobal);
   }
 }(
-    typeof sinon === "object" && sinon // eslint-disable-line no-undef
+  typeof sinon === "object" && sinon // eslint-disable-line no-undef
 ));
 
 /**
@@ -805,7 +809,7 @@ if (typeof sinon === "undefined") {
 // wrapper for global
 (function (global) {
 
-  var xdr = { XDomainRequest: global.XDomainRequest };
+  var xdr = {XDomainRequest: global.XDomainRequest};
   xdr.GlobalXDomainRequest = global.XDomainRequest;
   xdr.supportsXDR = typeof xdr.GlobalXDomainRequest !== "undefined";
   xdr.workingXDR = xdr.supportsXDR ? xdr.GlobalXDomainRequest : false;
@@ -847,7 +851,7 @@ if (typeof sinon === "undefined") {
     function verifyResponseBodyType(body) {
       if (typeof body !== "string") {
         var error = new Error("Attempted to respond to fake XDomainRequest with " +
-            body + ", which is not a string.");
+          body + ", which is not a string.");
         error.name = "InvalidBodyException";
         throw error;
       }
@@ -1049,7 +1053,7 @@ if (typeof sinon === "undefined") {
   var supportsFormData = typeof FormData !== "undefined";
   var supportsArrayBuffer = typeof ArrayBuffer !== "undefined";
   var supportsBlob = typeof Blob === "function";
-  var sinonXhr = { XMLHttpRequest: global.XMLHttpRequest };
+  var sinonXhr = {XMLHttpRequest: global.XMLHttpRequest};
   sinonXhr.GlobalXMLHttpRequest = global.XMLHttpRequest;
   sinonXhr.GlobalActiveXObject = global.ActiveXObject;
   sinonXhr.supportsActiveX = typeof sinonXhr.GlobalActiveXObject !== "undefined";
@@ -1185,6 +1189,7 @@ if (typeof sinon === "undefined") {
       callback(collection[i]);
     }
   }
+
   function some(collection, callback) {
     for (var index = 0; index < collection.length; index++) {
       if (callback(collection[index]) === true) {
@@ -1193,15 +1198,22 @@ if (typeof sinon === "undefined") {
     }
     return false;
   }
+
   // largest arity in XHR is 5 - XHR#open
   var apply = function (obj, method, args) {
     switch (args.length) {
-      case 0: return obj[method]();
-      case 1: return obj[method](args[0]);
-      case 2: return obj[method](args[0], args[1]);
-      case 3: return obj[method](args[0], args[1], args[2]);
-      case 4: return obj[method](args[0], args[1], args[2], args[3]);
-      case 5: return obj[method](args[0], args[1], args[2], args[3], args[4]);
+      case 0:
+        return obj[method]();
+      case 1:
+        return obj[method](args[0]);
+      case 2:
+        return obj[method](args[0], args[1]);
+      case 3:
+        return obj[method](args[0], args[1], args[2]);
+      case 4:
+        return obj[method](args[0], args[1], args[2], args[3]);
+      case 5:
+        return obj[method](args[0], args[1], args[2], args[3], args[4]);
     }
   };
 
@@ -1210,7 +1222,8 @@ if (typeof sinon === "undefined") {
     this.filters.push(fn);
   };
   var IE6Re = /MSIE 6/;
-  FakeXMLHttpRequest.onResponseEnd = function() {};
+  FakeXMLHttpRequest.onResponseEnd = function () {
+  };
   FakeXMLHttpRequest.defake = function defake(fakeXhr, xhrArgs) {
     var xhr = new sinonXhr.workingXHR(); // eslint-disable-line new-cap
 
@@ -1255,7 +1268,7 @@ if (typeof sinon === "undefined") {
         FakeXMLHttpRequest.onResponseEnd(fakeXhr);
       }
       if (fakeXhr.onreadystatechange) {
-        fakeXhr.onreadystatechange.call(fakeXhr, { target: fakeXhr });
+        fakeXhr.onreadystatechange.call(fakeXhr, {target: fakeXhr});
       }
     };
 
@@ -1299,7 +1312,7 @@ if (typeof sinon === "undefined") {
   function verifyResponseBodyType(body) {
     if (typeof body !== "string") {
       var error = new Error("Attempted to respond to fake XMLHttpRequest with " +
-          body + ", which is not a string.");
+        body + ", which is not a string.");
       error.name = "InvalidBodyException";
       throw error;
     }
@@ -1312,7 +1325,7 @@ if (typeof sinon === "undefined") {
       var charCode = body.charCodeAt(i);
       if (charCode >= 256) {
         throw new TypeError("arraybuffer or blob responseTypes require binary string, " +
-            "invalid character " + body[i] + " found.");
+          "invalid character " + body[i] + " found.");
       }
       view[i] = charCode;
     }
@@ -1585,8 +1598,7 @@ if (typeof sinon === "undefined") {
         var headers = "";
 
         for (var header in this.responseHeaders) {
-          if (this.responseHeaders.hasOwnProperty(header) &&
-              !/^Set-Cookie2?$/i.test(header)) {
+          if (this.responseHeaders.hasOwnProperty(header) && !/^Set-Cookie2?$/i.test(header)) {
             headers += header + ": " + this.responseHeaders[header] + "\r\n";
           }
         }
@@ -1726,8 +1738,8 @@ if (typeof sinon === "undefined") {
     makeApi(sinonGlobal);
   }
 }(
-    typeof sinon === "object" && sinon, // eslint-disable-line no-undef
-    typeof global !== "undefined" ? global : self
+  typeof sinon === "object" && sinon, // eslint-disable-line no-undef
+  typeof global !== "undefined" ? global : self
 ));
 
 /**
@@ -1783,7 +1795,8 @@ if (typeof sinon === "undefined") {
       try {
         formatio = require("formatio");
       }
-      catch (e) {} // eslint-disable-line no-empty
+      catch (e) {
+      } // eslint-disable-line no-empty
     }
 
     if (formatio) {
@@ -1820,8 +1833,8 @@ if (typeof sinon === "undefined") {
     makeApi(sinonGlobal);
   }
 }(
-    typeof sinon === "object" && sinon, // eslint-disable-line no-undef
-    typeof formatio === "object" && formatio // eslint-disable-line no-undef
+  typeof sinon === "object" && sinon, // eslint-disable-line no-undef
+  typeof formatio === "object" && formatio // eslint-disable-line no-undef
 ));
 
 /**
@@ -1853,8 +1866,7 @@ if (typeof sinon === "undefined") {
     }
 
     if (typeof response[2] !== "string") {
-      throw new TypeError("Fake server response body should be string, but was " +
-          typeof response[2]);
+      throw new TypeError("Fake server response body should be string, but was " + typeof response[2]);
     }
 
     return response;
@@ -1939,7 +1951,7 @@ if (typeof sinon === "undefined") {
             var request = this;
             var state = Leonardo.fetchStatesByUrlAndMethod(request.url, request.method);
             var delay;
-            if(state && state.activeOption && state.activeOption.hasOwnProperty('delay')) {
+            if (state && state.activeOption && state.activeOption.hasOwnProperty('delay')) {
               delay = state.activeOption.delay;
             } else {
               delay = server.autoRespondAfter || 10;
@@ -2173,7 +2185,9 @@ if (typeof sinon === "undefined") {
 (function () {
 
   function makeApi(sinon) {
-    function Server() {}
+    function Server() {
+    }
+
     Server.prototype = sinon.fakeServer;
 
     sinon.fakeServerWithClock = new Server();

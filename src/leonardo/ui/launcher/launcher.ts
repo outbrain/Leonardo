@@ -1,34 +1,28 @@
 /// <reference path="../../leonardo.d.ts" />
 import Utils from '../ui-utils';
 import Events from '../ui-events';
+import DOMElement from '../DOMElement';
 
-export default class Launcher {
+export default class Launcher extends DOMElement {
+
   constructor() {
-
-  }
-
-  get() {
-    const launcher = Utils.getElementFromHtml(`<div class="leonardo-launcher"></div>`);
-    launcher.addEventListener('click', this.onClick);
-    return launcher;
+    super(`<div class="leonardo-launcher"></div>`);
+    this.eventSubs.push(Events.on('keydown', this.bodyKeypress.bind(this)));
+    this.eventSubs.push(Events.on(Events.TOGGLE_ICON, this.toggleLauncher.bind(this)));
+    this.onItem(this.viewNode, 'click', this.onClick.bind(this));
   }
 
   onClick() {
     Events.dispatch(Events.TOGGLE_LAUNCHER);
   }
 
-  //$(document).on('keypress', (e) => {
-  //  if (e.shiftKey && e.ctrlKey) {
-  //    switch (e.keyCode) {
-  //      case 12:
-  //        $('.leonardo-activator').toggle();
-  //        break;
-  //      case 11:
-  //        toggleWindow();
-  //        break;
-  //      default:
-  //        break;
-  //    }
-  //  }
-  //});
+  bodyKeypress(e: KeyboardEvent) {
+    if (e.shiftKey && e.ctrlKey && e.keyCode === 76) {
+      Events.dispatch(Events.TOGGLE_ICON);
+    }
+  }
+
+  toggleLauncher() {
+    this.viewNode.style.display = this.viewNode.style.display === 'none' ? 'block' : 'none';
+  }
 }

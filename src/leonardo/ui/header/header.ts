@@ -3,19 +3,19 @@ import Utils from '../ui-utils';
 import Events from '../ui-events';
 import {HeaderTabItem} from './header.model';
 import UIStateViewService from '../ui-state/ui-state.srv';
+import DOMElement from '../DOMElement';
 
-export default class HeaderView {
+export default class HeaderView extends DOMElement{
   
   static SELECTED_CLASS_NAME: string = 'leonardo-header-tabItem-selected';
 
-  private onClickBinded: EventListenerObject = this.onClick.bind(this);
-
-  
   constructor(private tabList: Array<HeaderTabItem>) {
+    super(`<div class="leonardo-header-container">`);
   }
 
-  get() {
-    const template = `<div class="leonardo-header-container">
+  render() {
+    super.render();
+    this.viewNode.innerHTML = `<div class="leonardo-header-container">
         <span class="leonardo-header-label ">LEONARDO</span>
         <span class="leonardo-header-tabs">
           <ul>
@@ -23,9 +23,7 @@ export default class HeaderView {
           </ul>
       </span>
     </div>`;
-    const launcher = Utils.getElementFromHtml(template);
-    launcher.querySelector('ul').addEventListener('click', this.onClickBinded);
-    return launcher;
+    this.onItem(this.viewNode.querySelector('ul'), 'click', this.onClick.bind(this));
   }
 
   private getTabsHtml(selectedIndex: number) {
