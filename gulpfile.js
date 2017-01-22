@@ -88,6 +88,8 @@ gulp.task('build:less:full', "build less", function(cb) {
 
 gulp.task('build:ts', "build typescript", function(cb) {
   runSequence(
+    'clean:dist',
+    'clean:tmp',
     'build:js',
     'copy:dist',
     cb);
