@@ -2,6 +2,7 @@
 import Utils from '../../ui-utils';
 import Events from '../../ui-events';
 import DOMElement from '../../DOMElement';
+import StringHelper from '../../helpers/string.helper';
 
 declare var window;
 
@@ -19,7 +20,7 @@ export default class Export extends DOMElement {
       <div class="leonardo-spacer"></div>
       <code contenteditable>
         <div id="leonardo-exported-code" class="leonardo-exported-code">
-            <pre>${JSON.stringify(Leonardo.getStates(), null,  4).replace(new RegExp(`^[\\s]+|[\\s]+$`, 'g'), '')}</pre>
+            <pre>${StringHelper.trim(JSON.stringify(Leonardo.getStates(), null,  4))}</pre>
         </div>
       </code>
       <a id="downloadAnchorElem" style="display:none"></a>
@@ -32,7 +33,7 @@ export default class Export extends DOMElement {
 
   downloadFile() {
     const inner = this.viewNode.querySelector('#leonardo-exported-code pre').innerHTML || '';
-    const text = inner.replace(new RegExp(`^[\\s]+|[\\s]+$`, 'g'), '').replace(/<br>/g, '\r\n');
+    const text = StringHelper.trim(inner).replace(/<br>/g, '\r\n');
 
     const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(text)}`;
     const dlAnchorElem = document.getElementById('downloadAnchorElem');
@@ -44,7 +45,7 @@ export default class Export extends DOMElement {
 
   copyToClipboard() {
     const inner = this.viewNode.querySelector('#leonardo-exported-code pre').innerHTML || '';
-    const text = inner.replace(new RegExp(`^[\\s]+|[\\s]+$`, 'g'), '').replace(/<br>/g, '\r\n');
+    const text = StringHelper.trim(inner).replace(/<br>/g, '\r\n');
 
     if (window.clipboardData && window.clipboardData.setData) {
       return window.clipboardData.setData('Text', text);
