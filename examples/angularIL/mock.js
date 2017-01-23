@@ -196,14 +196,16 @@
   ]);
   Leonardo.addStates([
     {
-      "name": "Authenticate16",
-      "url": "/login",
+      "name": "Authenticate16asdf asdf asd fasdf asdf asdf asd fasdf as df",
+      "url": "/login/asdf/as/df/asd/fa/sdf/a/sdf/asd/f/asd/f/asdf/adsf",
       "verb": "GET",
       "options": [
         {
           "name": "success",
           "status": 200,
-          "data": {},
+          "data": function () {
+              return 'asdfas';
+          },
           "delay": 0
         }
       ]

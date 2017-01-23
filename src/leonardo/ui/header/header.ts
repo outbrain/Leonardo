@@ -15,7 +15,7 @@ export default class HeaderView extends DOMElement{
 
   render() {
     super.render();
-    this.viewNode.innerHTML = `<div class="leonardo-header-container">
+    this.viewNode.innerHTML = `<div class="leonardo-header-container-in">
         <span class="leonardo-header-label ">LEONARDO</span>
         <span class="leonardo-header-tabs">
           <ul>

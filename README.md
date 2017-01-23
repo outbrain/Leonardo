@@ -2,8 +2,7 @@
 [![Build Status](https://travis-ci.org/outbrain/Leonardo.svg?branch=master)](https://travis-ci.org/outbrain/Leonardo)
 [![npm version](https://badge.fury.io/js/leonardojs.svg)](http://badge.fury.io/js/leonardojs)
 [![Bower version](https://badge.fury.io/bo/leonardo.svg)](http://badge.fury.io/bo/leonardo)
-
-[![Package Quality](http://npm.packagequality.com/badge/leonardojs.png)](http://packagequality.com/#?package=leonardojs)
+[![Package Quality](http://npm.packagequality.com/shield/leonardojs.svg)](http://packagequality.com/#?package=leonardojs)
 
 ![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/leonardo.png)
 
@@ -13,23 +12,25 @@
 
 
 ## Video (currently only in hebrew)
-[![AngularJS Israel](http://img.youtube.com/vi/zPBmMiJZ5O8/0.jpg)](http://www.youtube.com/watch?v=zPBmMiJZ5O8)
+[![AngularJS Israel](http://img.youtube.com/vi/zPBmMiJZ5O8/hqdefault.jpg)](http://www.youtube.com/watch?v=zPBmMiJZ5O8)
  
 # Getting Started
 
-### 1. Install
+## 1. Install
 
-__npm__
-```sh
+### npm
+
+```bassh
 $ npm install leonardojs
 ```
 
-__bower__
-```sh
+### bower
+
+```bash
 $ bower install leonardo
 ```
 
-### 2. Add Leonardo script
+## 2. Add Leonardo script
 
 ```html
 <!DOCTYPE HTML>
@@ -41,20 +42,22 @@ $ bower install leonardo
 </html>
 ```
 
-### 3. Run your app
+## 3. Run your app
 You should now see Leonardo's icon on the bottom right corner. Click It.
 
-### 4. Start mocking your http calls via the recorder tab ([currently broken](https://github.com/outbrain/Leonardo/issues/132))
+## 4. Start mocking your http calls via the recorder tab 
 ![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/images/recorder.png)
 
-### 5. Turn your mocking on and off as you wish
+## 5. Turn your mocking on and off as you wish
 ![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/images/scenario.png)
 
-### 6. Change your responses as you wish
+## 6. Change your responses as you wish
 ![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/images/responses.png)
 
-## You can also automate mocking using a simple javascript API
+### You can also automate mocking using a simple javascript API
+
 #### Add States
+
 ```javascript
  //.....
     Leonardo.addStates([
@@ -81,8 +84,10 @@ You should now see Leonardo's icon on the bottom right corner. Click It.
   ]);
 ```
 
-#### Activate State Option
+### Activate State Option
+
 Activates state option, mocked response will be returned when calling the state url
+
 ```javascript
 //.....
     Leonardo.activateStateOption('Update Data', 'success');
@@ -97,45 +102,43 @@ Activates state option, mocked response will be returned when calling the state 
 //.....
 ```
 
-#### Deactivate State
+### Deactivate State
+
 Deactivates a specific state, when calling the state url request will pass through to the server
+
 ```javascript
 //.....
     Leonardo.deactivateState('Update Data');
 //.....
 ```
 
-## Hide/Show Leonardo icon
+### Hide/Show Leonardo icon
 You can hide Leonardo activator icon by clicking `ctrl` + `shift` + `l`.
-
-
-
-
 
 ## Running and contributing
 
-
-#### Install dev dependencies
-
-`cd` into the project folder
+### Go into the project folder
 
 ```bash
-npm install
+$ cd Leonardo
 ```
 
-#### Build
+### Install
 
 ```bash
-gulp build
+$ npm install
 ```
 
-#### Run (and watch)
+### Build
 
 ```bash
-gulp serve
+$ gulp build
+```
+
+### Run (and watch)
+
+```bash
+$ gulp serve
 ```
 
 This will run the demo app (and auto-refresh the browser)
-
-## License
-Copyright &copy; 2015 MIT License
