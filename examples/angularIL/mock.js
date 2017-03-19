@@ -23,7 +23,9 @@
         {
           "name": "success",
           "status": 200,
-          "data": {},
+          "data": function() {
+            return 'asdfasd';
+          },
           "delay": 0
         }
       ]
@@ -417,6 +419,21 @@
           "name": "success",
           "status": 200,
           "data": {},
+          "delay": 0
+        }
+      ]
+    }
+  ]);
+  Leonardo.addStates([
+    {
+      "name": "Characters HTML",
+      "url": "characters.html",
+      "verb": "GET",
+      "options": [
+        {
+          "name": "success",
+          "status": 200,
+          "data": '<div>test</div>',
           "delay": 0
         }
       ]

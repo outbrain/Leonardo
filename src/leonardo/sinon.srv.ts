@@ -16,9 +16,6 @@ export class Sinon {
 
     sinon.FakeXMLHttpRequest.useFilters = true;
     sinon.FakeXMLHttpRequest.addFilter(function (method, url) {
-      if (url.indexOf('.html') > 0 && url.indexOf('template') >= 0) {
-        return true;
-      }
       var state = Leonardo.fetchStatesByUrlAndMethod(url, method);
       return !(state && state.active);
     });

@@ -342,7 +342,7 @@ export function leoConfiguration() {
   }
 
   function logRequest(method, url, data, status) {
-    if (method && url && !(url.indexOf(".html") > 0)) {
+    if (method && url) {
       var req: INetworkRequest = {
         verb: method,
         data: data,
