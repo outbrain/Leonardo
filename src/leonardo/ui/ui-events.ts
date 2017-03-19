@@ -31,8 +31,8 @@ export default {
     document.body.dispatchEvent(event);
   },
   onItemOnce: (node: any, type: string, callback: Function) => {
-    node.addEventListener(type, function (e) {
-      e.target.removeEventListener(e.type, <EventListener>arguments.callee);
+    node.addEventListener(type, function func(e) {
+      e.target.removeEventListener(e.type, func);
       return callback.apply(callback, arguments);
     });
   },
