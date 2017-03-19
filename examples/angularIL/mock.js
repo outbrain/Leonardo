@@ -424,6 +424,21 @@
   ]);
   Leonardo.addStates([
     {
+      "name": "Characters HTML",
+      "url": "characters.html",
+      "verb": "GET",
+      "options": [
+        {
+          "name": "success",
+          "status": 200,
+          "data": '<div>test</div>',
+          "delay": 0
+        }
+      ]
+    }
+  ]);
+  Leonardo.addStates([
+    {
       "name": "jsonp test",
       "url": "http://ip.jsontest.com/?callback=callback",
       "verb": "JSONP",
