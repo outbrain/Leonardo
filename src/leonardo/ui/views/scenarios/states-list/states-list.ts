@@ -17,9 +17,11 @@ export default class StatesList extends DOMElement {
     super(`<div id="leonardo-states-list" class="leonardo-states-list"></div>`);
     this.bodyEventSubs.push(Events.on(Events.FILTER_STATES, this.onFilterStates.bind(this)));
     this.bodyEventSubs.push(Events.on(Events.ADD_SCENARIO, this.addScenario.bind(this)));
+    this.bodyEventSubs.push(Events.on(Events.RESET_STATE, this.render.bind(this)));
   }
 
   render() {
+    console.log('rendering...');
     super.render();
     this.clearEventSubs();
     this.viewNode.appendChild(this.statesBar.get());
