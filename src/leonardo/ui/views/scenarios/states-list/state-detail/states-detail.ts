@@ -18,7 +18,9 @@ export default class StateDetail extends DOMElement {
         <div class="leonardo-states-detail-top">Edit option <strong>${this.curState.activeOption.name}</strong>
         for <strong>${this.curState.name}</strong>
         </div>
-        
+        <div class="leonardo-states-detail-input">
+          <span>Source: ${this.curState.activeOption.from_local ? 'Local Storage': 'Configuration'} </span>
+        </div>
         <div class="leonardo-states-detail-input"><div>Status code: </div><input class="leonardo-states-detail-status" value="${this.curState.activeOption.status}"/></div>
         <div class="leonardo-states-detail-input"><div>Delay: </div><input class="leonardo-states-detail-delay" value="${this.curState.activeOption.delay}"/></div>
         <div>
