@@ -24,15 +24,16 @@ export default class StateDetail extends DOMElement {
         <div>
           <br/> 
           <span>Response:</span>    <button class="leonardo-button leonardo-states-detail-edit">Advanced</button>      
-          <textarea class="leonardo-states-detail-json">${this.getResString(this.curState.activeOption.data)}</textarea>          
+          <textarea class="leonardo-states-detail-json"></textarea>          
         </div>
         <div class="leonardo-states-detail-buttons">        
           <button class="leonardo-button leonardo-states-detail-save">Save</button>
           <button class="leonardo-button leonardo-states-detail-cancel" >Cancel</button>
         </div>`;
-    Events.onItem(this.viewNode.querySelector('.leonardo-states-detail-edit'), 'click', this.editMode.bind(this));
-    Events.onItemOnce(this.viewNode.querySelector('.leonardo-states-detail-cancel'), 'click', this.onCancel.bind(this));
-    Events.onItemOnce(this.viewNode.querySelector('.leonardo-states-detail-save'), 'click', this.onSave.bind(this));
+        this.viewNode.querySelector('.leonardo-states-detail-json').value = this.getResString(this.curState.activeOption.data);
+        Events.onItem(this.viewNode.querySelector('.leonardo-states-detail-edit'), 'click', this.editMode.bind(this));
+        Events.onItemOnce(this.viewNode.querySelector('.leonardo-states-detail-cancel'), 'click', this.onCancel.bind(this));
+        Events.onItemOnce(this.viewNode.querySelector('.leonardo-states-detail-save'), 'click', this.onSave.bind(this));
 
   }
 

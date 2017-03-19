@@ -38,7 +38,8 @@ export default class RecorderList extends DOMElement {
   toggleDetails(state, event){
     this.stateDetailsState = !this.stateDetailsState;
     const selectedClass: string = 'leonardo-recorder-item-selected';
-    this.stateDetailsState ? event.currentTarget.classList.add(selectedClass) : event.currentTarget.classList.remove(selectedClass);
+    const target = event.currentTarget || event.target;
+    this.stateDetailsState ? target.classList.add(selectedClass) : target.classList.remove(selectedClass);
     this.stateDetailsState && (state.activeOption = state.options[0]);
     this.stateDetail.toggle(state);
   }
