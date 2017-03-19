@@ -1,4 +1,5 @@
 import Utils from './utils';
+import * as sinon from 'sinon';
 
 declare var sinon;
 

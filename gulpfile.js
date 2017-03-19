@@ -38,19 +38,6 @@ gulp.task("build:less", false, function () {
       .pipe(gulp.dest('./tmp'));
 });
 
-gulp.task('build:js', "bundle all js assets", function(){
-  return gulp.src(
-    [
-      './src/leonardo/ace.js',
-      './src/leonardo/sinon.js',
-      './tmp/leonardo-ts.js',
-      './src/leonardo/separator.js',
-      './tmp/leonardo.css.js'
-    ])
-    .pipe(concat('leonardo.js'))
-    .pipe(gulp.dest('./tmp'));
-});
-
 gulp.task('copy:dist', false, function() {
   return gulp.src([
     "./tmp/leonardo.js"
@@ -107,7 +94,7 @@ function mockServerMiddleware(route) {
 }
 
 
-gulp.task('serve', "Serve files after build and watch", ['build','watch'], function () {
+gulp.task('serve', "Serve files after build and watch", function () {
   gulp.src('')
     .pipe(webserver({
       livereload: {
