@@ -3,7 +3,6 @@ export interface EventSub {
   off: Function
 }
 
-
 export default {
   TOGGLE_LAUNCHER: 'leonardo:toggle:launcher',
   CHANGE_VIEW: 'leonardo:change:view',

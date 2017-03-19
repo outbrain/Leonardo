@@ -81,7 +81,7 @@ export default class DropDown extends DOMElement{
 
   closeDropDown(event?: CustomEvent) {
     const dropDown: HTMLElement = <HTMLElement>this.viewNode.querySelector(`.leonardo-dropdown-options`);
-    if (!dropDown || (event && event.detail === this.viewNode)) {
+    if (!dropDown || !this.optionsState || (event && event.detail === this.viewNode)) {
       return;
     }
     dropDown.style.display = 'none';

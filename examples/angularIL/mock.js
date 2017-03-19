@@ -23,7 +23,9 @@
         {
           "name": "success",
           "status": 200,
-          "data": {},
+          "data": function() {
+            return 'asdfasd';
+          },
           "delay": 0
         }
       ]
