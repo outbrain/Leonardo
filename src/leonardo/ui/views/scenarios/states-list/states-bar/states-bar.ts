@@ -51,11 +51,7 @@ export default class StatesBar extends DOMElement{
 
   resetStates() {
     if (window.confirm('Are you sure you want to reset states?')) {
-      console.log('arrived here');
       Leonardo.storage.removeStates();
-      Events.dispatch(Events.RESET_STATE);
-      Leonardo.storage.setSavedStates([]);
     }
   }
-
 }

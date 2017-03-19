@@ -6,6 +6,7 @@ import StatesBar from './states-bar/states-bar';
 import StateDetail from './state-detail/states-detail';
 import DOMElement from '../../../DOMElement';
 import {EventSub} from '../../../ui-events';
+import UiUtils from '../../../ui-utils';
 
 export default class StatesList extends DOMElement {
   statesBar = new StatesBar();
@@ -21,7 +22,6 @@ export default class StatesList extends DOMElement {
   }
 
   render() {
-    console.log('rendering...');
     super.render();
     this.clearEventSubs();
     this.viewNode.appendChild(this.statesBar.get());

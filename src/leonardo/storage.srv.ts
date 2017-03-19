@@ -42,12 +42,9 @@ export class Storage {
   }
 
   removeStates() {
-    console.log(this.getSavedStates());
     this._removeItem(this.SAVED_STATES_KEY);
-    const states = Leonardo.storage.getStates();
-    console.log(states);
-    Leonardo.storage.setStates(states);
-    Leonardo.statesChanged();
+    this._removeItem(this.STATES_STORE_KEY);
+    window.location.reload();
   }
 
   setStates(states) {
