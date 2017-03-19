@@ -6,6 +6,7 @@ import StatesBar from './states-bar/states-bar';
 import StateDetail from './state-detail/states-detail';
 import DOMElement from '../../../DOMElement';
 import {EventSub} from '../../../ui-events';
+import UiUtils from '../../../ui-utils';
 
 export default class StatesList extends DOMElement {
   statesBar = new StatesBar();
@@ -17,6 +18,7 @@ export default class StatesList extends DOMElement {
     super(`<div id="leonardo-states-list" class="leonardo-states-list"></div>`);
     this.bodyEventSubs.push(Events.on(Events.FILTER_STATES, this.onFilterStates.bind(this)));
     this.bodyEventSubs.push(Events.on(Events.ADD_SCENARIO, this.addScenario.bind(this)));
+    this.bodyEventSubs.push(Events.on(Events.RESET_STATE, this.render.bind(this)));
   }
 
   render() {

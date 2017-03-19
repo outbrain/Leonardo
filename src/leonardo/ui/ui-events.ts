@@ -11,6 +11,7 @@ export default {
   TOGGLE_STATES: 'leonardo:toggle:states',
   TOGGLE_SCENARIOS: 'leonardo:toggle:scenario',
   ADD_SCENARIO: 'leonardo:add:scenario',
+  RESET_STATE: 'leonardo:add:reset:state',
   TOGGLE_STATE: 'leonardo:toggle:states',
   TOGGLE_ICON: 'leonardo:toggle:icon',
   ATTACH_MENU_ITEM: 'leonardo:attach:menu',

@@ -200,8 +200,6 @@ export function leoConfiguration() {
         delay: option.delay
       }, overrideOption);
     });
-
-    //$rootScope.$broadcast('leonardo:stateChanged', stateObj);
   }
 
   function addStates(statesArr, overrideOption = false) {
