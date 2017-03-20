@@ -7,7 +7,7 @@
     "compile": "gulp build",
     "compile:watch": "gulp watch",
     "test": "gulp test",
-    "start": "gulp serve",
+    "start": "webpack-dev-server",
     "wp": "webpack"
   },
   "repository": {
@@ -60,6 +60,7 @@
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0",
-    "webpack": "^2.2.1"
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.4.2"
   }
 }
