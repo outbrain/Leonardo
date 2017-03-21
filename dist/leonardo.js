@@ -1297,6 +1297,22 @@ var spyApi = {
         return this.callIds[this.callCount - 1] > spyFn.callIds[spyFn.callCount - 1];
     },
 
+    calledImmediatelyBefore: function calledImmediatelyBefore(spyFn) {
+        if (!this.called || !spyFn.called) {
+            return false;
+        }
+
+        return this.callIds[this.callCount - 1] === spyFn.callIds[spyFn.callCount - 1] - 1;
+    },
+
+    calledImmediatelyAfter: function calledImmediatelyAfter(spyFn) {
+        if (!this.called || !spyFn.called) {
+            return false;
+        }
+
+        return this.callIds[this.callCount - 1] === spyFn.callIds[spyFn.callCount - 1] + 1;
+    },
+
     withArgs: function () {
         var args = slice.call(arguments);
 
@@ -1721,6 +1737,14 @@ var callProto = {
 
     calledAfter: function (other) {
         return this.callId > other.callId;
+    },
+
+    calledImmediatelyBefore: function (other) {
+        return this.callId === other.callId - 1;
+    },
+
+    calledImmediatelyAfter: function (other) {
+        return this.callId === other.callId + 1;
     },
 
     callArg: function (pos) {
@@ -11462,7 +11486,7 @@ module.exports = {
     },
 
     "*": function (spyInstance, args) {
-        return args.map(sinonFormat).join(", ");
+        return args.map(function (arg) { return sinonFormat(arg); }).join(", ");
     }
 };
 
@@ -11484,7 +11508,7 @@ function stubDescriptor(object, property, descriptor) {
     var wrapper;
 
     deprecated.printWarning(
-      "sinon.stub(obj, 'meth', fn) is deprecated and will be removed from" +
+      "sinon.stub(obj, 'meth', fn) is deprecated and will be removed from " +
       "the public API in a future version of sinon." +
       "\n Use stub(obj, 'meth').callsFake(fn)." +
       "\n Codemod available at https://github.com/hurrymaplelad/sinon-codemod"

@@ -53,7 +53,7 @@
     "less-loader": "^3.0.0",
     "run-sequence": "^1.0.1",
     "script-loader": "^0.7.0",
-    "sinon": "^2.0.0",
+    "sinon": "https://github.com/outbrain/sinon",
     "style-loader": "^0.14.1",
     "ts-loader": "^2.0.2",
     "tsify": "^0.13.2",
