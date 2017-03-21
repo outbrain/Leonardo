@@ -8,7 +8,8 @@
     "compile:watch": "gulp watch",
     "test": "gulp test",
     "start": "webpack-dev-server",
-    "build": "webpack"
+    "build": "webpack",
+    "karma": "karma start test/unit/karma.conf.js --single-run"
   },
   "repository": {
     "type": "git",
@@ -44,11 +45,11 @@
     "gulp-sourcemaps": "^1.6.0",
     "gulp-typescript": "^2.12.0",
     "gulp-webserver": "^0.9.1",
-    "jasmine-core": "^2.4.1",
-    "karma": "^0.13.22",
-    "karma-browserify": "^5.0.2",
+    "jasmine-core": "^2.5.2",
+    "karma": "^1.5.0",
     "karma-chrome-launcher": "^0.2.2",
-    "karma-jasmine": "^0.3.8",
+    "karma-jasmine": "^1.1.0",
+    "karma-webpack": "^2.0.3",
     "less": "^2.7.2",
     "less-loader": "^3.0.0",
     "run-sequence": "^1.0.1",
