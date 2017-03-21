@@ -2,7 +2,8 @@ module.exports = {
   entry: "./src/leonardo/leonardo.ts",
   output: {
     path: __dirname + "/dist",
-    filename: "leonardo.js"
+    filename: "leonardo.js",
+    publicPath: 'dist/'
   },
   resolve: {
     // Add `.ts` and `.tsx` as a resolvable extension.
@@ -33,7 +34,11 @@ module.exports = {
     ]
   },
   devServer: {
+    historyApiFallback: {
+      index: 'examples/angularIL/index.html'
+    },
     open: true,
-    port: 9284
+    port: 9284,
+    inline: true
   }
 }
