@@ -8,7 +8,7 @@
     "compile:watch": "gulp watch",
     "test": "gulp test",
     "start": "webpack-dev-server",
-    "wp": "webpack"
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
