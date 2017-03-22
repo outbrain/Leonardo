@@ -6,10 +6,9 @@
   "scripts": {
     "compile": "gulp build",
     "compile:watch": "gulp watch",
-    "test": "gulp test",
+    "test": "karma start test/unit/karma.conf.js --single-run",
     "start": "webpack-dev-server",
-    "build": "webpack",
-    "karma": "karma start test/unit/karma.conf.js --single-run"
+    "build": "webpack"
   },
   "repository": {
     "type": "git",

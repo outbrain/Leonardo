@@ -16,7 +16,7 @@ module.exports = function(config) {
     ],
 
     files: [
-      'dist/leonardo.js',
+      'http://outbrain.github.io/Leonardo/dist/leonardo.js',
       'test/unit/**/*.spec.ts'
     ],
 
