@@ -62,7 +62,7 @@ export function leoConfiguration() {
     const funcName = state.name + callbackName;
     if (_jsonpCallbacks[funcName]) return;
 
-    let evaluatedFunction = eval(callbackName);
+    const evaluatedFunction = eval(callbackName);
     if (typeof evaluatedFunction === 'function') {
       _jsonpCallbacks[funcName] = evaluatedFunction;
       if (callbackName.lastIndexOf('.') > -1) {
@@ -145,7 +145,7 @@ export function leoConfiguration() {
     }
 
     if (state.url.indexOf('callback=') > 1) {
-      let postfix = state.url.split('callback=')[1];
+      const postfix = state.url.split('callback=')[1];
       return postfix.split('&')[0];
     }
   }
