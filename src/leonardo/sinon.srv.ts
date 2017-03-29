@@ -1,9 +1,9 @@
 import Utils from './utils';
+import * as sinon from 'sinon';
 
 declare var sinon;
 
 export class Sinon {
-
   constructor() {
     this.init();
   }
@@ -11,7 +11,7 @@ export class Sinon {
   private init() {
     var server = sinon.fakeServer.create({
       autoRespond: true,
-      autoRespondAfter: 10
+      autoRespondAfterFn: this.autoRespondAfterFn.bind(this)
     });
 
     sinon.FakeXMLHttpRequest.useFilters = true;
@@ -19,16 +19,6 @@ export class Sinon {
       var state = Leonardo.fetchStatesByUrlAndMethod(url, method);
       return !(state && state.active);
     });
-
-    sinon.FakeXMLHttpRequest.onResponseEnd = function (xhr) {
-      var res = xhr.response;
-      try {
-        res = JSON.parse(xhr.response);
-      }
-      catch (e) {
-      }
-      Leonardo._logRequest(xhr.method, xhr.url, res, xhr.status);
-    };
 
     server.respondWith(function (request) {
       var state = Leonardo.fetchStatesByUrlAndMethod(request.url, request.method),
@@ -42,5 +32,11 @@ export class Sinon {
         console.warn('could not find a state for the following request', request);
       }
     });
+  }
+
+  autoRespondAfterFn(request) {
+      var state = Leonardo.fetchStatesByUrlAndMethod(request.url, request.method),
+        activeOption = Leonardo.getActiveStateOption(state.name);
+      return activeOption.delay || 10;
   }
 }

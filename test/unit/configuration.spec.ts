@@ -5,11 +5,7 @@ import { leoConfiguration } from '../../src/leonardo/configuration.srv'
 describe('addStates', function() {
 
   it('should add a state', function() {
-    var leo = leoConfiguration({
-      getStates: () => []
-    }, {
-      $broadcast: () => {}
-    });
+    var leo = leoConfiguration();
 
     leo.addStates([
       {
