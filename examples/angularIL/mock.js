@@ -53,6 +53,25 @@ Leonardo.addStates([
   }
 ]);
 
+Leonardo.addStates([
+  {
+    "name": "jsonp test with params",
+    "url": "http://ip.jsontest.com/?callback=Obj.middleware.callback&idx=0",
+    "jsonpCallback": "Obj.middleware.callback",
+    "jsonCallbackAdditionalParams": [0],
+    "verb": "JSONP",
+    "options": [
+      {
+        "name": "success",
+        "data": {
+          x: 1
+        },
+        "delay": 1
+      }
+    ]
+  }
+]);
+
 
 Leonardo.addStates([
   {
