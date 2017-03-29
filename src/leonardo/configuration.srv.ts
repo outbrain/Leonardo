@@ -133,7 +133,13 @@ export function leoConfiguration() {
   function deactivateJsonpState(state, callbackName) {
     const funcName = state.name + callbackName;
     if (_jsonpCallbacks[funcName]) {
-      window[callbackName] = _jsonpCallbacks[funcName];
+      if (callbackName.lastIndexOf('.') > -1) {
+        const callbackWrapperObj = eval(getAndSpliceStr(callbackName));
+        callbackWrapperObj[extractCallbackSuffix(callbackName)] = _jsonpCallbacks[funcName];
+      }
+      else {
+        window[callbackName] = _jsonpCallbacks[funcName];
+      }
       delete _jsonpCallbacks[funcName];
     }
     activateJsonpMObserver();
