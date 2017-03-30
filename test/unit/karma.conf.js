@@ -1,13 +1,14 @@
 
 module.exports = function(config) {
   config.set({
+    mime: { 'text/x-typescript': ['ts','tsx'] },
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '../../',
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['browserify', 'jasmine'],
+    frameworks: ['jasmine'],
 
 
     // list of files to exclude
@@ -15,15 +16,14 @@ module.exports = function(config) {
     ],
 
     files: [
-      'bower_components/angular/angular.js',
-      'dist/leonardo.js',
+      'http://outbrain.github.io/Leonardo/dist/leonardo.js',
       'test/unit/**/*.spec.ts'
     ],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'test/unit/**/*.spec.ts': ['browserify']
+      'test/unit/**/*.spec.ts': ['webpack']
     },
 
 
@@ -63,9 +63,35 @@ module.exports = function(config) {
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: true,
 
-    browserify: {
-      debug: true,
-      plugin: [['tsify', { "target": "ES5" }]]
+    webpack: {
+      resolve: {
+        extensions: ['.js', '.ts', '.less']
+      },
+      module: {
+        rules: [
+          {
+            test: /\.ts?$/,
+            use: ['ts-loader']
+          },
+          {
+            test: /\.less$/,
+            use: [
+              'style-loader',
+              { loader: 'css-loader', options: { importLoaders: 1 } },
+              'less-loader'
+            ]
+          }
+        ]
+      },
+      stats: {
+        colors: true,
+        modules: true,
+        reasons: true,
+        errorDetails: true
+      },
+      performance: {
+        hints: false
+      }
     }
   });
 

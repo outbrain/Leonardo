@@ -73,9 +73,11 @@ export default class RecorderStateDetail extends DOMElement {
   toggle(state) {
     if (this.openState) {
       this.close(state);
-      return;
     }
-    this.open(state);
+    else {
+      this.open(state);
+    }
+    return this.openState;
   }
 
   private getResString(resopnse: string): string {

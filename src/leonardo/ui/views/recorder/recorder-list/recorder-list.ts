@@ -7,7 +7,8 @@ import {EventSub} from '../../../ui-events';
 export default class RecorderList extends DOMElement {
 
   stateDetail: RecorderStateDetail = new RecorderStateDetail();
-  stateDetailsState: boolean = false;
+  selectedClass = 'leonardo-recorder-item-selected';
+
   constructor() {
     super(`<div id="leonardo-recorder-list" class="leonardo-recorder-list"></div>`);
 
@@ -17,17 +18,26 @@ export default class RecorderList extends DOMElement {
     super.render();
     this.clearEventSubs();
     const list = Utils.getElementFromHtml(`<ul class="leonardo-recorder-list-container"></ul>`);
-    this.getStateItems().forEach((item) => {list.appendChild(item)});
+    this.getStateItems().forEach((item) => {
+      list.appendChild(item)
+    });
     this.viewNode.appendChild(list);
     Events.dispatch(Events.ATTACH_MENU_ITEM, this.stateDetail.get());
+  }
+
+  private removeSelections() {
+    const elements = document.querySelectorAll('.leonardo-recorder-list-item');
+    for (const el of elements) {
+      el.classList.remove(this.selectedClass);
+    }
   }
 
   private getStateItems(): Array<any> {
     return Leonardo.getRecordedStates().map((state) => {
       const item = Utils.getElementFromHtml(`<li class="leonardo-recorder-list-item">`);
       item.innerHTML =
-          `<span class="leonardo-recorder-list-verb leonardo-recorder-list-verb-${state.verb.toLowerCase()}">${state.verb}</span>
-           <span class="leonardo-recorder-list-url">${state.url.substr(0,110)}</span>`;
+        `<span class="leonardo-recorder-list-verb leonardo-recorder-list-verb-${state.verb.toLowerCase()}">${state.verb}</span>
+           <span class="leonardo-recorder-list-url">${state.url.substr(0, 110)}</span>`;
       item.innerHTML += state.recorded ? `<span class="leonardo-recorder-list-name">${state.name}</span>` :
         `<span class="leonardo-recorder-list-name leonardo-recorder-list-name-new">New</span>`;
       this.onItem(item, 'click', this.toggleDetails.bind(this, state));
@@ -35,13 +45,16 @@ export default class RecorderList extends DOMElement {
     })
   }
 
-  toggleDetails(state, event){
-    this.stateDetailsState = !this.stateDetailsState;
-    const selectedClass: string = 'leonardo-recorder-item-selected';
-    const target = event.currentTarget || event.target;
-    this.stateDetailsState ? target.classList.add(selectedClass) : target.classList.remove(selectedClass);
-    this.stateDetailsState && (state.activeOption = state.options[0]);
-    this.stateDetail.toggle(state);
-  }
+  toggleDetails(state, event) {
+    this.removeSelections();
 
+    const target = event.currentTarget || event.target;
+    target.classList.add(this.selectedClass);
+
+    state.activeOption = state.options[0];
+    const openState = this.stateDetail.toggle(state);
+    if (!openState) {
+      target.classList.remove(this.selectedClass);
+    }
+  }
 }
