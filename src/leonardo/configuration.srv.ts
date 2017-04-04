@@ -118,7 +118,12 @@ export function leoConfiguration() {
               if (!_jsonpCallbacks[funcName]) {
                 activeJsonpState(state, callbackName);
               }
-              setTimeout(_jsonpCallbacks[funcName].bind(null, state.activeOption.data, ...state.jsonCallbackAdditionalParams), state.activeOption.delay || 0);
+              if ((typeof(state.jsonCallbackAdditionalParams) === 'function') && (typeof(state.activeOption.data) === 'function')) {
+                setTimeout(_jsonpCallbacks[funcName].bind(null, state.activeOption.data(scriptNode.src), ...state.jsonCallbackAdditionalParams(scriptNode.src)), state.activeOption.delay || 0);
+              }
+              else {
+                setTimeout(_jsonpCallbacks[funcName].bind(null, state.activeOption.data, ...state.jsonCallbackAdditionalParams), state.activeOption.delay || 0);
+              }
             }
           }
         });
@@ -166,8 +171,8 @@ export function leoConfiguration() {
   }
 
   function fetchStates() {
-    var activeStates = Leonardo.storage.getStates();
-    var statesCopy = _states.map(function (state) {
+    const activeStates = Leonardo.storage.getStates();
+    let statesCopy = _states.map(function (state) {
       return Object.assign({}, state);
     });
 
