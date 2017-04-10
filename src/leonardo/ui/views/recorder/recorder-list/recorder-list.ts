@@ -27,8 +27,8 @@ export default class RecorderList extends DOMElement {
 
   private removeSelections() {
     const elements = document.querySelectorAll('.leonardo-recorder-list-item');
-    for (const el of elements) {
-      el.classList.remove(this.selectedClass);
+    for (let i = 0; i < elements.length; ++i) {
+      elements[i].classList.remove(this.selectedClass);
     }
   }
 
