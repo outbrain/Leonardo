@@ -29,13 +29,14 @@ export default class RecorderStateDetail extends DOMElement {
               <div class="leonardo-states-detail-input"><div>Delay: </div><input class="leonardo-states-detail-delay" value="0"/></div>
               <br/>
               <span>Response:</span>    <button class="leonardo-button leonardo-states-detail-edit">Advanced</button> 
-              <textarea class="leonardo-states-detail-json">${this.getResString(this.curState.options[0].data)}</textarea></p>
+              <textarea class="leonardo-states-detail-json"></textarea></p>
               <div class="leonardo-states-detail-buttons">
                 <button class="leonardo-button leonardo-states-detail-save">Save</button>
                 <button class="leonardo-button leonardo-states-detail-cancel" >Cancel</button>
               </div>`;
 
     this.viewNode.innerHTML = html;
+    this.viewNode.querySelector('.leonardo-states-detail-json').value = this.getResString(this.curState.options[0].data);
     Events.onItem(this.viewNode.querySelector('.leonardo-states-detail-edit'), 'click', this.editMode.bind(this));
     Events.onItemOnce(this.viewNode.querySelector('.leonardo-states-detail-cancel'), 'click', this.onCancel.bind(this));
     Events.onItemOnce(this.viewNode.querySelector('.leonardo-states-detail-save'), 'click', this.onSave.bind(this));
@@ -72,9 +73,11 @@ export default class RecorderStateDetail extends DOMElement {
   toggle(state) {
     if (this.openState) {
       this.close(state);
-      return;
     }
-    this.open(state);
+    else {
+      this.open(state);
+    }
+    return this.openState;
   }
 
   private getResString(resopnse: string): string {

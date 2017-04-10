@@ -61,11 +61,31 @@ export function leoConfiguration() {
   function activeJsonpState(state, callbackName: string) {
     const funcName = state.name + callbackName;
     if (_jsonpCallbacks[funcName]) return;
-    if (typeof window[callbackName] === 'function') {
-      _jsonpCallbacks[funcName] = window[callbackName];
-      window[callbackName] = dummyJsonpCallback;
+
+    const evaluatedFunction = eval(callbackName);
+    if (typeof evaluatedFunction === 'function') {
+      _jsonpCallbacks[funcName] = evaluatedFunction;
+      if (callbackName.lastIndexOf('.') > -1) {
+        const callbackWrapperObj = eval(getAndSpliceStr(callbackName));
+        callbackWrapperObj[extractCallbackSuffix(callbackName)] = dummyJsonpCallback;
+      }
+      else {
+        window[callbackName] = dummyJsonpCallback;
+      }
     }
+
     activateJsonpMObserver();
+  }
+
+  function getAndSpliceStr(str: string) : string {
+    const lastIndex = str.lastIndexOf('.');
+    const cutString = str.substring(0,lastIndex);
+    return 'window.' + cutString;
+  }
+
+  function extractCallbackSuffix(str: string): string {
+    const lastIndex = str.lastIndexOf('.');
+    return str.substring(lastIndex+1, str.length)
   }
 
   function activateJsonpMObserver() {
@@ -98,7 +118,12 @@ export function leoConfiguration() {
               if (!_jsonpCallbacks[funcName]) {
                 activeJsonpState(state, callbackName);
               }
-              setTimeout(_jsonpCallbacks[funcName].bind(null, state.activeOption.data), state.activeOption.delay || 0);
+              if ((typeof(state.jsonCallbackAdditionalParams) === 'function') && (typeof(state.activeOption.data) === 'function')) {
+                setTimeout(_jsonpCallbacks[funcName].bind(null, state.activeOption.data(scriptNode.src), ...state.jsonCallbackAdditionalParams(scriptNode.src)), state.activeOption.delay || 0);
+              }
+              else {
+                setTimeout(_jsonpCallbacks[funcName].bind(null, state.activeOption.data, ...state.jsonCallbackAdditionalParams), state.activeOption.delay || 0);
+              }
             }
           }
         });
@@ -113,7 +138,13 @@ export function leoConfiguration() {
   function deactivateJsonpState(state, callbackName) {
     const funcName = state.name + callbackName;
     if (_jsonpCallbacks[funcName]) {
-      window[callbackName] = _jsonpCallbacks[funcName];
+      if (callbackName.lastIndexOf('.') > -1) {
+        const callbackWrapperObj = eval(getAndSpliceStr(callbackName));
+        callbackWrapperObj[extractCallbackSuffix(callbackName)] = _jsonpCallbacks[funcName];
+      }
+      else {
+        window[callbackName] = _jsonpCallbacks[funcName];
+      }
       delete _jsonpCallbacks[funcName];
     }
     activateJsonpMObserver();
@@ -124,8 +155,10 @@ export function leoConfiguration() {
       return state.jsonpCallback;
     }
 
-    const postfix = state.url.split('callback=')[1];
-    return postfix.split('&')[0];
+    if (state.url.indexOf('callback=') > 1) {
+      const postfix = state.url.split('callback=')[1];
+      return postfix.split('&')[0];
+    }
   }
 
   function fetchStatesByUrlAndMethod(url, method) {
@@ -138,8 +171,8 @@ export function leoConfiguration() {
   }
 
   function fetchStates() {
-    var activeStates = Leonardo.storage.getStates();
-    var statesCopy = _states.map(function (state) {
+    const activeStates = Leonardo.storage.getStates();
+    let statesCopy = _states.map(function (state) {
       return Object.assign({}, state);
     });
 
@@ -192,6 +225,8 @@ export function leoConfiguration() {
       upsert({
         state: stateObj.name,
         url: stateObj.url,
+        jsonCallbackAdditionalParams: stateObj.jsonCallbackAdditionalParams,
+        jsonpCallback: stateObj.jsonpCallback,
         verb: stateObj.verb,
         name: option.name,
         from_local: !!overrideOption,
@@ -200,8 +235,6 @@ export function leoConfiguration() {
         delay: option.delay
       }, overrideOption);
     });
-
-    //$rootScope.$broadcast('leonardo:stateChanged', stateObj);
   }
 
   function addStates(statesArr, overrideOption = false) {
@@ -218,6 +251,8 @@ export function leoConfiguration() {
     var verb = configObj.verb || 'GET',
       state = configObj.state,
       name = configObj.name,
+      jsonpCallback = configObj.jsonpCallback,
+      jsonCallbackAdditionalParams = configObj.jsonCallbackAdditionalParams,
       from_local = configObj.from_local,
       url = configObj.url,
       status = configObj.status || 200,
@@ -240,6 +275,8 @@ export function leoConfiguration() {
       name: state,
       url: url || stateItem.url,
       verb: verb,
+      jsonpCallback: jsonpCallback,
+      jsonCallbackAdditionalParams: jsonCallbackAdditionalParams,
       options: stateItem.options || []
     });
 
@@ -342,7 +379,7 @@ export function leoConfiguration() {
   }
 
   function logRequest(method, url, data, status) {
-    if (method && url && !(url.indexOf(".html") > 0)) {
+    if (method && url) {
       var req: INetworkRequest = {
         verb: method,
         data: data,

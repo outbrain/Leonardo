@@ -38,7 +38,7 @@ export default class CodeEditor extends DOMElement {
     this.editor.focus();
   }
 
-  private getResString(resopnse: string): string {
+  private getResString(resopnse: any): any {
     let resStr: string;
     try {
       if(typeof resopnse === 'function') {

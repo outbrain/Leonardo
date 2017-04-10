@@ -4,6 +4,12 @@ function callback(data) {
   console.log('jsonp callback fired', data);
 }
 
+window['Obj'] = {
+  'middleware': {
+    'callback': function (data, ...params) {console.log('jsonp callback with multi params fired', data, ...params)}
+  }
+};
+
 angular.module('angular-il', ['ui.router'])
 //<!-- else -->
 //angular.module('angular-il', ['ui.router'])
@@ -61,6 +67,10 @@ angular.module('angular-il', ['ui.router'])
 
           this.fireJsonp = function() {
             $http.jsonp('http://ip.jsontest.com/?callback=callback');
+          };
+
+          this.fireJsonpParams = function() {
+            $http.jsonp('http://ip.jsontest.com/?callback=Obj.middleware.callback&idx=0');
           };
 
           this.create = function () {

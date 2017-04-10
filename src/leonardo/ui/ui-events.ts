@@ -3,7 +3,6 @@ export interface EventSub {
   off: Function
 }
 
-
 export default {
   TOGGLE_LAUNCHER: 'leonardo:toggle:launcher',
   CHANGE_VIEW: 'leonardo:change:view',
@@ -12,6 +11,7 @@ export default {
   TOGGLE_STATES: 'leonardo:toggle:states',
   TOGGLE_SCENARIOS: 'leonardo:toggle:scenario',
   ADD_SCENARIO: 'leonardo:add:scenario',
+  RESET_STATE: 'leonardo:add:reset:state',
   TOGGLE_STATE: 'leonardo:toggle:states',
   TOGGLE_ICON: 'leonardo:toggle:icon',
   ATTACH_MENU_ITEM: 'leonardo:attach:menu',
@@ -32,8 +32,8 @@ export default {
     document.body.dispatchEvent(event);
   },
   onItemOnce: (node: any, type: string, callback: Function) => {
-    node.addEventListener(type, function (e) {
-      e.target.removeEventListener(e.type, <EventListener>arguments.callee);
+    node.addEventListener(type, function func(e) {
+      e.target.removeEventListener(e.type, func);
       return callback.apply(callback, arguments);
     });
   },
