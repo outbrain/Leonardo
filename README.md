@@ -163,13 +163,13 @@ $ npm install
 ### Build
 
 ```bash
-$ gulp build
+$ npm run build
 ```
 
 ### Run (and watch)
 
 ```bash
-$ gulp serve
+$ npm start 
 ```
 
 This will run the demo app (and auto-refresh the browser)
