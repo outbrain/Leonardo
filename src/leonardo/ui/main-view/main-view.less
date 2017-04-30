@@ -8,10 +8,14 @@
   overflow: hidden;
   background-color: white;
   z-index: 9999999999999999999999999;
-
   &-hidden {
     display: none;
   }
+}
+
+.leonardo-main-overlay{
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .leonardo-main-view-body {
@@ -32,4 +36,23 @@
   will-change: transform;
   transform: translateX(100%);
   padding-top: 47px;
+}
+
+.leonardo-main-view-menu-out {
+  transform: translateX(0);
+}
+
+.leonardo-main-view-menu-in {
+  transform: translateX(100%);
+}
+
+.leonardo-main-view-dialog {
+  position: absolute;
+  z-index: 100;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: auto;
+  height: auto;
+  display: none;
 }

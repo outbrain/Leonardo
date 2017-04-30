@@ -1,6 +1,7 @@
 import Utils from '../../../../ui-utils';
 import Events from '../../../../ui-events';
 import DOMElement from '../../../../DOMElement';
+import CodeEditor from '../../../../code-editor/code-editor';
 export default class StateDetail extends DOMElement {
 
   openState: boolean = false;
@@ -17,20 +18,25 @@ export default class StateDetail extends DOMElement {
         <div class="leonardo-states-detail-top">Edit option <strong>${this.curState.activeOption.name}</strong>
         for <strong>${this.curState.name}</strong>
         </div>
+        <div class="leonardo-states-detail-input">
+          <span>Source: ${this.curState.activeOption.from_local ? 'Local Storage': 'Configuration'} </span>
+        </div>
         <div class="leonardo-states-detail-input"><div>Status code: </div><input class="leonardo-states-detail-status" value="${this.curState.activeOption.status}"/></div>
         <div class="leonardo-states-detail-input"><div>Delay: </div><input class="leonardo-states-detail-delay" value="${this.curState.activeOption.delay}"/></div>
         <div>
           <br/> 
-          <p>Response:</p>          
-          <textarea class="leonardo-states-detail-json">${this.getResString(this.curState.activeOption.data)}</textarea>
+          <span>Response:</span>    <button class="leonardo-button leonardo-states-detail-edit">Advanced</button>      
+          <textarea class="leonardo-states-detail-json"></textarea>          
         </div>
-        <div class="leonardo-states-detail-buttons">
+        <div class="leonardo-states-detail-buttons">        
           <button class="leonardo-button leonardo-states-detail-save">Save</button>
           <button class="leonardo-button leonardo-states-detail-cancel" >Cancel</button>
         </div>`;
-
-        Events.onItemOnce(this.viewNode.querySelector('.leonardo-states-detail-cancel'),'click', this.onCancel.bind(this));
+        this.viewNode.querySelector('.leonardo-states-detail-json').value = this.getResString(this.curState.activeOption.data);
+        Events.onItem(this.viewNode.querySelector('.leonardo-states-detail-edit'), 'click', this.editMode.bind(this));
+        Events.onItemOnce(this.viewNode.querySelector('.leonardo-states-detail-cancel'), 'click', this.onCancel.bind(this));
         Events.onItemOnce(this.viewNode.querySelector('.leonardo-states-detail-save'), 'click', this.onSave.bind(this));
+
   }
 
   open(state) {
@@ -41,7 +47,7 @@ export default class StateDetail extends DOMElement {
   }
 
   close(state?) {
-    if(state && this.curState !== state){
+    if (state && this.curState !== state) {
       this.open(state);
       return;
     }
@@ -51,20 +57,41 @@ export default class StateDetail extends DOMElement {
   }
 
   toggle(state) {
-    if(this.openState){
+    if (this.openState) {
       this.close(state);
       return;
     }
     this.open(state);
   }
 
+  editMode() {
+    const editor = new CodeEditor(this.closeEditMode.bind(this), this.closeEditMode.bind(this), this.viewNode.querySelector(".leonardo-states-detail-json").value);
+    editor.render();
+  }
+
+  private closeEditMode(data) {
+    if (!data) {
+      return;
+    }
+    this.viewNode.querySelector(".leonardo-states-detail-json").value = this.getResString(data);
+  }
+
   private getResString(resopnse: string): string {
     let resStr: string;
     try {
-      resStr = JSON.stringify(resopnse, null, 4);
+      switch (typeof resopnse) {
+        case 'function':
+          resStr = resopnse.toString();
+          break;
+        case 'object':
+          resStr = JSON.stringify(resopnse, null, 4);
+          break;
+        default:
+          return resStr = resopnse;
+      }
     }
-    catch(e){
-      resStr = typeof resopnse === 'string' ? resopnse : resopnse.toString();
+    catch (e) {
+      return resStr;
     }
     return resStr;
   }
@@ -75,16 +102,16 @@ export default class StateDetail extends DOMElement {
   }
 
   private onSave() {
-    const statusVal:string = this.viewNode.querySelector(".leonardo-states-detail-status").value;
-    const delayVal:string = this.viewNode.querySelector(".leonardo-states-detail-delay").value;
-    const jsonVal:string = this.viewNode.querySelector(".leonardo-states-detail-json").value;
+    const statusVal: string = this.viewNode.querySelector(".leonardo-states-detail-status").value;
+    const delayVal: string = this.viewNode.querySelector(".leonardo-states-detail-delay").value;
+    const jsonVal: string = this.viewNode.querySelector(".leonardo-states-detail-json").value;
 
     this.curState.activeOption.status = statusVal;
     this.curState.activeOption.delay = delayVal;
-    try{
+    try {
       this.curState.activeOption.data = JSON.parse(jsonVal);
     }
-    catch(e) {
+    catch (e) {
       this.curState.activeOption.data = jsonVal;
     }
 

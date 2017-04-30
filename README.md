@@ -54,10 +54,24 @@ You should now see Leonardo's icon on the bottom right corner. Click It.
 ## 6. Change your responses as you wish
 ![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/images/responses.png)
 
-### You can also automate mocking using a simple javascript API
+## Javascript API
+Automate your mocks using Leonardo's API
 
-#### Add States
+**State**:
+- name: (string) State name, must be unique
+- url: (string) request url, treated as regex
+- verb: (string) request http verb
+- options (StateOption array)
 
+**StateOption**:
+- name: (string) option name
+- status: (number) http status code
+- data: (primitive | Object | Function) the data to be returned in response body. 
+    - Use function to dynamically control the response (first parameter is the request object).
+
+
+### Add States
+`addState(State array)`
 ```javascript
  //.....
     Leonardo.addStates([
@@ -67,24 +81,40 @@ You should now see Leonardo's icon on the bottom right corner. Click It.
           verb: 'GET',
           options: [
             {name: 'success', status: 200, data: { name: "Master Splinter" }},
-            {name: 'error 500', status: 500},
-            {name: 'error 401', status: 401}
+            {name: 'error 500', status: 500}
+          ]
+        },{
+          name: 'Get Data',
+          url: '/api/user/43435',
+          verb: 'GET',
+          options: [
+            {name: 'success', status: 200, data: { name: "Master Splinter" }},
+            {name: 'error 500', status: 500}
           ]
         },
         {
-          name: 'Update Data',
-          url: '/api/user/43435',
-          verb: 'PUT',
+          name: 'Get Characters',
+          url: '/api/character',
+          verb: 'GET',
           options: [
-            {name: 'success', status: 200},
-            {name: 'error 500', status: 500},
-            {name: 'error 400', status: 400}
+            {
+              name: 'success', 
+              status: 200,
+              data: function(request) {
+                if (request.url.indexOf('term=Donatello') > 0) {
+                  return { name: "Donatello" };
+                } else {
+                  return { name: "Raphael" };                  
+                }
+              }
+            },
           ]
         }
   ]);
 ```
 
 ### Activate State Option
+`activateStateOption(stateName, optionName)`
 
 Activates state option, mocked response will be returned when calling the state url
 
@@ -103,6 +133,7 @@ Activates state option, mocked response will be returned when calling the state 
 ```
 
 ### Deactivate State
+`deactivateState(stateName)`
 
 Deactivates a specific state, when calling the state url request will pass through to the server
 

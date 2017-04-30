@@ -9,6 +9,7 @@
   padding: 10px;
   color: @black;
   width: 400px;
+  overflow: auto;
   .leonardo-states-detail-container {
     margin-top: 0;
   }
@@ -18,13 +19,12 @@
     border-bottom: 1px solid #ccc;;
   }
   .leonardo-states-detail-input {
-    //margin-top: 30px;
-    margin-right: 10px;
+    width: 100%;
     font-size: 14px;
-    display: inline-block;
+    display: block;
     input {
       display: inline-block;
-      width: 150px;
+      width: 95%;
       color: #78788c;
       padding: 10px;
       box-sizing: border-box;
@@ -49,14 +49,27 @@
     width: 100%;
     border: 1px solid #bebed2;
   }
+  .leonardo-states-detail-edit{
+    float: right;
+
+  }
   .leonardo-states-detail-buttons{
     margin: auto;
     button {
-      background: @blue;
-      color: white;
+      border-radius: 3px;
+      border: 1px solid @blue;
+      color: dimgray;
       margin-top: 10px;
       width: 49%;
       height: 35px;
+    }
+    button:first-child {
+      color: white;
+      background: @blue;
+      border: 1px solid @gray;
+      &:hover{
+          background: cornflowerblue;
+      }
     }
   }
 

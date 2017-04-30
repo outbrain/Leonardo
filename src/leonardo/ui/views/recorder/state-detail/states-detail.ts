@@ -1,13 +1,14 @@
 import Utils from '../../../ui-utils';
 import Events from '../../../ui-events';
 import DOMElement from '../../../DOMElement';
+import CodeEditor from '../../../code-editor/code-editor';
 export default class RecorderStateDetail extends DOMElement {
   openState: boolean = false;
   curState;
 
   constructor() {
     super(`<div id="leonardo-state-detail" class="leonardo-state-detail-recorder"></div>`);
-      }
+  }
 
   render() {
     super.render();
@@ -22,19 +23,22 @@ export default class RecorderStateDetail extends DOMElement {
               <div class="leonardo-states-detail-input">State name: <input class="leonardo-states-detail-state-name" value="${this.curState.name}"/></div>`;
     }
 
-    html +=   `<div class="leonardo-states-detail-input"><div>URL: </div><input class="leonardo-states-detail-option-url" value="${this.curState.url}"/></div>
+    html += `<div class="leonardo-states-detail-input"><div>URL: </div><input class="leonardo-states-detail-option-url" value="${this.curState.url}"/></div>
               <div class="leonardo-states-detail-input"><div>Option name: </div><input class="leonardo-states-detail-option-name" value="${this.curState.options[0].name}"/></div>
               <div class="leonardo-states-detail-input"><div>Status code: </div><input class="leonardo-states-detail-status" value="${this.curState.options[0].status}"/></div>
               <div class="leonardo-states-detail-input"><div>Delay: </div><input class="leonardo-states-detail-delay" value="0"/></div>
               <br/>
-              <p>Response:</p> <textarea class="leonardo-states-detail-json">${this.getResString(this.curState.options[0].data)}</textarea></p>
+              <span>Response:</span>    <button class="leonardo-button leonardo-states-detail-edit">Advanced</button> 
+              <textarea class="leonardo-states-detail-json"></textarea></p>
               <div class="leonardo-states-detail-buttons">
                 <button class="leonardo-button leonardo-states-detail-save">Save</button>
                 <button class="leonardo-button leonardo-states-detail-cancel" >Cancel</button>
               </div>`;
 
     this.viewNode.innerHTML = html;
-    Events.onItemOnce(this.viewNode.querySelector('.leonardo-states-detail-cancel'),'click', this.onCancel.bind(this));
+    this.viewNode.querySelector('.leonardo-states-detail-json').value = this.getResString(this.curState.options[0].data);
+    Events.onItem(this.viewNode.querySelector('.leonardo-states-detail-edit'), 'click', this.editMode.bind(this));
+    Events.onItemOnce(this.viewNode.querySelector('.leonardo-states-detail-cancel'), 'click', this.onCancel.bind(this));
     Events.onItemOnce(this.viewNode.querySelector('.leonardo-states-detail-save'), 'click', this.onSave.bind(this));
   }
 
@@ -43,6 +47,18 @@ export default class RecorderStateDetail extends DOMElement {
     this.render();
     this.openState = true;
     Events.dispatch(Events.OPEN_MENU);
+  }
+
+  editMode(){
+    const editor = new CodeEditor(this.closeEditMode.bind(this), this.closeEditMode.bind(this), this.viewNode.querySelector(".leonardo-states-detail-json").value);
+    editor.render();
+  }
+
+  private closeEditMode(data){
+    if(!data){
+      return;
+    }
+    this.viewNode.querySelector(".leonardo-states-detail-json").value = this.getResString(data);
   }
 
   close(state?) {
@@ -57,18 +73,30 @@ export default class RecorderStateDetail extends DOMElement {
   toggle(state) {
     if (this.openState) {
       this.close(state);
-      return;
     }
-    this.open(state);
+    else {
+      this.open(state);
+    }
+    return this.openState;
   }
-  
+
   private getResString(resopnse: string): string {
     let resStr: string;
+
     try {
-      resStr = JSON.stringify(resopnse, null, 4);
+      switch (typeof resopnse){
+        case 'function':
+          resStr = resopnse.toString();
+          break;
+        case 'object':
+          resStr = JSON.stringify(resopnse, null, 4);
+          break;
+        default:
+          return resStr = resopnse;
+      }
     }
     catch(e){
-       resStr = typeof resopnse === 'string' ? resopnse : resopnse.toString();
+      return resStr;
     }
     return resStr;
   }
@@ -87,15 +115,17 @@ export default class RecorderStateDetail extends DOMElement {
     this.curState.activeOption.status = statusVal;
     this.curState.activeOption.delay = delayVal;
     this.curState.activeOption.name = optionNameVal;
-    if(!this.curState.recorded){
+    if (!this.curState.recorded) {
       this.curState.name = this.viewNode.querySelector('.leonardo-states-detail-state-name').value;
     }
     try {
+
       this.curState.activeOption.data = JSON.parse(jsonVal);
     }
     catch (e) {
       this.curState.activeOption.data = jsonVal;
     }
+
 
     Leonardo.addOrUpdateSavedState(this.curState);
     this.close();

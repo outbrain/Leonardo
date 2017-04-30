@@ -25,8 +25,10 @@ export default class StateItem extends DOMElement {
         <input ${this.isChecked()} id="leonardo-state-toggle-${this.randomID}" class="leonardo-toggle leonardo-toggle-ios" type="checkbox"/>
         <label class="leonardo-toggle-btn" for="leonardo-state-toggle-${this.randomID }"></label>
         <span class="leonardo-state-verb leonardo-state-verb-${this.state.verb.toLowerCase()}">${this.state.verb}</span>
-        <span class="leonardo-state-name">${this.state.name}</span>
-        <span class="leonardo-state-url">${this.state.url || ''}</span>`;
+        <span class="leonardo-state-data-container">
+          <span class="leonardo-state-name">${this.state.name}</span>
+          <span class="leonardo-state-url">${this.state.url || ''}</span>
+        </span>`;
     this.viewNode.appendChild(this.dropDown.get());
     this.dropDown.render();
     this.viewNode.appendChild(Utils.getElementFromHtml(`<div title="Remove State" class="leonardo-x-btn leonardo-state-remove"></div>`));

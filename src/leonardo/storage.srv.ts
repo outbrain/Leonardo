@@ -29,12 +29,22 @@ export class Storage {
     window.localStorage.setItem(key, Utils.toJson(data));
   }
 
+  _removeItem(key) {
+    window.localStorage.removeItem(key);
+  }
+
   getStates() {
     return this._getItem(this.STATES_STORE_KEY) || {};
   }
 
   getScenarios() {
     return this._getItem(this.SCENARIOS_STORE_KEY) || [];
+  }
+
+  removeStates() {
+    this._removeItem(this.SAVED_STATES_KEY);
+    this._removeItem(this.STATES_STORE_KEY);
+    window.location.reload();
   }
 
   setStates(states) {

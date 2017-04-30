@@ -1,9 +1,9 @@
 import Utils from './utils';
+import * as sinon from 'sinon';
 
 declare var sinon;
 
 export class Sinon {
-
   constructor() {
     this.init();
   }
@@ -11,14 +11,11 @@ export class Sinon {
   private init() {
     var server = sinon.fakeServer.create({
       autoRespond: true,
-      autoRespondAfter: 10
+      autoRespondAfterFn: this.autoRespondAfterFn.bind(this)
     });
 
     sinon.FakeXMLHttpRequest.useFilters = true;
     sinon.FakeXMLHttpRequest.addFilter(function (method, url) {
-      if (url.indexOf('.html') > 0 && url.indexOf('template') >= 0) {
-        return true;
-      }
       var state = Leonardo.fetchStatesByUrlAndMethod(url, method);
       return !(state && state.active);
     });
@@ -45,5 +42,11 @@ export class Sinon {
         console.warn('could not find a state for the following request', request);
       }
     });
+  }
+
+  autoRespondAfterFn(request) {
+      var state = Leonardo.fetchStatesByUrlAndMethod(request.url, request.method),
+        activeOption = Leonardo.getActiveStateOption(state.name);
+      return activeOption.delay || 10;
   }
 }
