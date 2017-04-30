@@ -20,6 +20,16 @@ export class Sinon {
       return !(state && state.active);
     });
 
+    sinon.FakeXMLHttpRequest.onResponseEnd = function (xhr) {
+      var res = xhr.response;
+      try {
+        res = JSON.parse(xhr.response);
+      }
+      catch (e) {
+      }
+      Leonardo._logRequest(xhr.method, xhr.url, res, xhr.status);
+    };
+
     server.respondWith(function (request) {
       var state = Leonardo.fetchStatesByUrlAndMethod(request.url, request.method),
         activeOption = Leonardo.getActiveStateOption(state.name);
