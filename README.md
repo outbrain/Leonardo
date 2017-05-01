@@ -32,14 +32,14 @@ $ bower install leonardo
 
 ## 2. Add Leonardo script
 
-### * Webpack 2.x
+### Webpack 2.x
 
 ```javascript
     // in dev environment
     import "leonardojs";
 ```
 
-### * directly in html
+### Directly in html
 ```html
  <!DOCTYPE HTML>
  <html>
