@@ -1,0 +1,9 @@
+<h1>
+  <button class="btn btn-info" (click)="getComments()"><span>Get Comments</span></button>
+  <span *ngIf="loading">Loading...</span>
+  <h2 *ngFor="let comment of comments;">
+    keyword: {{comment.keyword}}
+  </h2>
+
+  <h3 style="color:red" *ngIf="error">Error Occured</h3>
+</h1>
