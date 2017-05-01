@@ -32,7 +32,7 @@ $ bower install leonardo
 
 ## 2. Add Leonardo script
 
-### Webpack 2.x
+### Require in your code
 
 ```javascript
     // in dev environment
