@@ -5861,7 +5861,12 @@ function leoConfiguration() {
             state.activeOption = !!option ?
                 state.options.filter(function (_option) {
                     return _option.name === option.name;
-                })[0] : state.options[0];
+                })[0]
+                :
+                    state.options[0];
+            if (typeof state.activeOption === 'undefined') {
+                console.warn('state with state name:', state.name, 'does not have active option:', option.name);
+            }
         });
         return statesCopy;
     }
@@ -6271,7 +6276,7 @@ var Sinon = (function () {
     };
     Sinon.prototype.autoRespondAfterFn = function (request) {
         var state = Leonardo.fetchStatesByUrlAndMethod(request.url, request.method), activeOption = Leonardo.getActiveStateOption(state.name);
-        return activeOption.delay || 10;
+        return activeOption && activeOption.delay || 10;
     };
     return Sinon;
 }());
@@ -15728,8 +15733,14 @@ var Launcher = (function (_super) {
         ui_events_1.default.dispatch(ui_events_1.default.TOGGLE_LAUNCHER);
     };
     Launcher.prototype.bodyKeypress = function (e) {
+        console.log(e);
         if (e.shiftKey && e.ctrlKey && e.keyCode === 76) {
             ui_events_1.default.dispatch(ui_events_1.default.TOGGLE_ICON);
+            return;
+        }
+        if (e.shiftKey && e.ctrlKey && e.keyCode === 75) {
+            ui_events_1.default.dispatch(ui_events_1.default.TOGGLE_LAUNCHER);
+            return;
         }
     };
     Launcher.prototype.toggleLauncher = function () {
