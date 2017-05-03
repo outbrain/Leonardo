@@ -15733,7 +15733,6 @@ var Launcher = (function (_super) {
         ui_events_1.default.dispatch(ui_events_1.default.TOGGLE_LAUNCHER);
     };
     Launcher.prototype.bodyKeypress = function (e) {
-        console.log(e);
         if (e.shiftKey && e.ctrlKey && e.keyCode === 76) {
             ui_events_1.default.dispatch(ui_events_1.default.TOGGLE_ICON);
             return;
