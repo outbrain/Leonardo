@@ -47,6 +47,7 @@ export class Sinon {
   autoRespondAfterFn(request) {
       var state = Leonardo.fetchStatesByUrlAndMethod(request.url, request.method),
         activeOption = Leonardo.getActiveStateOption(state.name);
-      return activeOption.delay || 10;
+
+      return activeOption && activeOption.delay || 10;
   }
 }

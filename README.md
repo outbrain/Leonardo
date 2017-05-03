@@ -21,7 +21,7 @@
 ### npm
 
 ```bassh
-$ npm install leonardojs
+$ npm install leonardojs --save
 ```
 
 ### bower
@@ -32,14 +32,22 @@ $ bower install leonardo
 
 ## 2. Add Leonardo script
 
+### Require in your code
+
+```javascript
+    // in dev environment
+    import "leonardojs";
+```
+
+### Directly in html
 ```html
-<!DOCTYPE HTML>
-<html>
-<body>
-  //.....
-  <script src="[bower_componenets|node_modules|other]/leonardo/dist/leonardo.js"></script>
-</body>
-</html>
+ <!DOCTYPE HTML>
+ <html>
+ <body>
+   //.....
+   <script src="[bower_components|node_modules|other]/leonardo/dist/leonardo.js"></script>
+ </body>
+ </html>
 ```
 
 ## 3. Run your app

@@ -17,8 +17,14 @@ export default class Launcher extends DOMElement {
   }
 
   bodyKeypress(e: KeyboardEvent) {
+    console.log(e);
     if (e.shiftKey && e.ctrlKey && e.keyCode === 76) {
       Events.dispatch(Events.TOGGLE_ICON);
+      return;
+    }
+    if (e.shiftKey && e.ctrlKey && e.keyCode === 75) {
+      Events.dispatch(Events.TOGGLE_LAUNCHER);
+      return;
     }
   }
 

@@ -182,7 +182,13 @@ export function leoConfiguration() {
       state.activeOption = !!option ?
         state.options.filter(function (_option) {
           return _option.name === option.name;
-        })[0] : state.options[0];
+        })[0]
+        :
+        state.options[0];
+
+      if (typeof state.activeOption === 'undefined') {
+        console.warn('state with state name:', state.name, 'does not have active option:', option.name);
+      }
     });
 
     return statesCopy;
