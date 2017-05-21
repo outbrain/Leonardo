@@ -9,6 +9,7 @@ export default class UIRoot {
   mainView: MainView;  
 
   constructor() {
+    window['Leonardo'] = window.parent['Leonardo'];
     switch (document.readyState) {
       default:
       case 'loading':

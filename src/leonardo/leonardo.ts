@@ -2,8 +2,7 @@ import {leoConfiguration} from './configuration.srv';
 import {Storage} from './storage.srv';
 import {polifylls} from './polyfills';
 import {Sinon} from './sinon.srv';
-import UIRoot from './ui/ui-root';
-
+// import UIRoot from './ui/ui-root';
 import './style/app.less';
 import '../../node_modules/ace-builds/src/ace.js';
 
@@ -21,6 +20,10 @@ Leonardo.loadSavedStates();
 
 // Init Sinon
 new Sinon();
-
 //Init UI
-new UIRoot();
+const f = document.createElement('iframe');
+// console.log(window.__leonardo_UI_src);
+f['san' + 'dbox'] = 'allow-scripts allow-same-origin';
+// f['srcdoc'] = uiSrc.slice(13, uiSrc.length-1);
+document.body.appendChild(f);
+
