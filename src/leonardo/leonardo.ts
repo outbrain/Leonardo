@@ -21,9 +21,31 @@ Leonardo.loadSavedStates();
 // Init Sinon
 new Sinon();
 //Init UI
-const f = document.createElement('iframe');
-// console.log(window.__leonardo_UI_src);
-f['san' + 'dbox'] = 'allow-scripts allow-same-origin';
-// f['srcdoc'] = uiSrc.slice(13, uiSrc.length-1);
+const f: any = document.createElement('iframe');
+f.width = '100%';
+f.height = '100%';
+
+f.sandbox = 'allow-scripts allow-same-origin';
+
+let timeout;
+
+function checkIframeLoaded() {
+  let iframeDoc = f.contentDocument || f.contentWindow ?  f.contentWindow.document : {};
+  if (  iframeDoc.readyState  == 'complete' ) {
+    f.contentWindow.eval(`(${window.__leonardo_UI_src})()`);
+    clearTimeout(timeout);
+    Object.assign(f.style, {
+      position: 'fixed',
+      top: 0,
+      bottom: 0,
+      right: 0,
+      left: 0,
+      border: 'none',
+      zIndex: 1000000000000000000000000000000000,
+    })
+  }
+  timeout = window.setTimeout(checkIframeLoaded, 100);
+}
+checkIframeLoaded();
 document.body.appendChild(f);
 

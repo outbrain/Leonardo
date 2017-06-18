@@ -60,7 +60,7 @@ LeonardoIframePlugin.prototype.apply = function(compiler) {
     const leoSrc =`
         ${apiSrc}
         //UI source
-        window.__leonardo_UI_src = function() { ${uiSrc} };
+        window.__leonardo_UI_src = function() { debugger;${uiSrc}};
         `;
     compilation.assets['leonardo.js'] = {
       source: function() {

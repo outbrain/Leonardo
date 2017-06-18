@@ -2,6 +2,7 @@ import Launcher from './launcher/launcher';
 import MainView from './main-view/main-view';
 import Utils from './ui-utils';
 import Events from './ui-events';
+import '../style/app.less';
 
 export default class UIRoot {
   leonardoApp: Node;
@@ -37,3 +38,5 @@ export default class UIRoot {
     Leonardo.toggleActivateAll(event.detail);
   }
 }
+
+new UIRoot();
