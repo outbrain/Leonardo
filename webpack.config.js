@@ -3,7 +3,7 @@ var btoa = require('btoa');
 module.exports = {
   entry: {
     'leonardo-api': "./src/leonardo/leonardo.ts",
-    'leonardo-ui': "./src/leonardo/ui/ui-root.ts"
+    'leonardo-ui': "./src/leonardo/ui-react/index.tsx"
   },
   output: {
     path: __dirname + "/dist",
@@ -12,14 +12,16 @@ module.exports = {
   },
   resolve: {
     // Add `.ts` and `.tsx` as a resolvable extension.
-    extensions: ['.ts', '.js']
+    extensions: ['.ts', '.tsx', '.js'] // note if using webpack 1 you'd also need a '' in the array as well
   },
+
   module: {
     rules: [
       {
-        test: /\.ts?$/,
+        test: /\.ts|.tsx?$/,
         use: ['ts-loader']
       },
+
       {
         test: /\/ace.js/,
         use: [
@@ -29,11 +31,11 @@ module.exports = {
       {
         test: /\.less$/,
         use: [{
-            loader: "style-loader" // creates style nodes from JS strings
+          loader: "style-loader" // creates style nodes from JS strings
         }, {
-            loader: "css-loader" // translates CSS into CommonJS
+          loader: "css-loader" // translates CSS into CommonJS
         }, {
-            loader: "less-loader" // compiles Less to CSS
+          loader: "less-loader" // compiles Less to CSS
         }]
       }
     ]
@@ -49,24 +51,25 @@ module.exports = {
     port: 9284,
     inline: true
   }
+};
+
+function LeonardoIframePlugin(options) {
 }
 
-function LeonardoIframePlugin(options) {}
-
-LeonardoIframePlugin.prototype.apply = function(compiler) {
-  compiler.plugin('emit', function(compilation, callback) {
+LeonardoIframePlugin.prototype.apply = function (compiler) {
+  compiler.plugin('emit', function (compilation, callback) {
     const apiSrc = compilation.assets['leonardo-api.js'].source();
     const uiSrc = compilation.assets['leonardo-ui.js'].source();
-    const leoSrc =`
+    const leoSrc = `
         ${apiSrc}
         //UI source
-        window.__leonardo_UI_src = function() { debugger;${uiSrc}};
+        window.__leonardo_UI_src = function() { ${uiSrc}};
         `;
     compilation.assets['leonardo.js'] = {
-      source: function() {
+      source: function () {
         return leoSrc;
       },
-      size: function() {
+      size: function () {
         return leoSrc.length;
       }
     };

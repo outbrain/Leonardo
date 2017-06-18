@@ -23,7 +23,12 @@
     "url": "https://github.com/outbrain/Leonardo/issues"
   },
   "homepage": "https://github.com/outbrain/Leonardo",
-  "dependencies": {},
+  "dependencies": {
+    "@types/react": "^15.0.29",
+    "@types/react-dom": "^15.5.0",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1"
+  },
   "devDependencies": {
     "@types/node": "^7.0.21",
     "ace-builds": "^1.2.6",
