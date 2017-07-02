@@ -1,10 +1,18 @@
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { Store, createStore } from 'redux';
+import { Provider } from 'react-redux';
 
-import * as React from "react";
-import * as ReactDOM from "react-dom";
+import App from './main/components/App';
+import rootReducer from './main/reducer';
 
-import { Hello } from "./components/Hello";
+const initialState = {};
+
+const store: Store<any> = createStore(rootReducer, initialState);
 
 ReactDOM.render(
-  <Hello compiler="TypeScript" framework="React" />,
-  document.getElementById("example")
+  <Provider  store={store}>
+    <App/>
+  </Provider>,
+  document.getElementById('app')
 );

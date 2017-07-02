@@ -1,7 +1,7 @@
 /// <reference path="leonardo.d.ts" />
-declare var Object: any;
+declare let Object: any;
 export function leoConfiguration() {
-  var _states = [],
+  let _states = [],
     _scenarios = {},
     _requestsLog = [],
     _savedStates = [],
@@ -40,7 +40,7 @@ export function leoConfiguration() {
   };
 
   function upsertOption(state, name, active) {
-    var statesStatus = Leonardo.storage.getStates();
+    let statesStatus = Leonardo.storage.getStates();
     statesStatus[state] = {
       name: name || findStateOption(state).name,
       active: active
@@ -177,7 +177,7 @@ export function leoConfiguration() {
     });
 
     statesCopy.forEach(function (state: any) {
-      var option = activeStates[state.name];
+      let option = activeStates[state.name];
       state.active = !!option && option.active;
       state.activeOption = !!option ?
         state.options.filter(function (_option) {
@@ -203,7 +203,7 @@ export function leoConfiguration() {
   function toggleActivateAll(flag: boolean) {
     let statesStatus = fetchStates();
     const statuses = statesStatus.reduce((obj, s) => {
-        var optionName = s.activeOption ? s.activeOption.name : s.options[0].name;
+        let optionName = s.activeOption ? s.activeOption.name : s.options[0].name;
         obj[s.name] = {name: optionName, active: flag};
         return obj;
       }
@@ -219,7 +219,7 @@ export function leoConfiguration() {
   }
 
   function getActiveStateOption(name) {
-    var state = fetchStates().filter(function (state) {
+    let state = fetchStates().filter(function (state) {
       return state.name === name
     })[0];
     return (state && state.active && findStateOption(name)) || null;
@@ -254,7 +254,7 @@ export function leoConfiguration() {
   }
 
   function upsert(configObj, overrideOption) {
-    var verb = configObj.verb || 'GET',
+    let verb = configObj.verb || 'GET',
       state = configObj.state,
       name = configObj.name,
       jsonpCallback = configObj.jsonpCallback,
@@ -264,16 +264,16 @@ export function leoConfiguration() {
       status = configObj.status || 200,
       data = (typeof configObj.data !== 'undefined') ? configObj.data : {},
       delay = configObj.delay || 0;
-    var defaultState = {};
+    let defaultState = {};
 
-    var defaultOption = {};
+    let defaultOption = {};
 
     if (!state) {
       console.log("leonardo: cannot upsert - state is mandatory");
       return;
     }
 
-    var stateItem = _states.filter(function (_state) {
+    let stateItem = _states.filter(function (_state) {
         return _state.name === state;
       })[0] || defaultState;
 
@@ -291,7 +291,7 @@ export function leoConfiguration() {
       _states.push(stateItem);
     }
 
-    var option = stateItem.options.filter(function (_option) {
+    let option = stateItem.options.filter(function (_option) {
       return _option.name === name
     })[0];
 
@@ -356,7 +356,7 @@ export function leoConfiguration() {
   }
 
   function setActiveScenario(name) {
-    var scenario = getScenario(name);
+    let scenario = getScenario(name);
     if (!scenario) {
       console.warn("leonardo: could not find scenario named " + name);
       return;
@@ -386,7 +386,7 @@ export function leoConfiguration() {
 
   function logRequest(method, url, data, status) {
     if (method && url) {
-      var req: INetworkRequest = {
+      let req: INetworkRequest = {
         verb: method,
         data: data,
         url: url.trim(),
@@ -414,15 +414,15 @@ export function leoConfiguration() {
   }
 
   function addOrUpdateSavedState(state) {
-    var option = state.activeOption;
+    let option = state.activeOption;
 
     //update local storage state
-    var _savedState = _savedStates.filter(function (_state) {
+    let _savedState = _savedStates.filter(function (_state) {
       return _state.name === state.name;
     })[0];
 
     if (_savedState) {
-      var _savedOption = _savedState.options.filter(function (_option) {
+      let _savedOption = _savedState.options.filter(function (_option) {
         return _option.name === option.name;
       })[0];
 
@@ -442,12 +442,12 @@ export function leoConfiguration() {
     }
 
     //update in memory state
-    var _state = _states.filter(function (__state) {
+    let _state = _states.filter(function (__state) {
       return __state.name === state.name;
     })[0];
 
     if (_state) {
-      var _option = _state.options.filter(function (__option) {
+      let _option = _state.options.filter(function (__option) {
         return __option.name === option.name;
       })[0];
 
@@ -465,7 +465,7 @@ export function leoConfiguration() {
   }
 
   function removeStateByName(name) {
-    var index = 0;
+    let index = 0;
     _states.forEach(function (state, i) {
       if (state.name === name) {
         index = i;
@@ -476,7 +476,7 @@ export function leoConfiguration() {
   }
 
   function removeSavedStateByName(name) {
-    var index = 0;
+    let index = 0;
     _savedStates.forEach(function (state, i) {
       if (state.name === name) {
         index = i;
@@ -495,8 +495,8 @@ export function leoConfiguration() {
   }
 
   function removeStateOptionByName(stateName, optionName) {
-    var sIndex = null;
-    var oIndex = null;
+    let sIndex = null;
+    let oIndex = null;
 
     _states.forEach(function (state, i) {
       if (state.name === stateName) {
@@ -518,8 +518,8 @@ export function leoConfiguration() {
   }
 
   function removeSavedStateOptionByName(stateName, optionName) {
-    var sIndex = null;
-    var oIndex = null;
+    let sIndex = null;
+    let oIndex = null;
 
     _savedStates.forEach(function (state, i) {
       if (state.name === stateName) {
@@ -550,9 +550,9 @@ export function leoConfiguration() {
   }
 
   function getRecordedStates() {
-    var requestsArr = _requestsLog
+    let requestsArr = _requestsLog
       .map(function (req) {
-        var state = fetchStatesByUrlAndMethod(req.url, req.verb);
+        let state = fetchStatesByUrlAndMethod(req.url, req.verb);
         return {
           name: state ? state.name : req.verb + " " + req.url,
           verb: req.verb,

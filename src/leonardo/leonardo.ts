@@ -61,7 +61,7 @@ function checkIframeLoaded() {
   let iframeDoc = f.contentDocument || f.contentWindow ?  f.contentWindow.document : {};
   if (  iframeDoc.readyState  == 'complete' ) {
     clearTimeout(timeout);
-    iframeDoc.body.innerHTML = '<div id="example"></div>';
+    iframeDoc.body.innerHTML = '<div id="app"></div>';
     f.contentWindow.eval(`(${window.__leonardo_UI_src})()`);
     Object.assign(f.style, {
       position: 'fixed',

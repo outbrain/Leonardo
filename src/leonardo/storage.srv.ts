@@ -18,7 +18,7 @@ export class Storage {
   }
 
   _getItem(key) {
-    var item = window.localStorage.getItem(key);
+    let item = window.localStorage.getItem(key);
     if (!item) {
       return null;
     }
@@ -57,7 +57,7 @@ export class Storage {
   }
 
   getSavedStates() {
-    var states = this._getItem(this.SAVED_STATES_KEY) || [];
+    let states = this._getItem(this.SAVED_STATES_KEY) || [];
     states.forEach(function (state) {
       state.options.forEach(option => {
         option.from_local = true;

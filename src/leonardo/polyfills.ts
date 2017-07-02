@@ -4,7 +4,7 @@ export function polifylls() {
   (function () {
     function CustomEvent(event, params) {
       params = params || {bubbles: false, cancelable: false, detail: undefined};
-      var evt = document.createEvent('CustomEvent');
+      let evt = document.createEvent('CustomEvent');
       evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
       return evt;
     }
@@ -24,10 +24,10 @@ export function polifylls() {
         }
 
         target = Object(target);
-        for (var index = 1; index < arguments.length; index++) {
-          var source = arguments[index];
+        for (let index = 1; index < arguments.length; index++) {
+          let source = arguments[index];
           if (source != null) {
-            for (var key in source) {
+            for (let key in source) {
               if (Object.prototype.hasOwnProperty.call(source, key)) {
                 target[key] = source[key];
               }
