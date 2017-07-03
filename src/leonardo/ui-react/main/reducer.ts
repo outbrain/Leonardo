@@ -1,8 +1,7 @@
 import { handleActions} from 'redux-actions';
 
-console.log(( window as any).Leonardo.getStates())
 const initialState: any = {
-  items:( window as any).Leonardo.getStates()
+  items: parent['Leonardo'].getStates()
 };
 
 export default handleActions({

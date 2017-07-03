@@ -2,6 +2,8 @@ import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import * as React from 'react'
 import State from './State'
+import './States.less'
+
 interface StatesProps {
   items: any[];
   dispatch: Dispatch<{}>;
@@ -16,7 +18,7 @@ class States extends React.Component<StatesProps, any> {
       )
     });
     return (
-      <div>
+      <div className="leonardo-states-list">
         {states}
       </div>
     );
