@@ -1,9 +1,11 @@
-import { combineReducers } from 'redux';
+import { handleActions} from 'redux-actions';
 
-import items from '../header';
+const initialState: any = {
+  items: parent['Leonardo'].getStates()
+}
 
-const rootReducer = combineReducers({
-  items: items,
-});
-
-export default rootReducer;
+export default handleActions({
+  ADD_STATE: (state, action) => {
+    return state
+  }
+}, initialState)

@@ -1,6 +1,6 @@
-import { Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import * as React from 'react';
+import { Dispatch } from 'redux'
+import * as React from 'react'
+import States from './States'
 
 interface AppProps {
   items: any[];
@@ -9,18 +9,10 @@ interface AppProps {
 
 class App extends React.Component<any, any> {
   render() {
-    const { todos, dispatch } = this.props;
-
     return (
-      <div>
-        <div>{this.props.items[0].text}</div>
-      </div>
-    );
+      <States />
+    )
   }
 }
 
-const mapStateToProps = state => ({
-  items: state.items
-});
-
-export default connect(mapStateToProps)(App);
+export default App
