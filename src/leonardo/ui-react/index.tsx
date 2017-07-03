@@ -15,6 +15,7 @@ import {Header} from './header'; // Or wherever you keep your reducers
 import Home2 from './Home2'; // Or wherever you keep your reducers
 import Home3 from './Home3'; // Or wherever you keep your reducers
 import './style.less';
+import States from './main/components/States';
 // Create a history of your choosing (we're using a browser history in this case)
 const history = createHistory();
 
@@ -40,7 +41,7 @@ ReactDOM.render(
     <ConnectedRouter history={history}>
       <div>
         <Route exact path="*" component={Header}/>
-        <Route path="/about" component={Home2}/>
+        <Route path="/about" component={States as any}/>
         <Route path="/more" component={Home3}/>
       </div>
     </ConnectedRouter>

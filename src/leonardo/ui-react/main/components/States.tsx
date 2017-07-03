@@ -23,8 +23,9 @@ class States extends React.Component<StatesProps, any> {
   }
 }
 
-const mapStateToProps = state => ({
-  items: state.items
-});
+const mapStateToProps = state => {
+  return ({
+    items: state.reducers.items
+})};
 
 export default connect(mapStateToProps)(States);
