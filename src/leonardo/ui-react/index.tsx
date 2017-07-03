@@ -6,13 +6,14 @@ import { Provider } from 'react-redux'
 
 import createHistory from 'history/createBrowserHistory'
 import { Route } from 'react-router'
+import { HashRouter } from 'react-router-dom'
+
 
 import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux'
 
 import rootReducer from './main/reducer'
 import {Reducer} from 'redux-actions';
 import {Header} from './header'; // Or wherever you keep your reducers
-import Home2 from './Home2'; // Or wherever you keep your reducers
 import Home3 from './Home3'; // Or wherever you keep your reducers
 import './style.less';
 import States from './main/components/States';
@@ -49,4 +50,3 @@ ReactDOM.render(
   document.getElementById('app')
 );
 
-console.log(window.location)

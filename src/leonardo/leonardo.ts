@@ -63,7 +63,7 @@ function checkIframeLoaded() {
       border: 'none',
       display: 'none',
       overflow: 'visible',
-      zIndex: 100000000000000,
+      zIndex: 2147483646,
     });
     return;
   }

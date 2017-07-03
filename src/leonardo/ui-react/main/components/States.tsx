@@ -18,7 +18,7 @@ class States extends React.Component<StatesProps, any> {
       )
     });
     return (
-      <div className="leonardo-states-list">
+      <div className="states-list">
         {states}
       </div>
     );
