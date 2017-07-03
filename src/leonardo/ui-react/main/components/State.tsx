@@ -20,7 +20,8 @@ export default class State extends React.Component<Prop, State>{
     const {item} = this.props;
     return (
       <div className="leonardo-state-item">
-        {item.name} | {item.active} | {item.url} | {item.verb}
+        <span className={"leonardo-state-verb " + "leonardo-state-verb-" + item.verb.toLowerCase()}>{item.verb}</span>
+        {item.name} | {item.active} | {item.url}
       </div>
     )
   }
