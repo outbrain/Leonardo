@@ -9,7 +9,7 @@ import { Route } from 'react-router'
 
 import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux'
 
-import reducers from './reducers'
+import rootReducer from './main/reducer'
 import {Reducer} from 'redux-actions';
 import {Header} from './header'; // Or wherever you keep your reducers
 import Home2 from './Home2'; // Or wherever you keep your reducers
@@ -25,7 +25,7 @@ const middleware = routerMiddleware(history);
 // Also apply our middleware for navigating
 const store = createStore(
   combineReducers({
-    reducers: reducers as Reducer<any, any>,
+    reducers: rootReducer as Reducer<any, any>,
     router: routerReducer as Reducer<any, any>
   }),
   applyMiddleware(middleware)
