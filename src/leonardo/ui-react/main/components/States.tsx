@@ -14,7 +14,7 @@ class States extends React.Component<StatesProps, any> {
       return (
         <State item={item} key={i}/>
       )
-    })
+    });
     return (
       <div>
         {states}

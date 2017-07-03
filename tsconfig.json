@@ -3,7 +3,8 @@
     "target": "es5",
     "module": "commonjs",
     "jsx": "react",
-    "types" : ["node"],
+    "types" : [],
+    "allowSyntheticDefaultImports": true,
     "lib": [
       "es7",
       "dom",

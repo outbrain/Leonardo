@@ -48,3 +48,5 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('app')
 );
+
+console.log(window.location)
