@@ -52,8 +52,8 @@ window.document.body.appendChild(launcher);
 const f: any = document.createElement('iframe');
 f.width = '100%';
 f.height = '100%';
-
-f.sandbox = 'allow-scripts allow-same-origin';
+f.src = "#";
+f.sandbox = 'allow-scripts allow-same-origin allow-modals';
 
 let timeout;
 
@@ -61,7 +61,10 @@ function checkIframeLoaded() {
   let iframeDoc = f.contentDocument || f.contentWindow ?  f.contentWindow.document : {};
   if (  iframeDoc.readyState  == 'complete' ) {
     clearTimeout(timeout);
+
     iframeDoc.body.innerHTML = '<div id="app"></div>';
+    iframeDoc.head.innerHTML = '<base href="." target="_blank">';
+
     f.contentWindow.eval(`(${window.__leonardo_UI_src})()`);
     Object.assign(f.style, {
       position: 'fixed',
@@ -72,7 +75,7 @@ function checkIframeLoaded() {
       border: 'none',
       display: 'none',
       overflow: 'visible',
-      zIndex: 1000000000000000000000000000000000,
+      zIndex: 100000000000000,
     });
     return;
   }
