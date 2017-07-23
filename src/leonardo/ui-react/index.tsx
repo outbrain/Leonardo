@@ -41,7 +41,7 @@ ReactDOM.render(
     { /* ConnectedRouter will use the store from Provider automatically */ }
     <ConnectedRouter history={history}>
       <div>
-        <Route exact path="*" component={Header}/>
+        <Route path="*" component={Header}/>
         <Route path="/about" component={States as any}/>
         <Route path="/more" component={Home3}/>
       </div>
@@ -49,4 +49,6 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('app')
 );
+history.push('/about');
+
 
