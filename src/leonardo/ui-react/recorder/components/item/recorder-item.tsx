@@ -8,7 +8,7 @@ interface RecorderItemProps {
   dispatch: Dispatch<{}>;
 }
 
-class RecorderItem extends React.Component<RecorderItemProps, any> {
+export default class RecorderItem extends React.Component<any, any> {
 
   render() {
     const {item} = this.props;
@@ -20,7 +20,3 @@ class RecorderItem extends React.Component<RecorderItemProps, any> {
   }
 }
 
-
-const mapStateToProps = state => state;
-
-export default connect(mapStateToProps)(RecorderItem);

@@ -2,6 +2,7 @@ import {Dispatch} from 'redux'
 import Scenarios from '../Scenarios/Scenarios';
 import * as React from 'react'
 import State from '../State/State'
+import StatesControlBar from '../States-control-bar/States-control-bar';
 import './States.less'
 import {connect} from 'react-redux';
 
@@ -28,7 +29,7 @@ class States extends React.Component<StatesProps, any> {
   }
 
   render() {
-    let {states, scenarios, selectedScenario, dispatch} = this.props;
+    let {states, scenarios, selectedScenario, filterValue, dispatch} = this.props;
     states = this.transformStates(states);
     return (
       <div className="states-container">
@@ -36,13 +37,7 @@ class States extends React.Component<StatesProps, any> {
           <Scenarios scenarios={scenarios} selectedScenario={selectedScenario} dispatch={dispatch}/>
         </div>
         <div className="states-list">
-          <div className="states-bar">
-            <input className="search-state"
-                   name="search-state"
-                   type="text"
-                   onChange={this.setFilter.bind(this)}
-                   placeholder="Search..."/>
-          </div>
+         <StatesControlBar filterValue={filterValue} dispatch={dispatch}/>
           {states}
         </div>
       </div>
@@ -58,6 +53,7 @@ const mapStateToProps = state => {
   return ({
     states: filterItems(state.reducers.states, state.reducers.filterValue),
     scenarios: state.reducers.scenarios,
+    filterValue: state.reducers.filterValue,
     selectedScenario: state.reducers.selectedScenario
   })
 };

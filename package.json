@@ -31,6 +31,7 @@
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",
     "react-router-redux": "5.0.0-alpha.6",
+    "react-widgets": "^3.4.8",
     "redux": "^3.7.1",
     "redux-actions": "^2.1.0"
   },
@@ -53,6 +54,7 @@
     "chromedriver": "^2.21.2",
     "css-loader": "^0.27.3",
     "del": "^1.2.0",
+    "file-loader": "^0.11.2",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.5.2",
     "gulp-css2js": "^1.0.2",
@@ -80,6 +82,7 @@
     "ts-loader": "^2.2.2",
     "tsify": "^0.13.2",
     "typescript": "^2.4.1",
+    "url-loader": "^0.5.9",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0",

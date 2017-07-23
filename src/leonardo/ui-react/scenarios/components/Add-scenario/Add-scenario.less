@@ -1,0 +1,40 @@
+.Add-scenario-container {
+  display: none;
+  position: absolute;
+
+  right: 0;
+  top: 0;
+  .add-scenario-box {
+    position: absolute;
+    display: flex;
+    height: 50px;
+    width: 425px;
+    right: 25px;
+    bottom: -90px;
+    border: 1px solid black;
+    background: white;
+    box-shadow: 4px 3px 5px 0 rgba(0, 0, 0, 0.75);
+    z-index: 1;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    > input {
+      flex: 1;
+      height: 25px;
+      margin-left: 5px;
+    }
+    > button {
+      margin-left: 5px;
+      background: white;
+      color: #212121;
+      border: 1px solid #E0E0E0;
+      font-size: 12px;
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 2px;
+      &[disabled]{
+        opacity: 0.5;
+      }
+    }
+  }
+}
