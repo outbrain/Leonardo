@@ -14,7 +14,8 @@ import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-ro
 import rootReducer from './main/reducer'
 import {Reducer} from 'redux-actions';
 import {Header} from './header'; // Or wherever you keep your reducers
-import Home3 from './Home3'; // Or wherever you keep your reducers
+import RecorderTab from './recorder-tab'; // Or wherever you keep your reducers
+import ExportTab from './export-tab'; // Or wherever you keep your reducers
 import './style.less';
 import States from './main/components/States/States';
 // Create a history of your choosing (we're using a browser history in this case)
@@ -43,8 +44,8 @@ ReactDOM.render(
       <div>
         <Route path="*" component={Header}/>
         <Route path="/states" component={States as any}/>
-        <Route path="/recorder" component={Home3}/>
-        <Route path="/export" component={Home3}/>
+        <Route path="/recorder" component={RecorderTab as any}/>
+        <Route path="/export" component={ExportTab}/>
       </div>
     </ConnectedRouter>
   </Provider>,
