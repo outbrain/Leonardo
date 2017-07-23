@@ -8,6 +8,6 @@ export const filterStates = createAction<any, string>(
 );
 
 export const selectScenario = createAction<any, string>(
-  'SET_FILTER',
-  (filterValue: string) => ({ filterValue })
+  'SET_SCENARIO',
+  (scenario: string) => ({ scenario })
 );

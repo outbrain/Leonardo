@@ -25,8 +25,8 @@ export default class State extends React.Component<StateProps, State>{
     const id = `state-toggle-${this.randomID}`;
     return (
       <div className="state-item">
-        <input defaultChecked={this.props.item.active} id={id} className="toggle toggle-ios" type="checkbox"/>
-        <label onClick={this.toggleState.bind(this)} className="toggle-btn" htmlFor={id} ></label>
+        <input checked={this.props.item.active} onChange={this.toggleState.bind(this)} id={id} className="toggle toggle-ios" type="checkbox"/>
+        <label className="toggle-btn" htmlFor={id} ></label>
         <span className={"state-verb " + "state-verb-" + item.verb.toLowerCase()}>{item.verb}</span>
         <span className="state-data-container">
           <span className="state-name">{item.name}</span>

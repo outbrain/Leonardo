@@ -4,14 +4,17 @@ import UiUtils from '../../../ui-utils';
 
 interface ScenariosProps {
   scenarios: any;
+  selectedScenario: any;
+  dispatch: any;
 }
 export default class Scenarios extends React.Component<any, any> {
   randomID = UiUtils.guidGenerator();
 
   render() {
-    let {scenarios} = this.props;
+    debugger;
+    let {scenarios, selectedScenario} = this.props;
     scenarios = scenarios.map((item, index) => {
-      return <li key={index}>{item}</li>;
+      return <li className={selectedScenario === item ? 'selected-scenario' : ''} key={index} onClick={this.selectScenario.bind(this, item)}>{item}</li>;
     });
     return (
         <div className="scenarios-list">
@@ -21,5 +24,12 @@ export default class Scenarios extends React.Component<any, any> {
         </div>
 
     )
+  }
+
+  selectScenario(scenario){
+    debugger;
+    window.parent['Leonardo'].setActiveScenario(scenario);
+    this.props.dispatch({type: 'SET_SCENARIO', scenario: scenario});
+
   }
 }

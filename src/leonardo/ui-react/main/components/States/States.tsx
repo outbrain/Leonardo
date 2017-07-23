@@ -9,6 +9,7 @@ interface StatesProps {
   filterValue: string,
   states: any[];
   scenarios: any[];
+  selectedScenario: any[];
   dispatch: Dispatch<{}>;
 }
 
@@ -27,12 +28,12 @@ class States extends React.Component<StatesProps, any> {
   }
 
   render() {
-    let {states, scenarios} = this.props;
+    let {states, scenarios, selectedScenario, dispatch} = this.props;
     states = this.transformStates(states);
     return (
       <div className="states-container">
         <div className="scenarios-container">
-          <Scenarios scenarios={scenarios}></Scenarios>
+          <Scenarios scenarios={scenarios} selectedScenario={selectedScenario} dispatch={dispatch}/>
         </div>
         <div className="states-list">
           <div className="states-bar">
@@ -56,7 +57,8 @@ const filterItems = (items, filter) => {
 const mapStateToProps = state => {
   return ({
     states: filterItems(state.reducers.states, state.reducers.filterValue),
-    scenarios: state.reducers.scenarios
+    scenarios: state.reducers.scenarios,
+    selectedScenario: state.reducers.selectedScenario
   })
 };
 

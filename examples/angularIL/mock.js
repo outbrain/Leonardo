@@ -215,6 +215,7 @@ Leonardo.addScenarios([
   {
     name: 'Full flow logged In',
     states: [
+      {name: 'Authenticate', option: 'success'},
       {name: 'Auth', option: 'success'},
       {name: 'Fetch Character', option: 'success empty'},
       {name: 'Create Character', option: 'success'}

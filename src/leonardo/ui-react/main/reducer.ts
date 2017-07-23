@@ -1,7 +1,9 @@
 import { handleActions} from 'redux-actions';
+import {debug} from 'util';
 
 const initialState: any = {
   filterValue: '',
+  selectedScenario: '',
   states: parent['Leonardo'].getStates(),
   scenarios: parent['Leonardo'].getScenarios(),
 
@@ -14,5 +16,9 @@ export default handleActions({
   },
   ADD_STATE: (state, action) => {
     return state
+  },
+  SET_SCENARIO: (state, action: any) => {
+    debugger;
+    return {...state, states: parent['Leonardo'].getStates(), selectedScenario: action.scenario}
   }
 }, initialState)
