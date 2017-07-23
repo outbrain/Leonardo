@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './State.less';
-import UiUtils from '../../ui-utils';
+import UiUtils from '../../../ui-utils';
 
 interface IState {
   name: string;
@@ -13,10 +13,11 @@ interface IState {
   verb: 'GET' | 'POST' | 'PUT';
 }
 
-interface Prop {
+interface StateProps {
   item: IState;
 }
-export default class State extends React.Component<Prop, State>{
+
+export default class State extends React.Component<StateProps, State>{
   randomID = UiUtils.guidGenerator();
 
   render() {

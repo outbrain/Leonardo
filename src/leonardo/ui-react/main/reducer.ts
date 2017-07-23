@@ -2,8 +2,11 @@ import { handleActions} from 'redux-actions';
 
 const initialState: any = {
   filterValue: '',
-  items: parent['Leonardo'].getStates()
+  states: parent['Leonardo'].getStates(),
+  scenarios: parent['Leonardo'].getScenarios(),
+
 };
+debugger;
 
 export default handleActions({
   SET_FILTER: (state, action: any) => {

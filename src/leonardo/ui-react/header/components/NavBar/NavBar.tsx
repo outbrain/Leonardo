@@ -12,9 +12,9 @@ export class NavBar extends React.Component<any, any> {
     return (
       <div className="navBar-container">
         <ul className="navBar-list">
-          <li className="navBar-item"><NavLink replace activeClassName="navBar-item-active" to="/about">states</NavLink></li>
-          <li className="navBar-item"><NavLink replace activeClassName="navBar-item-active" to="/more">recorder</NavLink></li>
-          <li className="navBar-item"><NavLink replace activeClassName="navBar-item-active" to="/more">exported code</NavLink></li>
+          <li className="navBar-item"><NavLink replace activeClassName="navBar-item-active" to="/states">states</NavLink></li>
+          <li className="navBar-item"><NavLink replace activeClassName="navBar-item-active" to="/recorder">recorder</NavLink></li>
+          <li className="navBar-item"><NavLink replace activeClassName="navBar-item-active" to="/export">exported code</NavLink></li>
         </ul>
       </div>
     );
