@@ -6,8 +6,7 @@ import { Provider } from 'react-redux'
 
 import createHistory from 'history/createBrowserHistory'
 import { Route } from 'react-router'
-import { HashRouter } from 'react-router-dom'
-
+import recorderReducer from './recorder/reducer';
 
 import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux'
 
@@ -29,6 +28,7 @@ const middleware = routerMiddleware(history);
 const store = createStore(
   combineReducers({
     reducers: rootReducer as Reducer<any, any>,
+    recorder: recorderReducer as Reducer<any, any>,
     router: routerReducer as Reducer<any, any>
   }),
   applyMiddleware(middleware)

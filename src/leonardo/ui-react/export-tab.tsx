@@ -1,15 +1,25 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
+import {Dispatch} from 'redux';
+import Export from './export/components/export/export';
 
-class ExportTab extends React.Component<any, any> {
+interface ExportTabProps {
+  states: any[];
+  dispatch: Dispatch<any>;
+}
 
+class ExportTab extends React.Component<ExportTabProps, any> {
   render() {
     return (
-      <div>
-      zzz
-      </div>
+        <Export states={this.props.states} dispatch={this.props.dispatch} />
     );
   }
 }
 
-export default connect()(ExportTab);
+const mapStateToProps = state => {
+  return ({
+    states: state.reducers.states
+  })
+};
+
+export default connect(mapStateToProps)(ExportTab);

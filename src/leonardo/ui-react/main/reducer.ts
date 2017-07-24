@@ -6,7 +6,6 @@ const initialState: any = {
   scenarios: parent['Leonardo'].getScenarios(),
 
 };
-debugger;
 
 export default handleActions({
   SET_FILTER: (state, action: any) => {
