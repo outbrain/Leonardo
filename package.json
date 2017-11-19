@@ -6,7 +6,7 @@
   "scripts": {
     "compile": "gulp build",
     "compile:watch": "gulp watch",
-    "test": "karma start test/unit/karma.conf.js --single-run",
+    "test": "karma start ./karma.conf.js --single-run",
     "start": "webpack-dev-server",
     "build": "webpack"
   },

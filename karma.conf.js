@@ -3,9 +3,6 @@ module.exports = function(config) {
   config.set({
     mime: { 'text/x-typescript': ['ts','tsx'] },
 
-    // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '../../',
-
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['jasmine'],
@@ -17,13 +14,13 @@ module.exports = function(config) {
 
     files: [
       'http://outbrain.github.io/Leonardo/dist/leonardo.js',
-      'test/unit/**/*.spec.ts'
+      'src/leonardo/**/*.spec.ts'
     ],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'test/unit/**/*.spec.ts': ['webpack']
+      'src/leonardo/**/*.spec.ts': ['webpack']
     },
 
 
