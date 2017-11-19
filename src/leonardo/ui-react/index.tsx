@@ -50,7 +50,7 @@ ReactDOM.render(
         <Route path="*" component={Header}/>
         <Route path="/states" component={States as any}/>
         <Route path="/recorder" component={RecorderTab as any}/>
-        <Route path="/export" component={ExportTab}/>
+        <Route path="/export" component={ExportTab as any}/>
         <CSSTransitionGroup
           transitionAppearTimeout={700}
           transitionAppear={true}
