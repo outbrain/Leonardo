@@ -1,15 +1,26 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
+import RecorderList from './recorder/components/list/recorder-list';
+import {Dispatch} from 'redux';
 
-class RecorderTab extends React.Component<any, any> {
+interface RecorderTabProps {
+  items: any[];
+  dispatch: Dispatch<any>;
+}
 
+class RecorderTab extends React.Component<RecorderTabProps, any> {
   render() {
     return (
-      <div>
-      zzz
-      </div>
+        <RecorderList items={this.props.items} dispatch={this.props.dispatch} />
     );
   }
 }
 
-export default connect()(RecorderTab);
+
+const mapStateToProps = state => {
+  return ({
+    items: state.recorder.recorderItems
+  })
+};
+
+export default connect(mapStateToProps)(RecorderTab);

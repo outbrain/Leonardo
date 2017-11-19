@@ -1,44 +1,46 @@
-import {Dispatch} from 'redux'
 import * as React from 'react'
 import './recorder-list.less'
-import {connect} from 'react-redux';
 import RecorderItem from '../item/recorder-item';
+import {Dispatch} from 'redux';
 
 interface RecorderListProps {
-  filterValue: string,
-  states: any[];
   items: any[];
-  dispatch: Dispatch<{}>;
+  dispatch: Dispatch<any>;
 }
 
 class RecorderList extends React.Component<RecorderListProps, any> {
 
+  private selectedItem;
+
+  constructor() {
+    super();
+    this.componentDidMount = () => {
+      this.props.dispatch({type: 'UPDATE_RECORDER_DATA'});
+    };
+  }
+
   transformStates(items) {
     return items
-      .map((item, i) => {
-        return (
-          <RecorderItem item={item} key={i}/>
-        )
-      });
+      .map((item, i) => Object.assign({}, item, { key: i }))
+      .map(item => Object.assign({}, item, { selected: this.selectedItem && this.selectedItem.key === item.key }))
+      .map(item => <RecorderItem item={item} key={item.key} onSelect={this.itemSelected.bind(this)} />);
+  }
+
+  itemSelected(item: any) {
+    this.selectedItem = item.selected ? null : item;
+    this.setState({});
   }
 
   render() {
     const {items} = this.props;
     return (
       <div className="recorder-container">
-        <div className="recorder-list">
+        <ul className="recorder-list">
           {this.transformStates(items)}
-        </div>
+        </ul>
       </div>
     );
   }
 }
 
-
-const mapStateToProps = state => {
-  return ({
-    items: state.recorderItems
-  })
-};
-
-export default connect(mapStateToProps)(RecorderList);
+export default RecorderList;

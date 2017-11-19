@@ -5,8 +5,8 @@ import {createStore, combineReducers, applyMiddleware} from 'redux'
 import {Provider} from 'react-redux'
 
 import createHistory from 'history/createBrowserHistory'
-import {Route} from 'react-router'
-import 'react-widgets/lib/less/react-widgets.less';
+import { Route } from 'react-router'
+import recorderReducer from './recorder/reducer';
 
 import {ConnectedRouter, routerReducer, routerMiddleware, push} from 'react-router-redux'
 
@@ -33,6 +33,7 @@ const store = createStore(
   combineReducers({
     commonReducer: commonReducer as Reducer<any, any>,
     scenariosReducer: ScenarioReducer as Reducer<any, any>,
+    recorder: recorderReducer as Reducer<any, any>,
     router: routerReducer as Reducer<any, any>
   }),
   applyMiddleware(middleware)

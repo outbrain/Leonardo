@@ -2,10 +2,11 @@ import {handleActions} from 'redux-actions';
 
 const initialState: any = {
   states: parent['Leonardo'].getStates(),
+  recorderItems: parent['Leonardo'].getRecordedStates(),
 };
 
 export default handleActions({
-  // ADD_STATE: (state, action) => {
-  //   return state
-  // }
+  UPDATE_RECORDER_DATA: (state) => {
+    return {...state, recorderItems: parent['Leonardo'].getRecordedStates()}
+  }
 }, initialState)
