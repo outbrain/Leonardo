@@ -1,12 +1,13 @@
 import {Dispatch} from 'redux'
 import Scenarios from '../Scenarios/Scenarios';
 import * as React from 'react'
-import State, {IState} from '../State/State'
+import State from '../State/State'
 import StatesControlBar from '../States-control-bar/States-control-bar';
 import './States.less'
 import {connect} from 'react-redux';
 import Slider from '../../../common/components/Slider/Slider';
 import EditOption from '../EditOption/EditOption';
+import {IState} from '../../../../configuration.srv';
 
 interface StatesProps {
   filterValue: string,

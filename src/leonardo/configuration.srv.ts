@@ -576,3 +576,14 @@ export function leoConfiguration() {
     _eventsElem && _eventsElem.dispatchEvent(_statesChangedEvent);
   }
 }
+
+export interface IState {
+  name: string;
+  active?: boolean;
+  activeOption?: {};
+  jsonCallbackAdditionalParams?: string;
+  jsonpCallback?: Function;
+  options: any[];
+  url: string;
+  verb: 'GET' | 'POST' | 'PUT';
+}
