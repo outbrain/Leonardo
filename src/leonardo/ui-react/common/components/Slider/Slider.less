@@ -1,18 +1,11 @@
 @slider-width: 500px;
+
 .slide-enter {
-  right: -501px;
+  right: -500px !important;
 }
 
 .slide-enter.slide-enter-active {
   right: 0;
-}
-
-.slide-leave {
-  right: 0;
-}
-
-.slide-leave.slide-leave-active {
-  right: -501px;
 }
 
 .slider-container {
@@ -31,15 +24,15 @@
   .slider-box {
     position: absolute;
     top: 0;
-
     display: inline-block;
     width: 500px;
     height: 100%;
     background-color: white;
     border-left: 1px solid black;
     overflow: auto;
-    transition: right 5s linear 100ms;
-    will-change: right;
+    transition: right 500ms linear;
+    right: 0;
+
     .slider-box-feet {
       position: absolute;
       bottom: 0;

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
+import {CSSTransitionGroup} from 'react-transition-group'
 
 import './Slider.less';
 interface SliderProps {
@@ -21,16 +22,24 @@ class Slider extends React.Component<any, any> {
   }
 
   render() {
+    const sliderBox = this.props.viewState ? [
+      <div className={this.getClassName()} key="sliderKey">
+        <div className="slider-box-body"></div>
+        <div className="slider-box-feet">
+          <button onClick={this.onCancel.bind(this)}>Cancel</button>
+          <button>Apply</button>
+        </div>
+      </div>
+    ] : [];
     return (
       <div style={this.getContainerStyle.call(this)} className="slider-container">
         <div className="slider-back"></div>
-        <div className={this.getClassName.call(this)}>
-          <div  className="slider-box-body"></div>
-          <div className="slider-box-feet">
-            <button onClick={this.onCancel.bind(this)}>Cancel</button>
-            <button>Apply</button>
-          </div>
-        </div>
+        <CSSTransitionGroup
+            transitionName="slide"
+            transitionEnterTimeout={300}
+            transitionLeave={false}>
+          {sliderBox}
+        </CSSTransitionGroup>
       </div>
     );
   }
