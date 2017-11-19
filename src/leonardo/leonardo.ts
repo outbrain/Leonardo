@@ -75,6 +75,7 @@ launcher.addEventListener('click', (e) => {
  }
  else {
    f.style.display = 'block';
+   f.contentDocument.getElementById('app').dispatchEvent(new Event('ui-show'));
  }
  e.stopPropagation();
 });
@@ -118,5 +119,4 @@ function checkIframeLoaded() {
 }
 checkIframeLoaded();
 document.body.appendChild(f);
-
 

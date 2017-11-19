@@ -64,4 +64,7 @@ ReactDOM.render(
 );
 history.push('/states');
 
+document.getElementById('app').addEventListener('ui-show', () => {
+  store.dispatch({type: 'UPDATE_RECORDER_DATA'});
+});
 
