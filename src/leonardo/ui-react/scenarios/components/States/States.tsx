@@ -5,6 +5,8 @@ import State, {IState} from '../State/State'
 import StatesControlBar from '../States-control-bar/States-control-bar';
 import './States.less'
 import {connect} from 'react-redux';
+import Slider from '../../../common/components/Slider/Slider';
+import EditOption from '../EditOption/EditOption';
 
 interface StatesProps {
   filterValue: string,
@@ -46,6 +48,9 @@ class States extends React.Component<StatesProps, any> {
          <StatesControlBar filterValue={filterValue} dispatch={dispatch}/>
           {states}
         </div>
+        <Slider>
+          <EditOption></EditOption>
+        </Slider>
       </div>
     );
   }

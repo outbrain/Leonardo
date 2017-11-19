@@ -24,7 +24,9 @@ class Slider extends React.Component<any, any> {
   render() {
     const sliderBox = this.props.viewState ? [
       <div className={this.getClassName()} key="sliderKey">
-        <div className="slider-box-body"></div>
+        <div className="slider-box-body">
+          {this.props.children}
+        </div>
         <div className="slider-box-feet">
           <button onClick={this.onCancel.bind(this)}>Cancel</button>
           <button>Apply</button>
