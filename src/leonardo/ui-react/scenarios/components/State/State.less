@@ -76,7 +76,25 @@
     align-self: center;
     border: 1px inset @gray;
     padding: 10px;
+    position:relative;
     border-radius: 5px;
+    margin-left: 25px;
+    &::before, &::after {
+      content: '';
+      position: absolute;
+      height: 1px;
+      width: 100%;
+      top: 50%;
+      left: 0;
+      background: #000;
+      border-radius: 5px;
+    }
+    &::after {
+      transform: rotate(-45deg);
+    }
+    &::before {
+      transform: rotate(45deg);
+    }
     &:active {
       border: 1px solid @gray;
     }
@@ -87,11 +105,24 @@
   }
 
   .rw-dropdownlist {
+    outline: none;
     height: 100%;
+    padding: 0 10px;
     width: 200px;
-    .rw-input{
+    .rw-input {
+      padding: 0 10px;
+      line-height: 26px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      background: #43A047;
+      color: #fff;
+      border: 0;
+      margin-left: 0;
+      position: relative;
+      width: 100%;
+      cursor: pointer;
       height: 100%;
-      line-height: 2;
     }
     .rw-i-caret-down {
       position: absolute;
@@ -99,5 +130,27 @@
       left: 50%;
       transform: translate(-50%, -50%);
     }
+    .rw-popup-container {
+      z-index: 9999;
+      position: relative;
+      margin-top: -16px;
+    }
+    .rw-popup {
+      ul {
+        background: #fff;
+        border: 1px solid #000;
+        list-style: none;
+        width: 218px;
+        padding: 0;
+        .rw-list-option {
+          padding: 0 10px;
+          line-height: 32px;
+          &:hover {
+            background: lightblue;
+          }
+        }
+      }
+    }
   }
+
 }

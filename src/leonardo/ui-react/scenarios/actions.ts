@@ -38,3 +38,10 @@ export const resetStates = createAction<any, string>(
     return {}
   }
 );
+
+export const refreshStates = createAction<any>(
+    'REFRESH_STATES',
+    ()=> {
+        console.log('here');
+    }
+);

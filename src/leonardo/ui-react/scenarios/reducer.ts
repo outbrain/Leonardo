@@ -27,6 +27,10 @@ export default handleActions({
   ADD_STATE: (state, action) => {
     return state
   },
+  REFRESH_STATES: (state, action: any) => {
+    console.log('here2');
+    return {...state, states: parent['Leonardo'].getStates()}
+  },
   SET_SCENARIO: (state, action: any) => {
     window.parent['Leonardo'].setActiveScenario(action.scenario);
     return {...state, states: parent['Leonardo'].getStates(), selectedScenario: action.scenario}

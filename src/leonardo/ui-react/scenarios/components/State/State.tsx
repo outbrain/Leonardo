@@ -1,8 +1,8 @@
 import * as React from 'react';
 import * as DropdownList from 'react-widgets/lib/DropdownList';
 import './State.less';
-import UiUtils from '../../../ui-utils';
-import {SyntheticEvent} from "react";
+import {connect} from "react-redux";
+import {refreshStates} from "../../actions";
 
 export interface IState {
   name: string;
@@ -15,11 +15,15 @@ export interface IState {
   verb: 'GET' | 'POST' | 'PUT';
 }
 
-interface StateProps {
+interface StateProps extends React.Props<any> {
   item: IState;
 }
 
-export default class State extends React.Component<StateProps, State>{
+interface PassedProps extends React.Props<any> {
+  removeState: any;
+}
+
+class State extends React.Component<StateProps & PassedProps, any>{
   private inputElement;
 
   render() {
@@ -34,13 +38,21 @@ export default class State extends React.Component<StateProps, State>{
           <span className="state-url">{item.url}</span>
         </span>
         <DropdownList
+          onClick={(e) => {e.stopPropagation()}}
           onSelect={this.selectOption.bind(this)}
           textField={'name'}
           valueField={'name'}
           defaultValue={item.activeOption}
           data={item.options}/>
+        <div title="Remove State" className="state-remove" onClick={this.removeState.bind(this)}></div>
       </div>
     )
+  }
+
+  removeState(event) {
+    event.stopPropagation();
+    window.parent['Leonardo'].removeState(this.props.item.name);
+    this.props.removeState();
   }
 
   selectOption(option) {
@@ -66,3 +78,11 @@ export default class State extends React.Component<StateProps, State>{
   }
 
 }
+
+const mapDispatchToProps = dispatch => {
+    return {
+        removeState: dispatch => refreshStates()
+    }
+};
+
+export default connect<{},PassedProps, StateProps>(null, mapDispatchToProps)(State);
