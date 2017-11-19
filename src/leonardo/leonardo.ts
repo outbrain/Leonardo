@@ -21,11 +21,57 @@ Leonardo.loadSavedStates();
 new Sinon();
 
 // Init launcher
+let keysPressed = {
+  ctrl: false,
+  shift: false,
+  l: false
+};
+
 const launcher: any = document.createElement('div');
 launcher.classList.add('leonardo-launcher');
+
+function hideLeonardo() {
+  keysPressed = {ctrl: false, shift: false, l: false};
+  f.style.display = 'none';
+}
+
+document.addEventListener('keydown', (e) => {
+  switch (e.keyCode) {
+      case 16:
+        keysPressed.ctrl = true;
+        break;
+      case 17:
+        keysPressed.shift = true;
+        break;
+      case 76:
+        keysPressed.l = true;
+        break;
+      case 27:
+        if (f.style.display === 'block') {
+          hideLeonardo();
+        }
+        break;
+  }
+  if (f.style.display === 'none' && keysPressed.ctrl && keysPressed.shift && keysPressed.l) {
+    f.style.display = 'block';
+  }
+});
+document.addEventListener('keyup', (e) => {
+  switch (e.keyCode) {
+      case 16:
+          keysPressed.ctrl = false;
+          break;
+      case 17:
+          keysPressed.shift = false;
+          break;
+      case 76:
+          keysPressed.l = false;
+          break;
+  }
+});
 launcher.addEventListener('click', (e) => {
  if(f.style.display === 'block'){
-   f.style.display = 'none';
+   hideLeonardo();
  }
  else {
    f.style.display = 'block';
