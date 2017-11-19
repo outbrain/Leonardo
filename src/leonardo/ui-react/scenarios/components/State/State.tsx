@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as DropdownList from 'react-widgets/lib/DropdownList';
 import './State.less';
 import UiUtils from '../../../ui-utils';
+import {SyntheticEvent} from "react";
 
 export interface IState {
   name: string;
@@ -19,15 +20,14 @@ interface StateProps {
 }
 
 export default class State extends React.Component<StateProps, State>{
-  randomID = UiUtils.guidGenerator();
+  private inputElement;
 
   render() {
     const {item} = this.props;
-    const id = `state-toggle-${this.randomID}`;
     return (
       <div className="state-item">
-        <input checked={item.active} onChange={this.toggleState.bind(this)}  id={id} className="toggle toggle-ios" type="checkbox"/>
-        <label className="toggle-btn" htmlFor={id} ></label>
+        <input checked={item.active} ref={(input) => {this.inputElement = input;}} className="toggle toggle-ios" type="checkbox"/>
+        <label className="toggle-btn" onClick={this.toggleState.bind(this)}></label>
         <span className={"state-verb " + "state-verb-" + item.verb.toLowerCase()}>{item.verb}</span>
         <span className="state-data-container">
           <span className="state-name">{item.name}</span>
@@ -60,7 +60,9 @@ export default class State extends React.Component<StateProps, State>{
   }
 
   private toggleState(event: Event) {
-    this.setItemState(event.target['checked']);
+    event.stopPropagation();
+    this.inputElement.checked = !this.inputElement.checked;
+    this.setItemState(this.inputElement.checked);
   }
 
 }
