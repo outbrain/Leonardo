@@ -17,7 +17,6 @@ export default handleActions({
     return {...state, filterValue: action.filterValue}
   },
   ADD_SCENARIO: (state, action: any) => {
-    debugger;
     window.parent['Leonardo'].addScenario({
       name: action.scenario,
       states: window.parent['Leonardo'].getStates().filter((state) => state.active),

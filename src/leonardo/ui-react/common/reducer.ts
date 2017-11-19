@@ -7,7 +7,6 @@ const initialState: any = {
 
 export default handleActions({
   TOGGLE_SLIDER_VIEW: (state, action: any) => {
-    debugger;
     return {...state, sliderViewState: action.viewState, initData: action.initData}
   }
 

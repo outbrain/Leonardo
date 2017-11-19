@@ -23,7 +23,9 @@ class States extends React.Component<StatesProps, any> {
     return items
       .map((item, i) => {
         return (
-          <div className="state-container" onClick={this.editState.bind(this, item)} key={i}><State  item={item}/></div>
+          <div className="state-container" onClick={this.editState.bind(this, item)} key={i}>
+            <State  item={item}/>
+          </div>
         )
       });
   }

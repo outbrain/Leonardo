@@ -37,7 +37,6 @@ export default class AddScenario extends React.Component<AddScenarioProps, any> 
   }
 
   onSave() {
-    debugger;
     // if(window.parent['Leonardo'].getScenarios().some(scenario => scenario.name === this.scenarioName)){
     //   alert('Scenario name already in use');
     //   return;

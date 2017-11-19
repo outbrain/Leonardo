@@ -49,7 +49,6 @@ export default class State extends React.Component<StateProps, State>{
   }
 
   setItemState(state: boolean) {
-    debugger;
     if (state) {
       window.parent['Leonardo'].activateStateOption(this.props.item.name, (this.props.item.activeOption as any).name);
     }
