@@ -18,7 +18,7 @@ class ExportTab extends React.Component<ExportTabProps, any> {
 
 const mapStateToProps = state => {
   return ({
-    states: state.reducers.states
+    states: state.scenariosReducer.states
   })
 };
 
