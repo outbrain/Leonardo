@@ -26,7 +26,7 @@ export default class State extends React.Component<StateProps, State>{
     const {item} = this.props;
     return (
       <div className="state-item">
-        <input checked={item.active} ref={(input) => {this.inputElement = input;}} className="toggle toggle-ios" type="checkbox"/>
+        <input defaultChecked={item.active} ref={(input) => {this.inputElement = input;}} className="toggle toggle-ios" type="checkbox"/>
         <label className="toggle-btn" onClick={this.toggleState.bind(this)}></label>
         <span className={"state-verb " + "state-verb-" + item.verb.toLowerCase()}>{item.verb}</span>
         <span className="state-data-container">
