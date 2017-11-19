@@ -3,18 +3,21 @@
 .state-item:nth-child(2n+3) {
   background: #eee;
 }
+
 .state-item:hover {
   cursor: pointer;
   background: rgba(47, 204, 255, 0.32);
 }
+
 .state-item-detailed {
-  background: #999966!important;
-  &:hover{
-    background:  #ccccb3!important;
+  background: #999966 !important;
+  &:hover {
+    background: #ccccb3 !important;
   }
 }
 
 .state-item {
+  height: 30px;
   display: flex;
   margin-bottom: 3px;
   .state-verb {
@@ -81,5 +84,20 @@
 
   &.state-item-hidden {
     display: none;
+  }
+
+  .rw-dropdownlist {
+    height: 100%;
+    width: 200px;
+    .rw-input{
+      height: 100%;
+      line-height: 2;
+    }
+    .rw-i-caret-down {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
 }

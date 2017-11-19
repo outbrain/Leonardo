@@ -1,7 +1,7 @@
 import {Dispatch} from 'redux'
 import Scenarios from '../Scenarios/Scenarios';
 import * as React from 'react'
-import State from '../State/State'
+import State, {IState} from '../State/State'
 import StatesControlBar from '../States-control-bar/States-control-bar';
 import './States.less'
 import {connect} from 'react-redux';
@@ -23,9 +23,13 @@ class States extends React.Component<StatesProps, any> {
     return items
       .map((item, i) => {
         return (
-          <State item={item} key={i}/>
+          <div className="state-container" onClick={this.editState.bind(this, item)} key={i}><State  item={item}/></div>
         )
       });
+  }
+
+  editState(item: IState) {
+    this.props.dispatch({type: 'TOGGLE_SLIDER_VIEW', viewState: true, initData: item})
   }
 
   render() {
@@ -50,11 +54,12 @@ const filterItems = (items, filter) => {
 };
 
 const mapStateToProps = state => {
+  const {scenariosReducer} = state;
   return ({
-    states: filterItems(state.reducers.states, state.reducers.filterValue),
-    scenarios: state.reducers.scenarios,
-    filterValue: state.reducers.filterValue,
-    selectedScenario: state.reducers.selectedScenario
+    states: filterItems(scenariosReducer.states, scenariosReducer.filterValue),
+    scenarios: scenariosReducer.scenarios,
+    filterValue: scenariosReducer.filterValue,
+    selectedScenario: scenariosReducer.selectedScenario
   })
 };
 

@@ -3,7 +3,7 @@ import * as DropdownList from 'react-widgets/lib/DropdownList';
 import './State.less';
 import UiUtils from '../../../ui-utils';
 
-interface IState {
+export interface IState {
   name: string;
   active?: boolean;
   activeOption?: {};
@@ -22,7 +22,6 @@ export default class State extends React.Component<StateProps, State>{
   randomID = UiUtils.guidGenerator();
 
   render() {
-    debugger;
     const {item} = this.props;
     const id = `state-toggle-${this.randomID}`;
     return (
@@ -38,13 +37,14 @@ export default class State extends React.Component<StateProps, State>{
           onSelect={this.selectOption.bind(this)}
           textField={'name'}
           valueField={'name'}
-          defaultValue={item.options[0]}
+          defaultValue={item.activeOption}
           data={item.options}/>
       </div>
     )
   }
 
   selectOption(option) {
+    this.props.item.activeOption = option;
     window.parent['Leonardo'].activateStateOption(this.props.item.name, (this.props.item.activeOption as any).name);
   }
 
