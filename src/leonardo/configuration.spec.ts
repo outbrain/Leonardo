@@ -1,37 +1,83 @@
 /// <reference path="../../typings/angularjs/angular.d.ts" />
 /// <reference path="../../typings/jasmine/jasmine.d.ts" />
-import { leoConfiguration } from '../../src/leonardo/configuration.srv'
+import {leoConfiguration} from '../../src/leonardo/configuration.srv'
+import {IState} from './configuration.srv';
 
-describe('addStates', function() {
+const generateState = ({
+  name = "Create Character",
+  url =  "/character",
+  verb = "POST",
+  options = [
+    {
+      "name": "success",
+      "status": 200,
+      "data": {},
+      "delay": "2500"
+    },
+    {
+      "name": "Failure",
+      "status": "500",
+      "data": {
+        "msg": "you have a crappy server"
+      },
+      "delay": "2000"
+    }
+  ]
+}:IState) :IState => {
 
+  return {
+    name,
+    url,
+    verb,
+    options
+  }
+}
+
+describe('configurations', function() {
   it('should add a state', function() {
     var leo = leoConfiguration();
 
+    leo.addState(generateState({} as IState), false);
+
+    var states = leo.getStates();
+    expect(states.length).toBe(1);
+  });
+
+  it('should add two different states', function() {
+    var leo = leoConfiguration();
+
     leo.addStates([
-      {
-        "name": "Create Character",
-        "url": "/character",
-        "verb": "POST",
-        "options": [
-          {
-            "name": "success",
-            "status": 200,
-            "data": {},
-            "delay": "2500"
-          },
-          {
-            "name": "Failure",
-            "status": "500",
-            "data": {
-              "msg": "you have a crappy server"
-            },
-            "delay": "2000"
-          }
-        ]
-      }
+      generateState({name: "logout"} as IState),
+      generateState({} as IState)
+    ]);
+
+    var states = leo.getStates();
+    expect(states.length).toBe(2);
+  });
+
+  it('should merge two similar states', function() {
+    var leo = leoConfiguration();
+
+    const state = generateState({name: "logout"} as IState);
+
+    leo.addStates([
+      state,
+      state
     ]);
 
     var states = leo.getStates();
     expect(states.length).toBe(1);
+  });
+
+  it('should remove a state', function() {
+    var leo = leoConfiguration();
+
+    const state = generateState({name: "logout"} as IState);
+
+    leo.addState(state, false);
+    leo.removeState(state);
+
+    var states = leo.getStates();
+    expect(states.length).toBe(0);
   });
 });

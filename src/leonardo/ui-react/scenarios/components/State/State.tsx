@@ -3,17 +3,7 @@ import * as DropdownList from 'react-widgets/lib/DropdownList';
 import './State.less';
 import {connect} from "react-redux";
 import {refreshStates} from "../../actions";
-
-export interface IState {
-  name: string;
-  active?: boolean;
-  activeOption?: {};
-  jsonCallbackAdditionalParams?: string;
-  jsonpCallback?: Function;
-  options: any[];
-  url: string;
-  verb: 'GET' | 'POST' | 'PUT';
-}
+import { IState } from '../../../../configuration.srv';
 
 interface StateProps extends React.Props<any> {
   item: IState;
