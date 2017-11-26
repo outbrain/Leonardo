@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as DropdownList from 'react-widgets/lib/DropdownList';
 import './State.less';
 import {connect} from "react-redux";
-import {refreshStates} from "../../actions";
+import {removeState} from "../../actions";
 import { IState } from '../../../../configuration.srv';
 
 interface StateProps extends React.Props<any> {
@@ -42,7 +42,7 @@ class State extends React.Component<StateProps & PassedProps, any>{
   removeState(event) {
     event.stopPropagation();
     window.parent['Leonardo'].removeState(this.props.item.name);
-    this.props.removeState();
+    this.props.removeState(this.props.item);
   }
 
   selectOption(option) {
@@ -71,7 +71,7 @@ class State extends React.Component<StateProps & PassedProps, any>{
 
 const mapDispatchToProps = dispatch => {
     return {
-        removeState: dispatch => refreshStates()
+      removeState: item => dispatch(removeState({stateName: item.name}))
     }
 };
 

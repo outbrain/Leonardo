@@ -39,9 +39,4 @@ export const resetStates = createAction<any, string>(
   }
 );
 
-export const refreshStates = createAction<any>(
-    'REFRESH_STATES',
-    ()=> {
-        console.log('here');
-    }
-);
+export const removeState = createAction<any>('REMOVE_STATE');
