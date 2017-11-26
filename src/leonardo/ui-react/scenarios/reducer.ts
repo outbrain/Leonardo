@@ -27,8 +27,10 @@ export default handleActions({
   ADD_STATE: (state, action) => {
     return state
   },
+  REMOVE_STATE: (state, action) => {
+    return {...state, states: state.states.filter(s => s.name != action.payload.stateName)};
+  },
   REFRESH_STATES: (state, action: any) => {
-    console.log('here2');
     return {...state, states: parent['Leonardo'].getStates()}
   },
   SET_SCENARIO: (state, action: any) => {
