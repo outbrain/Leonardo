@@ -3,13 +3,15 @@ import {connect} from 'react-redux';
 import {CSSTransitionGroup} from 'react-transition-group'
 
 import './Slider.less';
-interface SliderProps {
-  viewState: boolean,
-  initData: any,
-  dispatch: boolean
+interface ISliderState {
+  viewState: boolean
+}
+interface ISliderProps extends ISliderState {
+  onApply: Function,
+  dispatch: any
 }
 
-class Slider extends React.Component<any, any> {
+class Slider extends React.Component<ISliderProps, any> {
 
   getContainerStyle() {
     return {
@@ -29,7 +31,7 @@ class Slider extends React.Component<any, any> {
         </div>
         <div className="slider-box-feet">
           <button onClick={this.onCancel.bind(this)}>Cancel</button>
-          <button>Apply</button>
+          <button onClick={this.onApply.bind(this)}>Apply</button>
         </div>
       </div>
     ] : [];
@@ -50,6 +52,10 @@ class Slider extends React.Component<any, any> {
     this.props.dispatch({type: 'TOGGLE_SLIDER_VIEW', viewState: false, initData: {}})
   }
 
+  onApply(item: any) {
+    this.props.onApply && this.props.onApply(item);
+  }
+
 }
 
 const mapStateToProps = state => {
@@ -58,4 +64,4 @@ const mapStateToProps = state => {
   })
 };
 
-export default connect(mapStateToProps)(Slider);
+export default connect<ISliderState, any, any>(mapStateToProps)(Slider);

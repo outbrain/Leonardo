@@ -1,16 +1,19 @@
 import * as React from 'react';
 import './EditOption.less';
-import {connect} from 'react-redux';
+import {IState} from '../../../../configuration.srv';
 
-interface EditOptionProps {
-  selectedState: any;
-  dispatch: any;
+interface IEditOptionProps {
+  selectedState: IState;
+  onChange: any;
 }
 
-class EditOption extends React.Component<EditOptionProps, any>{
+class EditOption extends React.Component<IEditOptionProps, any>{
 
   render() {
     const {selectedState} = this.props;
+    if (!selectedState || !selectedState.activeOption) {
+      return null;
+    }
     return (
       <div className="leonardo-states-detail-container">
         <div className="leonardo-states-detail-top">
@@ -19,24 +22,53 @@ class EditOption extends React.Component<EditOptionProps, any>{
         <div className="leonardo-states-detail-input">
           <span>Source: {selectedState.activeOption.from_local ? 'Local Storage': 'Configuration'} </span>
         </div>
-        <div className="leonardo-states-detail-input"><div>Status code: </div><input className="leonardo-states-detail-status" defaultValue={selectedState.activeOption.status}/></div>
-        <div className="leonardo-states-detail-input"><div>Delay: </div><input className="leonardo-states-detail-delay" defaultValue={selectedState.activeOption.delay}/></div>
+        <div className="leonardo-states-detail-input">
+          <div>Status code: </div>
+          <input className="leonardo-states-detail-status"
+                 value={selectedState.activeOption.status}
+                 name="status"
+                 onChange={this.props.onChange}/>
+        </div>
+        <div className="leonardo-states-detail-input">
+          <div>Delay: </div>
+          <input className="leonardo-states-detail-delay"
+                 value={selectedState.activeOption.delay}
+                 name="delay"
+                 onChange={this.props.onChange}/>
+        </div>
         <div>
           <br/>
-          <span>Response:</span>    <button className="leonardo-button leonardo-states-detail-edit">Advanced</button>
-          <textarea className="leonardo-states-detail-json"></textarea>
+          <span>Response:</span>
+          <button className="leonardo-button leonardo-states-detail-edit">Advanced</button>
+          <textarea className="leonardo-states-detail-json"
+                    value={this.getResString(selectedState.activeOption.data)}
+                    name="data"
+                    onChange={this.props.onChange}>
+          </textarea>
         </div>
       </div>
     )
   }
+
+  private getResString(resopnse: string): string {
+    let resStr: string;
+    try {
+      switch (typeof resopnse) {
+        case 'function':
+          resStr = resopnse.toString();
+          break;
+        case 'object':
+          resStr = JSON.stringify(resopnse, null, 4);
+          break;
+        default:
+          return resStr = resopnse;
+      }
+    }
+    catch (e) {
+      return resStr;
+    }
+    return resStr;
+  }
 }
 
-
-const mapStateToProps = state => {
-  const {commonReducer} = state;
-  return ({
-    selectedState: commonReducer.selectedState
-  })
-};
-
-export default connect(mapStateToProps)(EditOption);
+export default EditOption;

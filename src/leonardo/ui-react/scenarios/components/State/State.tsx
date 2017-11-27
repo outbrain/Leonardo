@@ -71,7 +71,7 @@ class State extends React.Component<StateProps & PassedProps, any>{
 
 const mapDispatchToProps = dispatch => {
     return {
-        removeState: dispatch => refreshStates()
+      removeState: dispatch => refreshStates()
     }
 };
 

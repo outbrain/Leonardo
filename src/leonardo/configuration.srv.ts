@@ -580,7 +580,7 @@ export function leoConfiguration() {
 export interface IState {
   name: string;
   active?: boolean;
-  activeOption?: {};
+  activeOption?: any;
   jsonCallbackAdditionalParams?: string;
   jsonpCallback?: Function;
   options: any[];

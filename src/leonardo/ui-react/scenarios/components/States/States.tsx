@@ -18,6 +18,7 @@ interface StatesProps {
 }
 
 class States extends React.Component<StatesProps, any> {
+  editItem: IState;
   private setFilter(event) {
     this.props.dispatch({type: 'SET_FILTER', filterValue: event.target.value.toLowerCase()});
   }
@@ -34,7 +35,15 @@ class States extends React.Component<StatesProps, any> {
   }
 
   editState(item: IState) {
-    this.props.dispatch({type: 'TOGGLE_SLIDER_VIEW', viewState: true, initData: item})
+    this.editItem = item;
+    this.props.dispatch({type: 'TOGGLE_SLIDER_VIEW', viewState: true})
+  }
+
+  onEditStateChanged(event) {
+    this.editItem.activeOption[event.target.name] = event.target.value;
+  }
+
+  saveEditState() {
   }
 
   render() {
@@ -49,8 +58,8 @@ class States extends React.Component<StatesProps, any> {
          <StatesControlBar filterValue={filterValue} dispatch={dispatch}/>
           {states}
         </div>
-        <Slider>
-          <EditOption></EditOption>
+        <Slider onApply={this.saveEditState}>
+          <EditOption onChange={this.onEditStateChanged.bind(this)} selectedState={this.editItem}></EditOption>
         </Slider>
       </div>
     );
