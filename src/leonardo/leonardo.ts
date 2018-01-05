@@ -33,6 +33,7 @@ launcher.classList.add('leonardo-launcher');
 function hideLeonardo() {
   keysPressed = {ctrl: false, shift: false, l: false};
   f.style.display = 'none';
+  document.body.classList.remove('leonardo-launcher-active');
 }
 
 document.addEventListener('keydown', (e) => {
@@ -70,14 +71,15 @@ document.addEventListener('keyup', (e) => {
   }
 });
 launcher.addEventListener('click', (e) => {
- if(f.style.display === 'block'){
-   hideLeonardo();
- }
- else {
-   f.style.display = 'block';
-   f.contentDocument.getElementById('app').dispatchEvent(new Event('ui-show'));
- }
- e.stopPropagation();
+  if (f.style.display === 'block') {
+    hideLeonardo();
+  }
+  else {
+    f.style.display = 'block';
+    f.contentDocument.getElementById('app').dispatchEvent(new Event('ui-show'));
+  }
+  document.body.classList.add('leonardo-launcher-active');
+  e.stopPropagation();
 });
 
 

@@ -25,14 +25,14 @@ class EditOption extends React.Component<IEditOptionProps, any>{
         <div className="leonardo-states-detail-input">
           <div>Status code: </div>
           <input className="leonardo-states-detail-status"
-                 value={selectedState.activeOption.status}
+                 defaultValue={selectedState.activeOption.status}
                  name="status"
                  onChange={this.props.onChange}/>
         </div>
         <div className="leonardo-states-detail-input">
           <div>Delay: </div>
           <input className="leonardo-states-detail-delay"
-                 value={selectedState.activeOption.delay}
+                 defaultValue={selectedState.activeOption.delay}
                  name="delay"
                  onChange={this.props.onChange}/>
         </div>
@@ -41,7 +41,7 @@ class EditOption extends React.Component<IEditOptionProps, any>{
           <span>Response:</span>
           <button className="leonardo-button leonardo-states-detail-edit">Advanced</button>
           <textarea className="leonardo-states-detail-json"
-                    value={this.getResString(selectedState.activeOption.data)}
+                    defaultValue={this.getResString(selectedState.activeOption.data)}
                     name="data"
                     onChange={this.props.onChange}>
           </textarea>

@@ -44,6 +44,11 @@ export default handleActions({
   RESET_STATE: (state, action: any) => {
     window.parent['Leonardo'].storage.removeStates();
     return {...state, states: parent['Leonardo'].getStates()}
+  },
+  UPDATE_STATE: (state, action: any) => {
+    action.updatedState.activeOption.status = parseInt(action.updatedState.activeOption.status);
+    window.parent['Leonardo'].addOrUpdateSavedState(action.updatedState);
+    return {...state, states: parent['Leonardo'].getStates()}
   }
 
 }, initialState)

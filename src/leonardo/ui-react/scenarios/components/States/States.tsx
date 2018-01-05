@@ -36,7 +36,7 @@ class States extends React.Component<StatesProps, any> {
 
   editState(item: IState) {
     this.editItem = item;
-    this.props.dispatch({type: 'TOGGLE_SLIDER_VIEW', viewState: true})
+    this.props.dispatch({type: 'TOGGLE_SLIDER_VIEW', viewState: true});
   }
 
   onEditStateChanged(event) {
@@ -44,6 +44,8 @@ class States extends React.Component<StatesProps, any> {
   }
 
   saveEditState() {
+    this.props.dispatch({type: 'UPDATE_STATE', updatedState: this.editItem});
+    this.props.dispatch({type: 'TOGGLE_SLIDER_VIEW', viewState: false});
   }
 
   render() {
@@ -58,7 +60,7 @@ class States extends React.Component<StatesProps, any> {
          <StatesControlBar filterValue={filterValue} dispatch={dispatch}/>
           {states}
         </div>
-        <Slider onApply={this.saveEditState}>
+        <Slider onApply={this.saveEditState.bind(this)}>
           <EditOption onChange={this.onEditStateChanged.bind(this)} selectedState={this.editItem}></EditOption>
         </Slider>
       </div>
