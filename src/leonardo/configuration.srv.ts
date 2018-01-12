@@ -7,7 +7,8 @@ export function leoConfiguration() {
     _savedStates = [],
     _statesChangedEvent = new CustomEvent('leonardo:setStates'),
     _eventsElem = document.body,
-    _jsonpCallbacks = {};
+    _jsonpCallbacks = {},
+    _consoleOutputEnabled = null;
 
   // Core API
   // ----------------
@@ -34,9 +35,9 @@ export function leoConfiguration() {
     removeOption: removeOption,
     onStateChange: onSetStates,
     statesChanged: statesChanged,
+    toggleConsoleOutput: toggleConsoleOutput,
     _logRequest: logRequest,
     _jsonpCallbacks: _jsonpCallbacks
-
   };
 
   function upsertOption(state, name, active) {
@@ -381,7 +382,7 @@ export function leoConfiguration() {
     url?: string;
     status: string;
     timestamp: Date;
-    state?: string;
+    state?: IState;
   }
 
   function logRequest(method, url, data, status) {
@@ -394,6 +395,7 @@ export function leoConfiguration() {
         timestamp: new Date()
       };
       req.state = fetchStatesByUrlAndMethod(req.url, req.verb);
+      logRequestToConsole(req);
       _requestsLog.push(req);
     }
   }
@@ -574,6 +576,26 @@ export function leoConfiguration() {
 
   function statesChanged() {
     _eventsElem && _eventsElem.dispatchEvent(_statesChangedEvent);
+  }
+
+  function toggleConsoleOutput(enable: boolean) {
+    _consoleOutputEnabled = enable;
+    Leonardo.storage.setConsoleOutput(_consoleOutputEnabled);
+  }
+
+  function logRequestToConsole(req: INetworkRequest) {
+    if (_consoleOutputEnabled === null) {
+      _consoleOutputEnabled = Leonardo.storage.getConsoleOutput();
+    }
+    if (_consoleOutputEnabled) {
+      const mocked = req.state && req.state.active;
+      if (mocked) {
+        console.groupCollapsed(`Leonardo logger: ${req.verb} ${req.url}`);
+        console.log('status code: ', req.status);
+        console.log('response: ', req.data);
+        console.groupEnd();
+      }
+    }
   }
 }
 

@@ -8,6 +8,7 @@ export class Storage {
   private SCENARIOS_STORE_KEY;
   private SAVED_STATES_KEY;
   private POSITION_KEY;
+  private CONSOLE_OUTPUT;
 
   constructor() {
     this.APP_PREFIX = Leonardo.APP_PREFIX || '';
@@ -15,6 +16,7 @@ export class Storage {
     this.SAVED_STATES_KEY = `${this.APP_PREFIX}leonardo-unregistered-states`;
     this.SCENARIOS_STORE_KEY = `${this.APP_PREFIX}leonardo-scenarios`;
     this.POSITION_KEY = `${this.APP_PREFIX}leonardo-position`;
+    this.CONSOLE_OUTPUT = `${this.APP_PREFIX}leonardo-console-output`;
   }
 
   _getItem(key) {
@@ -79,5 +81,14 @@ export class Storage {
 
   getSavedPosition() {
     return this._getItem(this.POSITION_KEY);
+  }
+
+  getConsoleOutput(): boolean {
+    const item  = this._getItem(this.CONSOLE_OUTPUT);
+    return item && item.enabled;
+  }
+
+  setConsoleOutput(enabled: boolean) {
+    this._setItem(this.CONSOLE_OUTPUT, {enabled: enabled});
   }
 }
