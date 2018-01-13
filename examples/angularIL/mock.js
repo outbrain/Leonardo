@@ -1,4 +1,3 @@
-console.log('here!');
 Leonardo.addStates([
   {
     "name": "Authenticate",
