@@ -227,7 +227,6 @@ export function leoConfiguration() {
   }
 
   function addState(stateObj, overrideOption) {
-
     stateObj.options.forEach(function (option) {
       upsert({
         state: stateObj.name,
@@ -239,6 +238,7 @@ export function leoConfiguration() {
         from_local: !!overrideOption,
         status: option.status,
         data: option.data,
+        headers: option.headers,
         delay: option.delay
       }, overrideOption);
     });
@@ -264,6 +264,7 @@ export function leoConfiguration() {
       url = configObj.url,
       status = configObj.status || 200,
       data = (typeof configObj.data !== 'undefined') ? configObj.data : {},
+      headers = configObj.headers,
       delay = configObj.delay || 0;
     let defaultState = {};
 
@@ -298,20 +299,22 @@ export function leoConfiguration() {
 
     if (overrideOption && option) {
       Object.assign(option, {
-        name: name,
-        from_local: from_local,
-        status: status,
-        data: data,
-        delay: delay
+        name,
+        from_local,
+        status,
+        data,
+        headers,
+        delay
       });
     }
     else if (!option) {
       Object.assign(defaultOption, {
-        name: name,
-        from_local: from_local,
-        status: status,
-        data: data,
-        delay: delay
+        name,
+        from_local,
+        status,
+        data,
+        headers,
+        delay
       });
 
       stateItem.options.push(defaultOption);
@@ -381,17 +384,19 @@ export function leoConfiguration() {
     data: any;
     url?: string;
     status: string;
+    headers?: any;
     timestamp: Date;
     state?: IState;
   }
 
-  function logRequest(method, url, data, status) {
+  function logRequest(method, url, data, status, headers = null) {
     if (method && url) {
       let req: INetworkRequest = {
         verb: method,
         data: data,
         url: url.trim(),
         status: status,
+        headers: headers,
         timestamp: new Date()
       };
       req.state = fetchStatesByUrlAndMethod(req.url, req.verb);
@@ -592,7 +597,8 @@ export function leoConfiguration() {
       if (mocked) {
         console.groupCollapsed(`Leonardo logger: ${req.verb} ${req.url}`);
         console.log('status code: ', req.status);
-        console.log('response: ', req.data);
+        console.log('response data: ', req.data);
+        console.log('response headers: ', req.headers);
         console.groupEnd();
       }
     }

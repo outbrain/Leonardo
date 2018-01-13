@@ -33,9 +33,13 @@ export class Sinon {
         activeOption = Leonardo.getActiveStateOption(state.name);
 
       if (!!activeOption) {
-        let responseData = Utils.isFunction(activeOption.data) ? activeOption.data(request) : activeOption.data;
-        request.respond(activeOption.status, {'Content-Type': 'application/json'}, JSON.stringify(responseData));
-        Leonardo._logRequest(request.method, request.url, responseData, activeOption.status);
+        const responseData = Utils.isFunction(activeOption.data) ? activeOption.data(request) : activeOption.data;
+        let responseHeaders = {'Content-Type': 'application/json'};
+        if (activeOption.headers) {
+          responseHeaders = Utils.isFunction(activeOption.headers) ? activeOption.headers(request) : activeOption.headers;
+        }
+        request.respond(activeOption.status, responseHeaders, JSON.stringify(responseData));
+        Leonardo._logRequest(request.method, request.url, responseData, activeOption.status, responseHeaders);
       } else {
         console.warn('could not find a state for the following request', request);
       }

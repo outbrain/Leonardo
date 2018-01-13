@@ -1,4 +1,4 @@
-
+console.log('here!');
 Leonardo.addStates([
   {
     "name": "Authenticate",
@@ -9,6 +9,10 @@ Leonardo.addStates([
         "name": "success",
         "status": 200,
         "data": {bla: 'bla'},
+        "headers": {
+          'Content-Type': 'application/json',
+          'x-test-header': 'my-test'
+        },
         "delay": 0
       }
     ]
