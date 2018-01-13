@@ -597,7 +597,7 @@ export function leoConfiguration() {
       if (mocked) {
         console.groupCollapsed(`Leonardo logger: ${req.verb} ${req.url}`);
         console.log('status code: ', req.status);
-        console.log('response data: ', req.data);
+        console.log('response body: ', req.data);
         console.log('response headers: ', req.headers);
         console.groupEnd();
       }
