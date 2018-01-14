@@ -20,68 +20,47 @@ Leonardo.loadSavedStates();
 // Init Sinon
 new Sinon();
 
-// Init launcher
-let keysPressed = {
-  ctrl: false,
-  shift: false,
-  l: false
-};
-
 const launcher: any = document.createElement('div');
 launcher.classList.add('leonardo-launcher');
 
-function hideLeonardo() {
-  keysPressed = {ctrl: false, shift: false, l: false};
-  f.style.display = 'none';
-  document.body.classList.remove('leonardo-launcher-active');
-}
-
-document.addEventListener('keydown', (e) => {
-  switch (e.keyCode) {
-      case 16:
-        keysPressed.ctrl = true;
-        break;
-      case 17:
-        keysPressed.shift = true;
-        break;
-      case 76:
-        keysPressed.l = true;
-        break;
-      case 27:
-        if (f.style.display === 'block') {
-          hideLeonardo();
-        }
-        break;
-  }
-  if (f.style.display === 'none' && keysPressed.ctrl && keysPressed.shift && keysPressed.l) {
-    f.style.display = 'block';
-  }
-});
-document.addEventListener('keyup', (e) => {
-  switch (e.keyCode) {
-      case 16:
-          keysPressed.ctrl = false;
-          break;
-      case 17:
-          keysPressed.shift = false;
-          break;
-      case 76:
-          keysPressed.l = false;
-          break;
-  }
-});
-launcher.addEventListener('click', (e) => {
-  if (f.style.display === 'block') {
-    hideLeonardo();
-  }
-  else {
+function toggleView() {
+  if (f.style.display === 'none') {
     f.style.display = 'block';
     f.contentDocument.getElementById('app').dispatchEvent(new Event('ui-show'));
+    document.body.classList.add('leonardo-launcher-active');
+  } else {
+    f.style.display = 'none';
+    document.body.classList.remove('leonardo-launcher-active');
   }
-  document.body.classList.add('leonardo-launcher-active');
+}
+
+function toggleLauncher() {
+  if (launcher.style.display === 'none') {
+    launcher.style.display = 'block';
+  } else {
+    launcher.style.display = 'none';
+  }
+}
+
+document.addEventListener('keyup', (e) => {
+  if (e.ctrlKey && e.shiftKey && e.keyCode === 76) {
+    return toggleLauncher();
+  }
+  if (e.ctrlKey && e.shiftKey && e.keyCode === 86) {
+    return toggleView();
+  }
+  if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
+    return Leonardo.toggleConsoleOutput(Leonardo.get);
+  }
+  if (e.keyCode === 27 && f.style.display === 'block') {
+    return toggleView();
+  }
+
+});
+launcher.addEventListener('click', (e) => {
+  toggleView();
   e.stopPropagation();
 });
-
 
 window.document.body.appendChild(launcher);
 

@@ -25,7 +25,9 @@ export class Sinon {
       }
       catch (e) {
       }
-      Leonardo._logRequest(xhr.method, xhr.url, res, xhr.status);
+      Leonardo._logRequest(xhr.method,
+          xhr.url, xhr.status, xhr.requestHeaders,
+          xhr.requestBody, xhr.getAllResponseHeaders(), res);
     };
 
     server.respondWith(function (request) {
@@ -33,13 +35,17 @@ export class Sinon {
         activeOption = Leonardo.getActiveStateOption(state.name);
 
       if (!!activeOption) {
-        const responseData = Utils.isFunction(activeOption.data) ? activeOption.data(request) : activeOption.data;
-        let responseHeaders = {'Content-Type': 'application/json'};
+        const resStatus = activeOption.status;
+        const resData = Utils.isFunction(activeOption.data) ? activeOption.data(request) : activeOption.data;
+        let resHeaders = {'Content-Type': 'application/json'};
         if (activeOption.headers) {
-          responseHeaders = Utils.isFunction(activeOption.headers) ? activeOption.headers(request) : activeOption.headers;
+          resHeaders = Utils.isFunction(activeOption.headers) ? activeOption.headers(request) : activeOption.headers;
         }
-        request.respond(activeOption.status, responseHeaders, JSON.stringify(responseData));
-        Leonardo._logRequest(request.method, request.url, responseData, activeOption.status, responseHeaders);
+
+        request.respond(resStatus, resHeaders, JSON.stringify(resData));
+        Leonardo._logRequest(request.method, request.url,
+            resStatus, request.requestHeaders,
+            request.requestBody, resHeaders, resData);
       } else {
         console.warn('could not find a state for the following request', request);
       }

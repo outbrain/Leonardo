@@ -110,7 +110,7 @@ export function leoConfiguration() {
             mutation.addedNodes[0].tagName.toLowerCase() === 'script') {
             const scriptNode = mutation.addedNodes[0];
             if (scriptNode.src && scriptNode.src.indexOf('callback') > 0) {
-              logRequest('JSONP', scriptNode.src, {}, 200);
+              logRequest('JSONP', scriptNode.src, 200);
             }
             const state = fetchStatesByUrlAndMethod(scriptNode.src, 'JSONP');
             if (state && state.active) {
@@ -384,19 +384,23 @@ export function leoConfiguration() {
     data: any;
     url?: string;
     status: string;
-    headers?: any;
+    reqBody?: any;
+    reqHeaders?: any;
+    resHeaders?: any;
     timestamp: Date;
     state?: IState;
   }
 
-  function logRequest(method, url, data, status, headers = null) {
+  function logRequest(method, url, status, reqHeaders?, reqBody?, resHeaders?, resBody?) {
     if (method && url) {
       let req: INetworkRequest = {
         verb: method,
-        data: data,
         url: url.trim(),
         status: status,
-        headers: headers,
+        reqHeaders: reqHeaders || {},
+        reqBody: reqBody || {},
+        resHeaders: resHeaders || {},
+        data: resBody || {},
         timestamp: new Date()
       };
       req.state = fetchStatesByUrlAndMethod(req.url, req.verb);
@@ -583,8 +587,9 @@ export function leoConfiguration() {
     _eventsElem && _eventsElem.dispatchEvent(_statesChangedEvent);
   }
 
-  function toggleConsoleOutput(enable: boolean) {
-    _consoleOutputEnabled = enable;
+  function toggleConsoleOutput() {
+    _consoleOutputEnabled = !_consoleOutputEnabled;
+    console.log(`%cLeonardo console is now ${_consoleOutputEnabled ? 'enabled' : 'disabled'}`, `color: ${_consoleOutputEnabled ? 'green' : 'gray' }; font-size:13px;`);
     Leonardo.storage.setConsoleOutput(_consoleOutputEnabled);
   }
 
@@ -596,9 +601,17 @@ export function leoConfiguration() {
       const mocked = req.state && req.state.active;
       if (mocked) {
         console.groupCollapsed(`Leonardo logger: ${req.verb} ${req.url}`);
+        console.groupCollapsed(`Request`);
+        console.log('verb: ', req.verb);
+        console.log('url: ', req.url);
+        console.log('headers: ', req.reqHeaders);
+        console.log('body: ', req.reqBody);
+        console.groupEnd();
+        console.group(`Response`);
         console.log('status code: ', req.status);
-        console.log('response body: ', req.data);
-        console.log('response headers: ', req.headers);
+        console.log('headers: ', req.resHeaders);
+        console.log('body: ', req.data);
+        console.groupEnd();
         console.groupEnd();
       }
     }
