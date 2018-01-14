@@ -6,7 +6,7 @@ window.document.body.appendChild(launcher);
 let timeout;
 function checkIframeLoaded() {
   let iframeDoc = f.contentDocument || f.contentWindow ?  f.contentWindow.document : {};
-  if (  iframeDoc.readyState  == 'complete' ) {
+  if (iframeDoc.readyState  == 'complete' && document.readyState  == 'complete' ) {
     clearTimeout(timeout);
     iframeDoc.write('<html><body></body></html>');
     iframeDoc.body.innerHTML = '<div id="app"></div>';
@@ -39,6 +39,6 @@ if (!window.Leonardo.storage.getNoUI()) {
     zIndex: 2147483646,
   });
 
-  checkIframeLoaded();
   document.body.appendChild(f);
+  checkIframeLoaded();
 }
