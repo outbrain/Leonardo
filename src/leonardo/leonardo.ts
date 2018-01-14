@@ -21,6 +21,7 @@ Leonardo.loadSavedStates();
 new Sinon();
 
 const launcher: any = document.createElement('div');
+let f: any;
 launcher.classList.add('leonardo-launcher');
 
 function toggleView() {
@@ -46,43 +47,24 @@ document.addEventListener('keyup', (e) => {
   if (e.ctrlKey && e.shiftKey && e.keyCode === 76) {
     return toggleLauncher();
   }
-  if (e.ctrlKey && e.shiftKey && e.keyCode === 86) {
+  if (f && e.ctrlKey && e.shiftKey && e.keyCode === 86) {
     return toggleView();
   }
   if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
     return Leonardo.toggleConsoleOutput(Leonardo.get);
   }
-  if (e.keyCode === 27 && f.style.display === 'block') {
+  if (f && e.keyCode === 27 && f.style.display === 'block') {
     return toggleView();
   }
 
 });
 launcher.addEventListener('click', (e) => {
-  toggleView();
+  f && toggleView();
   e.stopPropagation();
 });
 
 window.document.body.appendChild(launcher);
-
-//Init UI
-const f: any = document.createElement('iframe');
-f.width = '100%';
-f.height = '100%';
-//f.src = "";
-//f.sandbox = 'allow-scripts allow-same-origin allow-modals';
-Object.assign(f.style, {
-  position: 'fixed',
-  top: 0,
-  bottom: 0,
-  right: 0,
-  left: 0,
-  border: 'none',
-  display: 'none',
-  overflow: 'visible',
-  zIndex: 2147483646,
-});
 let timeout;
-
 function checkIframeLoaded() {
   let iframeDoc = f.contentDocument || f.contentWindow ?  f.contentWindow.document : {};
   if (  iframeDoc.readyState  == 'complete' ) {
@@ -98,6 +80,26 @@ function checkIframeLoaded() {
   timeout = window.setTimeout(checkIframeLoaded, 100);
 
 }
-checkIframeLoaded();
-document.body.appendChild(f);
 
+//Init UI
+if (!window.Leonardo.storage.getNoUI()) {
+  f = document.createElement('iframe');
+  f.width = '100%';
+  f.height = '100%';
+//f.src = "";
+//f.sandbox = 'allow-scripts allow-same-origin allow-modals';
+  Object.assign(f.style, {
+    position: 'fixed',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    border: 'none',
+    display: 'none',
+    overflow: 'visible',
+    zIndex: 2147483646,
+  });
+
+  checkIframeLoaded();
+  document.body.appendChild(f);
+}
