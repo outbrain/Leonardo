@@ -1,7 +1,6 @@
 ## Leonardo
 [![Build Status](https://travis-ci.org/outbrain/Leonardo.svg?branch=master)](https://travis-ci.org/outbrain/Leonardo)
 [![npm version](https://badge.fury.io/js/leonardojs.svg)](http://badge.fury.io/js/leonardojs)
-[![Bower version](https://badge.fury.io/bo/leonardo.svg)](http://badge.fury.io/bo/leonardo)
 [![Package Quality](http://npm.packagequality.com/shield/leonardojs.svg)](http://packagequality.com/#?package=leonardojs)
 
 ![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/leonardo.png)
@@ -24,13 +23,7 @@
 $ npm install leonardojs --save
 ```
 
-### bower
-
-```bash
-$ bower install leonardo
-```
-
-## 2. Add Leonardo script
+## 1. Add Leonardo script
 
 ### Require in your code
 
@@ -45,21 +38,21 @@ $ bower install leonardo
  <html>
  <body>
    //.....
-   <script src="[bower_components|node_modules|other]/leonardo/dist/leonardo.js"></script>
+   <script src="[node_modules|other]/leonardo/dist/leonardo.js"></script>
  </body>
  </html>
 ```
 
-## 3. Run your app
+## 2. Run your app
 You should now see Leonardo's icon on the bottom right corner. Click It.
 
-## 4. Start mocking your http calls via the recorder tab 
+## 3. Start mocking your http calls via the recorder tab 
 ![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/images/recorder.png)
 
-## 5. Turn your mocking on and off as you wish
+## 4. Turn your mocking on and off as you wish
 ![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/images/scenario.png)
 
-## 6. Change your responses as you wish
+## 5. Change your responses as you wish
 ![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/images/responses.png)
 
 ## Javascript API
