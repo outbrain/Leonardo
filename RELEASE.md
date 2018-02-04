@@ -1,5 +1,5 @@
 ### Release Steps (bower and npm)
-- Bump version in `bower.json` and `package.json`
+- Bump version in `package.json`
 - Make sure all changes are pushed to master
 - Merge changes to the `release` branch
 - run `npm run build` to create the `dist` folder
