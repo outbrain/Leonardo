@@ -63,7 +63,10 @@ launcher.addEventListener('click', (e) => {
   e.stopPropagation();
 });
 
-window.document.body.appendChild(launcher);
+document.addEventListener('DOMContentLoaded', () => {
+  window.document.body.appendChild(launcher);
+}, false);
+
 let timeout;
 function checkIframeLoaded() {
   let iframeDoc = f.contentDocument || f.contentWindow ?  f.contentWindow.document : {};
@@ -100,6 +103,9 @@ if (!window.Leonardo.storage.getNoUI()) {
     zIndex: 2147483646,
   });
 
-  document.body.appendChild(f);
+  document.addEventListener('DOMContentLoaded', () => {
+    window.document.body.appendChild(f);
+  }, false);
+
   checkIframeLoaded();
 }
