@@ -53517,14 +53517,16 @@ var State = /** @class */ (function (_super) {
         var _this = this;
         var item = this.props.item;
         return (React.createElement("div", { className: "state-item" },
-            React.createElement("input", { defaultChecked: item.active, ref: function (input) { _this.inputElement = input; }, className: "toggle toggle-ios", type: "checkbox" }),
+            React.createElement("input", { checked: item.active, onChange: this.toggleChange, ref: function (input) { _this.inputElement = input; }, className: "toggle toggle-ios", type: "checkbox" }),
             React.createElement("label", { className: "toggle-btn", onClick: this.toggleState.bind(this) }),
             React.createElement("span", { className: "state-verb " + "state-verb-" + item.verb.toLowerCase() }, item.verb),
             React.createElement("span", { className: "state-data-container" },
                 React.createElement("span", { className: "state-name" }, item.name),
-                React.createElement("span", { className: "state-url" }, item.url)),
+                React.createElement("span", { className: "state-url" }, item.url ? item.url.toString() : '')),
             React.createElement(DropdownList, { onClick: function (e) { e.stopPropagation(); }, onSelect: this.selectOption.bind(this), textField: 'name', valueField: 'name', defaultValue: item.activeOption, data: item.options }),
             React.createElement("div", { title: "Remove State", className: "state-remove", onClick: this.removeState.bind(this) })));
+    };
+    State.prototype.toggleChange = function (event) {
     };
     State.prototype.removeState = function (event) {
         event.stopPropagation();
