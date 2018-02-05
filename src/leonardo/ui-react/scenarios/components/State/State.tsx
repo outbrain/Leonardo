@@ -25,7 +25,7 @@ class State extends React.Component<StateProps & PassedProps, any>{
         <span className={"state-verb " + "state-verb-" + item.verb.toLowerCase()}>{item.verb}</span>
         <span className="state-data-container">
           <span className="state-name">{item.name}</span>
-          <span className="state-url">{item.url}</span>
+          <span className="state-url">{item.url? item.url.toString() : ''}</span>
         </span>
         <DropdownList
           onClick={(e) => {e.stopPropagation()}}
