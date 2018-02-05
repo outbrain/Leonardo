@@ -1,7 +1,7 @@
 Leonardo.addStates([
   {
     "name": "Authenticate",
-    "url": "/login",
+    "url": /\/login/,
     "verb": "GET",
     "options": [
       {

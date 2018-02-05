@@ -20,12 +20,12 @@ class State extends React.Component<StateProps & PassedProps, any>{
     const {item} = this.props;
     return (
       <div className="state-item">
-        <input defaultChecked={item.active} ref={(input) => {this.inputElement = input;}} className="toggle toggle-ios" type="checkbox"/>
+        <input checked={item.active} onChange={this.toggleChange} ref={(input) => {this.inputElement = input;}} className="toggle toggle-ios" type="checkbox"/>
         <label className="toggle-btn" onClick={this.toggleState.bind(this)}></label>
         <span className={"state-verb " + "state-verb-" + item.verb.toLowerCase()}>{item.verb}</span>
         <span className="state-data-container">
           <span className="state-name">{item.name}</span>
-          <span className="state-url">{item.url}</span>
+          <span className="state-url">{item.url? item.url.toString() : ''}</span>
         </span>
         <DropdownList
           onClick={(e) => {e.stopPropagation()}}
@@ -37,6 +37,9 @@ class State extends React.Component<StateProps & PassedProps, any>{
         <div title="Remove State" className="state-remove" onClick={this.removeState.bind(this)}></div>
       </div>
     )
+  }
+
+  toggleChange(event) {
   }
 
   removeState(event) {
