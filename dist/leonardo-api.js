@@ -8374,7 +8374,9 @@ function leoConfiguration() {
             });
             stateItem.options.push(defaultOption);
         }
-        setupJsonpForState(state);
+        if (verb.toUpperCase() === 'JSONP') {
+            setupJsonpForState(state);
+        }
     }
     function addScenario(scenario, fromLocal) {
         if (fromLocal === void 0) { fromLocal = false; }
