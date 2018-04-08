@@ -28,11 +28,12 @@ class State extends React.Component<StateProps & PassedProps, any>{
           <span className="state-url">{item.url? item.url.toString() : ''}</span>
         </span>
         <DropdownList
+          key={item.activeOption.name}
           onClick={(e) => {e.stopPropagation()}}
           onSelect={this.selectOption.bind(this)}
           textField={'name'}
           valueField={'name'}
-          defaultValue={item.activeOption}
+          defaultValue={item.activeOption.name}
           data={item.options}/>
         <div title="Remove State" className="state-remove" onClick={this.removeState.bind(this)}></div>
       </div>
