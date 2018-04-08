@@ -2505,9 +2505,9 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 		module.exports = classNames;
 	} else if (true) {
 		// register as 'classnames', consistent with npm package name
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function () {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
 			return classNames;
-		}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	} else {
 		window.classNames = classNames;
@@ -35380,7 +35380,7 @@ var _hasClass2 = _interopRequireDefault(_hasClass);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function addClass(element, className) {
-  if (element.classList) element.classList.add(className);else if (!(0, _hasClass2.default)(element, className)) if (typeof element.className === 'string') element.className = element.className + ' ' + className;else element.setAttribute('class', (element.className && element.className.baseVal || '') + ' ' + className);
+  if (element.classList) element.classList.add(className);else if (!(0, _hasClass2.default)(element)) element.className = element.className + ' ' + className;
 }
 module.exports = exports['default'];
 
@@ -35396,7 +35396,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = hasClass;
 function hasClass(element, className) {
-  if (element.classList) return !!className && element.classList.contains(className);else return (" " + (element.className.baseVal || element.className) + " ").indexOf(" " + className + " ") !== -1;
+  if (element.classList) return !!className && element.classList.contains(className);else return (" " + element.className + " ").indexOf(" " + className + " ") !== -1;
 }
 module.exports = exports["default"];
 
@@ -35407,12 +35407,8 @@ module.exports = exports["default"];
 "use strict";
 
 
-function replaceClassName(origClass, classToRemove) {
-  return origClass.replace(new RegExp('(^|\\s)' + classToRemove + '(?:\\s|$)', 'g'), '$1').replace(/\s+/g, ' ').replace(/^\s*|\s*$/g, '');
-}
-
 module.exports = function removeClass(element, className) {
-  if (element.classList) element.classList.remove(className);else if (typeof element.className === 'string') element.className = replaceClassName(element.className, className);else element.setAttribute('class', replaceClassName(element.className && element.className.baseVal || '', className));
+  if (element.classList) element.classList.remove(className);else element.className = element.className.replace(new RegExp('(^|\\s)' + className + '(?:\\s|$)', 'g'), '$1').replace(/\s+/g, ' ').replace(/^\s*|\s*$/g, '');
 };
 
 /***/ }),
@@ -37095,7 +37091,7 @@ var State = /** @class */ (function (_super) {
             React.createElement("span", { className: "state-data-container" },
                 React.createElement("span", { className: "state-name" }, item.name),
                 React.createElement("span", { className: "state-url" }, item.url ? item.url.toString() : '')),
-            React.createElement(DropdownList, { onClick: function (e) { e.stopPropagation(); }, onSelect: this.selectOption.bind(this), textField: 'name', valueField: 'name', defaultValue: item.activeOption, data: item.options }),
+            React.createElement(DropdownList, { key: item.activeOption.name, onClick: function (e) { e.stopPropagation(); }, onSelect: this.selectOption.bind(this), textField: 'name', valueField: 'name', defaultValue: item.activeOption.name, data: item.options }),
             React.createElement("div", { title: "Remove State", className: "state-remove", onClick: this.removeState.bind(this) })));
     };
     State.prototype.toggleChange = function (event) {
