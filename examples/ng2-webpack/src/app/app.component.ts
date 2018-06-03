@@ -22,12 +22,12 @@ export class AppComponent {
     this.commentService.getComments()
       .subscribe((response) => {
         this.loading = false;
-        if (response.status = 200) {
-          this.comments = response.json().data;
+        if (response.status === 200) {
+          this.comments = response.json();
           this.error = false;
         }
 
-        if (response.status = 400) {
+        if (response.status === 400) {
           this.error = true;
         }
 

@@ -14,10 +14,9 @@ export default function register () {
     options: [
       {
         "name": "Success",
-        "from_local": true,
-        "status": "200",
-        "data": {
-          "data": [
+        "status": 200,
+        "delay": 500,
+        "data": [
             {
               "keyword": "mexican women in politics",
               "articles": 1,
@@ -90,11 +89,8 @@ export default function register () {
                 "source": "www.vox.com"
               }
             }
-          ]
-        },
-        "delay": "500"
-      }
+          ],
+        }
     ]
-  });
-
+  })
 }
