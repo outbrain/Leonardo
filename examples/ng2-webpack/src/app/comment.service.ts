@@ -9,10 +9,6 @@ export class CommentService {
   private commentsUrl = 'http://localhost:3000/api/comments';
 
   getComments() : Observable<Response> {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    return this.http.get(this.commentsUrl, {
-      headers
-    });
+    return this.http.get(this.commentsUrl);
   }
 }
