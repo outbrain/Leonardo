@@ -37,6 +37,7 @@ export function leoConfiguration() {
     statesChanged: statesChanged,
     toggleConsoleOutput: toggleConsoleOutput,
     _logRequest: logRequest,
+    getLastRequestByState: getLastRequestByState,
     _jsonpCallbacks: _jsonpCallbacks
   };
 
@@ -617,6 +618,12 @@ export function leoConfiguration() {
         console.groupEnd();
       }
     }
+  }
+
+  function getLastRequestByState(stateName: string) {
+    return _requestsLog.filter(entry => {
+      return entry.state && entry.state.name === stateName;
+    }).reverse()[0];
   }
 }
 

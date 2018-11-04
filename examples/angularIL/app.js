@@ -38,7 +38,11 @@ angular.module('angular-il', ['ui.router'])
             $rootScope.loading = true;
             $http({
               method: 'POST',
-              url: '/login'
+              url: '/login',
+              data: {
+                user: this.user,
+                password: this.password
+              }
             }).then(function (res) {
               $rootScope.error = null;
               $rootScope.user = res.data ? res.data.name : '';
