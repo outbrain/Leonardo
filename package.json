@@ -48,7 +48,7 @@
     "@types/redux-actions": "^1.2.6",
     "ace-builds": "^1.2.6",
     "btoa": "^1.1.2",
-    "chromedriver": "^2.21.2",
+    "chromedriver": "^2.43.1",
     "jasmine-core": "^2.5.2",
     "karma": "^3.1.1",
     "karma-chrome-launcher": "^0.2.2",
