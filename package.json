@@ -60,7 +60,7 @@
     "karma-chrome-launcher": "^0.2.2",
     "karma-jasmine": "^1.1.0",
     "karma-webpack": "^3.0.5",
-    "less": "^2.7.2",
+    "less": "^3.8.1",
     "less-loader": "^3.0.0",
     "loglevel": "^1.4.1",
     "raw-loader": "^0.5.1",
