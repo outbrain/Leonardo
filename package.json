@@ -67,15 +67,16 @@
     "script-loader": "^0.7.0",
     "sinon": "https://github.com/outbrain/sinon",
     "style-loader": "^0.14.1",
-    "ts-loader": "^2.2.2",
+    "ts-loader": "^5.3.0",
     "tsify": "^0.13.2",
     "typescript": "^2.4.1",
     "url-loader": "^0.5.9",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0",
-    "webpack": "^3.0.0",
-    "webpack-dev-server": "^2.5.0",
+    "webpack": "^4.24.0",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10",
     "webpack-shell-plugin": "^0.5.0"
   }
 }
