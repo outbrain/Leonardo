@@ -61,6 +61,7 @@ module.exports = function(config) {
     singleRun: true,
 
     webpack: {
+      mode: "development",
       resolve: {
         extensions: ['.js', '.ts', '.less']
       },
