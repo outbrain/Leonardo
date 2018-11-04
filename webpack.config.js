@@ -1,6 +1,7 @@
 'use strict'
 var btoa = require('btoa');
 module.exports = {
+  mode: 'development',
   entry: {
     'leonardo-api': "./src/leonardo/leonardo.ts",
     'leonardo-ui': "./src/leonardo/ui-react/index.tsx"
@@ -76,6 +77,7 @@ function LeonardoIframePlugin(options) {
 }
 
 LeonardoIframePlugin.prototype.apply = function (compiler) {
+  console.log('LeonardoIframePlugin');
   compiler.plugin('emit', function (compilation, callback) {
     const apiSrc = compilation.assets['leonardo-api.js'].source();
     const uiSrc = compilation.assets['leonardo-ui.js'].source();
