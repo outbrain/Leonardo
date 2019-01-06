@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/outbrain/Leonardo",
   "dependencies": {
-    "css-loader": "^1.0.1",
+    "css-loader": "^2.1.0",
     "history": "^4.6.3",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
