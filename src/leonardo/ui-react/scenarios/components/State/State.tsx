@@ -28,6 +28,7 @@ class State extends React.Component<StateProps & PassedProps, any>{
           <span className="state-url">{item.url? item.url.toString() : ''}</span>
         </span>
         <DropdownList
+          className="state-select"
           key={item.activeOption.name}
           onClick={(e) => {e.stopPropagation()}}
           onSelect={this.selectOption.bind(this)}
