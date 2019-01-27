@@ -29,7 +29,7 @@ $ npm install leonardojs --save
 
 ```javascript
     // in dev environment
-    import "leonardojs";
+    import Leonardo from 'leonardojs';
 ```
 
 ### Directly in html

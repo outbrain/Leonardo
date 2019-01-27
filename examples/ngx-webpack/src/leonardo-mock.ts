@@ -1,6 +1,4 @@
-import 'leonardojs';
-
-declare var Leonardo: any;
+import Leonardo from 'leonardojs';
 
 export function registerLeonardo () {
   Leonardo.addState({

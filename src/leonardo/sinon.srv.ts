@@ -1,5 +1,6 @@
 import Utils from './utils';
 import * as sinon from 'sinon';
+import Leonardo from './leonardo';
 
 export class Sinon {
   constructor() {
