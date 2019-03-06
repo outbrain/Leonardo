@@ -95,6 +95,10 @@ export class Storage {
     return item && item.value;
   }
 
+  setNoUI(value: boolean) {
+    this._setItem(this.NO_UI, {value});
+  }
+
   setConsoleOutput(enabled: boolean) {
     this._setItem(this.CONSOLE_OUTPUT, {enabled: enabled});
   }
