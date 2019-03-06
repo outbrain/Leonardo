@@ -20,9 +20,9 @@ Leonardo.loadSavedStates();
 // Init Sinon
 new Sinon();
 
-const launcher: any = document.createElement('div');
+let launcher: any;
 let f: any;
-launcher.classList.add('leonardo-launcher');
+let timeout;
 
 function toggleView() {
   if (f.style.display === 'none') {
@@ -43,31 +43,6 @@ function toggleLauncher() {
   }
 }
 
-document.addEventListener('keyup', (e) => {
-  if (e.ctrlKey && e.shiftKey && e.keyCode === 76) {
-    return toggleLauncher();
-  }
-  if (f && e.ctrlKey && e.shiftKey && e.keyCode === 86) {
-    return toggleView();
-  }
-  if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
-    return Leonardo.toggleConsoleOutput(Leonardo.get);
-  }
-  if (f && e.keyCode === 27 && f.style.display === 'block') {
-    return toggleView();
-  }
-
-});
-launcher.addEventListener('click', (e) => {
-  f && toggleView();
-  e.stopPropagation();
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  window.document.body.appendChild(launcher);
-}, false);
-
-let timeout;
 function checkIframeLoaded() {
   let iframeDoc = f.contentDocument || f.contentWindow ?  f.contentWindow.document : {};
   if (iframeDoc.readyState  == 'complete' && document.readyState  == 'complete' ) {
@@ -81,16 +56,43 @@ function checkIframeLoaded() {
     return;
   }
   timeout = window.setTimeout(checkIframeLoaded, 100);
-
 }
 
-//Init UI
 if (!window.Leonardo.storage.getNoUI()) {
+
+  launcher = document.createElement('div');
+  launcher.classList.add('leonardo-launcher');
+
+  document.addEventListener('keyup', (e) => {
+    if (e.ctrlKey && e.shiftKey && e.keyCode === 76) {
+      return toggleLauncher();
+    }
+    if (f && e.ctrlKey && e.shiftKey && e.keyCode === 86) {
+      return toggleView();
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
+      return Leonardo.toggleConsoleOutput(Leonardo.get);
+    }
+    if (f && e.keyCode === 27 && f.style.display === 'block') {
+      return toggleView();
+    }
+
+  });
+
+  launcher.addEventListener('click', (e) => {
+    f && toggleView();
+    e.stopPropagation();
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    window.document.body.appendChild(launcher);
+  }, false);
+
+
+//Init UI
   f = document.createElement('iframe');
   f.width = '100%';
   f.height = '100%';
-//f.src = "";
-//f.sandbox = 'allow-scripts allow-same-origin allow-modals';
   Object.assign(f.style, {
     position: 'fixed',
     top: 0,
