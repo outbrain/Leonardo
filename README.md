@@ -30,6 +30,16 @@ $ npm install leonardojs --save
 ```javascript
     // in dev environment
     import Leonardo from 'leonardojs';
+    const leonardo = Leonardo.init();
+    leonardo.addState({
+      name: 'Get Data',
+      url: '/api/user/43435',
+      verb: 'GET',
+      options: [
+        {name: 'success', status: 200, data: { name: "Master Splinter" }},
+        {name: 'error 500', status: 500}
+      ]
+    })
 ```
 
 ### Directly in html
