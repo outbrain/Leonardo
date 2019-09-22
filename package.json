@@ -1,6 +1,6 @@
 {
   "name": "leonardojs",
-  "version": "4.0.6",
+  "version": "4.0.7",
   "description": "Leonardo ========",
   "main": "dist/leonardo.js",
   "scripts": {
@@ -46,7 +46,6 @@
     "@types/react-router-redux": "^5.0.3",
     "@types/redux": "^3.6.0",
     "@types/redux-actions": "^1.2.6",
-    "ace-builds": "^1.2.6",
     "btoa": "^1.1.2",
     "chromedriver": "^2.43.1",
     "jasmine-core": "^2.5.2",

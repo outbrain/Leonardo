@@ -22,13 +22,6 @@ module.exports = {
         test: /\.ts|.tsx?$/,
         use: ['ts-loader']
       },
-
-      {
-        test: /\/ace.js/,
-        use: [
-          'script-loader'
-        ]
-      },
       {
         test: /\.gif$/,
         use: [

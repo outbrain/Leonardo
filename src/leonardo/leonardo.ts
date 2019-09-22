@@ -3,7 +3,6 @@ import {Storage} from './storage.srv';
 import {polifylls} from './polyfills';
 import {Sinon} from './sinon.srv';
 import './style/app.less';
-import '../../node_modules/ace-builds/src/ace.js';
 
 declare const window;
 declare const Object;
