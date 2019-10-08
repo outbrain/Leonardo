@@ -2,7 +2,7 @@ import {leoConfiguration} from './configuration.srv';
 import {Storage} from './storage.srv';
 import {polifylls} from './polyfills';
 import {Sinon} from './sinon.srv';
-import './style/app.less';
+import './leonardo.less';
 
 declare const window;
 declare const Object;
@@ -46,12 +46,11 @@ function checkIframeLoaded() {
   let iframeDoc = f.contentDocument || f.contentWindow ?  f.contentWindow.document : {};
   if (iframeDoc.readyState  == 'complete' && document.readyState  == 'complete' ) {
     clearTimeout(timeout);
-    iframeDoc.write('<html><body></body></html>');
-    iframeDoc.body.innerHTML = '<div id="app"></div>';
     iframeDoc.head.innerHTML = '<base href="." target="_blank">';
+    iframeDoc.body.innerHTML = '<div id="app"></div>';
 
     f.contentWindow.eval(`(${window.__leonardo_UI_src})()`);
-
+    timeout = window.setTimeout(toggleView, 200); //TODO: REMOVE!!!!
     return;
   }
   timeout = window.setTimeout(checkIframeLoaded, 100);
@@ -70,7 +69,7 @@ if (!window.Leonardo.storage.getNoUI()) {
       return toggleView();
     }
     if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
-      return Leonardo.toggleConsoleOutput(Leonardo.get);
+      return Leonardo.toggleConsoleOutput();
     }
     if (f && e.keyCode === 27 && f.style.display === 'block') {
       return toggleView();
@@ -82,11 +81,6 @@ if (!window.Leonardo.storage.getNoUI()) {
     f && toggleView();
     e.stopPropagation();
   });
-
-  document.addEventListener('DOMContentLoaded', () => {
-    window.document.body.appendChild(launcher);
-  }, false);
-
 
 //Init UI
   f = document.createElement('iframe');
@@ -105,6 +99,7 @@ if (!window.Leonardo.storage.getNoUI()) {
   });
 
   document.addEventListener('DOMContentLoaded', () => {
+    window.document.body.appendChild(launcher);
     window.document.body.appendChild(f);
   }, false);
 

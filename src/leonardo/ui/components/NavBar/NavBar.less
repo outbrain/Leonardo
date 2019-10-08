@@ -1,0 +1,29 @@
+@import '../../styles/variables.less';
+
+.navBar-container {
+  flex-grow: 1;
+  align-self: stretch;
+  .navBar-list {
+    font-size: @font-size-normal;
+    display: flex;
+    position: relative;
+    height: 100%;
+    max-width: 500px;
+    .navBar-item {
+      display: flex;
+      flex-grow: 1;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-transform: uppercase;
+      position: relative;
+      border-top: 3px solid transparent;
+      &.navBar-item-active {
+        border-top-color: #f08222;
+      }
+      &:hover {
+        color: @blue50;
+      }
+    }
+  }
+}

@@ -1,0 +1,72 @@
+@import '../../../styles/variables.less';
+
+.state-row {
+  display: flex;
+  height: 30px;
+  align-items: center;
+  padding-left: 10px;
+  &:nth-child(odd) {
+    background-color: @gray95;
+  }
+}
+
+.state-active {
+  margin-right: 20px;
+}
+
+.state-verb {
+  width: 60px;
+  padding: 2px 0;
+  border-radius: 3px;
+  font-size: @font-size-small;
+  color: white;
+  text-align: center;
+}
+
+.state-verb-get { background: @green48; }
+.state-verb-post { background: darken(@yellow58, 20%); }
+.state-verb-put { background: @blue30; }
+.state-verb-delete { background: @red48; }
+.state-verb-jsonp { background: @gray30; }
+.state-verb-custom { background: black; }
+
+.state-text {
+  flex-grow: 1;
+  display: flex;
+  margin: 0 10px;
+  align-items: center;
+}
+
+.state-url {
+  font-size: @font-size-small;
+  color: @gray45;
+  margin-left: 10px;
+}
+
+.state-options {
+  position: relative;
+  select {
+    color: @white00;
+    width: 200px;
+    padding: 2px 6px;
+    height: 25px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: @green48;
+    /* background: url(http://www.stackoverflow.com/favicon.ico) 6.4% no-repeat #EEE; */
+    outline: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  &:after {
+    content: "▼";
+    color: @white00;
+    position: absolute;
+    right: 10px;
+    top: 6px;
+    z-index: 1;
+    font-size: 11px;
+    pointer-events: none;
+  }
+}
