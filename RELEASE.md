@@ -1,4 +1,4 @@
-### Release Steps (bower and npm)
+### Release Steps
 - Bump version in `package.json`
 - Make sure all changes are pushed to master
 - Merge changes to the `release` branch
