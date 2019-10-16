@@ -1,0 +1,64 @@
+@import '../../../styles/variables.less';
+
+.recorder-item {
+  display: flex;
+  height: 50px;
+  align-items: center;
+  padding-left: 10px;
+  &:nth-child(odd) {
+    background-color: @gray95;
+  }
+
+  > div {
+    margin-right: 10px;
+  }
+}
+
+.recorder-verb {
+  width: 60px;
+  min-width: 60px;
+  padding: 2px 0;
+  border-radius: 3px;
+  font-size: @font-size-small;
+  color: @white00;
+  text-align: center;
+}
+
+.recorder-verb-get { background: @green48; }
+.recorder-verb-post { background: darken(@yellow58, 20%); }
+.recorder-verb-put { background: @blue30; }
+.recorder-verb-delete { background: @red48; }
+.recorder-verb-jsonp { background: @gray30; }
+.recorder-verb-custom { background: black; }
+
+.recorder-url {
+  flex-grow: 1;
+  align-items: center;
+  white-space: nowrap;
+  color: @gray45;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recorder-is-mocked {
+  width: 40px;
+  min-width: 40px;
+}
+
+.recorder-mock, .recorder-response {
+  width: 150px;
+  min-width: 150px;
+  text-overflow: ellipsis;
+}
+
+.recorder-state {
+  background: @blue50;
+  color: @white00;
+  padding: 3px 10px;
+  border-radius: 3px;
+  font-size: @font-size-small;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

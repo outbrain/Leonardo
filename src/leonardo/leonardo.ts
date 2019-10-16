@@ -50,7 +50,6 @@ function checkIframeLoaded() {
     iframeDoc.body.innerHTML = '<div id="app"></div>';
 
     f.contentWindow.eval(`(${window.__leonardo_UI_src})()`);
-    timeout = window.setTimeout(toggleView, 200); //TODO: REMOVE!!!!
     return;
   }
   timeout = window.setTimeout(checkIframeLoaded, 100);

@@ -22,8 +22,9 @@ function StatesProvider({ children }) {
     if (isAllActive !== null) {
       LeonardoApi.toggleActivateAll(isAllActive);
       refreshStates();
+      setAllActive(null);
     }
-  }, [isAllActive]);
+  });
 
   const setStatesActive = (isActive: boolean) => {
     setAllActive(isActive);
@@ -39,7 +40,6 @@ function StatesProvider({ children }) {
   };
 
   const setStateOption = (state, option) => {
-    console.log(state.name);
     LeonardoApi.activateStateOption(state.name, option);
     refreshStates();
   };

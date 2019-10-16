@@ -9,10 +9,6 @@ export function StatesActionBar({setFilter}) {
     statesContext.setStatesActive(isActive);
   };
 
-  const addScenario = (statesContext) => {
-
-  };
-
   return (
     <div className="states-action-bar">
       <div className="search-container">
@@ -20,7 +16,6 @@ export function StatesActionBar({setFilter}) {
       </div>
       <div className="btn" onClick={() => toggleActivateAll(statesContext, true)}>Enable All</div>
       <div className="btn" onClick={() => toggleActivateAll(statesContext, false)}>Disable All</div>
-      <div className="btn" onClick={() => addScenario(statesContext)}>Add Scenario</div>
     </div>
   );
 }

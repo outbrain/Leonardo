@@ -17,11 +17,12 @@ function ScenariosProvider({ children }) {
   const [scenarios] = useState(LeonardoApi.getScenarios());
 
   useEffect(() => {
-    if (currentScenario) {
+    if (currentScenario !== null) {
       LeonardoApi.setActiveScenario(currentScenario);
       statesContext.refreshStates();
+      setScenario(null);
     }
-  }, [currentScenario]);
+  });
 
   return (
     <ScenarioContext.Provider value={{

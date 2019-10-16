@@ -1,0 +1,41 @@
+@import '../../styles/variables.less';
+
+.export-container {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+
+  .export-buttons {
+    display: flex;
+    margin-bottom: 10px;
+    .btn {
+      margin-right: 10px;
+      position: relative;
+    }
+
+    .export-copied:after {
+      content: 'Copied!';
+      position: absolute;
+      top: 2px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: @white00;
+    }
+  }
+
+  code {
+    overflow-y: scroll;
+    min-height: 500px;
+    border: 1px solid @gray80;
+    border-radius: 3px;
+    padding: 10px;
+    pre {
+      margin: 0;
+      font-size: @font-size-small;
+    }
+  }
+}

@@ -8,9 +8,7 @@ import {useContext, useState} from 'react';
 export function StatesList() {
   const statesContext = useContext(StatesContext);
   const [filter, setFilter] = useState('');
-  const renderState = state => {
-    return <State key={state.name} state={state}/>
-  };
+  const renderState = state => <State key={state.verb + state.name} state={state}/>;
 
   const filterState = state => {
     if (!filter) return true;

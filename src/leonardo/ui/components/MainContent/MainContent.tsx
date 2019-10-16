@@ -3,6 +3,8 @@ import './MainContent.less';
 import {MenuContext} from '../../context/MenuContext';
 import {StatesTab} from '../states/StatesTab/StatesTab';
 import {useContext} from 'react';
+import {ExportTab} from '../ExportTab/ExportTab';
+import {RecorderTab} from '../recorder/RecorderTab/RecorderTab';
 
 export function MainContent() {
   const menuContext = useContext(MenuContext);
@@ -11,9 +13,9 @@ export function MainContent() {
       return <StatesTab/>;
     }
     if (tab === 'recorder') {
-      return <div>recorder</div>;
+      return <RecorderTab />;
     }
-    return <div>exported code</div>
+    return <ExportTab />
   };
 
   return (
