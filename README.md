@@ -20,7 +20,7 @@
 ### npm
 
 ```bassh
-$ npm install leonardojs --save
+$ npm install leonardojs --save-dev
 ```
 
 ## 1. Add Leonardo script
@@ -29,10 +29,10 @@ $ npm install leonardojs --save
 
 ```javascript
     // in dev environment
-    import "leonardojs";
+    import 'leonardojs';
 ```
 
-### Directly in html
+### Or directly in html
 ```html
  <!DOCTYPE HTML>
  <html>
@@ -147,30 +147,3 @@ Deactivates a specific state, when calling the state url request will pass throu
 ### Hide/Show Leonardo icon
 You can hide Leonardo activator icon by clicking `ctrl` + `shift` + `l`.
 
-## Running and contributing
-
-### Go into the project folder
-
-```bash
-$ cd Leonardo
-```
-
-### Install
-
-```bash
-$ npm install
-```
-
-### Build
-
-```bash
-$ npm run build
-```
-
-### Run (and watch)
-
-```bash
-$ npm start 
-```
-
-This will run the demo app (and auto-refresh the browser)
