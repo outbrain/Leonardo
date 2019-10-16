@@ -1,0 +1,75 @@
+@import '../../../variables.less';
+
+.recorder-list-item {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  text-decoration: none;
+  color: #555;
+  padding: 5px;
+  font-size: 13px;
+  cursor: pointer;
+  &:hover{
+    background: #ddd !important;
+  }
+  &-selected, &-selected:hover{
+    background:  #ccccb3!important;
+  }
+  &-url {
+    flex-grow: 10;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 5px;
+    line-height: 25px;
+    font-size: 13px;
+    color: #555;
+  }
+
+  &-name {
+    background: @maroon;
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 12px;
+    margin: 0 2px;
+    color: white;
+    justify-content: flex-end;
+    align-self: flex-end;
+    white-space: nowrap;
+    text-align: center;
+    width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &-name-new {
+    background: blue;
+  }
+
+  &-verb {
+    margin-right: 10px;
+    background: #000;
+    color: #fff;
+    text-align: center;
+    width: 60px;
+    height: 25px;
+    line-height: 25px;
+    font-size: 12px;
+  }
+  &-verb-get {
+    background: @green;
+  }
+  &-verb-custom {
+    background: @black;
+  }
+  &-verb-post {
+    background: @orange;
+  }
+  &-verb-put {
+    background: @blue;
+  }
+  &-verb-delete {
+    background: @navy;
+  }
+}
+
+

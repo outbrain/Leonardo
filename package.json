@@ -1,7 +1,7 @@
 {
   "name": "leonardojs",
   "version": "4.0.7",
-  "description": "Leonardo ========",
+  "description": "Leonardo - Your mocking ninja - an add-on tool for centralizing your client side mocking",
   "main": "dist/leonardo.js",
   "scripts": {
     "test": "karma start ./karma.conf.js --single-run",
@@ -13,40 +13,28 @@
     "url": "git://github.com/outbrain/Leonardo.git"
   },
   "keywords": [
-    "angularjs"
+    "e2e",
+    "ajax",
+    "mock",
+    "proxy"
   ],
   "author": "Sagiv Frankel",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/outbrain/Leonardo/issues"
   },
+  "files": [
+    "dist/leonardo.js"
+  ],
   "homepage": "https://github.com/outbrain/Leonardo",
   "dependencies": {
-    "css-loader": "^2.1.0",
-    "history": "^4.6.3",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
-    "react-redux": "^5.0.5",
-    "react-router": "^4.1.1",
-    "react-router-dom": "^4.1.1",
-    "react-router-redux": "5.0.0-alpha.6",
-    "react-transition-group": "^1.2.0",
-    "react-widgets": "^3.4.8",
-    "redux": "^3.7.1",
-    "redux-actions": "^2.1.0"
+    "@types/react": "^16.9.5",
+    "@types/react-dom": "^16.9.1",
+    "react": "^16.10.1",
+    "react-dom": "^16.10.1",
+    "react-toggle-button": "^2.2.0"
   },
   "devDependencies": {
-    "@types/history": "^4.6.0",
-    "@types/node": "^8.0.7",
-    "@types/react": "^15.0.34",
-    "@types/react-dom": "^15.5.1",
-    "@types/react-redux": "^4.4.45",
-    "@types/react-router": "^4.0.12",
-    "@types/react-router-dom": "^4.0.5",
-    "@types/react-router-redux": "^5.0.3",
-    "@types/redux": "^3.6.0",
-    "@types/redux-actions": "^1.2.6",
-    "btoa": "^1.1.2",
     "chromedriver": "^2.43.1",
     "jasmine-core": "^2.5.2",
     "karma": "^3.1.1",
@@ -54,6 +42,7 @@
     "karma-jasmine": "^1.1.0",
     "karma-webpack": "^3.0.5",
     "less": "^3.8.1",
+    "css-loader": "^2.1.0",
     "less-loader": "^3.0.0",
     "loglevel": "^1.4.1",
     "raw-loader": "^0.5.1",

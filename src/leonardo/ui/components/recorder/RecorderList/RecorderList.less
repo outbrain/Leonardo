@@ -1,0 +1,46 @@
+@import '../../../styles/variables.less';
+
+.recorder-list-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 10px;
+  max-width: 100vw;
+}
+
+.recorder-list {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.recorder-header {
+  display: flex;
+  height: 30px;
+  align-items: center;
+  padding-left: 10px;
+  background: @gray45;
+  color: @white00;
+  > div {
+    margin-right: 10px;
+  }
+}
+
+.recorder-header-verb {
+  width: 60px;
+  min-width: 60px;
+}
+.recorder-header-url {
+  flex-grow: 1;
+  align-items: center;
+}
+
+recorder-header-is-mocked {
+  width: 40px;
+  min-width: 40px;
+}
+
+.recorder-header-mock, .recorder-header-response  {
+  width: 150px;
+  min-width: 150px;
+
+}

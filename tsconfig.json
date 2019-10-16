@@ -16,9 +16,8 @@
   "exclude": [
     "node_modules",
     "**/*.spec.ts",
-    "typings",
     "examples",
-    "src/leonardo/ui"
+    "src/leonardo/ui-old"
   ]
 }
 

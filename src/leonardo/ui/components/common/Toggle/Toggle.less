@@ -1,0 +1,73 @@
+@import '../../../styles/variables.less';
+
+.toggle-input {
+  display: none!important;
+
+  + .toggle-label {
+    outline: 0;
+    display: block;
+    width: 3em;
+    min-width: 50px;
+    height: 1.5em;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    background: #fbfbfb;
+    border-radius: 2em;
+    padding: 2px;
+    transition: all .4s ease;
+    border: 1px solid #e8eae9;
+
+    &:hover:after {
+      will-change: padding;
+    }
+
+    &:active {
+      box-shadow: inset 0 0 0 2em #e8eae9;
+      &:after {
+        padding-right: .8em;
+      }
+    }
+
+
+    &:after,
+    &:before {
+      position: relative;
+      display: block;
+      content: "";
+      width: 50%;
+      height: 100%;
+    }
+
+    &:after {
+      left: 0;
+      border-radius: 2em;
+      background: #fbfbfb;
+      transition: left .3s cubic-bezier(
+              0.175, 0.885, 0.320, 1.275
+      ),
+      padding .3s ease, margin .3s ease;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, .1),
+      0 4px 0 rgba(0, 0, 0, .08);
+    }
+
+    &:before {
+      display: none;
+    }
+  }
+
+  &:checked + .toggle-label:after {
+    left: 50%;
+  }
+
+  &:checked + .toggle-label {
+    background: #43A047;
+    &:active {
+      box-shadow: none;
+      &:after {
+        margin-left: -.8em;
+      }
+    }
+  }
+
+}
