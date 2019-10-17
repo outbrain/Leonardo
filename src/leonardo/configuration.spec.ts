@@ -1,7 +1,5 @@
-/// <reference path="../../typings/angularjs/angular.d.ts" />
-/// <reference path="../../typings/jasmine/jasmine.d.ts" />
-import {leoConfiguration} from '../../src/leonardo/configuration.srv'
-import {IState} from './configuration.srv';
+import {} from 'jasmine';
+import {leoConfiguration, IState} from './configuration.srv'
 
 const generateState = ({
   name = "Create Character",
@@ -31,7 +29,7 @@ const generateState = ({
     verb,
     options
   }
-}
+};
 
 describe('configurations', function() {
   it('should add a state', function() {
