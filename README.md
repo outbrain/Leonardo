@@ -47,13 +47,13 @@ $ npm install leonardojs --save-dev
 You should now see Leonardo's icon on the bottom right corner. Click It.
 
 ## 3. Start mocking your http calls via the recorder tab 
-![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/images/recorder.png)
+![Mocking and testing made simple and consistent. Developed by Outbrain.](./images/recorder.png)
 
 ## 4. Turn your mocking on and off as you wish
-![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/images/scenario.png)
+![Mocking and testing made simple and consistent. Developed by Outbrain.](./images/scenario.png)
 
 ## 5. Change your responses as you wish
-![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/images/responses.png)
+![Mocking and testing made simple and consistent. Developed by Outbrain.](./images/responses.png)
 
 ## Javascript API
 Automate your mocks using Leonardo's API
