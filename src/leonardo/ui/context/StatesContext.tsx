@@ -10,6 +10,7 @@ interface IStatesContext {
   isAllActive?: boolean;
   activateState?: (state: any, active: boolean) => void;
   setStateOption?: (state: any, option: string) => void;
+  addOrUpdateState?: (state: any) => void;
 }
 
 const StatesContext = createContext({} as IStatesContext);
@@ -44,6 +45,11 @@ function StatesProvider({ children }) {
     refreshStates();
   };
 
+  const addOrUpdateState = (state) => {
+    LeonardoApi.addOrUpdateSavedState(state);
+    refreshStates();
+  };
+
   return (
     <StatesContext.Provider value={{
       states,
@@ -51,7 +57,8 @@ function StatesProvider({ children }) {
       setStatesActive,
       isAllActive,
       activateState,
-      setStateOption
+      setStateOption,
+      addOrUpdateState
     }}>
       {children}
     </StatesContext.Provider>

@@ -1,0 +1,57 @@
+@import '../../styles/variables.less';
+
+@slider-width: 500px;
+
+.slider-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100000000000;
+  .slider-back {
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    transition: opacity 200ms linear;
+  }
+
+  .slider-box {
+    position: absolute;
+    padding-left: 10px;
+    padding-right: 10px;
+    top: 0;
+    display: inline-block;
+    width: @slider-width;
+    height: 100%;
+    background-color: @white00;
+    border-left: 1px solid @gray45;
+    transition: right 200ms linear;
+    right: 0;
+  }
+
+  .slider-box-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 50px;
+    width: 100%;
+    border-top: 1px solid @gray45;
+    background-color: rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    > button {
+      margin-right: 5px;
+    }
+  }
+
+  &.slider-closed .slider-box {
+    right: -500px;
+  }
+
+  &.slider-closed .slider-back {
+    opacity: 0;
+  }
+}

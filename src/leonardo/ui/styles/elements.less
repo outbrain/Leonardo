@@ -1,6 +1,5 @@
 @import './variables.less';
 
-
 .btn {
   font-size: @font-size-small;
   white-space: nowrap;
@@ -13,5 +12,28 @@
     border-color: @blue50;
     color: @blue50;
   }
+
+  &.btn-action {
+    background: @blue30;
+    color: @white00;
+  }
 }
 
+
+form {
+ .form-group {
+    margin-bottom: 10px;
+ }
+
+  label {
+    color: @gray45;
+    margin-right: 20px;
+  }
+
+  input[type="text"], input[type="number"], textarea {
+    width: 100%;
+    border: 1px solid @gray80;
+    padding-left: 3px;
+    font-size: @font-size-small;
+  }
+}
