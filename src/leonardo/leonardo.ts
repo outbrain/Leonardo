@@ -1,8 +1,8 @@
 import {leoConfiguration} from './configuration.srv';
 import {Storage} from './storage.srv';
 import {polifylls} from './polyfills';
-import {Sinon} from './sinon.srv';
 import './leonardo.less';
+import {XhrMock} from './xhr-mock.srv';
 
 declare const window;
 declare const Object;
@@ -16,8 +16,8 @@ const storage = new Storage();
 Object.assign(window.Leonardo || {}, configuration, {storage});
 Leonardo.loadSavedStates();
 
-// Init Sinon
-new Sinon();
+// Init XhrMock
+new XhrMock();
 
 let launcher: any;
 let f: any;
