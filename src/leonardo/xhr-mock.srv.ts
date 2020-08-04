@@ -11,9 +11,8 @@ export class XhrMock {
   private init() {
     xhrMock.setup();
     xhrMock.use(async (request: MockRequest, response: MockResponse) => {
-      let url = request.url().toString();
-      const {fetchStatesByUrlAndMethod} = Leonardo;
-
+      const url = request.url().toString();
+      const { fetchStatesByUrlAndMethod } = Leonardo;
       let state = fetchStatesByUrlAndMethod(url, request.method());
 
       if (!state && decodeURIComponent(url) !== url) {
