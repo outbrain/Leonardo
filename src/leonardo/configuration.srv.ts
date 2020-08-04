@@ -166,10 +166,18 @@ export function leoConfiguration() {
   function fetchStatesByUrlAndMethod(url, method) {
     return fetchStates().filter((state) => {
       return state.url &&
-        (new RegExp(state.url).test(url) || state.url === url) &&
+        isMatchUrl(state.url, url) &&
         state.verb.toLowerCase() === method.toLowerCase();
-
     })[0];
+  }
+
+  function isMatchUrl(stateUrlPattern, url) {
+    const urlRegexp = new RegExp(stateUrlPattern);
+    const decodedUrl = decodeURIComponent(url);
+    return urlRegexp.test(url) ||
+      urlRegexp.test(decodedUrl) ||
+      stateUrlPattern === url ||
+      stateUrlPattern === decodedUrl;
   }
 
   function fetchStates() {
