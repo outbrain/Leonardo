@@ -376,7 +376,6 @@ export function leoConfiguration() {
       console.warn("leonardo: could not find scenario named " + name);
       return;
     }
-    toggleActivateAll(false);
     scenario.forEach(function (state) {
       upsertOption(state.name, state.option, true);
     });
