@@ -423,10 +423,6 @@ export function leoConfiguration() {
     }
   }
 
-  function clearRequestsLog() {
-    _requestsLog = [];
-  }
-
   function toggleRecordingEnabled() {
     _recordingEnabled = !_recordingEnabled;
     Leonardo.storage.setRecordingEnabled(_recordingEnabled);
@@ -437,6 +433,10 @@ export function leoConfiguration() {
       _recordingEnabled = Leonardo.storage.getRecordingEnabled();
     }
     return _recordingEnabled;
+  }
+
+  function clearRequestsLog() {
+    _requestsLog = [];
   }
 
   function getRequestsLog() {

@@ -1,27 +1,46 @@
-## Leonardo
-[![Build Status](https://travis-ci.org/outbrain/Leonardo.svg?branch=master)](https://travis-ci.org/outbrain/Leonardo)
-[![npm version](https://badge.fury.io/js/leonardojs.svg)](http://badge.fury.io/js/leonardojs)
-[![Package Quality](http://npm.packagequality.com/shield/leonardojs.svg)](http://packagequality.com/#?package=leonardojs)
 
-![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/leonardo.png)
+<div align="center">
+<img
+  width="100"
+  src="https://raw.githubusercontent.com/outbrain/Leonardo/master/leonardo.png"
+  alt="Mocking and testing made simple and consistent. Developed by Outbrain."
+/>
+<h1>Leonardo</h1>
+<h3>Client side mocking for the server side </h3>
+<p align="center">
+  <a href="https://travis-ci.org/outbrain/Leonardo"
+    ><img
+      src="https://travis-ci.org/outbrain/Leonardo.svg?branch=master"
+      alt="travis-ci workflow status"
+  /></a>
+  <a href="http://badge.fury.io/js/leonardojs"
+    ><img
+      src="https://badge.fury.io/js/leonardojs.svg"
+      alt="NPM version"
+  /></a>
+  <a href="http://packagequality.com/#?package=leonardojs"
+    ><img
+      src="http://npm.packagequality.com/shield/leonardojs.svg"
+      alt="Package Quality"
+  /></a>
+</p>
+</div>
 
+
+## Install
+
+### npm
+
+```bash
+$ npm install leonardojs --save-dev
+```
 ## Example
 
 [Full Application Example](http://outbrain.github.io/Leonardo/examples/angularIL/)
 
+[Video Example - AngularJS Israel Conference (Hebrew)](http://www.youtube.com/watch?v=zPBmMiJZ5O8)
 
-## Video (currently only in hebrew)
-[![AngularJS Israel](http://img.youtube.com/vi/zPBmMiJZ5O8/hqdefault.jpg)](http://www.youtube.com/watch?v=zPBmMiJZ5O8)
- 
 # Getting Started
-
-## 1. Install
-
-### npm
-
-```bassh
-$ npm install leonardojs --save-dev
-```
 
 ## 1. Add Leonardo script
 

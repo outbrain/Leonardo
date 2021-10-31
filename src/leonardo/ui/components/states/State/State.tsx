@@ -31,10 +31,10 @@ export function State({state}) {
           }}/>
       </div>
       <div className={"state-verb state-verb-" + state.verb.toLowerCase()}>{state.verb}</div>
-      <div className="state-text" onClick={editClicked}>
+      <div className="state-text">
         <div className="state-name">{state.name}</div>
         <div className="state-url">{state.url ? state.url.toString() : ''}</div>
-        <a href="#" className="state-edit-icon"> </a>
+        <a href="#" className="state-edit-icon" onClick={editClicked}> </a>
       </div>
       <div className="state-options">
         <select onChange={e => statesContext.setStateOption(state, e.target.value)}
