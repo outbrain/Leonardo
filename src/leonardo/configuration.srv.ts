@@ -27,6 +27,7 @@ export function leoConfiguration() {
     setActiveScenario: setActiveScenario,
     getRecordedStates: getRecordedStates,
     getRequestsLog: getRequestsLog,
+    clearRequestsLog: clearRequestsLog,
     loadSavedStates: loadSavedStates,
     addSavedState: addSavedState,
     addOrUpdateSavedState: addOrUpdateSavedState,
@@ -417,6 +418,10 @@ export function leoConfiguration() {
       logRequestToConsole(req);
       _requestsLog.push(req);
     }
+  }
+
+  function clearRequestsLog() {
+    _requestsLog = [];
   }
 
   function getRequestsLog() {
