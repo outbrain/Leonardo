@@ -29,7 +29,7 @@ export function Slider({children, onClose}) {
 
   return (
     <div className={'slider-container ' + (visible === true ? 'slider-open' : 'slider-closed')}>
-      <div className="slider-back"></div>
+      <div className="slider-back" onClick={() => close(true)}></div>
       <div className="slider-box" >
         <div className="slider-box-body">
           {React.cloneElement(children, { onDataChanged: onDataChanged })}
