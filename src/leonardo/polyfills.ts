@@ -11,7 +11,7 @@ export function polifylls() {
 
     CustomEvent.prototype = window['Event'].prototype;
 
-    window['CustomEvent'] = CustomEvent;
+    (window as unknown)['CustomEvent'] = CustomEvent;
   })();
 
   // Object.assign
