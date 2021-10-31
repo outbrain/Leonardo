@@ -5,6 +5,7 @@ import {LeonardoApi} from './LeonardoApi';
 interface IRecorderContext {
   log?: any[];
   refreshLog?: () => void;
+  clearAllLogs?: () => void;
 }
 
 const RecorderContext = createContext({} as IRecorderContext);
@@ -12,10 +13,13 @@ const RecorderContext = createContext({} as IRecorderContext);
 function RecorderProvider({ children }) {
   const [log, setLog] = useState(LeonardoApi.getRequestsLog());
   const refreshLog = () => { setLog([...LeonardoApi.getRequestsLog()]); };
+  const clearAllLogs = () => { LeonardoApi.clearRequestsLog(); }
+
   return (
     <RecorderContext.Provider value={{
       log,
-      refreshLog
+      refreshLog,
+      clearAllLogs
     }}>
       {children}
     </RecorderContext.Provider>
