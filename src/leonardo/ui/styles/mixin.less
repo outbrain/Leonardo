@@ -1,0 +1,10 @@
+.ellipsis(@lines-count) {
+  display: -moz-box;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  white-space: normal;
+  -webkit-line-clamp: @lines-count;
+  -webkit-box-orient: vertical;
+}
