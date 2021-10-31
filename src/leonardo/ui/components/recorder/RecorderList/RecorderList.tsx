@@ -9,9 +9,11 @@ import {useInterval} from '../../../hooks/UseInterval';
 export function RecorderList() {
   const recorderContext = useContext(RecorderContext);
   const [filter, setFilter] = useState('');
+
   useInterval(() => {
     recorderContext.refreshLog();
   }, 1000);
+
   const renderRecord = record => {
     return <RecorderItem key={record.timestamp.getTime() + record.url} record={record}/>
   };
@@ -25,9 +27,13 @@ export function RecorderList() {
       || verb.toLowerCase().includes(lcFilter);
   };
 
+  const clearAll = () => {
+    recorderContext.clearAllLogs();
+  };
+
   return (
     <div className="recorder-list-container">
-      <RecorderActionBar setFilter={setFilter}/>
+      <RecorderActionBar setFilter={setFilter} clearAll={() => clearAll()}/>
       <div className="recorder-list">
         <div className="recorder-header">
           <div className="recorder-header-verb">Verb</div>
