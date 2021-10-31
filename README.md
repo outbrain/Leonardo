@@ -1,9 +1,31 @@
-## Leonardo
-[![Build Status](https://travis-ci.org/outbrain/Leonardo.svg?branch=master)](https://travis-ci.org/outbrain/Leonardo)
-[![npm version](https://badge.fury.io/js/leonardojs.svg)](http://badge.fury.io/js/leonardojs)
-[![Package Quality](http://npm.packagequality.com/shield/leonardojs.svg)](http://packagequality.com/#?package=leonardojs)
+<p align="center">
+  <img
+    width="100"
+    src="https://raw.githubusercontent.com/outbrain/Leonardo/master/leonardo.png"
+    alt="Mocking and testing made simple and consistent. Developed by Outbrain."
+  />
+</p>
+<h1 align="center">
+  Leonardo
+</h1>
 
-![Mocking and testing made simple and consistent. Developed by Outbrain.](https://raw.githubusercontent.com/outbrain/Leonardo/master/leonardo.png)
+<p align="center">
+  <a href="https://travis-ci.org/outbrain/Leonardo"
+    ><img
+      src="https://travis-ci.org/outbrain/Leonardo.svg?branch=master"
+      alt="travis-ci workflow status"
+  /></a>
+  <a href="http://badge.fury.io/js/leonardojs"
+    ><img
+      src="https://badge.fury.io/js/leonardojs.svg"
+      alt="NPM version"
+  /></a>
+  <a href="http://packagequality.com/#?package=leonardojs"
+    ><img
+      src="http://npm.packagequality.com/shield/leonardojs.svg"
+      alt="Package Quality"
+  /></a>
+</p>
 
 ## Example
 
