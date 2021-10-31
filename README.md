@@ -37,6 +37,7 @@ $ npm install leonardojs --save-dev
 ## Example
 
 [Full Application Example](http://outbrain.github.io/Leonardo/examples/angularIL/)
+
 [AngularJS Israel conference (hebrew)](http://www.youtube.com/watch?v=zPBmMiJZ5O8)
 
 # Getting Started
