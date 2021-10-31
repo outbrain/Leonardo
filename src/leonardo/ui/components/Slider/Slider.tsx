@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './Slider.less';
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useCallback} from 'react';
 
 export function Slider({children, onClose}) {
   const [currentData, setCurrentData] = useState(null);
@@ -9,6 +9,20 @@ export function Slider({children, onClose}) {
     cancel && setCurrentData(null);
     setVisible(false);
   };
+
+  const escFunction = useCallback((event) => {
+    if(event.keyCode === 27) {
+      close(false)
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("keydown", escFunction);
+
+    return () => {
+      document.removeEventListener("keydown", escFunction);
+    };
+  });
 
   useEffect(() => {
     if (visible === null) {
