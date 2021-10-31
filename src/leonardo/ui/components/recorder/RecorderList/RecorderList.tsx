@@ -27,13 +27,14 @@ export function RecorderList() {
       || verb.toLowerCase().includes(lcFilter);
   };
 
-  const clearAll = () => {
-    recorderContext.clearAllLogs();
-  };
-
   return (
     <div className="recorder-list-container">
-      <RecorderActionBar setFilter={setFilter} clearAll={() => clearAll()}/>
+      <RecorderActionBar
+        setFilter={setFilter}
+        toggleRecordingEnabled={() => recorderContext.toggleRecordingEnabled()}
+        clearAll={() => recorderContext.clearAllLogs()}
+        recordingEnabled={recorderContext.getRecordingEnabled()}
+      />
       <div className="recorder-list">
         <div className="recorder-header">
           <div className="recorder-header-verb">Verb</div>
