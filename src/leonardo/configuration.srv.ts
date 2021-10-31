@@ -8,7 +8,8 @@ export function leoConfiguration() {
     _statesChangedEvent = new CustomEvent('leonardo:setStates'),
     _eventsElem = document.body,
     _jsonpCallbacks = {},
-    _consoleOutputEnabled = null;
+    _consoleOutputEnabled = null,
+    _recordingEnabled = null;
 
   // Core API
   // ----------------
@@ -28,6 +29,7 @@ export function leoConfiguration() {
     getRecordedStates: getRecordedStates,
     getRequestsLog: getRequestsLog,
     clearRequestsLog: clearRequestsLog,
+    toggleRecordingEnabled: toggleRecordingEnabled,
     loadSavedStates: loadSavedStates,
     addSavedState: addSavedState,
     addOrUpdateSavedState: addOrUpdateSavedState,
@@ -39,7 +41,8 @@ export function leoConfiguration() {
     toggleConsoleOutput: toggleConsoleOutput,
     _logRequest: logRequest,
     getLastRequestByState: getLastRequestByState,
-    _jsonpCallbacks: _jsonpCallbacks
+    _jsonpCallbacks: _jsonpCallbacks,
+    getRecordingEnabled: getRecordingEnabled
   };
 
   function upsertOption(state, name, active) {
@@ -403,7 +406,7 @@ export function leoConfiguration() {
   }
 
   function logRequest(method, url, status, reqHeaders?, reqBody?, resHeaders?, resBody?) {
-    if (method && url) {
+    if (getRecordingEnabled() && method && url) {
       let req: INetworkRequest = {
         verb: method,
         url: url.trim(),
@@ -422,6 +425,18 @@ export function leoConfiguration() {
 
   function clearRequestsLog() {
     _requestsLog = [];
+  }
+
+  function toggleRecordingEnabled() {
+    _recordingEnabled = !_recordingEnabled;
+    Leonardo.storage.setRecordingEnabled(_recordingEnabled);
+  }
+
+  function getRecordingEnabled() {
+    if (_recordingEnabled === null) {
+      _recordingEnabled = Leonardo.storage.getRecordingEnabled();
+    }
+    return _recordingEnabled;
   }
 
   function getRequestsLog() {
