@@ -5,7 +5,7 @@
     alt="Mocking and testing made simple and consistent. Developed by Outbrain."
   />
 </p>
-<h1 align="center">
+<h1 align="center" style="border-bottom: none">
   Leonardo
 </h1>
 
@@ -27,23 +27,19 @@
   /></a>
 </p>
 
-## Example
-
-[Full Application Example](http://outbrain.github.io/Leonardo/examples/angularIL/)
-
-
-## Video (currently only in hebrew)
-[![AngularJS Israel](http://img.youtube.com/vi/zPBmMiJZ5O8/hqdefault.jpg)](http://www.youtube.com/watch?v=zPBmMiJZ5O8)
- 
-# Getting Started
-
-## 1. Install
+## Install
 
 ### npm
 
-```bassh
+```bash
 $ npm install leonardojs --save-dev
 ```
+## Example
+
+[Full Application Example](http://outbrain.github.io/Leonardo/examples/angularIL/)
+[AngularJS Israel conference (hebrew)](http://www.youtube.com/watch?v=zPBmMiJZ5O8)
+
+# Getting Started
 
 ## 1. Add Leonardo script
 
