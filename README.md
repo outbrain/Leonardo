@@ -1,15 +1,13 @@
 
-<h1 align="center">
-  <img
-    width="100"
-    src="https://raw.githubusercontent.com/outbrain/Leonardo/master/leonardo.png"
-    alt="Mocking and testing made simple and consistent. Developed by Outbrain."
-  />
-  <br>
-  Leonardo
-</h1>
+<div align="center">
+<img
+  width="100"
+  src="https://raw.githubusercontent.com/outbrain/Leonardo/master/leonardo.png"
+  alt="Mocking and testing made simple and consistent. Developed by Outbrain."
+/>
+<h1>Leonardo</h1>
+<h3>Client side mocking for the server side </h3>
 <p align="center">
-  <br>
   <a href="https://travis-ci.org/outbrain/Leonardo"
     ><img
       src="https://travis-ci.org/outbrain/Leonardo.svg?branch=master"
@@ -25,9 +23,9 @@
       src="http://npm.packagequality.com/shield/leonardojs.svg"
       alt="Package Quality"
   /></a>
-  <br>
-  Client side mocking for the server side
 </p>
+</div>
+
 
 ## Install
 
@@ -40,7 +38,7 @@ $ npm install leonardojs --save-dev
 
 [Full Application Example](http://outbrain.github.io/Leonardo/examples/angularIL/)
 
-[AngularJS Israel conference (hebrew)](http://www.youtube.com/watch?v=zPBmMiJZ5O8)
+[Video Example - AngularJS Israel Conference (Hebrew)](http://www.youtube.com/watch?v=zPBmMiJZ5O8)
 
 # Getting Started
 
