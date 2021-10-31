@@ -5,12 +5,9 @@
     alt="Mocking and testing made simple and consistent. Developed by Outbrain."
   />
 </p>
-<h1 align="center" style="border-bottom: none">
-  Leonardo
-</h1>
-
-<p align="center">
-  <a href="https://travis-ci.org/outbrain/Leonardo"
+<h1 align="center">
+  Leonardo <br>
+    <a href="https://travis-ci.org/outbrain/Leonardo"
     ><img
       src="https://travis-ci.org/outbrain/Leonardo.svg?branch=master"
       alt="travis-ci workflow status"
@@ -25,7 +22,7 @@
       src="http://npm.packagequality.com/shield/leonardojs.svg"
       alt="Package Quality"
   /></a>
-</p>
+</h1>
 
 ## Install
 
