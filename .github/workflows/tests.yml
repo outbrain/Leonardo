@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: ['10.x', '14.x', '16.0']
+        node-version: ['10.x', '12.x', '14.0']
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -35,6 +35,8 @@ jobs:
           
       - name: Install Dependencies
         run: npm ci
-
+      
       - name: Run tests
-        run: npm run test
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: npm test
