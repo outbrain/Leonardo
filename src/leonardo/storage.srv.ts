@@ -10,6 +10,7 @@ export class Storage {
   private POSITION_KEY;
   private CONSOLE_OUTPUT;
   private NO_UI;
+  private LAUNCHER_VISIBILITY
 
   constructor() {
     this.APP_PREFIX = Leonardo.APP_PREFIX || '';
@@ -19,6 +20,7 @@ export class Storage {
     this.POSITION_KEY = `${this.APP_PREFIX}leonardo-position`;
     this.CONSOLE_OUTPUT = `${this.APP_PREFIX}leonardo-console-output`;
     this.NO_UI = `${this.APP_PREFIX}leonardo-no-ui`;
+    this.LAUNCHER_VISIBILITY = `${this.APP_PREFIX}leonardo-launcher-visibility`
   }
 
   _getItem(key) {
@@ -101,5 +103,13 @@ export class Storage {
 
   setConsoleOutput(enabled: boolean) {
     this._setItem(this.CONSOLE_OUTPUT, {enabled: enabled});
+  }
+
+  setLauncherVisibility(visibility: string) {
+    this._setItem(this.LAUNCHER_VISIBILITY, visibility)
+  }
+
+  getLauncherVisibility(): string {
+    return this._getItem(this.LAUNCHER_VISIBILITY)
   }
 }
