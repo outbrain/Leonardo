@@ -1,14 +1,29 @@
+:root {
+  --width: 70px;
+  --height: 70px;
+  --leonardo-x: 100vw;
+  --leonardo-y: 100vh;
+}
+
 body.leonardo-launcher-active {
   overflow: hidden;
 }
 
 .leonardo-launcher {
   position: fixed;
-  right: 40px;
-  bottom: 40px;
-  width: 70px;
+  left: clamp(
+          0px,
+          var(--leonardo-x),
+          calc(100vw - var(--width))
+        );
+  top: clamp(
+          0px,
+          var(--leonardo-y),
+          calc(100vh - var(--height))
+       );
+  width: var(--width);
   cursor: pointer;
-  height: 70px;
+  height: var(--height);
   z-index: 2147483647;
   background-size: contain;
   background-repeat: no-repeat;
