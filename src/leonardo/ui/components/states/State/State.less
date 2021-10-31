@@ -1,4 +1,5 @@
 @import '../../../styles/variables.less';
+@import '../../../styles/mixin.less';
 
 .state-row {
   display: flex;
@@ -67,7 +68,7 @@
 
 .state-options {
   position: relative;
-  select {
+  button.bp3-button {
     color: @white00;
     width: 200px;
     padding: 2px 6px;
@@ -80,16 +81,19 @@
     outline: none;
     border-radius: 3px;
     cursor: pointer;
-  }
-  &:after {
-    content: ">";
-    transform: scaleX(1.7) rotate(90deg);
-    color: @white00;
-    position: absolute;
-    right: 10px;
-    top: 6px;
-    z-index: 1;
-    font-size: 10px;
-    pointer-events: none;
+    background-image: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &:hover {
+      background-color: @green48;
+    }
+    .bp3-button-text {
+      .ellipsis(1);
+    }
+
+    .bp3-icon {
+      color: @white00;
+    }
   }
 }

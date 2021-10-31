@@ -5,11 +5,16 @@ import {useContext, useState} from 'react';
 import {Toggle} from '../../common/Toggle/Toggle';
 import {Slider} from '../../Slider/Slider';
 import {OptionEdit} from '../OptionEdit/OptionEdit';
+import { Button, MenuItem } from "@blueprintjs/core";
+import { Select } from "@blueprintjs/select";
+import { IState } from "../../../../configuration.srv";
 
 export function State({state}) {
+  const OptionSelect = Select.ofType<IState>();
   const statesContext = useContext(StatesContext);
   const [editOpen, setEditOpen] = useState(false);
-  const activeOptionName = state.activeOption ? state.activeOption.name : '';
+  const { activeOption } = state
+  const activeOptionName = activeOption?.name || '';
   const editClicked = e => {
     e.preventDefault();
     setEditOpen(true);
@@ -21,6 +26,31 @@ export function State({state}) {
       statesContext.addOrUpdateState(result.data);
     }
   };
+
+  const filterOptions = (val, item) => {
+      if(!val) {
+          return true
+      }
+
+      const lcName = item.name.toLowerCase()
+      return lcName.includes(val.toLowerCase());
+  };
+
+  const itemRenderer = (item, { handleClick, modifiers }): JSX.Element => {
+    return (
+      <MenuItem
+          active={modifiers.active}
+          key={state.name + item.name}
+          onClick={handleClick}
+          text={item.name}
+          title={item.name}
+      />)
+  }
+
+  const onItemSelect = (e) => {
+      statesContext.setStateOption(state, e.name)
+  }
+
   return (
     <div className="state-row">
       <div className="state-active">
@@ -37,10 +67,15 @@ export function State({state}) {
         <a href="#" className="state-edit-icon"> </a>
       </div>
       <div className="state-options">
-        <select onChange={e => statesContext.setStateOption(state, e.target.value)}
-                value={activeOptionName}>
-          {state.options.map(opt => (<option key={state.name + opt.name} value={opt.name}>{opt.name}</option>))}
-        </select>
+        <OptionSelect
+          items={state.options}
+          itemRenderer={itemRenderer}
+          activeItem={activeOption}
+          itemPredicate={filterOptions}
+          onItemSelect={onItemSelect}
+        >
+          <Button text={activeOptionName} rightIcon="caret-down" />
+        </OptionSelect>
       </div>
       {editOpen && <Slider onClose={onEditClosed}>
                      <OptionEdit state={state} />
