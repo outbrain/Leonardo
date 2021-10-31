@@ -15,7 +15,10 @@ export function StatesList() {
     const url = (state.url  || '').toString();
     const verb = state.verb || '';
     const lcFilter = filter.toLowerCase();
-    return state.name.toLowerCase().includes(lcFilter)
+    const optionNames: string[] = state.options?.map(o => o.name.toLowerCase()) || [];
+    const found = !!optionNames.find(name => name.includes(lcFilter))
+    return found
+      || state.name.toLowerCase().includes(lcFilter)
       || url.toLowerCase().includes(lcFilter)
       || verb.toLowerCase().includes(lcFilter);
   };
