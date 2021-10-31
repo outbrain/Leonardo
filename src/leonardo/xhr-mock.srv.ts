@@ -40,7 +40,15 @@ export class XhrMock {
       resHeaders = Utils.isFunction(activeOption.headers) ? activeOption.headers(requestEventObj) : activeOption.headers;
     }
     const delay = activeOption.delay || 0;
-    const res = response.status(resStatus).headers(resHeaders).body(resData);
+    const deepCopy = (data: any) => {
+      if (typeof data === 'object') {
+        return JSON.parse(JSON.stringify(data)) 
+      }
+
+      return data
+    }
+
+    const res = response.status(resStatus).headers(resHeaders).body(deepCopy(resData));
     this.log(request, res);
     return new Promise<MockResponse>((resolve, reject) => {
       setTimeout(() => resolve(res), delay);

@@ -61,6 +61,9 @@ if (!window.Leonardo.storage.getNoUI()) {
 
   launcher = document.createElement('div');
   launcher.classList.add('leonardo-launcher');
+  launcher.setAttribute('draggable', true);
+  let root = document.documentElement;
+  let offsetX, offsetY
 
   launcher.style.display = storage.getLauncherVisibility()
 
@@ -77,7 +80,28 @@ if (!window.Leonardo.storage.getNoUI()) {
     if (f && e.keyCode === 27 && f.style.display === 'block') {
       return toggleView();
     }
+  });
 
+  launcher.addEventListener("dragstart", (e) => {
+    offsetX = e.offsetX
+    offsetY = e.offsetY
+  });
+
+  launcher.addEventListener('drag', (e) => {
+    e.preventDefault()
+    e.dataTransfer.clearData();
+    root.style.setProperty('--leonardo-x', e.clientX - offsetX + "px");
+    root.style.setProperty('--leonardo-y', e.clientY - offsetY + "px");
+  });
+
+  launcher.addEventListener('dragend', (e) => {
+    e.preventDefault()
+    root.style.setProperty('--leonardo-x', e.clientX - offsetX + "px");
+    root.style.setProperty('--leonardo-y', e.clientY - offsetY + "px");
+  });
+
+  launcher.addEventListener("dragover", function(event) {
+    event.preventDefault();
   });
 
   launcher.addEventListener('click', (e) => {

@@ -1,6 +1,6 @@
 {
   "name": "leonardojs",
-  "version": "5.0.8",
+  "version": "5.1.0",
   "description": "Leonardo - Your mocking ninja - an add-on tool for centralizing your client side mocking",
   "main": "dist/leonardo.js",
   "scripts": {
@@ -28,6 +28,8 @@
   ],
   "homepage": "https://github.com/outbrain/Leonardo",
   "dependencies": {
+    "@blueprintjs/core": "^3.51.3",
+    "@blueprintjs/select": "^3.18.10",
     "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",
     "react": "^17.0.2",
@@ -37,6 +39,7 @@
     "@types/jasmine": "^3.4.4",
     "chromedriver": "^2.43.1",
     "css-loader": "^2.1.0",
+    "file-loader": "^6.2.0",
     "jasmine-core": "^2.5.2",
     "karma": "^5.2.3",
     "karma-chrome-launcher": "^0.2.2",
@@ -49,6 +52,7 @@
     "style-loader": "^0.14.1",
     "ts-loader": "^8.2.0",
     "typescript": "^4.4.4",
+    "url-loader": "^4.1.1",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.11.0",
