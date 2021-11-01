@@ -11,7 +11,7 @@ export class XhrMock {
   private init() {
     xhrMock.setup();
     xhrMock.use(async (request: MockRequest, response: MockResponse) => {
-      const state = Leonardo.fetchStatesByUrlAndMethod(request.url().toString(), request.method());
+      const state = Leonardo.fetchStatesByRequest(request);
       if (state && state.active) {
         const activeOption = Leonardo.getActiveStateOption(state.name);
         if (!!activeOption) {
@@ -42,7 +42,7 @@ export class XhrMock {
     const delay = activeOption.delay || 0;
     const res = response.status(resStatus).headers(resHeaders).body(resData);
     this.log(request, res);
-    return new Promise<MockResponse>((resolve, reject) => {
+    return new Promise<MockResponse>((resolve) => {
       setTimeout(() => resolve(res), delay);
     });
   }
