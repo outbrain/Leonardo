@@ -1,4 +1,6 @@
 /// <reference path="leonardo.d.ts" />
+import MockRequest from "xhr-mock/lib/MockRequest";
+
 declare let Object: any;
 export function leoConfiguration() {
   let _states = [],
@@ -34,6 +36,7 @@ export function leoConfiguration() {
     addSavedState: addSavedState,
     addOrUpdateSavedState: addOrUpdateSavedState,
     fetchStatesByUrlAndMethod: fetchStatesByUrlAndMethod,
+    fetchStatesByRequest: fetchStatesByRequest,
     removeState: removeState,
     removeOption: removeOption,
     onStateChange: onSetStates,
@@ -173,6 +176,29 @@ export function leoConfiguration() {
         isMatchUrl(state.url, url) &&
         state.verb.toLowerCase() === method.toLowerCase();
     })[0];
+  }
+
+  function fetchStatesByRequest(request: MockRequest) {
+    return fetchStates()
+        .filter((state) => state.url || state.verb || typeof state.match === 'function')
+        .filter((state) => {
+          if (state.url) {
+            return isMatchUrl(state.url, request.url().toString());
+          }
+          return true;
+        })
+        .filter((state) => {
+          if (state.verb) {
+            return request.method().toLocaleLowerCase() === state.verb.toLowerCase();
+          }
+          return true;
+        })
+        .filter((state) => {
+          if (typeof state.match === 'function') {
+            return !!this.state.match.call(this.state, request);
+          }
+          return true;
+        })[0];
   }
 
   function isMatchUrl(stateUrlPattern, url) {
