@@ -11,6 +11,7 @@ export class Storage {
   private CONSOLE_OUTPUT;
   private NO_UI;
   private LAUNCHER_VISIBILITY
+  private RECORDING_ENABLED;
 
   constructor() {
     this.APP_PREFIX = Leonardo.APP_PREFIX || '';
@@ -21,6 +22,7 @@ export class Storage {
     this.CONSOLE_OUTPUT = `${this.APP_PREFIX}leonardo-console-output`;
     this.NO_UI = `${this.APP_PREFIX}leonardo-no-ui`;
     this.LAUNCHER_VISIBILITY = `${this.APP_PREFIX}leonardo-launcher-visibility`
+    this.RECORDING_ENABLED = `${this.APP_PREFIX}leonardo-recording-enabled`;
   }
 
   _getItem(key) {
@@ -92,6 +94,14 @@ export class Storage {
     return item && item.enabled;
   }
 
+  getRecordingEnabled(): boolean {
+    const item  = this._getItem(this.RECORDING_ENABLED);
+    if (item) {
+      return item.enabled
+    }
+    return true
+  }
+
   getNoUI(): boolean {
     const item  = this._getItem(this.NO_UI);
     return item && item.value;
@@ -111,5 +121,9 @@ export class Storage {
 
   getLauncherVisibility(): string {
     return this._getItem(this.LAUNCHER_VISIBILITY)
+  }
+
+  setRecordingEnabled(enabled: boolean) {
+    this._setItem(this.RECORDING_ENABLED, {enabled: enabled});
   }
 }

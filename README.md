@@ -8,9 +8,9 @@
 <h1>Leonardo</h1>
 <h3>Client side mocking for the server side </h3>
 <p align="center">
-  <a href="https://travis-ci.org/outbrain/Leonardo"
+  <a href="https://github.com/outbrain/Leonardo/actions/workflows/tests.yml"
     ><img
-      src="https://travis-ci.org/outbrain/Leonardo.svg?branch=master"
+      src="https://github.com/outbrain/Leonardo/actions/workflows/tests.yml/badge.svg"
       alt="travis-ci workflow status"
   /></a>
   <a href="http://badge.fury.io/js/leonardojs"
