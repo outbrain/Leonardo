@@ -121,10 +121,16 @@ if (!window.Leonardo.storage.getNoUI()) {
     zIndex: 2147483646,
   });
 
-  document.addEventListener('DOMContentLoaded', () => {
+  const appendLauncher = () => {
     window.document.body.appendChild(launcher);
     window.document.body.appendChild(f);
-  }, false);
+  }
+
+  if (window.document.body) {
+    appendLauncher()
+  } else {
+    window.document.addEventListener('DOMContentLoaded', appendLauncher, false);
+  }
 
   checkIframeLoaded();
 }
