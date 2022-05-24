@@ -11,7 +11,7 @@ export class XhrMock {
   private init() {
     xhrMock.setup();
     xhrMock.use(async (request: MockRequest, response: MockResponse) => {
-      const state = Leonardo.fetchStatesByRequest(request);
+      const state = Leonardo.fetchStatesByUrlAndMethod(request.url().toString(), request.method());
       if (state && state.active) {
         const activeOption = Leonardo.getActiveStateOption(state.name);
         if (!!activeOption) {
