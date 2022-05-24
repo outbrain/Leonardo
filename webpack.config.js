@@ -1,3 +1,6 @@
+const path = require('node:path');
+const CopyPlugin = require("copy-webpack-plugin");
+
 module.exports = {
   mode: 'development',
   entry: {
@@ -55,37 +58,44 @@ module.exports = {
     new LeonardoIframePlugin()
   ],
   devServer: {
-    historyApiFallback: {
-      index: 'examples/angularIL/index.html'
+    static: {
+      directory: path.join(__dirname, './'),
     },
     open: true,
     port: 9284,
-    inline: true
-  }
+  },
 };
 
-function LeonardoIframePlugin(options) {
-}
+function LeonardoIframePlugin(options) {}
 
-LeonardoIframePlugin.prototype.apply = function (compiler) {
-  compiler.plugin('emit', function (compilation, callback) {
-    const apiSrc = compilation.assets['leonardo-api.js'].source();
-    const uiSrc = compilation.assets['leonardo-ui.js'].source();
-    const leoSrc = `
-        ${apiSrc}
-        //UI source
-        window.__leonardo_UI_src = function() { ${uiSrc}};
-        `;
-    compilation.assets['leonardo.js'] = {
-      source: function () {
-        return leoSrc;
+LeonardoIframePlugin.prototype.apply = function(compiler) {
+  compiler.hooks.compilation.tap("LeonardoIframePlugin", function(
+    compilation,
+    callback
+  ) {
+    compilation.hooks.processAssets.tap(
+      {
+        name: "LeonardoIframePlugin",
+        stage: compilation.PROCESS_ASSETS_STAGE_DEV_TOOLING,
       },
-      size: function () {
-        return leoSrc.length;
+      (assets) => {
+        // this function will be called once with assets added by plugins on prior stages
+        const apiSrc = compilation.assets['leonardo-api.js'].source();
+        const uiSrc = compilation.assets['leonardo-ui.js'].source();
+        const leoSrc = `
+            ${apiSrc}
+            //UI source
+            window.__leonardo_UI_src = function() { ${uiSrc}};
+            `;
+        assets['leonardo.js'] = {
+          source: function () {
+            return leoSrc;
+          },
+          size: function () {
+            return leoSrc.length;
+          }
+        };
       }
-    };
-
-    callback();
+    );
   });
 };
-
