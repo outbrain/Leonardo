@@ -1,7 +1,7 @@
 const path = require('node:path');
+const webpack = require('webpack');
 
 module.exports = {
-  mode: 'development',
   entry: {
     'leonardo-api': "./src/leonardo/leonardo.ts",
     'leonardo-ui': "./src/leonardo/ui/index.tsx"
@@ -56,17 +56,9 @@ module.exports = {
   plugins: [
     new LeonardoIframePlugin()
   ],
-  devServer: {
-    static: {
-      directory: path.join(__dirname, './'),
-    },
-    open: true,
-    port: 9284,
-  },
 };
 
 function LeonardoIframePlugin(options) {}
-
 LeonardoIframePlugin.prototype.apply = function(compiler) {
   compiler.hooks.compilation.tap("LeonardoIframePlugin", function(
     compilation,
@@ -86,14 +78,7 @@ LeonardoIframePlugin.prototype.apply = function(compiler) {
             //UI source
             window.__leonardo_UI_src = function() { ${uiSrc}};
             `;
-        assets['leonardo.js'] = {
-          source: function () {
-            return leoSrc;
-          },
-          size: function () {
-            return leoSrc.length;
-          }
-        };
+        assets['leonardo.js'] = new webpack.sources.RawSource(leoSrc);
       }
     );
   });
