@@ -1,6 +1,6 @@
 {
   "name": "leonardojs",
-  "version": "5.2.1",
+  "version": "5.2.2",
   "description": "Leonardo - Your mocking ninja - an add-on tool for centralizing your client side mocking",
   "main": "dist/leonardo.js",
   "scripts": {
