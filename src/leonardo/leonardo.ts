@@ -40,6 +40,8 @@ function toggleLauncher() {
   } else {
     launcher.style.display = 'none';
   }
+
+  storage.setLauncherVisibility(launcher.style.display)
 }
 
 function checkIframeLoaded() {
@@ -62,6 +64,8 @@ if (!window.Leonardo.storage.getNoUI()) {
   launcher.setAttribute('draggable', true);
   let root = document.documentElement;
   let offsetX, offsetY
+
+  launcher.style.display = storage.getLauncherVisibility()
 
   document.addEventListener('keyup', (e) => {
     if (e.ctrlKey && e.shiftKey && e.keyCode === 76) {
