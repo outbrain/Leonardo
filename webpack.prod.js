@@ -3,4 +3,5 @@
 
  module.exports = merge(common, {
    mode: 'production',
+   devtool: 'eval',
  });
