@@ -27,16 +27,14 @@
     "dist/leonardo.js"
   ],
   "homepage": "https://github.com/outbrain/Leonardo",
-  "dependencies": {
+  "devDependencies": {
     "@blueprintjs/core": "^4.3.2",
     "@blueprintjs/select": "^4.2.2",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.5",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
-    "webpack-merge": "^5.8.0"
-  },
-  "devDependencies": {
+    "webpack-merge": "^5.8.0",
     "@types/jasmine": "^4.0.3",
     "chromedriver": "^2.43.1",
     "css-loader": "^6.7.1",
